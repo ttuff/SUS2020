@@ -14,6 +14,28 @@ library(plotly)
 library(png)
 library(shinyWidgets)
 library(cowplot)
+library(RColorBrewer)
+library(classInt)
+library(scales)
+library(leaflet)
+library(shinythemes)
+library(ggthemes)
+library(extrafont)
+
+
+js_ped <- "$(document).ready(function(){
+  $('#plotContainer_ped').on('show', function(){
+    $(this).css('opacity', 0).animate({opacity: 1}, {duration: 1000});
+  }).on('hide', function(){
+    var $this = $(this);
+    setTimeout(function(){
+      $this.css('opacity', 0).animate({opacity: 1}, {duration: 1000});
+    })
+  });
+});
+"
+
+rz_pedestrian <- reactiveValues(zoom = 'OUT')
 
 
 js <- "
@@ -109,7 +131,7 @@ dashboardPage(skin="black",
                                                    #conditionalPanel(condition = "input.tabs == 'bivariate'" ,plotOutput("map1")),
                                                    menuItem("Pedestrian realm", icon = icon("walking"), tabName = "Pedestrian",
                                                             badgeLabel = "suggested", badgeColor = "aqua"),
-                                                   conditionalPanel(condition = "input.tabs == 'Pedestrian'" ,plotOutput("mapPedestrians")),
+                                                   conditionalPanel(condition = "input.tabs == 'Pedestrian'" ,plotOutput("map_distancing_capacity")),
                                                    menuItem("Access to green space", icon = icon("envira"), tabName = "green",
                                                             badgeLabel = "new", badgeColor = "teal"),
                                                    #conditionalPanel(condition = "input.tabs == 'green'" ,plotOutput("mapGreenSpace")),
@@ -306,13 +328,33 @@ bla bla bla bla bla bla"
                                     ))
                                   
                           ),
-                          tabItem(tabName = "Pedestrian",
-                                  mapdeckOutput(
-                                    outputId = 'myMap2'
-                                    , height = "800px"
-                                  )
-                                  
-                          ),
+                            tabItem(tabName = "Pedestrian",
+                                    mapdeckOutput(
+                                      outputId = 'PedestrianMap'
+                                      , height = "800px"
+                                    ),
+                                    jqui_draggable(absolutePanel(
+                                      id="input_control_right",
+                                      style="z-index:501;",
+                                      class = "panel panel-default",
+                                      draggable = TRUE, 
+                                      top = 60, right = 250,
+                                      width = 400,
+                                      conditionalPanel(condition = "output.zoom == 'IN'", id = "plotContainer_ped",
+                                                       selectInput("data_for_plot_ped", label=h3("Select your second variable"),
+                                                                   selected = "agg_proximity_score_quant3", choices = list(
+                                                                     "Walkable Access to Key Amenities" = "agg_proximity_score_quant3",
+                                                                     "Net Median Income" = "net_median_income_quant3",
+                                                                     "Visible Minority Population" = "visible_minority_pop_quant3",
+                                                                     "Black Minority Population" = "black_minority_pop_quant3", 
+                                                                     "Immigrant Population" = "immigrants_quant3",
+                                                                     "Refugee Population" = "refugees_quant3")),
+                                                       plotOutput("second_variable"),
+                                                       HTML(markdownToHTML(fragment.only=TRUE, text=c("Drag to move")))))
+                                      
+                                    )  
+                                    
+                            ),
                           tabItem(tabName = "home",
                                   fluidPage(
                                     imageOutput("homepic", height = 600)

@@ -14,7 +14,27 @@ library(plotly)
 library(png)
 library(shinyWidgets)
 library(cowplot)
+library(RColorBrewer)
+library(classInt)
+library(scales)
+library(leaflet)
+library(shinythemes)
+library(ggthemes)
+library(extrafont)
 
+js_ped <- "$(document).ready(function(){
+  $('#plotContainer').on('show', function(){
+    $(this).css('opacity', 0).animate({opacity: 1}, {duration: 1000});
+  }).on('hide', function(){
+    var $this = $(this);
+    setTimeout(function(){
+      $this.css('opacity', 0).animate({opacity: 1}, {duration: 1000});
+    })
+  });
+});
+"
+
+rz_pedestrian <- reactiveValues(zoom = 'OUT')
 
 rz <- reactiveValues(zoom = 'IN')
 
@@ -23,6 +43,18 @@ shinyServer(function(input, output, session) {
   
   dropshadow1 <- normalizePath(file.path("www/dropshadow1.png"))
   dropshadow2 <- normalizePath(file.path("www/dropshadow2.png"))
+  
+ # Load data for pedestrian realm 
+  
+  load(file = "data/census_analysis.Rdata")
+  load(file = "data/census_circular.Rdata")
+  load(file = "data/data_for_app.Rdata")
+  load(file = "data/color_scale.Rdata")
+  load(file = "data/bivariate_color_scale.Rdata")
+  load(file = "data/sample_points_for_app_WSG.Rdata")
+  load(file = "data/census_analysis_WSG.Rdata")
+  load(file = "data/data_for_app_WSG.Rdata")
+  load(file = "data/centroids.Rdata")
   
   
   output$homepic <- renderImage({
@@ -754,10 +786,139 @@ observeEvent({rz$zoom
   })
 
 
+### Pedestrian zone - no cars ALLOWED
+
+# Pedestrian social distancing capacity map
+output$map_distancing_capacity <- renderPlot({
+  
+  colors <- color_scale$fill
+  colors <- as.character(colors)
+  
+  p <- ggplot() +
+    geom_sf(data = census_circular, fill = "transparent", color = "black", size = 0.05) +
+    geom_sf(data = data_for_app,
+            aes(
+              fill = as.factor(social_distancing_capacity_pop_perc_2m_quant3)
+            ),
+            # use thin white stroke for municipalities
+            color = "white",
+            size = 0.03
+    ) +
+    scale_fill_manual(values=rev(colors[c(1:3)]))+
+    theme_void() +
+    theme(legend.position = "none")
+  
+  ggdraw() + 
+    draw_image(dropshadow2, scale = 1.85, vjust = 0.01) +
+    draw_plot(p)
+})
+
+# MapBox studio base map
+output$PedestrianMap <- renderMapdeck({
+  mapdeck(style = "mapbox://styles/skohn90/ckgjqwg1w00bv1bmorr5oad7q", zoom=8,location=c(-73.75,45.5), pitch=35) 
+})
+
+# Choose your second variable
+output$second_variable <- renderPlot({
+  
+  colors <- color_scale$fill
+  colors <- as.character(colors)
+  
+  data_for_plot_ped <- data_for_app %>%
+    dplyr::select(input$data_for_plot_ped)
+  
+  colnames(data_for_plot_ped) <- c("right_variable",  "geometry")
+  
+  p <- ggplot(data_for_plot_ped) +
+    geom_sf(data = census_circular, fill = "transparent", color = "black", size = 0.05) +
+    geom_sf(
+      aes(
+        fill = as.factor(right_variable)
+      ),
+      # use thin white stroke for municipalities
+      color = "white",
+      size = 0.03
+    ) +
+    scale_fill_manual(values=rev(colors[c(4:6)]))+
+    theme_void() +
+    theme(legend.position = "none")
+  
+  ggdraw() + 
+    draw_image(dropshadow1, scale = 1.8, vjust = 0.01) +
+    draw_plot(p)
+}, bg="transparent")
 
 
+## Bivariate chloropleth map
 
-# jqui_draggable("#backpic, #context_plot")
+bivariate_chloropleth <- reactive({
+  data_for_plot_bi <- data_for_app_WSG %>%
+    dplyr::select(social_distancing_capacity_pop_perc_2m_quant3, input$data_for_plot_ped)
+  if(length(colnames(data_for_plot_bi)) == 2){data_for_plot_bi <- cbind(data_for_plot_bi[,1], data_for_plot_bi)[,1:3]}
+  #print(head(data_for_plot_bi))
+  colnames(data_for_plot_bi) <- c("left_variable", "right_variable",  "geometry")
+  data_for_plot_bivariate <- data_for_plot_bi %>%
+    mutate(
+      group = paste(
+        as.numeric(left_variable), "-",
+        as.numeric(right_variable)
+      )
+    ) %>%
+    left_join(bivariate_color_scale, by = "group") %>% 
+    drop_na()
+  
+  bivariate_chloropleth  <- st_cast(data_for_plot_bivariate, "MULTIPOLYGON")
+})
+
+
+# Set zoom bins
+observeEvent(input$PedestrianMap_view_change$zoom, {
+  #print(rz_pedestrian$zoom)
+  if( input$PedestrianMap_view_change$zoom >= 12 & input$PedestrianMap_view_change$zoom <= 14){rz_pedestrian$zoom <- 'IN'} else {
+    rz_pedestrian$zoom <- 'OUT'}
+})
+
+
+# Send reactive zoom variable back to the UI
+output$zoom <- reactive({
+  return(rz_pedestrian$zoom)
+})
+outputOptions(output, "zoom", suspendWhenHidden = FALSE)
+
+# Update map if there is a zoom, dataframe or tab change
+
+observeEvent({rz_pedestrian$zoom
+  bivariate_chloropleth()
+  input$tabs}, {
+    print(bivariate_chloropleth())
+    if( rz_pedestrian$zoom == "IN"){
+      mapdeck_update(map_id = "PedestrianMap")  %>%
+        #clear_polygon(layer_id = "dot_density_layer") %>%
+        add_polygon(
+          data = bivariate_chloropleth()
+          , na_colour = "#FFFFFF" 
+          ,stroke_colour = "FFFFFF"
+          ,stroke_width = 2
+          ,fill_colour = "fill"
+          , fill_opacity = 1
+          , update_view = FALSE
+          , layer_id = "chloropleth_layer"
+          , auto_highlight = TRUE
+          , highlight_colour = '#FFFFFF90'
+          , legend = FALSE
+          , light_settings =  list(
+            lightsPosition = c(0,0, 5000)
+            , numberOfLights = 1
+            , ambientRatio = 1
+          ) 
+        )  
+    }
+    
+    if( rz_pedestrian$zoom == "OUT") {
+      mapdeck_update(map_id = "PedestrianMap")  %>%  
+        clear_polygon(layer_id = "chloropleth_layer")
+    }  
+  })
 
 })
 
