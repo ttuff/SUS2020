@@ -792,9 +792,6 @@ observeEvent({rz$zoom
 # Pedestrian social distancing capacity map
 output$map_distancing_capacity <- renderPlot({
   
-  colors <- color_scale$fill
-  colors <- as.character(colors)
-  
   p <- ggplot() +
     geom_sf(data = census_circular, fill = "transparent", color = "black", size = 0.05) +
     geom_sf(data = data_for_app,
@@ -851,7 +848,7 @@ output$second_variable <- renderPlot({
 }, bg="transparent")
 
 
-## Bivariate chloropleth map
+## Bivariate chloropleth map (reactive value)
 
 bivariate_chloropleth <- reactive({
   data_for_plot_bi <- data_for_app_WSG %>%
@@ -870,6 +867,32 @@ bivariate_chloropleth <- reactive({
     drop_na()
   
   bivariate_chloropleth  <- st_cast(data_for_plot_bivariate, "MULTIPOLYGON")
+})
+
+## Univariate chloropleth map (reactive value)
+univariate_chloropleth <- reactive({
+  
+  color_scale_2 <- 
+    tibble(
+      "3" = "#AE3A4E",
+      "2" = "#BC7C8F",
+      "1" = "#CABED0"
+    ) %>%
+    gather("group", "fill")
+  
+  data_for_plot_uni <- data_for_app_WSG %>%
+    dplyr::select(social_distancing_capacity_pop_perc_2m_quant3)
+
+  colnames(data_for_plot_uni) <- c("left_variable", "geometry")
+  
+  data_for_plot_uni <- data_for_plot_uni %>%
+    mutate(
+      group = paste(
+        as.numeric(left_variable)
+      )
+    ) %>%
+    left_join(color_scale_2, by = "group")
+  
 })
 
 ## Create both VAS plans as reactive values
@@ -925,6 +948,7 @@ observeEvent({rz_pedestrian$zoom
         if (input$switch_biv == TRUE) {
           mapdeck_update(map_id = "PedestrianMap")  %>%
             clear_path(layer_id = "july_plan") %>%
+            clear_polygon(layer_id = "univariate_layer") %>% 
             add_polygon(
               data = bivariate_chloropleth()
               , na_colour = "#FFFFFF" 
@@ -956,6 +980,24 @@ observeEvent({rz_pedestrian$zoom
           mapdeck_update(map_id = "PedestrianMap")  %>%
             clear_path(layer_id = "july_plan") %>%
             clear_polygon(layer_id = "chloropleth_layer") %>% 
+            add_polygon(
+              data = univariate_chloropleth()
+              , na_colour = "#FFFFFF" 
+              ,stroke_colour = "#FFFFFF"
+              ,stroke_width = 5
+              ,fill_colour = "fill"
+              , fill_opacity = 1
+              , update_view = FALSE
+              , layer_id = "univariate_layer"
+              , auto_highlight = TRUE
+              , highlight_colour = '#FFFFFF90'
+              , legend = FALSE
+              , light_settings =  list(
+                lightsPosition = c(0,0, 5000)
+                , numberOfLights = 1
+                , ambientRatio = 1
+              ) 
+            ) %>%  
             add_path(
               data = may_vas_plan()
               , layer_id = "may_plan"
@@ -971,6 +1013,7 @@ observeEvent({rz_pedestrian$zoom
         if (input$switch_biv == TRUE) {
           mapdeck_update(map_id = "PedestrianMap")  %>%
             clear_path(layer_id = "may_plan") %>%
+            clear_polygon(layer_id = "univariate_layer") %>% 
             add_polygon(
               data = bivariate_chloropleth()
               , na_colour = "#FFFFFF" 
@@ -1003,6 +1046,24 @@ observeEvent({rz_pedestrian$zoom
           mapdeck_update(map_id = "PedestrianMap")  %>%
             clear_path(layer_id = "may_plan") %>%
             clear_polygon(layer_id = "chloropleth_layer") %>%
+            add_polygon(
+              data = univariate_chloropleth()
+              , na_colour = "#FFFFFF" 
+              ,stroke_colour = "#FFFFFF"
+              ,stroke_width = 5
+              ,fill_colour = "fill"
+              , fill_opacity = 1
+              , update_view = FALSE
+              , layer_id = "univariate_layer"
+              , auto_highlight = TRUE
+              , highlight_colour = '#FFFFFF90'
+              , legend = FALSE
+              , light_settings =  list(
+                lightsPosition = c(0,0, 5000)
+                , numberOfLights = 1
+                , ambientRatio = 1
+              ) 
+            ) %>% 
             add_path(
               data = july_vas_plan()
               , layer_id = "july_plan"
@@ -1021,6 +1082,7 @@ observeEvent({rz_pedestrian$zoom
           mapdeck_update(map_id = "PedestrianMap")  %>%
             clear_path(layer_id = "may_plan") %>%
             clear_path(layer_id = "july_plan") %>% 
+            clear_polygon(layer_id = "univariate_layer") %>% 
             add_polygon(
               data = bivariate_chloropleth()
               , na_colour = "#FFFFFF" 
@@ -1045,13 +1107,32 @@ observeEvent({rz_pedestrian$zoom
           mapdeck_update(map_id = "PedestrianMap")  %>%
             clear_path(layer_id = "may_plan") %>%
             clear_path(layer_id = "july_plan") %>% 
-            clear_polygon(layer_id = "chloropleth_layer") 
+            clear_polygon(layer_id = "chloropleth_layer") %>% 
+            add_polygon(
+              data = univariate_chloropleth()
+              , na_colour = "#FFFFFF" 
+              ,stroke_colour = "#FFFFFF"
+              ,stroke_width = 5
+              ,fill_colour = "fill"
+              , fill_opacity = 1
+              , update_view = FALSE
+              , layer_id = "univariate_layer"
+              , auto_highlight = TRUE
+              , highlight_colour = '#FFFFFF90'
+              , legend = FALSE
+              , light_settings =  list(
+                lightsPosition = c(0,0, 5000)
+                , numberOfLights = 1
+                , ambientRatio = 1
+              ) 
+            )
         } 
     }}
     
     if( rz_pedestrian$zoom == "OUT") {
       mapdeck_update(map_id = "PedestrianMap")  %>%  
         clear_polygon(layer_id = "chloropleth_layer") %>% 
+        clear_polygon(layer_id = "univariate_layer") %>% 
         clear_path(layer_id = "may_plan") %>% 
         clear_path(layer_id = "july_plan")
     }  
@@ -1059,6 +1140,7 @@ observeEvent({rz_pedestrian$zoom
     if( rz_pedestrian$zoom == "FINAL") {
       mapdeck_update(map_id = "PedestrianMap")  %>%  
         clear_polygon(layer_id = "chloropleth_layer") %>% 
+        clear_polygon(layer_id = "univariate_layer") %>% 
         clear_path(layer_id = "may_plan") %>% 
         clear_path(layer_id = "july_plan")
     } 
