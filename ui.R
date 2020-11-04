@@ -244,6 +244,7 @@ dashboardPage(skin="black",
                                   ),
                                   tags$head(tags$style(
                                     HTML('
+             #input_control_overlay {background-color: rgba(0,0,255,0.0);border-width: 0px;}
              #input_control_left {background-color: rgba(0,0,255,0.0);border-width: 0px;}
              #input_control_left2 {background-color: rgba(0,0,255,0.0);border-width: 0px;}
              #input_control_right {background-color: rgba(0,0,255,0.0);border-width: 0px;}')
@@ -258,17 +259,17 @@ dashboardPage(skin="black",
                                     width = 500,
                                     
                                     
-                                    conditionalPanel(condition = "output.zoom == 'OUT'", plotOutput("context_plot", height = 200), id = "plotContainer2")
+                                    conditionalPanel(condition = "output.zoom_ALP == 'OUT'", plotOutput("context_plot", height = 200), id = "plotContainer2")
                                   ),
                                   jqui_draggable(
                                     absolutePanel(
-                                      id="input_control_right",
+                                      id="input_control_overlay",
                                       style="z-index:500;",
                                       class = "panel panel-default",
                                       draggable = TRUE, 
                                       top = 60, right = 50,
                                       widtth=60,
-                                      conditionalPanel(id = "menuContainer",condition = "output.zoom == 'IN'" ,
+                                      conditionalPanel(id = "menuContainer",condition = "output.zoom_ALP == 'IN'" ,
                                                        selectInput("data_for_plot_right", label=h3("Select your second variable"), 
                                                                    selected = "MedRent_quant3", choices = list(
                                                                      "Tenant housing" = "TenantH_quant3",

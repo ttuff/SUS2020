@@ -649,13 +649,13 @@ observeEvent(input$myMap_view_change$zoom, {
       rz$zoom <- 'OUT'}}
 })
 
-output$zoom <- reactive({
+output$zoom_ALP <- reactive({
   
   
   return(rz$zoom)
   
 })
-outputOptions(output, "zoom", suspendWhenHidden = FALSE)
+outputOptions(output, "zoom_ALP", suspendWhenHidden = FALSE)
 
 
 
