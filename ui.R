@@ -35,6 +35,18 @@ js_ped <- "$(document).ready(function(){
 });
 "
 
+js_ped_control <- "$(document).ready(function(){
+  $('#plotContainer_ped_control').on('show', function(){
+    $(this).css('opacity', 0).animate({opacity: 1}, {duration: 1000});
+  }).on('hide', function(){
+    var $this = $(this);
+    setTimeout(function(){
+      $this.css('opacity', 0).animate({opacity: 1}, {duration: 1000});
+    })
+  });
+});
+"
+
 rz_pedestrian <- reactiveValues(zoom = 'OUT')
 
 
@@ -340,19 +352,40 @@ bla bla bla bla bla bla"
                                       draggable = TRUE, 
                                       top = 60, right = 250,
                                       width = 400,
-                                      conditionalPanel(condition = "output.zoom == 'IN'", id = "plotContainer_ped",
+                                      conditionalPanel(condition = "output.zoom == 'IN'",  id = "plotContainer_ped",
                                                        selectInput("data_for_plot_ped", label=h3("Select your second variable"),
                                                                    selected = "agg_proximity_score_quant3", choices = list(
                                                                      "Walkable Access to Key Amenities" = "agg_proximity_score_quant3",
                                                                      "Net Median Income" = "net_median_income_quant3",
-                                                                     "Visible Minority Population" = "visible_minority_pop_quant3",
-                                                                     "Black Minority Population" = "black_minority_pop_quant3", 
-                                                                     "Immigrant Population" = "immigrants_quant3",
-                                                                     "Refugee Population" = "refugees_quant3")),
+                                                                     "Visible Minority Population" = "visible_minority_pop_quant3", 
+                                                                     "Immigrant Population" = "immigrants_quant3")),
                                                        plotOutput("second_variable"),
-                                                       HTML(markdownToHTML(fragment.only=TRUE, text=c("Drag to move")))))
+                                                       HTML(markdownToHTML(fragment.only=TRUE, text=c("Drag to move"))))
+                                      )          
                                       
-                                    )  
+                                    ),
+                                    
+                                    absolutePanel(
+                                      id = "controls", class = "panel panel-default",
+                                      draggable = TRUE, top = "5%",
+                                      conditionalPanel(condition = "output.zoom == 'IN'", id = "plotContainer_ped_control",
+                                      dropdownButton(
+                                        label = "",
+                                        icon = icon("gear"),
+                                        status = "primary",
+                                        circle = TRUE,
+                                        width = 350,
+                                        radioGroupButtons(inputId = "vas_plan",label = "Covid-19 Expanded Active Transportation Network",
+                                                          checkIcon = list(
+                                                            yes = tags$i(class = "fa fa-check-square", 
+                                                                         style = "color: steelblue"),
+                                                            no = tags$i(class = "fa fa-square-o", 
+                                                                        style = "color: steelblue")),
+                                                          choices = list("May 2020 plan" = 1,"July 2020 plan" = 2, "Remove plan view" = 0),
+                                                          selected = 0),
+                                        materialSwitch(inputId = "switch_biv", label = "Perform Bivariate Analysis", status = "primary", value = FALSE)
+                                      )
+                                    ))
                                     
                             ),
                           tabItem(tabName = "home",

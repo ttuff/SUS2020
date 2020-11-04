@@ -55,7 +55,8 @@ shinyServer(function(input, output, session) {
   load(file = "data/census_analysis_WSG.Rdata")
   load(file = "data/data_for_app_WSG.Rdata")
   load(file = "data/centroids.Rdata")
-  
+  load(file = "data/original_VAS_plan.Rdata")
+  load(file = "data/revised_VAS_plan.Rdata")
   
   output$homepic <- renderImage({
   # When input$n is 3, filename is ./images/image3.jpeg
@@ -786,7 +787,7 @@ observeEvent({rz$zoom
   })
 
 
-### Pedestrian zone - no cars ALLOWED
+### Pedestrian zone - no cars ALLOWED ###
 
 # Pedestrian social distancing capacity map
 output$map_distancing_capacity <- renderPlot({
@@ -871,13 +872,38 @@ bivariate_chloropleth <- reactive({
   bivariate_chloropleth  <- st_cast(data_for_plot_bivariate, "MULTIPOLYGON")
 })
 
+## Create both VAS plans as reactive values
+
+# May plan
+may_vas_plan <- reactive({
+  
+  may_vas_plan <- original_plan_disaggregated %>% 
+    st_transform(4326)
+  
+  may_vas_plan  <- st_cast(may_vas_plan, "MULTILINESTRING")
+  
+})
+
+
+
+# July plan
+
+july_vas_plan <- reactive({
+  
+  july_vas_plan <- revised_plan %>% 
+    st_transform(4326)
+  
+  july_vas_plan  <- st_cast( july_vas_plan, "MULTILINESTRING")
+})
+
 
 # Set zoom bins
 observeEvent(input$PedestrianMap_view_change$zoom, {
   #print(rz_pedestrian$zoom)
-  if( input$PedestrianMap_view_change$zoom >= 12 & input$PedestrianMap_view_change$zoom <= 14){rz_pedestrian$zoom <- 'IN'} else {
-    rz_pedestrian$zoom <- 'OUT'}
-})
+  if( input$PedestrianMap_view_change$zoom >= 10.5 & input$PedestrianMap_view_change$zoom <= 14){rz_pedestrian$zoom <- 'IN'} else {
+    if(  input$PedestrianMap_view_change$zoom > 14){rz_pedestrian$zoom <- 'FINAL'} else {
+    rz_pedestrian$zoom <- 'OUT'}}
+    })
 
 
 # Send reactive zoom variable back to the UI
@@ -886,39 +912,156 @@ output$zoom <- reactive({
 })
 outputOptions(output, "zoom", suspendWhenHidden = FALSE)
 
-# Update map if there is a zoom, dataframe or tab change
+# Update map if there is a zoom / dataframe / tab / input change
 
 observeEvent({rz_pedestrian$zoom
   bivariate_chloropleth()
+  input$vas_plan
+  input$switch_biv
   input$tabs}, {
-    print(bivariate_chloropleth())
+    #print(bivariate_chloropleth())
     if( rz_pedestrian$zoom == "IN"){
-      mapdeck_update(map_id = "PedestrianMap")  %>%
-        #clear_polygon(layer_id = "dot_density_layer") %>%
-        add_polygon(
-          data = bivariate_chloropleth()
-          , na_colour = "#FFFFFF" 
-          ,stroke_colour = "FFFFFF"
-          ,stroke_width = 2
-          ,fill_colour = "fill"
-          , fill_opacity = 1
-          , update_view = FALSE
-          , layer_id = "chloropleth_layer"
-          , auto_highlight = TRUE
-          , highlight_colour = '#FFFFFF90'
-          , legend = FALSE
-          , light_settings =  list(
-            lightsPosition = c(0,0, 5000)
-            , numberOfLights = 1
-            , ambientRatio = 1
-          ) 
-        )  
-    }
+      if (input$vas_plan == 1) {
+        if (input$switch_biv == TRUE) {
+          mapdeck_update(map_id = "PedestrianMap")  %>%
+            clear_path(layer_id = "july_plan") %>%
+            add_polygon(
+              data = bivariate_chloropleth()
+              , na_colour = "#FFFFFF" 
+              ,stroke_colour = "#FFFFFF"
+              ,stroke_width = 5
+              ,fill_colour = "fill"
+              , fill_opacity = 1
+              , update_view = FALSE
+              , layer_id = "chloropleth_layer"
+              , auto_highlight = TRUE
+              , highlight_colour = '#FFFFFF90'
+              , legend = FALSE
+              , light_settings =  list(
+                lightsPosition = c(0,0, 5000)
+                , numberOfLights = 1
+                , ambientRatio = 1
+              ) 
+            ) %>%  
+            add_path(
+              data = may_vas_plan()
+              , layer_id = "may_plan"
+              , stroke_colour = "#FFD700"
+              , stroke_width = 40
+              , stroke_opacity = 1
+              , update_view = FALSE
+            )
+        }
+        if (input$switch_biv == FALSE) {
+          mapdeck_update(map_id = "PedestrianMap")  %>%
+            clear_path(layer_id = "july_plan") %>%
+            clear_polygon(layer_id = "chloropleth_layer") %>% 
+            add_path(
+              data = may_vas_plan()
+              , layer_id = "may_plan"
+              , stroke_colour = "#FFD700"
+              , stroke_width = 40
+              , stroke_opacity = 1
+              , update_view = FALSE
+            )
+        }
+        }
+      
+      if (input$vas_plan == 2) { 
+        if (input$switch_biv == TRUE) {
+          mapdeck_update(map_id = "PedestrianMap")  %>%
+            clear_path(layer_id = "may_plan") %>%
+            add_polygon(
+              data = bivariate_chloropleth()
+              , na_colour = "#FFFFFF" 
+              ,stroke_colour = "#FFFFFF"
+              ,stroke_width = 5
+              ,fill_colour = "fill"
+              , fill_opacity = 1
+              , update_view = FALSE
+              , layer_id = "chloropleth_layer"
+              , auto_highlight = TRUE
+              , highlight_colour = '#FFFFFF90'
+              , legend = FALSE
+              , light_settings =  list(
+                lightsPosition = c(0,0, 5000)
+                , numberOfLights = 1
+                , ambientRatio = 1
+              ) 
+            ) %>% 
+            add_path(
+              data = july_vas_plan()
+              , layer_id = "july_plan"
+              , stroke_colour = "#FFD700"
+              , stroke_width = 40
+              , stroke_opacity = 1
+              , update_view = FALSE
+            )
+        }
+      
+        if (input$switch_biv == FALSE) {
+          mapdeck_update(map_id = "PedestrianMap")  %>%
+            clear_path(layer_id = "may_plan") %>%
+            clear_polygon(layer_id = "chloropleth_layer") %>%
+            add_path(
+              data = july_vas_plan()
+              , layer_id = "july_plan"
+              , stroke_colour = "#FFD700"
+              , stroke_width = 40
+              , stroke_opacity = 1
+              , update_view = FALSE
+            )
+        }  
+        
+        }
+      
+      if (input$vas_plan == 0) { 
+        
+        if (input$switch_biv == TRUE) {
+          mapdeck_update(map_id = "PedestrianMap")  %>%
+            clear_path(layer_id = "may_plan") %>%
+            clear_path(layer_id = "july_plan") %>% 
+            add_polygon(
+              data = bivariate_chloropleth()
+              , na_colour = "#FFFFFF" 
+              ,stroke_colour = "#FFFFFF"
+              ,stroke_width = 5
+              ,fill_colour = "fill"
+              , fill_opacity = 255
+              , update_view = FALSE
+              , layer_id = "chloropleth_layer"
+              , auto_highlight = TRUE
+              , highlight_colour = '#FFFFFF90'
+              , legend = FALSE
+              , light_settings =  list(
+                lightsPosition = c(0,0, 5000)
+                , numberOfLights = 1
+                , ambientRatio = 1
+              ) 
+            )
+        }
+        
+        if (input$switch_biv == FALSE) {
+          mapdeck_update(map_id = "PedestrianMap")  %>%
+            clear_path(layer_id = "may_plan") %>%
+            clear_path(layer_id = "july_plan") %>% 
+            clear_polygon(layer_id = "chloropleth_layer") 
+        } 
+    }}
     
     if( rz_pedestrian$zoom == "OUT") {
       mapdeck_update(map_id = "PedestrianMap")  %>%  
-        clear_polygon(layer_id = "chloropleth_layer")
+        clear_polygon(layer_id = "chloropleth_layer") %>% 
+        clear_path(layer_id = "may_plan") %>% 
+        clear_path(layer_id = "july_plan")
     }  
+    
+    if( rz_pedestrian$zoom == "FINAL") {
+      mapdeck_update(map_id = "PedestrianMap")  %>%  
+        clear_polygon(layer_id = "chloropleth_layer") %>% 
+        clear_path(layer_id = "may_plan") %>% 
+        clear_path(layer_id = "july_plan")
+    } 
   })
 
 })
