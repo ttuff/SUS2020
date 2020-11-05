@@ -126,106 +126,73 @@ shinyServer(function(input, output, session) {
   
   output$mapModeShift <- renderPlot({
     
-    data_for_plot_left <- data_for_plot %>%
-      dplyr::select(Bicycle_proportion_quant3)
-    
-    colnames(data_for_plot_left) <- c("left_variable",  "geometry")
+    data_for_plot_left <- 
+      data_for_plot %>%
+      dplyr::select(Bicycle_proportion_quant3) %>% 
+      set_names(c("left_variable",  "geometry"))
     
     ggplot(data_for_plot_left) +
-      geom_sf(
-        aes(
-          fill = as.factor(left_variable)
-        ),
-        # use thin white stroke for municipalities
-        color = "white",
-        size = 0.01
-      ) +
-      scale_fill_manual(values=rev(colors[c(1:3)]))+
+      geom_sf(aes(fill = as.factor(left_variable)), color = "white", size = 0.01) +
+      scale_fill_manual(values = rev(colors[c(1:3)])) +
       theme_map()
-  })
+    
+    })
   
   output$mapBiodiversity <- renderPlot({
     
-    data_for_plot_left <- data_for_plot %>%
-      dplyr::select(ale_tranis_quant3)
-    
-    colnames(data_for_plot_left) <- c("left_variable",  "geometry")
+    data_for_plot_left <- 
+      data_for_plot %>%
+      dplyr::select(ale_tranis_quant3) %>% 
+      set_names(c("left_variable",  "geometry"))
     
     ggplot(data_for_plot_left) +
-      geom_sf(
-        aes(
-          fill = as.factor(left_variable)
-        ),
-        # use thin white stroke for municipalities
-        color = "white",
-        size = 0.01
-      ) +
-      scale_fill_manual(values=rev(colors[c(1:3)]))+
+      geom_sf(aes(fill = as.factor(left_variable)), color = "white", size = 0.01) +
+      scale_fill_manual(values = rev(colors[c(1:3)])) +
       theme_map()
-  })
-  
-  
-  
+    
+    })
   
   output$mapGreenSpace <- renderPlot({
     
-    data_for_plot_left <- data_for_plot %>%
-      dplyr::select(ale_tranis_quant3)
-    
-    colnames(data_for_plot_left) <- c("left_variable",  "geometry")
+    data_for_plot_left <- 
+      data_for_plot %>%
+      dplyr::select(ale_tranis_quant3) %>% 
+      set_names(c("left_variable",  "geometry"))
     
     ggplot(data_for_plot_left) +
-      geom_sf(
-        aes(
-          fill = as.factor(left_variable)
-        ),
-        # use thin white stroke for municipalities
-        color = "white",
-        size = 0.01
-      ) +
-      scale_fill_manual(values=rev(colors[c(1:3)]))+
+      geom_sf(aes(fill = as.factor(left_variable)), color = "white", size = 0.01) +
+      scale_fill_manual(values = rev(colors[c(1:3)])) +
       theme_map()
-  })
+    
+    })
   
   output$mapShortTermRentals <- renderPlot({
     
-    data_for_plot_left <- data_for_plot %>%
-      dplyr::select(TenantH_quant3)
-    
-    colnames(data_for_plot_left) <- c("left_variable",  "geometry")
+    data_for_plot_left <- 
+      data_for_plot %>%
+      dplyr::select(TenantH_quant3) %>% 
+      set_names(c("left_variable",  "geometry"))
     
     ggplot(data_for_plot_left) +
-      geom_sf(
-        aes(
-          fill = as.factor(left_variable)
-        ),
-        # use thin white stroke for municipalities
-        color = "white",
-        size = 0.01
-      ) +
-      scale_fill_manual(values=rev(colors[c(1:3)]))+
+      geom_sf(aes(fill = as.factor(left_variable)), color = "white", size = 0.01) +
+      scale_fill_manual(values = rev(colors[c(1:3)])) +
       theme_map()
-  })
+    
+    })
   
   output$mapEnergy <- renderPlot({
     
-    data_for_plot_left <- data_for_plot %>%
-      dplyr::select(ale_tranis_quant3)
-    
-    colnames(data_for_plot_left) <- c("left_variable",  "geometry")
+    data_for_plot_left <- 
+      data_for_plot %>%
+      dplyr::select(ale_tranis_quant3) %>% 
+      set_names(c("left_variable",  "geometry"))
     
     ggplot(data_for_plot_left) +
-      geom_sf(
-        aes(
-          fill = as.factor(left_variable)
-        ),
-        # use thin white stroke for municipalities
-        color = "white",
-        size = 0.01
-      ) +
-      scale_fill_manual(values=rev(colors[c(1:3)]))+
+      geom_sf(aes(fill = as.factor(left_variable)), color = "white", size = 0.01) +
+      scale_fill_manual(values = rev(colors[c(1:3)])) +
       theme_map()
-  })
+    
+    })
   
   output$mapClimateChange <- renderPlot({
     
@@ -559,17 +526,13 @@ shinyServer(function(input, output, session) {
           ) 
         )  
     }
-    if( rz$zoom == "OUT") {
+    if (rz$zoom == "OUT") {
       mapdeck_update(map_id = "myMap")  %>%  
         clear_polygon(layer_id = "polylayer") %>%  
         clear_polygon(layer_id = "isolayer")
     } 
     
   }) 
-  
-  
-  
-  
   
   observeEvent({rz$zoom
     data_for_plot_r_bivar()
@@ -579,7 +542,7 @@ shinyServer(function(input, output, session) {
       # print(head(data_for_plot_r_bivar()))   
       
       
-      if( rz$zoom == "ISO"){
+      if (rz$zoom == "ISO") {
         
         # mapdeck_update(map_id = "myMap") %>%  
         #  clear_polygon(layer_id = "polylayer")
