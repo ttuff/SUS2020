@@ -21,14 +21,12 @@ library(leaflet)
 library(shinythemes)
 library(ggthemes)
 library(extrafont)
-library(shiny)
 library(shinydashboard)
 library(shinyWidgets)
 library(leaflet)
 library(sf)
 library(mapdeck)
 library(DT)
-library(dplyr)
 
 
 loadRData <- function(fileName){
@@ -100,7 +98,8 @@ observe({
   #  print(output$top)
 })
 
-set_token('pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ') ## set your access token
+# Set access token
+set_token('pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ') 
 
 # Load and clean census data
 source("bivariate_server.R")
@@ -206,71 +205,49 @@ theme_map <- function(...) {
 
 output$context_plot <- renderPlot({
   
+  data_for_plot_left <- 
+    data_for_plot %>%
+    dplyr::select(ale_tranis_quant3) %>% 
+    set_names(c("left_variable",  "geometry"))
   
-  
-  data_for_plot_left <- data_for_plot %>%
-    dplyr::select(ale_tranis_quant3)
-  
-  colnames(data_for_plot_left) <- c("left_variable",  "geometry")
-  
-  p <- ggplot(data_for_plot_left) +
-    geom_sf(
-      aes(
-        fill = as.factor(left_variable)
-      ),
-      # use thin white stroke for municipalities
-      color = "white",
-      size = 0.01
-    ) +
-    scale_fill_manual(values=rev(colors[c(1:3)]))+
+  p <- 
+    ggplot(data_for_plot_left) +
+    geom_sf(aes(fill = as.factor(left_variable)), color = "white", size = 0.01) +
+    scale_fill_manual(values = rev(colors[c(1:3)])) +
     theme_map() 
-  
   
   ggdraw() + 
     draw_image(dropshadow1, scale = 1, vjust = -0.003, hjust = -0.003) +
     draw_plot(p)
   
-  
-}, bg="transparent")
-
-
-
-
+  }, bg = "transparent")
 
 output$mapActiveLivingPotential <- renderPlot({
   
-  data_for_plot_left <- data_for_plot %>%
-    dplyr::select(ale_tranis_quant3)
+  data_for_plot_left <- 
+    data_for_plot %>%
+    dplyr::select(ale_tranis_quant3) %>% 
+    set_names(c("left_variable",  "geometry"))
   
-  colnames(data_for_plot_left) <- c("left_variable",  "geometry")
-  
-  p <- ggplot(data_for_plot_left) +
-    geom_sf(
-      aes(
-        fill = as.factor(left_variable)
-      ),
-      # use thin white stroke for municipalities
-      color = "white",
-      size = 0.01
-    ) +
-    scale_fill_manual(values=rev(colors[c(1:3)]))+
-    theme_map() + 
+  p <- 
+    ggplot(data_for_plot_left) +
+    geom_sf(aes(fill = as.factor(left_variable)), color = "white", size = 0.01) +
+    scale_fill_manual(values = rev(colors[c(1:3)])) +
+    theme_map() +
     theme(legend.position = "none")
-  
   
   ggdraw() + 
     draw_image(dropshadow2, scale = 1.59, vjust = 0.003, hjust = 0.003) +
     draw_plot(p)
   
-  
-}, bg="white")
+  }, bg = "white")
 
 output$mapModeShift <- renderPlot({
   
-  data_for_plot_left <- data_for_plot %>%
-    dplyr::select(Bicycle_proportion_quant3)
-  
-  colnames(data_for_plot_left) <- c("left_variable",  "geometry")
+  data_for_plot_left <- 
+    data_for_plot %>%
+    dplyr::select(Bicycle_proportion_quant3) %>% 
+    set_names(c("left_variable",  "geometry"))
   
   ggplot(data_for_plot_left) +
     geom_sf(
@@ -568,7 +545,8 @@ data_for_plot_r_bivar <- reactive({
   data_for_plot_bi <- data_for_plot %>%
     dplyr::select(ale_tranis_quant3, input$data_for_plot_right) 
   
-  if(length(colnames(data_for_plot_bi)) == 2){data_for_plot_bi <- cbind(data_for_plot_bi[,1], data_for_plot_bi)[,1:3]}
+  if(length(colnames(data_for_plot_bi)) == 2){
+    data_for_plot_bi <- cbind(data_for_plot_bi[,1], data_for_plot_bi)[,1:3]}
   #print(head(data_for_plot_bi))
   colnames(data_for_plot_bi) <- c("left_variable", "right_variable",  "geometry")
   
@@ -581,7 +559,10 @@ data_for_plot_r_bivar <- reactive({
     ) %>%
     left_join(bivariate_color_scale, by = "group")
   
-  data_for_plot_bivariate <- cbind(data_for_plot_bivariate, as.numeric(data_for_plot_bivariate$left_variable) * as.numeric(data_for_plot_bivariate$right_variable))
+  data_for_plot_bivariate <- 
+    cbind(data_for_plot_bivariate, 
+          as.numeric(data_for_plot_bivariate$left_variable) * 
+            as.numeric(data_for_plot_bivariate$right_variable))
   
   
   names(data_for_plot_bivariate)[5] <- 'elevation'
@@ -598,37 +579,36 @@ data_for_plot_r_bivar <- reactive({
   #return(data_for_plot_r_bivar)
 })
 
-isochrones <- mb_isochrone(c(-73.75,45.5),
-                           time = c(30),
-                           profile = c("walking"),
-                           geometry = "polygon",
-                           access_token='pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ')
+isochrones <- 
+  mb_isochrone(c(-73.75, 45.5),
+               time = c(30),
+               profile = c("walking"),
+               geometry = "polygon",
+               access_token = 
+                 'pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ')
 
-isochrones_path <- mb_isochrone(c(-73.75,45.5),
-                                time = c(30),
-                                profile = c("driving"),
-                                geometry = "linestring",
-                                access_token='pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ',
-                                keep_color_cols = TRUE)
+isochrones_path <- 
+  mb_isochrone(c(-73.75, 45.5),
+               time = c(30),
+               profile = c("driving"),
+               geometry = "linestring",
+               access_token = 
+                 'pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ',
+               keep_color_cols = TRUE)
 
 output$myMap <- renderMapdeck({
   
-  mapdeck(style = "mapbox://styles/ttuff/ckg422ljr1leo1al42f920pa8", zoom=10.1,location=c(-73.58,45.39), pitch=35) 
-})
+  mapdeck(style = "mapbox://styles/ttuff/ckg422ljr1leo1al42f920pa8", 
+          zoom = 10.1, location = c(-73.58, 45.39), pitch = 35)
+  
+  })
 
 output$myMap2 <- renderMapdeck({
-  mapdeck(style = "mapbox://styles/ttuff/ckg422ljr1leo1al42f920pa8", zoom=10,location=c(-73.75,45.4), pitch=35) 
-})
-
-
-
-
-
-
-
-
-
-
+  
+  mapdeck(style = "mapbox://styles/ttuff/ckg422ljr1leo1al42f920pa8", 
+          zoom = 10, location = c(-73.75, 45.4), pitch = 35) 
+  
+  })
 
 
 observeEvent(input$myMap_view_change$zoom, {
@@ -802,7 +782,8 @@ output$map_distancing_capacity <- renderPlot({
 
 # MapBox studio base map
 output$PedestrianMap <- renderMapdeck({
-  mapdeck(style = "mapbox://styles/skohn90/ckgjqwg1w00bv1bmorr5oad7q", token = 'pk.eyJ1Ijoic2tvaG45MCIsImEiOiJja2JpNGZjMnUwYm9hMnFwN3Q2bmV5c3prIn0.M-AJKxYD1ETFiBB6swQmJw',
+  mapdeck(style = "mapbox://styles/skohn90/ckgjqwg1w00bv1bmorr5oad7q", 
+          token = 'pk.eyJ1Ijoic2tvaG45MCIsImEiOiJja2JpNGZjMnUwYm9hMnFwN3Q2bmV5c3prIn0.M-AJKxYD1ETFiBB6swQmJw',
           zoom=8,location=c(-73.75,45.5), pitch=35) 
 })
 
@@ -842,7 +823,8 @@ output$second_variable <- renderPlot({
 bivariate_chloropleth <- reactive({
   data_for_plot_bi <- data_for_app_WSG %>%
     dplyr::select(social_distancing_capacity_pop_perc_2m_quant3, input$data_for_plot_ped)
-  if(length(colnames(data_for_plot_bi)) == 2){data_for_plot_bi <- cbind(data_for_plot_bi[,1], data_for_plot_bi)[,1:3]}
+  if(length(colnames(data_for_plot_bi)) == 2){
+    data_for_plot_bi <- cbind(data_for_plot_bi[,1], data_for_plot_bi)[,1:3]}
   #print(head(data_for_plot_bi))
   colnames(data_for_plot_bi) <- c("left_variable", "right_variable",  "geometry")
   data_for_plot_bivariate <- data_for_plot_bi %>%
@@ -912,10 +894,15 @@ july_vas_plan <- reactive({
 # Set zoom bins
 observeEvent(input$PedestrianMap_view_change$zoom, {
   #print(rz_pedestrian$zoom)
-  if( input$PedestrianMap_view_change$zoom >= 10.5 & input$PedestrianMap_view_change$zoom <= 14){rz_pedestrian$zoom <- 'IN'} else {
-    if(  input$PedestrianMap_view_change$zoom > 14){rz_pedestrian$zoom <- 'FINAL'} else {
-    rz_pedestrian$zoom <- 'OUT'}}
-    })
+  if (input$PedestrianMap_view_change$zoom >= 10.5 && 
+      input$PedestrianMap_view_change$zoom <= 14) {
+    rz_pedestrian$zoom <- 'IN'
+    } else {
+      if (input$PedestrianMap_view_change$zoom > 14) {
+        rz_pedestrian$zoom <- 'FINAL'} else {
+          rz_pedestrian$zoom <- 'OUT'
+          }}
+  })
 
 
 # Send reactive zoom variable back to the UI
@@ -1140,8 +1127,22 @@ cycling_network <- loadRData("data/reseau_cyclable.Rdata")
 car_share <- loadRData("data/Car_Share.Rdata")
 cycling_access <- loadRData("data/Cycling_Access.Rdata")
 trip_distance <- loadRData("data/Trip_Distance.Rdata")
-scenario1 <- data.frame(c("Criteria: Cycling Distance (km)","Potential Cyclable Trips (per day)", "VMT Savings (per day)"), c(4.4, 60460, 102862))
-scenario2 <- data.frame(c("Criteria: Cycling Distance (km)","Criteria: Elevation Gain (m)", "Criteria: Time Ratio","Potential Cyclable Trips (per day)", "VMT Savings (per day)"), c(4.4,45,2.4, 44205, 72992))
+
+scenario1 <- 
+  tibble(
+    c("Criteria: Cycling Distance (km)", 
+      "Potential Cyclable Trips (per day)", 
+      "VMT Savings (per day)"), 
+    c(4.4, 60460, 102862))
+
+scenario2 <- 
+  tibble(
+    c("Criteria: Cycling Distance (km)", 
+      "Criteria: Elevation Gain (m)", 
+      "Criteria: Time Ratio","Potential Cyclable Trips (per day)", 
+      "VMT Savings (per day)"), 
+    c(4.4,45,2.4, 44205, 72992))
+
 ###########legend#####
 df_pal1 <- data.frame(
   color = c(1,2,3,4,5),
@@ -1196,7 +1197,8 @@ legend3 <- mapdeck_legend(legend_po3)
 ########Output#######
 output$qzmyMap <- renderMapdeck({
   mapdeck(token = "pk.eyJ1Ijoiemhhb3FpYW8wMTIwIiwiYSI6ImNrYXBnbHB3dTFtbDIycWxvZ285cjNmcG0ifQ.fieGPt1pLEgHs1AI8NvjYg",
-          style = "mapbox://styles/zhaoqiao0120/ckh1hkzwe02br19nvzt9bvxcg", zoom=10,location=c(-73.611,45.526))
+          style = "mapbox://styles/zhaoqiao0120/ckh1hkzwe02br19nvzt9bvxcg", 
+          zoom = 10, location = c(-73.611, 45.526))
 })
 observeEvent(input$qzmyMap_view_change$zoom, {
   if( input$qzmyMap_view_change$zoom > 10){qz$zoom_level <- 'OUT'} else {
@@ -1242,14 +1244,17 @@ observeEvent(input$radio1, {
     updateSliderTextInput(session = session,
                           inputId = "slider3",
                           selected = 2.4)
-    # showNotification("A potentially cyclable trip:\nA car trip where the cycling distance between its origin and destination is shorter than 4.4 kilometers",
+    # showNotification(paste0("A potentially cyclable trip:\n",
+    #                         "A car trip where the cycling distance between ",
+    #                         "its origin and destination is shorter than 4.4 ", 
+    #                         "kilometers"),
     #                  type = "message", duration = 3)
   }
   
 }
 )
 observeEvent(input$switch2, {
-  if(input$switch2 == TRUE){
+  if (input$switch2 == TRUE) {
     mapdeck_update(map_id = "qzmyMap")  %>%
       add_path(data = cycling_network,
                stroke_colour = "#EA3546",
@@ -1262,7 +1267,7 @@ observeEvent(input$switch2, {
   }
 })
 observeEvent(input$variable,{
-  if(input$variable == 1){
+  if (input$variable == 1) {
     updateKnobInput(session = session,
                     inputId = "knob1",
                     label = "Access to Cycling Infrastructure (km/sq.km):",
