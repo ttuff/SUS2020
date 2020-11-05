@@ -30,7 +30,7 @@ library(mapdeck)
 library(DT)
 library(dplyr)
 
-source("bivariate.R")
+source("bivariate_ui.R")
 
 loadRData <- function(fileName){
   #loads an RData file, and returns it

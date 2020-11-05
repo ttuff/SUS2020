@@ -1,4 +1,4 @@
-#### Logic/prep for bivariate comparison #######################################
+#### Logic/prep for bivariate comparison UI ####################################
 
 
 
