@@ -363,62 +363,67 @@ shinyServer(function(input, output, session) {
   ####################################################
   
   output$map2 <- renderPlot({
-    data_for_plot_right <- data_for_plot %>%
-      dplyr::select(input$data_for_plot_right)
     
-    colnames(data_for_plot_right) <- c("right_variable",  "geometry")
+    data_for_plot_right <- 
+      data_for_plot %>%
+      dplyr::select(input$data_for_plot_right) %>% 
+      set_names(c("right_variable",  "geometry"))
     
-    p <- ggplot(data_for_plot_right) +
-      geom_sf(
-        aes(
-          fill = as.factor(right_variable)
-        ),
-        # use thin white stroke for municipalities
-        color = "white",
-        size = 0.01
-      ) +
-      scale_fill_manual(values=rev(colors[c(4:6)]))+
+    p <- 
+      ggplot(data_for_plot_right) +
+      geom_sf(aes(fill = as.factor(right_variable)), color = "white", size = 0.01) +
+      scale_fill_manual(values = rev(colors[c(4:6)])) +
       theme_map()
     
     ggdraw() + 
-      draw_image( dropshadow1, scale = 1.49, vjust = -0.003, hjust = -0.003) +
+      draw_image(dropshadow1, scale = 1.49, vjust = -0.003, hjust = -0.003) +
       draw_plot(p)
     
-    
-  }, bg="transparent")
+    }, bg = "transparent")
+  
+  
+  ### Create the data frame to generate bivariate maps #########################
   
   data_for_plot_r_bivar <- reactive({
-    data_for_plot_bi <- data_for_plot %>%
-      dplyr::select(ale_tranis_quant3, input$data_for_plot_right) 
     
-    if(length(colnames(data_for_plot_bi)) == 2){data_for_plot_bi <- cbind(data_for_plot_bi[,1], data_for_plot_bi)[,1:3]}
-    #print(head(data_for_plot_bi))
+    data_for_plot_bi <- 
+      data_for_plot %>%
+      dplyr::select(ale_tranis_quant3, input$data_for_plot_right)
+    
+    if (length(colnames(data_for_plot_bi)) == 2) {
+      data_for_plot_bi <- 
+        cbind(data_for_plot_bi[,1], data_for_plot_bi)[,1:3]
+    }
+    
     colnames(data_for_plot_bi) <- c("left_variable", "right_variable",  "geometry")
     
-    data_for_plot_bivariate <- data_for_plot_bi %>%
-      mutate(
-        group = paste(
-          as.numeric(left_variable), "-",
-          as.numeric(right_variable)
-        )
-      ) %>%
+    data_for_plot_bivariate <- 
+      data_for_plot_bi %>%
+      mutate(group = paste(as.numeric(left_variable), "-", 
+                           as.numeric(right_variable))) %>%
       left_join(bivariate_color_scale, by = "group")
     
-    data_for_plot_bivariate <- cbind(data_for_plot_bivariate, as.numeric(data_for_plot_bivariate$left_variable) * as.numeric(data_for_plot_bivariate$right_variable))
-    
+    data_for_plot_bivariate <- 
+      cbind(data_for_plot_bivariate, 
+            as.numeric(data_for_plot_bivariate$left_variable) * 
+              as.numeric(data_for_plot_bivariate$right_variable))
     
     names(data_for_plot_bivariate)[5] <- 'elevation'
+    
     data_for_plot_bivariate <- data_for_plot_bivariate[,-7]
-    #data_for_plot_bivariate <- data_for_plot_bivariate[- which(is.na(data_for_plot_bivariate$elevation)),]
-    data_for_plot_bivariate$elevation <- (data_for_plot_bivariate$elevation)^2 *50
-    #library(raster)
-    #which(is.na(data_for_plot_bivariate$elevation))
-    print(max(data_for_plot_bivariate$elevation))
-    data_for_plot_r_bivar <- st_transform(data_for_plot_bivariate, 4326)
+    
+    data_for_plot_bivariate$elevation <- 
+      (data_for_plot_bivariate$elevation) ^ 2 * 50
 
-    data_for_plot_r_bivar  <- st_cast(data_for_plot_r_bivar, "MULTIPOLYGON")
-    #return(data_for_plot_r_bivar)
+    data_for_plot_r_bivar <- 
+      data_for_plot_bivariate %>% 
+      st_transform(4326) %>% 
+      st_cast("MULTIPOLYGON")
+    
   })
+  
+  
+  
   
   isochrones <- mb_isochrone(c(-73.75,45.5),
                              time = c(30),

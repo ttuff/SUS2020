@@ -338,15 +338,23 @@ bla bla bla bla bla bla")))))
                                                  status = "primary",
                                                  circle = TRUE,
                                                  width = 350,
-                                                 radioGroupButtons(inputId = "vas_plan",label = "Covid-19 Expanded Active Transportation Network",
-                                                                   checkIcon = list(
-                                                                     yes = tags$i(class = "fa fa-check-square", 
-                                                                                  style = "color: steelblue"),
-                                                                     no = tags$i(class = "fa fa-square-o", 
-                                                                                 style = "color: steelblue")),
-                                                                   choices = list("May 2020 plan" = 1,"July 2020 plan" = 2, "Remove plan view" = 0),
+                                                 radioGroupButtons(
+                                                   inputId = "vas_plan",
+                                                   label = "Covid-19 Expanded Active Transportation Network",
+                                                   checkIcon = list(
+                                                     yes = tags$i(class = "fa fa-check-square", 
+                                                                  style = "color: steelblue"),
+                                                     no = tags$i(class = "fa fa-square-o", 
+                                                                 style = "color: steelblue")),
+                                                   choices = list("May 2020 plan" = 1,
+                                                                  "July 2020 plan" = 2, 
+                                                                  "Remove plan view" = 0),
                                                                    selected = 0),
-                                                 materialSwitch(inputId = "switch_biv", label = "Perform Bivariate Analysis", status = "primary", value = FALSE)
+                                                 materialSwitch(
+                                                   inputId = "switch_biv", 
+                                                   label = "Perform Bivariate Analysis", 
+                                                   status = "primary", 
+                                                   value = FALSE)
                                                )
                               ))
                             
@@ -407,9 +415,13 @@ bla bla bla bla bla bla")))))
                                                   by = 0.2),
                                     grid = TRUE
                                   ),
-                                  # materialSwitch(inputId = "switch1", label = "Modelled Cycling Route", status = "primary", value = FALSE),
+                                  # materialSwitch(inputId = "switch1", 
+                                  #                label = "Modelled Cycling Route", 
+                                  #                status = "primary", value = FALSE),
                                   hr(),
-                                  materialSwitch(inputId = "switch2", label = "Cycling Network", status = "primary", value = TRUE)
+                                  materialSwitch(inputId = "switch2", 
+                                                 label = "Cycling Network", 
+                                                 status = "primary", value = TRUE)
                                   
                                 )
                               ),
@@ -426,7 +438,9 @@ bla bla bla bla bla bla")))))
                                   pickerInput(
                                     inputId = "variable",
                                     label = "Select a variable:", 
-                                    choices = list("Share of Car Trips" = 2, "Average Commuting Distance" = 3, "Access to Cycling Infrastructure" = 1),
+                                    choices = list("Share of Car Trips" = 2, 
+                                                   "Average Commuting Distance" = 3, 
+                                                   "Access to Cycling Infrastructure" = 1),
                                     selected = 2
                                   ),
                                   knobInput(
@@ -453,21 +467,6 @@ bla bla bla bla bla bla")))))
                   
                 )
   ))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
