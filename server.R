@@ -244,25 +244,7 @@ output$context_plot <- renderPlot({
 }, bg="transparent")
 
 
-output$mapPedestrians <- renderPlot({
-  
-  data_for_plot_left <- data_for_plot %>%
-    dplyr::select(ale_tranis_quant3)
-  
-  colnames(data_for_plot_left) <- c("left_variable",  "geometry")
-  
-  ggplot(data_for_plot_left) +
-    geom_sf(
-      aes(
-        fill = as.factor(left_variable)
-      ),
-      # use thin white stroke for municipalities
-      color = "white",
-      size = 0.01
-    ) +
-    scale_fill_manual(values=rev(colors[c(1:3)]))+
-    theme_map()
-})
+
 
 
 output$mapActiveLivingPotential <- renderPlot({
