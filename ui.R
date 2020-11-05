@@ -21,7 +21,23 @@ library(leaflet)
 library(shinythemes)
 library(ggthemes)
 library(extrafont)
+library(shiny)
+library(shinydashboard)
+library(shinyWidgets)
+library(leaflet)
+library(sf)
+library(mapdeck)
+library(DT)
+library(dplyr)
 
+
+loadRData <- function(fileName){
+  #loads an RData file, and returns it
+  load(fileName)
+  get(ls()[ls() != "fileName"])
+}
+
+qz <- reactiveValues(zoom_level = 'IN')
 
 js_ped <- "$(document).ready(function(){
   $('#plotContainer_ped').on('show', function(){
@@ -394,7 +410,101 @@ bla bla bla bla bla bla"
                                     imageOutput("homepic", height = 600)
                                   )  
                                   
-                          )))
+                          ),
+                          tabItem(tabName = "mode",
+                                  fluidPage(
+                                    
+                                    mapdeckOutput(outputId = "qzmyMap",
+                                                  height = "800px"),
+                                    absolutePanel(
+                                      id = "controls", class = "panel panel-default",
+                                      draggable = FALSE, top = 55, left = "4%",
+                                      right = "auto", bottom = "auto",
+                                      width = 0, height = 0,
+                                      dropdownButton(
+                                        label = "",
+                                        inputId = "drop",
+                                        icon = icon("gear"),
+                                        status = "primary",
+                                        circle = TRUE,
+                                        width = 330,
+                                        h4(strong("Modal Shift Scenarios")),
+                                        radioGroupButtons("radio1",label = "Predefined Scenarios",
+                                                          checkIcon = list(
+                                                            yes = tags$i(class = "fa fa-check-square", 
+                                                                         style = "color: steelblue"),
+                                                            no = tags$i(class = "fa fa-square-o", 
+                                                                        style = "color: steelblue")),
+                                                          choices = list("Scenario 1" = 1,"Scenario 2" = 2, "Reset" = 3),
+                                                          selected = 3),
+                                        sliderTextInput(
+                                          inputId = "slider1",
+                                          label = "Cycling Distance (km):", 
+                                          choices = seq(from = 1,
+                                                        to = 10,
+                                                        by = 0.1),
+                                          grid = TRUE
+                                        ),
+                                        
+                                        sliderTextInput(
+                                          inputId = "slider2",
+                                          label = "Elevation Gain (m):", 
+                                          choices = seq(from = 10,
+                                                        to = 55,
+                                                        by = 5),
+                                          grid = TRUE
+                                        ),
+                                        sliderTextInput(
+                                          inputId = "slider3",
+                                          label = "Time Ratio:", 
+                                          choices = seq(from = 1.0,
+                                                        to = 3.0,
+                                                        by = 0.2),
+                                          grid = TRUE
+                                        ),
+                                        # materialSwitch(inputId = "switch1", label = "Modelled Cycling Route", status = "primary", value = FALSE),
+                                        hr(),
+                                        materialSwitch(inputId = "switch2", label = "Cycling Network", status = "primary", value = TRUE)
+                                        
+                                      )
+                                    ),
+                                    absolutePanel(
+                                      id="panel1",
+                                      style="z-index:500;",
+                                      class = "panel panel-default",
+                                      draggable = FALSE, 
+                                      top = 60, right = 50,
+                                      widtth=60,
+                                      conditionalPanel(
+                                        condition = "output.zoom_level == 'ISO'",
+                                        h4(strong("Choropleth Map")),
+                                        pickerInput(
+                                          inputId = "variable",
+                                          label = "Select a variable:", 
+                                          choices = list("Share of Car Trips" = 2, "Average Commuting Distance" = 3, "Access to Cycling Infrastructure" = 1),
+                                          selected = 2
+                                        ),
+                                        knobInput(
+                                          inputId = "knob1",
+                                          label = "Car Share by Origin Census Tract:",
+                                          step = 0.5,
+                                          min = 4,
+                                          max = 17,
+                                          value = 17,
+                                          displayPrevious = TRUE,
+                                          lineCap = "round",
+                                          fgColor = "#B2D235",
+                                          inputColor = "#B2D235"
+                                        )
+                                      ),
+                                      conditionalPanel(
+                                        condition = "output.zoom_level == 'OUT' & input.radio1 <3",
+                                        h4(strong("VMT Reduction")),
+                                        DT::DTOutput("table")
+                                      )
+                                    )
+                                  )  
+                          ))
                       
   )
   
