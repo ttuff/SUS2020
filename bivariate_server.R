@@ -20,33 +20,48 @@ data_for_plot <-
            NA_real_, driver_proportion),
          walk_or_bike_prop = Walked_proportion + Bicycle_proportion,
          car_prop = driver_proportion + passenger_proportion) %>% 
-  select(DAUID, ale_index, ale_class,
-         households_housing = Households,
+  # select(DAUID, ale_index, ale_class,
+  #        households_housing = Households,
+  #        households_income = Househol_1,
+  #        population = Pop,
+  #        tenant_prop,
+  #        median_rent = MedRent,
+  #        median_mortgage = MedMort,
+  #        median_property_value = MedVal,
+  #        suitable_prop,
+  #        median_income = MHI,
+  #        income_50_prop,
+  #        income_100_prop,
+  #        income_high_prop = INOver100k_proportion,
+  #        immigrant_prop = Imm_proportion,
+  #        immigrant_new_prop = Imm_5year_proportion,
+  #        car_prop,
+  #        walk_or_bike_prop,
+  #        transit_prop = Pubtrans_proportion,
+  #        time_15_prop = T_15_proportion,
+  #        time_30_prop = B15_29_proportion,
+  #        time_45_prop = B30_44_proportion,
+  #        time_60_prop = B_45_59_proportion,
+  #        ale_tranis_quant3,
+  #        Bicycle_proportion_quant3) %>% 
+  rename(households_housing = Households,
          households_income = Househol_1,
          population = Pop,
-         tenant_prop,
          median_rent = MedRent,
          median_mortgage = MedMort,
          median_property_value = MedVal,
-         suitable_prop,
          median_income = MHI,
-         income_50_prop,
-         income_100_prop,
          income_high_prop = INOver100k_proportion,
          immigrant_prop = Imm_proportion,
          immigrant_new_prop = Imm_5year_proportion,
-         car_prop,
-         walk_or_bike_prop,
          transit_prop = Pubtrans_proportion,
          time_15_prop = T_15_proportion,
          time_30_prop = B15_29_proportion,
          time_45_prop = B30_44_proportion,
-         time_60_prop = B_45_59_proportion,
-         ale_tranis_quant3,
-         Bicycle_proportion_quant3)
+         time_60_prop = B_45_59_proportion)
 
 # Fix geometry
-data_for_plot <- 
-  data_for_plot %>% 
-  st_transform(4326) %>% 
-  st_cast("MULTIPOLYGON")
+# data_for_plot <- 
+#   data_for_plot %>% 
+#   st_transform(4326) %>% 
+#   st_cast("MULTIPOLYGON")
