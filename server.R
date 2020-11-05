@@ -37,7 +37,7 @@ loadRData <- function(fileName){
   get(ls()[ls() != "fileName"])
 }
 
-qz <- reactiveValues(zoom_level = 'IN')
+qz <- reactiveValues(zoom_level = 'NO')
 
 js_ped <- "$(document).ready(function(){
   $('#plotContainer').on('show', function(){
@@ -1392,7 +1392,7 @@ observe({
                  stroke_colour = "#0061FF80",
                  layer_id = "cyclable",
                  update_view = FALSE)
-      
+
       output$table <- renderDT({
         DT::datatable(scenario1,
                       rownames = FALSE, colnames = c("",""), filter = "none",

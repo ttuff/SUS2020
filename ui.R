@@ -37,7 +37,7 @@ loadRData <- function(fileName){
   get(ls()[ls() != "fileName"])
 }
 
-qz <- reactiveValues(zoom_level = 'IN')
+qz <- reactiveValues(zoom_level = 'NO')
 
 js_ped <- "$(document).ready(function(){
   $('#plotContainer_ped').on('show', function(){
@@ -497,7 +497,7 @@ bla bla bla bla bla bla"
                                         )
                                       ),
                                       conditionalPanel(
-                                        condition = "output.zoom_level == 'ISO' & input.radio1 <3",
+                                        condition = "output.zoom_level == 'OUT' & input.radio1 <3",
                                         h4(strong("VMT Reduction")),
                                         DT::DTOutput("table")
                                       )
