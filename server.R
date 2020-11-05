@@ -1,39 +1,33 @@
-library(mapdeck)
-library(shiny)
-library(shinydashboard)
-library(jsonify)
-library(sf)
-library(geojsonsf)
-library(tidyverse)
-library(raster)
-library(mapboxapi)
-library(mapdeck)
-library(markdown)
-library(shinyjqui)
-library(plotly)
-library(png)
-library(shinyWidgets)
-library(cowplot)
-library(RColorBrewer)
-library(classInt)
-library(scales)
-library(leaflet)
-library(shinythemes)
-library(ggthemes)
-library(extrafont)
-library(shinydashboard)
-library(shinyWidgets)
-library(leaflet)
-library(sf)
-library(mapdeck)
-library(DT)
+##### SUS SERVER SCRIPT ########################################################
+
+# Load libraries, functions and variables ---------------------------------
+
+source("libs.R")
 
 
-loadRData <- function(fileName){
-  #loads an RData file, and returns it
-  load(fileName)
-  get(ls()[ls() != "fileName"])
-}
+# Load data ---------------------------------------------------------------
+
+# Load bivariate census data
+load(file = "data/data_for_plot.Rdata")
+
+# Load data for pedestrian realm 
+load(file = "data/census_analysis.Rdata")
+load(file = "data/census_circular.Rdata")
+load(file = "data/data_for_app.Rdata")
+load(file = "data/color_scale.Rdata")
+load(file = "data/bivariate_color_scale.Rdata")
+load(file = "data/sample_points_for_app_WSG.Rdata")
+load(file = "data/census_analysis_WSG.Rdata")
+load(file = "data/data_for_app_WSG.Rdata")
+load(file = "data/centroids.Rdata")
+load(file = "data/original_VAS_plan.Rdata")
+load(file = "data/revised_VAS_plan.Rdata")
+
+dropshadow1 <- normalizePath(file.path("www/dropshadow1.png"))
+dropshadow2 <- normalizePath(file.path("www/dropshadow2.png"))
+
+
+# Other prep --------------------------------------------------------------
 
 qz <- reactiveValues(zoom_level = 'NO')
 
@@ -53,37 +47,13 @@ rz_pedestrian <- reactiveValues(zoom = 'OUT')
 
 rz <- reactiveValues(zoom = 'IN')
 
-# Define server logic required to draw a histogram
+# Set access token  
+set_token('pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ')
+
+
+### Main server function #######################################################
+
 shinyServer(function(input, output, session) {
-  
-  dropshadow1 <- normalizePath(file.path("www/dropshadow1.png"))
-  dropshadow2 <- normalizePath(file.path("www/dropshadow2.png"))
-  
-  # Load data for pedestrian realm 
-  
-  load(file = "data/census_analysis.Rdata")
-  load(file = "data/census_circular.Rdata")
-  load(file = "data/data_for_app.Rdata")
-  load(file = "data/color_scale.Rdata")
-  load(file = "data/bivariate_color_scale.Rdata")
-  load(file = "data/sample_points_for_app_WSG.Rdata")
-  load(file = "data/census_analysis_WSG.Rdata")
-  load(file = "data/data_for_app_WSG.Rdata")
-  load(file = "data/centroids.Rdata")
-  load(file = "data/original_VAS_plan.Rdata")
-  load(file = "data/revised_VAS_plan.Rdata")
-  
-  output$homepic <- renderImage({
-    # When input$n is 3, filename is ./images/image3.jpeg
-    filename <- normalizePath(file.path("www/Sus logo transparent.png"))
-    
-    # Return a list containing the filename and alt text
-    return( list(src = filename, contentType = "image/png",  width = 571,
-                 height = 551))
-    
-  }, deleteFile = FALSE)
-  
-  
   
   #print(observe(tops()))
   #observeEvent(input$tabswitch, {
@@ -93,185 +63,66 @@ shinyServer(function(input, output, session) {
   #updateTabItems(session, "tabs", newtab)
   #})
   
-  observe({
-    print(input$input_control_left_position)
-    #  print(output$top)
-  })
+  # observe({
+  #   print(input$input_control_left_position)
+  #   #  print(output$top)
+  # })
   
-  set_token('pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ') ## set your access token
-  
-  load(file = "data/data_for_plot.Rdata")
-  
-  #class(data_for_plot)
-  #library(raster)
-  #crs(data_for_plot) <- "+proj=longlat +datum=WGS84"
-  data_for_plot_r <- st_transform(data_for_plot, 4326)
-  #crs(data_for_plot_r)
-  
-  data_for_plot_r  <- st_cast(data_for_plot_r, "MULTIPOLYGON")
-  
-  
-  
-  
-  ## save colors
-  bivariate_color_scale <- tibble(
-    "3 - 3" = "#3F2949", # high inequality, high income
-    "2 - 3" = "#435786",
-    "1 - 3" = "#4885C1", # low inequality, high income
-    "3 - 2" = "#77324C",
-    "2 - 2" = "#806A8A", # medium inequality, medium income
-    "1 - 2" = "#89A1C8",
-    "3 - 1" = "#AE3A4E", # high inequality, low income
-    "2 - 1" = "#BC7C8F",
-    "1 - 1" = "#CABED0" # low inequality, low income
-  ) %>%
-    gather("group", "fill")
-  
-  color_scale <- tibble(
-    "6" = "#AE3A4E",
-    "5" = "#BC7C8F", # medium inequality, medium income
-    "4" = "#CABED0",
-    "3" = "#4885C1", # high inequality, low income
-    "2" = "#89A1C8",
-    "1" = "#CABED0" # low inequality, low income
-  ) %>%
-    gather("group", "fill") 
-  
-  #color_scale <- cbind(color_scale[,1], color_scale) %>% 
-  #as.numeric(color_scale)
-  # names(color_scale) <- c("pers","haps", "fill_color")
-  # color_scale$pers <- as.numeric(color_scale$pers)
-  # color_scale$haps <- as.numeric(color_scale$haps)
-  
-  colors <- color_scale$fill
-  colors <- as.character(colors)
-  
-  # g <- grid::circleGrob(gp = grid::gpar(fill = "white", col="white"))
-  
-  # ## maps output
-  
-  default_background_color <- "transparent"
-  default_font_color <- "black"
-  default_font_family <- "Helvetica"
-  
-  theme_map <- function(...) {
-    default_background_color <- "transparent"
-    default_font_color <- "black"
-    default_font_family <- "Helvetica"
+  output$homepic <- renderImage({
+   
+     # When input$n is 3, filename is ./images/image3.jpeg
+    filename <- normalizePath(file.path("www/Sus logo transparent.png"))
     
-    theme_minimal() +
-      theme(
-        text = element_text(family = default_font_family,
-                            color = default_font_color),
-        # remove all axes
-        axis.line = element_blank(),
-        axis.text.x = element_blank(),
-        axis.text.y = element_blank(),
-        axis.ticks = element_blank(),
-        # add a subtle grid
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        # background colors
-        plot.background = element_rect(fill = default_background_color,
-                                       color = NA),
-        panel.background = element_rect(fill = default_background_color,
-                                        color = NA),
-        legend.background = element_rect(fill = default_background_color,
-                                         color = NA),
-        legend.position = "none",
-        # borders and margins
-        plot.margin = unit(c(0, .5, .2, .5), "cm"),
-        panel.border = element_blank(),
-        panel.spacing = unit(c(-.1, 0.2, .2, 0.2), "cm"),
-        # titles
-        legend.title = element_text(size = 11),
-        legend.text = element_text(size = 22, hjust = 0,
-                                   color = default_font_color),
-        plot.title = element_text(size = 15, hjust = 0.5,
-                                  color = default_font_color),
-        plot.subtitle = element_text(size = 10, hjust = 0.5,
-                                     color = default_font_color,
-                                     margin = margin(b = -0.1,
-                                                     t = -0.1,
-                                                     l = 2,
-                                                     unit = "cm"),
-                                     debug = F),
-        # captions
-        plot.caption = element_text(size = 7,
-                                    hjust = .5,
-                                    margin = margin(t = 0.2,
-                                                    b = 0,
-                                                    unit = "cm"),
-                                    color = "#939184"),
-        ...
-      )
-  }
-  #set_token('pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ')
+    # Return a list containing the filename and alt text
+    return(list(src = filename, contentType = "image/png",  width = 571,
+                height = 551))
+    
+    }, deleteFile = FALSE)
   
+  
+
   ####################################################
   # plot output calls for all 'left' plots
   ####################################################
   
   output$context_plot <- renderPlot({
     
+    data_for_plot_left <- 
+      data_for_plot %>%
+      dplyr::select(ale_tranis_quant3) %>% 
+      set_names(c("left_variable",  "geometry"))
     
-    
-    data_for_plot_left <- data_for_plot %>%
-      dplyr::select(ale_tranis_quant3)
-    
-    colnames(data_for_plot_left) <- c("left_variable",  "geometry")
-    
-    p <- ggplot(data_for_plot_left) +
-      geom_sf(
-        aes(
-          fill = as.factor(left_variable)
-        ),
-        # use thin white stroke for municipalities
-        color = "white",
-        size = 0.01
-      ) +
-      scale_fill_manual(values=rev(colors[c(1:3)]))+
+    p <- 
+      ggplot(data_for_plot_left) +
+      geom_sf(aes(fill = as.factor(left_variable)), color = "white", size = 0.01) +
+      scale_fill_manual(values = rev(colors[c(1:3)])) +
       theme_map() 
-    
     
     ggdraw() + 
       draw_image(dropshadow1, scale = 1, vjust = -0.003, hjust = -0.003) +
       draw_plot(p)
     
-    
-  }, bg="transparent")
-  
-  
-  
-  
+    }, bg = "transparent")
   
   output$mapActiveLivingPotential <- renderPlot({
     
-    data_for_plot_left <- data_for_plot %>%
-      dplyr::select(ale_tranis_quant3)
+    data_for_plot_left <- 
+      data_for_plot %>%
+      dplyr::select(ale_tranis_quant3) %>% 
+      set_names(c("left_variable",  "geometry"))
     
-    colnames(data_for_plot_left) <- c("left_variable",  "geometry")
-    
-    p <- ggplot(data_for_plot_left) +
-      geom_sf(
-        aes(
-          fill = as.factor(left_variable)
-        ),
-        # use thin white stroke for municipalities
-        color = "white",
-        size = 0.01
-      ) +
-      scale_fill_manual(values=rev(colors[c(1:3)]))+
+    p <-
+      ggplot(data_for_plot_left) +
+      geom_sf(aes(fill = as.factor(left_variable)), color = "white", size = 0.01) +
+      scale_fill_manual(values = rev(colors[c(1:3)])) +
       theme_map() + 
       theme(legend.position = "none")
-    
     
     ggdraw() + 
       draw_image(dropshadow2, scale = 1.59, vjust = 0.003, hjust = 0.003) +
       draw_plot(p)
     
-    
-  }, bg="white")
+    }, bg = "white")
   
   output$mapModeShift <- renderPlot({
     
@@ -562,9 +413,6 @@ shinyServer(function(input, output, session) {
       scale_fill_manual(values=rev(colors[c(4:6)]))+
       theme_map()
     
-    
-    
-    
     ggdraw() + 
       draw_image( dropshadow1, scale = 1.49, vjust = -0.003, hjust = -0.003) +
       draw_plot(p)
@@ -600,8 +448,7 @@ shinyServer(function(input, output, session) {
     #which(is.na(data_for_plot_bivariate$elevation))
     print(max(data_for_plot_bivariate$elevation))
     data_for_plot_r_bivar <- st_transform(data_for_plot_bivariate, 4326)
-    #crs(data_for_plot_r)
-    
+
     data_for_plot_r_bivar  <- st_cast(data_for_plot_r_bivar, "MULTIPOLYGON")
     #return(data_for_plot_r_bivar)
   })
