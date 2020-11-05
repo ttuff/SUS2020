@@ -1213,6 +1213,12 @@ observeEvent(input$qzmyMap_view_change$zoom, {
     qz$zoom_level <- 'ISO'}}
 )
 
+observeEvent(input$myMap_view_change$zoom, {
+  #print(rz$zoom)
+  
+})
+
+
 output$zoom_level <- reactive({
   
   return(qz$zoom_level)

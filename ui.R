@@ -418,8 +418,7 @@ bla bla bla bla bla bla"
                                                   height = "800px"),
                                     absolutePanel(
                                       id = "controls", class = "panel panel-default",
-                                      draggable = FALSE, top = 55, left = "4%",
-                                      right = "auto", bottom = "auto",
+                                      draggable = FALSE, top = 55, left = 400,
                                       width = 0, height = 0,
                                       dropdownButton(
                                         label = "",
@@ -498,7 +497,7 @@ bla bla bla bla bla bla"
                                         )
                                       ),
                                       conditionalPanel(
-                                        condition = "output.zoom_level == 'OUT' & input.radio1 <3",
+                                        condition = "output.zoom_level == 'ISO' & input.radio1 <3",
                                         h4(strong("VMT Reduction")),
                                         DT::DTOutput("table")
                                       )
