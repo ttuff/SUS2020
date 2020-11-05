@@ -1162,12 +1162,12 @@ observeEvent({rz_pedestrian$zoom
         clear_path(layer_id = "july_plan")
     } 
   })
-cycling1 <- loadRData("Rdata/car_1_finals.Rdata")
-cycling2 <- loadRData("Rdata/car_3_finals.Rdata")
-cycling_network <- loadRData("Rdata/reseau_cyclable.Rdata")
-car_share <- loadRData("Rdata/Car_Share.Rdata")
-cycling_access <- loadRData("Rdata/Cycling_Access.Rdata")
-trip_distance <- loadRData("Rdata/Trip_Distance.Rdata")
+cycling1 <- loadRData("data/car_1_finals.Rdata")
+cycling2 <- loadRData("data/car_3_finals.Rdata")
+cycling_network <- loadRData("data/reseau_cyclable.Rdata")
+car_share <- loadRData("data/Car_Share.Rdata")
+cycling_access <- loadRData("data/Cycling_Access.Rdata")
+trip_distance <- loadRData("data/Trip_Distance.Rdata")
 scenario1 <- data.frame(c("Criteria: Cycling Distance (km)","Potential Cyclable Trips (per day)", "VMT Savings (per day)"), c(4.4, 60460, 102862))
 scenario2 <- data.frame(c("Criteria: Cycling Distance (km)","Criteria: Elevation Gain (m)", "Criteria: Time Ratio","Potential Cyclable Trips (per day)", "VMT Savings (per day)"), c(4.4,45,2.4, 44205, 72992))
 ###########legend#####
