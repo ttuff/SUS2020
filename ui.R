@@ -43,11 +43,6 @@ shinyUI(
                                    plotOutput("mapActiveLivingPotential", 
                                               height = 250)),
                   
-                  menuItem("Agriculture", icon = icon("carrot"), 
-                           tabName = "Agriculture"),
-                  # conditionalPanel(condition = "input.tabs == 'Agriculture'",
-                  #                  plotOutput("mapAgriculture")),
-                  
                   menuItem("Biodiversity", icon = icon("bug"), 
                            tabName = "Biodiversity"),
                   conditionalPanel(condition = "input.tabs == 'Biodiversity'", 
@@ -58,10 +53,13 @@ shinyUI(
                   # conditionalPanel(condition = "input.tabs == 'Climate'", 
                   #                  plotOutput("mapClimateChange")),
                   
-                  menuItem("Commuter mode switching", icon = icon("biking"), 
-                           tabName = "mode"),
-                  conditionalPanel(condition = "input.tabs == 'mode'", 
-                                   plotOutput("mapModeShift", height = 250)),
+                  menuItem("Pedestrian realm", icon = icon("walking"), 
+                           tabName = "Pedestrian", badgeLabel = "suggested", 
+                           badgeColor = "aqua"),
+                  conditionalPanel(condition = "input.tabs == 'Pedestrian'",
+                                   plotOutput("map_distancing_capacity", 
+                                              height = 250)),
+                
                   
                   menuItem("Covid-19", icon = icon("head-side-mask"), 
                            tabName = "Covid", badgeLabel = "health and safety", 
@@ -73,6 +71,16 @@ shinyUI(
                            tabName = "Economic"),
                   # conditionalPanel(condition = "input.tabs == 'Economic'", 
                   #                  plotOutput("mapEconomic_health")),
+                  
+                  menuItem("Commuter mode switching", icon = icon("biking"), 
+                           tabName = "mode"),
+                  conditionalPanel(condition = "input.tabs == 'mode'", 
+                                   plotOutput("mapModeShift", height = 250)),
+                  
+                  menuItem("Agriculture", icon = icon("carrot"), 
+                           tabName = "Agriculture"),
+                  # conditionalPanel(condition = "input.tabs == 'Agriculture'",
+                  #                  plotOutput("mapAgriculture")),
                   
                   menuItem("Energy consumption", icon = icon("fire-alt"), 
                            tabName = "Energy"),
@@ -89,12 +97,7 @@ shinyUI(
                   # conditionalPanel(condition = "input.tabs == 'Land'", 
                   #                  plotOutput("mapLandUse")),
                   
-                  menuItem("Pedestrian realm", icon = icon("walking"), 
-                           tabName = "Pedestrian", badgeLabel = "suggested", 
-                           badgeColor = "aqua"),
-                  conditionalPanel(condition = "input.tabs == 'Pedestrian'",
-                                   plotOutput("map_distancing_capacity", 
-                                              height = 250)),
+                
                   
                   menuItem("Public transit", icon = icon("train"), 
                            tabName = "transit", badgeLabel = "on the ballot", 
@@ -246,7 +249,7 @@ bla bla bla bla bla bla")))))
                                                                    selected = 0),
                                                  materialSwitch(
                                                    inputId = "switchBiV", 
-                                                   label = "Perform Bivariate Analysis", 
+                                                   label = "Perform Bivariate Comparison", 
                                                    status = "primary", 
                                                    value = FALSE)
                                                ,
@@ -287,7 +290,7 @@ bla bla bla bla bla bla")))))
                                             height = "800px"),
                               absolutePanel(
                                 id = "controls", class = "panel panel-default",
-                                draggable = FALSE, top = 55, left = 400,
+                                draggable = FALSE, top = 55, left = 300,
                                 width = 0, height = 0,
                                 dropdownButton(
                                   label = "",
