@@ -205,7 +205,7 @@ shinyUI(
                                   id = "menuContainer",
                                   condition = "output.zoom_ALP == 'IN'",
                                   selectInput("data_for_plot_right", 
-                                              label = h3("Select your second variable"), 
+                                              label = h3("Try comparing pedestrian capacity with other variables"), 
                                               selected = "MedRent_quant3", choices = var_list_2),
                                   plotOutput("map2", height = 250),
                                                  
@@ -221,29 +221,10 @@ bla bla bla bla bla bla")))))
                               outputId = 'PedestrianMap'
                               , height = "800px"
                             ),
-                            jqui_draggable(absolutePanel(
-                              id = "input_control_right",
-                              style = "z-index:501;",
-                              class = "panel panel-default",
-                              draggable = TRUE, 
-                              top = 60, right = 50,
-                              conditionalPanel(
-                                condition = "output.zoom == 'IN'",  
-                                id = "plotContainer_ped",
-                                selectInput("data_for_plot_ped", 
-                                            label = h3("Select your second variable"),
-                                            selected = "agg_proximity_score_quant3", 
-                                            choices = list(
-                                              "Walkable Access to Key Amenities" = "agg_proximity_score_quant3",
-                                              "Net Median Income" = "net_median_income_quant3",
-                                              "Visible Minority Population" = "visible_minority_pop_quant3", 
-                                              "Immigrant Population" = "immigrants_quant3")),
-                                plotOutput("second_variable"),
-                                HTML(markdownToHTML(fragment.only = TRUE, text = c("Drag to move")))))),
                             
                             absolutePanel(
                               id = "controls", class = "panel panel-default",
-                              draggable = TRUE, top = "5%",
+                              draggable = TRUE, top = 50,
                               conditionalPanel(condition = "output.zoom == 'IN'", id = "plotContainer_ped_control",
                                                dropdownButton(
                                                  label = "",
@@ -264,12 +245,33 @@ bla bla bla bla bla bla")))))
                                                                   "Remove plan view" = 0),
                                                                    selected = 0),
                                                  materialSwitch(
-                                                   inputId = "switch_biv", 
+                                                   inputId = "switchBiV", 
                                                    label = "Perform Bivariate Analysis", 
                                                    status = "primary", 
                                                    value = FALSE)
-                                               )
-                              ))
+                                               ,
+                                               conditionalPanel(condition = "input.switchBiV == '1'",
+                                                            selectInput("data_for_plot_ped", 
+                                                            label = h3("Compare pedestrian realm with other variables"),
+                                                            selected = "agg_proximity_score_quant3", 
+                                                            choices = list(
+                                                              "Walkable Access to Key Amenities" = "agg_proximity_score_quant3",
+                                                              "Net Median Income" = "net_median_income_quant3",
+                                                              "Visible Minority Population" = "visible_minority_pop_quant3", 
+                                                              "Immigrant Population" = "immigrants_quant3"))
+                                               ))
+                              )),
+                       jqui_draggable(absolutePanel(
+                         id = "input_control_right",
+                         style = "z-index:501;",
+                         class = "panel panel-default",
+                         draggable = TRUE, 
+                         top = 50, left = "45%",
+                         conditionalPanel(
+                           condition = "input.switchBiV == '1'",  
+                           id = "plotContainer_ped",
+                           plotOutput("second_variable", width = 250, height = 250),
+                           HTML(markdownToHTML(fragment.only = TRUE, text = c("      Comparision variable"))))))
                             
                     ),
                     tabItem(tabName = "home",
