@@ -220,63 +220,82 @@ bal blabla balalallalal
 bla bla bla bla bla bla")))))
                          , verbatimTextOutput(outputId = "observed_click"))),
                tabItem(tabName = "Pedestrian",
-                            mapdeckOutput(
-                              outputId = 'PedestrianMap'
-                              , height = "800px"
-                            ),
-                            
-                            absolutePanel(
-                              id = "controls", class = "panel panel-default",
-                              draggable = TRUE, top = 50,
-                              conditionalPanel(condition = "output.zoom == 'IN'", id = "plotContainer_ped_control",
-                                               dropdownButton(
-                                                 label = "",
-                                                 icon = icon("gear"),
-                                                 status = "primary",
-                                                 circle = TRUE,
-                                                 width = 350,
-                                                 radioGroupButtons(
-                                                   inputId = "vas_plan",
-                                                   label = "Covid-19 Expanded Active Transportation Network",
-                                                   checkIcon = list(
-                                                     yes = tags$i(class = "fa fa-check-square", 
-                                                                  style = "color: steelblue"),
-                                                     no = tags$i(class = "fa fa-square-o", 
-                                                                 style = "color: steelblue")),
-                                                   choices = list("May 2020 plan" = 1,
-                                                                  "July 2020 plan" = 2, 
-                                                                  "Remove plan view" = 0),
-                                                                   selected = 0),
-                                                 materialSwitch(
-                                                   inputId = "switchBiV", 
-                                                   label = "Perform Bivariate Comparison", 
-                                                   status = "primary", 
-                                                   value = FALSE)
-                                               ,
-                                               conditionalPanel(condition = "input.switchBiV == '1'",
-                                                            selectInput("data_for_plot_ped", 
-                                                            label = h3("Compare pedestrian realm with other variables"),
-                                                            selected = "agg_proximity_score_quant3", 
-                                                            choices = list(
-                                                              "Walkable Access to Key Amenities" = "agg_proximity_score_quant3",
-                                                              "Net Median Income" = "net_median_income_quant3",
-                                                              "Visible Minority Population" = "visible_minority_pop_quant3", 
-                                                              "Immigrant Population" = "immigrants_quant3"))
-                                               ))
-                              )),
-                       jqui_draggable(absolutePanel(
-                         id = "input_control_right",
-                         style = "z-index:501;",
+                       mapdeckOutput(
+                         outputId = 'PedestrianMap'
+                         , height = "800px"
+                       ),
+                       absolutePanel(
+                         id="input_control_right",
+                         style="z-index:501;",
                          class = "panel panel-default",
                          draggable = TRUE, 
-                         top = 50, left = "45%",
-                         conditionalPanel(
-                           condition = "input.switchBiV == '1'",  
-                           id = "plotContainer_ped",
-                           plotOutput("second_variable", width = 250, height = 250),
-                           HTML(markdownToHTML(fragment.only = TRUE, text = c("      Comparision variable"))))))
-                            
-                    ),
+                         top = 60, right = 0,
+                         width = 400,
+                         conditionalPanel(condition = "output.zoom == 'IN' && input.switch_biv == true",  id = "plotContainer_ped",
+                                          helpText(h4(tags$div(align = 'center', (strong("Your second variable:", style = "color:#B2D235"))))), 
+                                          plotOutput("second_variable"),
+                                          helpText(tags$div(align = 'center', (strong("Drag to move", style = "color:#B2D235"))))
+                         ))          
+                       
+                       ,
+                       
+                       absolutePanel(
+                         id = "controls", class = "panel panel-default",
+                         draggable = TRUE, top = "5%",
+                         conditionalPanel(condition = "output.zoom == 'IN'", id = "plotContainer_ped_control",
+                                          dropdownButton(
+                                            label = "",
+                                            icon = icon("gear"),
+                                            status = "primary",
+                                            circle = TRUE,
+                                            width = 350,
+                                            materialSwitch(inputId = "switch_biv", label = h3(strong("Perform a Bivariate Analysis", style = "color:#B2D235")), status = "primary", value = FALSE),
+                                            conditionalPanel(condition = "input.switch_biv == true", id = "plotContainer_ped_control",
+                                                             selectInput("data_for_plot_ped", label=h4( tags$em(tags$span(style="color:#3C3C3B", "Select your second variable"))),
+                                                                         selected = "agg_proximity_score_quant3", choices = list(
+                                                                           "Walkable Access to Key Amenities" = "agg_proximity_score_quant3",
+                                                                           "Net Median Income" = "net_median_income_quant3",
+                                                                           "Visible Minority Population" = "visible_minority_pop_quant3", 
+                                                                           "Immigrant Population" = "immigrants_quant3"))
+                                            ),
+                                            h4(strong("Montreal Covid-19 Expanded Active Transit Corridors", style = "color:#B2D235")), 
+                                            materialSwitch(inputId = "vas_1", label = "Original Plan (May 15, 2020)", status = "info", value = FALSE),
+                                            materialSwitch(inputId = "vas_2", label = "Revised Plan (July 25, 2020", status = "info", value = FALSE),
+                                            selectInput(
+                                              inputId = "variable_ped",
+                                              label = h4(strong("Choose more variables and explore further", style = "color:#B2D235")), 
+                                              choices = list("Work commutes by car (%)" = 2, "TBD" = 3, "TBD" = 1),
+                                              selected = 2
+                                            ),
+                                            h5(tags$em(tags$span(style="color:#3C3C3B", "Play around with the knob to filter through the map"))), 
+                                            knobInput(
+                                              inputId = "knob_ped",
+                                              label = "",
+                                              step = 5,
+                                              min = 0,
+                                              max = 100,
+                                              value = 100,
+                                              displayPrevious = TRUE,
+                                              lineCap = "round",
+                                              fgColor = "#B2D235",
+                                              inputColor = "#B2D235"
+                                              
+                                            )
+                                            # pickerInput(
+                                            #   inputId = "vas_plan",
+                                            #   label = "Covid-19 Expanded Active Transportation Network",
+                                            #   choices = list("May 2020 plan" = 1,"July 2020 plan" = 2),
+                                            #   multiple = TRUE
+                                            # ),
+                                            # radioGroupButtons(inputId = "vas_plan",label = "Covid-19 Expanded Active Transportation Network",
+                                            #                   checkIcon = list(
+                                            #                     yes = tags$i(class = "fa fa-check-square", 
+                                            #                                  style = "color: steelblue"),
+                                            #                     no = tags$i(class = "fa fa-square-o", 
+                                            #                                 style = "color: steelblue")),
+                                            #                   choices = list("May 2020 plan" = 1,"July 2020 plan" = 2, "Remove plan view" = 0),
+                                            #                   selected = 0),)
+                                          )))), 
                     tabItem(tabName = "home",
                             fluidPage(
                               imageOutput("homepic", height = 600)
