@@ -399,7 +399,27 @@ bla bla bla bla bla bla")))))
                   width=0,height = 0,
                   conditionalPanel(
                     condition = "input.tabs == 'Biodiversity'",
-                imageOutput("bivariate_legend", height = 100)))
+                imageOutput("bivariate_legend", height = 100))),
+                absolutePanel(
+                  id="Uni_left",
+                  style="z-index:500;",
+                  class = "panel panel-default",
+                  draggable = TRUE, 
+                  top = 200, left = "30%",
+                  width=0,height = 0,
+                  conditionalPanel(
+                    condition = "input.tabs == 'Biodiversity'",
+                    imageOutput("Univariate_left_legend", height = 100))),
+                absolutePanel(
+                  id="Uni_right",
+                  style="z-index:500;",
+                  class = "panel panel-default",
+                  draggable = TRUE, 
+                  top = 200, left = "70%",
+                  width=0,height = 0,
+                  conditionalPanel(
+                    condition = "input.tabs == 'Biodiversity'",
+                    imageOutput("Univariate_right_legend", height = 100)))
               )))
               
       )
