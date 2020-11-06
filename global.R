@@ -112,6 +112,14 @@ color_scale <- tibble(
 ) %>%
   gather("group", "fill") 
 
+color_scale_2 <- 
+  tibble(
+    "3" = "#AE3A4E",
+    "2" = "#BC7C8F",
+    "1" = "#CABED0"
+  ) %>%
+  gather("group", "fill")
+
 colors <- as.character(color_scale$fill)
 
 default_background_color <- "transparent"
