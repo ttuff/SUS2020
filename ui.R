@@ -264,38 +264,23 @@ bla bla bla bla bla bla")))))
                                             selectInput(
                                               inputId = "variable_ped",
                                               label = h4(strong("Choose more variables and explore further", style = "color:#B2D235")), 
-                                              choices = list("Work commutes by car (%)" = 2, "TBD" = 3, "TBD" = 1),
-                                              selected = 2
+                                              choices = list("Population density per square km" = 1, "Pedestrian social distancing capacity" = 2, "Work commutes by car (%)" = 3, "Trajet MTL 2016 data on pedestrian flows" = 4),
+                                              selected = 1
                                             ),
-                                            h5(tags$em(tags$span(style="color:#3C3C3B", "Play around with the knob to filter through the map"))), 
-                                            knobInput(
-                                              inputId = "knob_ped",
-                                              label = "",
-                                              step = 5,
-                                              min = 0,
-                                              max = 100,
-                                              value = 100,
-                                              displayPrevious = TRUE,
-                                              lineCap = "round",
-                                              fgColor = "#B2D235",
-                                              inputColor = "#B2D235"
-                                              
-                                            )
-                                            # pickerInput(
-                                            #   inputId = "vas_plan",
-                                            #   label = "Covid-19 Expanded Active Transportation Network",
-                                            #   choices = list("May 2020 plan" = 1,"July 2020 plan" = 2),
-                                            #   multiple = TRUE
-                                            # ),
-                                            # radioGroupButtons(inputId = "vas_plan",label = "Covid-19 Expanded Active Transportation Network",
-                                            #                   checkIcon = list(
-                                            #                     yes = tags$i(class = "fa fa-check-square", 
-                                            #                                  style = "color: steelblue"),
-                                            #                     no = tags$i(class = "fa fa-square-o", 
-                                            #                                 style = "color: steelblue")),
-                                            #                   choices = list("May 2020 plan" = 1,"July 2020 plan" = 2, "Remove plan view" = 0),
-                                            #                   selected = 0),)
-                                          )))), 
+                                            h5(tags$em(tags$span(style="color:#3C3C3B", "Play around with the slider to filter through the map"))), 
+                                            h5( chooseSliderSkin(
+                                              skin = "Flat",
+                                              #c("Shiny", "Flat", "Modern", "Nice", "Simple", "HTML5", "Round", "Square"),
+                                              color = "#B2D235"
+                                            ),
+                                            sliderInput (inputId = "slider_ped",
+                                                         label = "",
+                                                         0, 12,
+                                                         value = c(0, 12),
+                                                         step = 1)
+                                          ))))), 
+               
+               
                     tabItem(tabName = "home",
                             fluidPage(
                               imageOutput("homepic", height = 600)

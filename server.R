@@ -524,7 +524,7 @@ shinyServer(function(input, output, session) {
   # MapBox studio base map
   output$PedestrianMap <- renderMapdeck({
     mapdeck(style = "mapbox://styles/skohn90/ckgjqwg1w00bv1bmorr5oad7q", token = 'pk.eyJ1Ijoic2tvaG45MCIsImEiOiJja2JpNGZjMnUwYm9hMnFwN3Q2bmV5c3prIn0.M-AJKxYD1ETFiBB6swQmJw',
-            zoom=8,location=c(-73.75,45.5), pitch=35) 
+            zoom=9,location=c(-73.75,45), pitch=35) 
   })
   
   # Choose your second variable
@@ -572,10 +572,24 @@ shinyServer(function(input, output, session) {
           as.numeric(right_variable)
         )
       ) %>%
+      mutate(prop_driving = round(census_analysis_quantile_WSG$prop_driving, 0),
+             pop_density = log(round(census_analysis_quantile_WSG$`pop_density(sqkm)`, 0)),
+             trip_scale = census_analysis_quantile_WSG$trip_scale,
+             social_distancing = census_analysis_quantile_WSG$social_distancing_capacity_pop_perc_2m) %>% 
       left_join(bivariate_color_scale, by = "group") %>% 
-      drop_na()
+      drop_na(right_variable) 
     
     bivariate_chloropleth  <- st_cast(data_for_plot_bivariate, "MULTIPOLYGON")
+    
+    if (input$variable_ped == 3) {
+      bivariate_chloropleth <- bivariate_chloropleth %>% 
+        filter(prop_driving >= input$slider_ped[1] & prop_driving <= input$slider_ped[2])
+    } else if (input$variable_ped == 2) {bivariate_chloropleth <- bivariate_chloropleth %>% 
+      filter(social_distancing >= input$slider_ped[1] & social_distancing <= input$slider_ped[2]) 
+    } else if (input$variable_ped == 1) {bivariate_chloropleth <- bivariate_chloropleth %>% 
+      filter(pop_density >= input$slider_ped[1] & pop_density <= input$slider_ped[2]) 
+    } else {bivariate_chloropleth <- bivariate_chloropleth %>% 
+      filter(trip_scale >= input$slider_ped[1] & trip_scale <= input$slider_ped[2])}
   })
   
   ## Bivariate dot density map (reactive value)
@@ -601,27 +615,37 @@ shinyServer(function(input, output, session) {
   
   ## Univariate chloropleth map
   
-  color_scale_2 <- 
-    tibble(
-      "3" = "#AE3A4E",
-      "2" = "#BC7C8F",
-      "1" = "#CABED0"
-    ) %>%
-    gather("group", "fill")
-  
-  data_for_plot_uni <- census_analysis_quantile_WSG %>%
-    dplyr::select(social_distancing_capacity_pop_perc_2m_quant3)
-  
-  colnames(data_for_plot_uni) <- c("left_variable", "geometry")
-  
-  data_for_plot_uni <- data_for_plot_uni %>%
-    mutate(
-      group = paste(
-        as.numeric(left_variable)
-      )
-    ) %>%
-    left_join(color_scale_2, by = "group") %>% 
-    mutate(prop_driving = census_analysis_quantile_WSG$prop_driving)
+  data_for_plot_uni <- reactive({
+    
+    data_for_plot_uni <- census_analysis_quantile_WSG %>%
+      dplyr::select(social_distancing_capacity_pop_perc_2m_quant3)
+    
+    colnames(data_for_plot_uni) <- c("left_variable", "geometry")
+    
+    data_for_plot_uni <- data_for_plot_uni %>%
+      mutate(
+        group = paste(
+          as.numeric(left_variable)
+        )
+      ) %>%
+      left_join(color_scale_2, by = "group") %>% 
+      mutate(prop_driving = round(census_analysis_quantile_WSG$prop_driving, 0),
+             pop_density = log(round(census_analysis_quantile_WSG$`pop_density(sqkm)`, 0)),
+             trip_scale = census_analysis_quantile_WSG$trip_scale,
+             social_distancing = census_analysis_quantile_WSG$social_distancing_capacity_pop_perc_2m)
+      
+    
+    if (input$variable_ped == 3) {
+    data_for_plot_uni <- data_for_plot_uni %>% 
+      filter(prop_driving >= input$slider_ped[1] & prop_driving <= input$slider_ped[2])
+    } else if (input$variable_ped == 2) {data_for_plot_uni <- data_for_plot_uni %>% 
+      filter(social_distancing >= input$slider_ped[1] & social_distancing <= input$slider_ped[2]) 
+    } else if (input$variable_ped == 1) {data_for_plot_uni <- data_for_plot_uni %>% 
+      filter(pop_density >= input$slider_ped[1] & pop_density <= input$slider_ped[2]) 
+    } else {data_for_plot_uni <- data_for_plot_uni %>% 
+      filter(trip_scale >= input$slider_ped[1] & trip_scale <= input$slider_ped[2])}
+    })
+
   
   # Legend
   
@@ -674,6 +698,7 @@ shinyServer(function(input, output, session) {
   
   observeEvent({rz_pedestrian$zoom
     bivariate_chloropleth()
+    data_for_plot_uni()
     #bivariate_dotdensity()
     input$vas_1
     input$vas_2
@@ -768,15 +793,13 @@ shinyServer(function(input, output, session) {
         }
         
         if (input$switch_biv == FALSE) {
-          if (input$variable_ped == 2) {
-            data_for_plot_uni_select <- data_for_plot_uni[which(data_for_plot_uni$prop_driving <= input$knob_ped),]
             mapdeck_update(map_id = "PedestrianMap")  %>%
               #clear_scatterplot(layer_id = "dot_density") %>%
               clear_polygon(layer_id = "chloropleth_layer") %>% 
               clear_path(layer_id = "july_plan") %>%
               clear_path(layer_id = "may_plan") %>% 
               add_polygon(
-                data = data_for_plot_uni_select
+                data = data_for_plot_uni()
                 , na_colour = "#FFFFFF" 
                 ,stroke_colour = "#FFFFFF"
                 ,stroke_width = 5
@@ -849,9 +872,11 @@ shinyServer(function(input, output, session) {
                   , stroke_opacity = 1
                   , update_view = FALSE
                 )
-            } } 
+            } 
           
         }
+        
+      }
         
         
         #             add_polygon(
@@ -882,7 +907,6 @@ shinyServer(function(input, output, session) {
         #                             , palette = "ped_color_palette")
         #         }
         
-      }
       
       if( rz_pedestrian$zoom == "OUT") {
         mapdeck_update(map_id = "PedestrianMap")  %>%  
@@ -905,23 +929,61 @@ shinyServer(function(input, output, session) {
     })
   
   observeEvent(input$variable_ped,{
-    if(input$variable_ped == 2){
-      updateKnobInput(session = session,
-                      inputId = "knob_ped",
+    if(input$variable_ped == 3){
+      updateSliderInput(session = session,
+                      inputId = "slider_ped",
                       label = "Work commutes by car (%)",
-                      options = list(
-                        step = 5,
-                        min = 0,
-                        max = 100,
-                        displayPrevious = TRUE,
-                        lineCap = "round",
-                        fgColor = "#B2D235",
-                        inputColor = "#B2D235"))
-      updateKnobInput(session = session,
-                      inputId = "knob_ped",
-                      value = 100
+                      0, 100,
+                      value = c(0, 100),
+                      step = 1)
+      updateSliderInput(session = session,
+                        inputId = "slider_ped",
+                        value = c(0, 100),
+                        step = 1
       )
-    } })
+    }
+    
+    else if (input$variable_ped == 2) {
+      updateSliderInput(session = session,
+                        inputId = "slider_ped",
+                        label = "Capacity of local population to make trips on foot while maintaining 2 meters distance (%)",
+                        0, 1000,
+                        value = c(0, 1000),
+                        step = 25)
+      updateSliderInput(session = session,
+                        inputId = "slider_ped",
+                        value = c(0, 1000),
+                        step = 25
+      )
+    }
+    
+    else if (input$variable_ped == 1) {
+      updateSliderInput(session = session,
+                      inputId = "slider_ped",
+                      label = "Log of Population density / km2",
+                      0, 12,
+                      value = c(0, 12),
+                      step = 1)
+      updateSliderInput(session = session,
+                      inputId = "slider_ped",
+                      value = c(0, 12),
+                      step = 1
+      )
+    }
+    
+    else {updateSliderInput(session = session,
+                            inputId = "slider_ped",
+                            label = "Pedestrian trips per sqm of walkable space index (0 = average)",
+                            -1, 6.5,
+                            value = c(-1, 6.5),
+                            step = 0.5)
+      updateSliderInput(session = session,
+                        inputId = "slider_ped",
+                        value = c(-1, 6.5),
+                        step = 0.5
+      )}
+      
+      })
   
   #####################
   ## MODE
