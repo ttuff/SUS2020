@@ -222,18 +222,18 @@ bla bla bla bla bla bla")))))
                tabItem(tabName = "Pedestrian",
                        mapdeckOutput(
                          outputId = 'PedestrianMap'
-                         , height = "800px"
+                         , height = "1200px"
                        ),
                        absolutePanel(
                          id="input_control_right",
                          style="z-index:501;",
                          class = "panel panel-default",
                          draggable = TRUE, 
-                         top = 60, right = 0,
-                         width = 400,
+                         top = 60, left = "40%",
+                         width = 250,
                          conditionalPanel(condition = "output.zoom == 'IN' && input.switch_biv == true",  id = "plotContainer_ped",
-                                          helpText(h4(tags$div(align = 'center', (strong("Your second variable:", style = "color:#B2D235"))))), 
-                                          plotOutput("second_variable"),
+                                          helpText(h2(tags$div(align = 'center', (strong("Your second variable:", style = "color:#B2D235"))))), 
+                                          plotOutput("second_variable", width = 250, height= 250),
                                           helpText(tags$div(align = 'center', (strong("Drag to move", style = "color:#B2D235"))))
                          ))          
                        
@@ -241,7 +241,7 @@ bla bla bla bla bla bla")))))
                        
                        absolutePanel(
                          id = "controls", class = "panel panel-default",
-                         draggable = TRUE, top = "5%",
+                         draggable = FALSE, top = "5%",
                          conditionalPanel(condition = "output.zoom == 'IN'", id = "plotContainer_ped_control",
                                           dropdownButton(
                                             label = "",
@@ -306,7 +306,7 @@ bla bla bla bla bla bla")))))
                             fluidPage(
                               
                               mapdeckOutput(outputId = "qzmyMap",
-                                            height = "800px"),
+                                            height = "1200px"),
                               absolutePanel(
                                 id = "controls", class = "panel panel-default",
                                 draggable = FALSE, top = 55, left = 300,

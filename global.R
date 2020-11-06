@@ -281,7 +281,7 @@ $(document).ready(function(){
 
 qz <- reactiveValues(zoom_level = 'ISO')
 
-rz_pedestrian <- reactiveValues(zoom = 'OUT')
+rz_pedestrian <- reactiveValues(zoom = 'FINAL')
 
 rz <- reactiveValues(zoom = 'IN')
 
