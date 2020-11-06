@@ -65,7 +65,8 @@ shinyServer(function(input, output, session) {
     
     ggdraw() + 
       draw_image(dropshadow2, scale = 1.59, vjust = 0.003, hjust = 0.003) +
-      draw_plot(p)
+      draw_plot(p)+
+      draw_image(uni_legend, scale = 1, vjust = 0.003, hjust = 0.003) 
     
     }, bg = "white")
   

@@ -204,6 +204,8 @@ census_analysis_quantile_WSG <- census_analysis_quantile %>%
 dropshadow1 <- normalizePath(file.path("www/dropshadow1.png"))
 dropshadow2 <- normalizePath(file.path("www/dropshadow2.png"))
 
+uni_legend <- normalizePath(file.path("www/Univariate_left.png"))
+
 
 # Other prep --------------------------------------------------------------
 
