@@ -208,16 +208,12 @@ shinyUI(
                                   id = "menuContainer",
                                   condition = "output.zoom_ALP == 'IN'",
                                   selectInput("data_for_plot_right", 
-                                              label = h3("Try comparing pedestrian capacity with other variables"), 
+                                              label = h3("Try comparing Active Living Potential with other variables"), 
                                               selected = "MedRent_quant3", choices = var_list_2),
                                   plotOutput("map2", height = 250),
-                                                 
+                                  imageOutput("bivariate_legend", height = 300),
                                                  HTML(markdownToHTML(fragment.only=TRUE, text=c(
-                                                   "bla bla bla bla bla bla 
-         
-bal blabla balalallalal
-         
-bla bla bla bla bla bla")))))
+                                                   "")))))
                          , verbatimTextOutput(outputId = "observed_click"))),
                tabItem(tabName = "Pedestrian",
                        mapdeckOutput(
@@ -390,16 +386,16 @@ bla bla bla bla bla bla")))))
               fluidPage(
                 mapdeckOutput(outputId = "biodiversityMap",
                               height = "1200px"),
-                absolutePanel(
-                  id="bivariate_legend",
-                  style="z-index:500;",
-                  class = "panel panel-default",
-                  draggable = TRUE, 
-                  top = 100, left = "50%",
-                  width=0,height = 0,
-                  conditionalPanel(
-                    condition = "input.tabs == 'Biodiversity'",
-                imageOutput("bivariate_legend", height = 100))),
+                # absolutePanel(
+                #   id="bivariate_legend",
+                #   style="z-index:500;",
+                #   class = "panel panel-default",
+                #   draggable = TRUE, 
+                #   top = 100, left = "50%",
+                #   width=0,height = 0,
+                #   conditionalPanel(
+                #     condition = "input.tabs == 'Biodiversity'",
+                # imageOutput("bivariate_legend", height = 100))),
                 absolutePanel(
                   id="Uni_left",
                   style="z-index:500;",
@@ -409,7 +405,8 @@ bla bla bla bla bla bla")))))
                   width=0,height = 0,
                   conditionalPanel(
                     condition = "input.tabs == 'Biodiversity'",
-                    imageOutput("Univariate_left_legend", height = 100))),
+                    imageOutput("Univariate_left_legend", height = 100)))
+                ,
                 absolutePanel(
                   id="Uni_right",
                   style="z-index:500;",

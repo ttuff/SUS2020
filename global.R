@@ -205,7 +205,7 @@ dropshadow1 <- normalizePath(file.path("www/dropshadow1.png"))
 dropshadow2 <- normalizePath(file.path("www/dropshadow2.png"))
 
 uni_legend <- normalizePath(file.path("www/Univariate_left.png"))
-
+uni_legend_right <- normalizePath(file.path("www/Univariate_right.png"))
 
 # Other prep --------------------------------------------------------------
 
