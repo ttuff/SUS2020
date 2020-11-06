@@ -509,7 +509,7 @@ shinyServer(function(input, output, session) {
   # MapBox studio base map
   output$PedestrianMap <- renderMapdeck({
     mapdeck(style = "mapbox://styles/skohn90/ckgjqwg1w00bv1bmorr5oad7q", token = 'pk.eyJ1Ijoic2tvaG45MCIsImEiOiJja2JpNGZjMnUwYm9hMnFwN3Q2bmV5c3prIn0.M-AJKxYD1ETFiBB6swQmJw',
-            zoom=8,location=c(-73.75,45.5), pitch=35) 
+            zoom=9,location=c(-73.75,45), pitch=35) 
   })
   
   # Choose your second variable
