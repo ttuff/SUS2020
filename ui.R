@@ -46,7 +46,7 @@ shinyUI(
                   menuItem("Biodiversity", icon = icon("bug"), 
                            tabName = "Biodiversity"),
                   conditionalPanel(condition = "input.tabs == 'Biodiversity'", 
-                                   plotOutput("mapBiodiversity")),
+                                   plotOutput("mapBiodiversity", height = 250)),
                   
                   menuItem("Climate-change risk", 
                            icon = icon("globe-americas"), badgeColor = "yellow"),
@@ -400,9 +400,26 @@ bla bla bla bla bla bla")))))
                                 )
                               )
                             )  
-                    ))
+                    ), 
+      tabItem(tabName = "Biodiversity",
+              fluidPage(
+                mapdeckOutput(outputId = "biodiversityMap",
+                              height = "1200px"),
+                absolutePanel(
+                  id="bivariate_legend",
+                  style="z-index:500;",
+                  class = "panel panel-default",
+                  draggable = TRUE, 
+                  top = 100, left = "50%",
+                  width=0,height = 0,
+                  conditionalPanel(
+                    condition = "input.tabs == 'Biodiversity'",
+                imageOutput("bivariate_legend", height = 100)))
+              )))
+              
+      )
                   
-                )
+                
   ))
 
 

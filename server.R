@@ -8,6 +8,12 @@ shinyServer(function(input, output, session) {
                 height = 551))
     }, deleteFile = FALSE)
   
+  output$bivariate_legend <- renderImage({
+    filename <- normalizePath(file.path("www/bivariate_legend.png"))
+    return(list(src = filename, contentType = "image/png",  width = 300,
+                height = 300))
+  }, deleteFile = FALSE)
+  
   ####################################################
   # plot output calls for all 'left' plots
   ####################################################
@@ -368,7 +374,16 @@ shinyServer(function(input, output, session) {
   
   ### Call initial map
   output$myMap <- renderMapdeck({
-    mapdeck(style = "mapbox://styles/ttuff/ckg422ljr1leo1al42f920pa8", zoom=10.1,location=c(-73.58,45.39), pitch=35) 
+    mapdeck(style = "mapbox://styles/ttuff/ckg422ljr1leo1al42f920pa8", 
+            token = 'pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ',
+            zoom=10.1,location=c(-73.58,45.39), pitch=35) 
+  })
+  
+  ### Call initial map
+  output$biodiversityMap <- renderMapdeck({
+    mapdeck(style = "mapbox://styles/ttuff/ckg422ljr1leo1al42f920pa8",
+            token = 'pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ',
+            zoom=10.1,location=c(-73.58,45.39), pitch=35) 
   })
   
   
