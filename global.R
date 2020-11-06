@@ -27,6 +27,7 @@ library(shinydashboard)
 library(shinyWidgets)
 library(leaflet)
 
+
 loadRData <- function(fileName){
   #loads an RData file, and returns it
   load(fileName)
@@ -136,4 +137,151 @@ var_list_2 <- list(
     "Less than 30" = "Less30_quant3",
     "More than 30" = "More30_quant3"))
 
+
+
+loadingLogo <- 
+  function(href, src, loadingsrc, height = NULL, width = NULL, alt = NULL) {
+    tagList(
+      tags$head(
+        tags$script(
+          "setInterval(function(){
+        if ($('html').attr('class')=='shiny-busy') {
+        $('div.busy').show();
+        $('div.notbusy').hide();
+        } else {
+        $('div.busy').hide();
+        $('div.notbusy').show();
+        }
+        },100)")
+      ),
+      tags$a(href = href,
+             div(class = "busy",  
+                 img(src = loadingsrc, height = height, width = width, alt = alt)),
+             div(class = 'notbusy',
+                 img(src = src, height = height, width = width, alt = alt))
+      )
+    )
+  }
+
+
+# Load data ---------------------------------------------------------------
+
+# Load bivariate census data
+load(file = "data/data_for_plot.Rdata")
+
+# Load data for pedestrian realm 
+load(file = "data/census_analysis.Rdata")
+load(file = "data/census_circular.Rdata")
+load(file = "data/data_for_app.Rdata")
+#load(file = "data/color_scale.Rdata")
+#load(file = "data/bivariate_color_scale.Rdata")
+load(file = "data/sample_points_for_app_WSG.Rdata")
+load(file = "data/census_analysis_WSG.Rdata")
+load(file = "data/data_for_app_WSG.Rdata")
+load(file = "data/centroids.Rdata")
+load(file = "data/original_VAS_plan.Rdata")
+load(file = "data/revised_VAS_plan.Rdata")
+cycling1 <- loadRData("data/car_1_finals.Rdata")
+cycling2 <- loadRData("data/car_3_finals.Rdata")
+cycling_network <- loadRData("data/reseau_cyclable.Rdata")
+car_share <- loadRData("data/Car_Share.Rdata")
+cycling_access <- loadRData("data/Cycling_Access.Rdata")
+trip_distance <- loadRData("data/Trip_Distance.Rdata")
+
+
+dropshadow1 <- normalizePath(file.path("www/dropshadow1.png"))
+dropshadow2 <- normalizePath(file.path("www/dropshadow2.png"))
+
+
+# Other prep --------------------------------------------------------------
+
+js_ped <- "$(document).ready(function(){
+  $('#plotContainer').on('show', function(){
+    $(this).css('opacity', 0).animate({opacity: 1}, {duration: 1000});
+  }).on('hide', function(){
+    var $this = $(this);
+    setTimeout(function(){
+      $this.css('opacity', 0).animate({opacity: 1}, {duration: 1000});
+    })
+  });
+});
+"
+
+js_ped <- "$(document).ready(function(){
+  $('#plotContainer_ped').on('show', function(){
+    $(this).css('opacity', 0).animate({opacity: 1}, {duration: 1000});
+  }).on('hide', function(){
+    var $this = $(this);
+    setTimeout(function(){
+      $this.css('opacity', 0).animate({opacity: 1}, {duration: 1000});
+    })
+  });
+});
+"
+
+js_ped_control <- "$(document).ready(function(){
+  $('#plotContainer_ped_control').on('show', function(){
+    $(this).css('opacity', 0).animate({opacity: 1}, {duration: 1000});
+  }).on('hide', function(){
+    var $this = $(this);
+    setTimeout(function(){
+      $this.css('opacity', 0).animate({opacity: 1}, {duration: 1000});
+    })
+  });
+});
+"
+
+js <- "
+  $(document).ready(function(){
+  $('#plotContainer').on('show', function(){
+    $(this).css('opacity', 0).animate({opacity: 1}, {duration: 1000});
+  }).on('hide', function(){
+    var $this = $(this);
+    setTimeout(function(){
+      $this.css('opacity', 0).animate({opacity: 1}, {duration: 1000});
+    })
+  });
+});
+"
+
+js2 <- "
+$(document).ready(function(){
+  $('#menuContainer').on('show', function(){
+    $(this).css('opacity', 0).animate({opacity: 1}, {duration: 1000});
+  }).on('hide', function(){
+    var $this = $(this);
+    setTimeout(function(){
+       $(this).css('opacity', 1).animate({opacity: 0}, {duration: 1000});
+    })
+  });
+});
+"
+
+
+js3 <- "
+$(document).ready(function(){
+  $('#plotContainer2').on('show', function(){
+    $(this).css('opacity', 0).animate({opacity: 1}, {duration: 1000});
+  }).on('hide', function(){
+    var $this = $(this);
+    setTimeout(function(){
+       $(this).css('opacity', 1).animate({opacity: 0}, {duration: 1000});
+    })
+  });
+});
+"
+
+
+
+### Establish reactiveValues
+
+qz <- reactiveValues(zoom_level = 'NO')
+
+rz_pedestrian <- reactiveValues(zoom = 'OUT')
+
+rz <- reactiveValues(zoom = 'IN')
+
+
+# Set access token  
+set_token('pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ')
 

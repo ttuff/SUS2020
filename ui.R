@@ -6,99 +6,6 @@
 
 ##### SUS UI SCRIPT ############################################################
 
-qz <- reactiveValues(zoom_level = 'NO')
-
-js_ped <- "$(document).ready(function(){
-  $('#plotContainer_ped').on('show', function(){
-    $(this).css('opacity', 0).animate({opacity: 1}, {duration: 1000});
-  }).on('hide', function(){
-    var $this = $(this);
-    setTimeout(function(){
-      $this.css('opacity', 0).animate({opacity: 1}, {duration: 1000});
-    })
-  });
-});
-"
-
-js_ped_control <- "$(document).ready(function(){
-  $('#plotContainer_ped_control').on('show', function(){
-    $(this).css('opacity', 0).animate({opacity: 1}, {duration: 1000});
-  }).on('hide', function(){
-    var $this = $(this);
-    setTimeout(function(){
-      $this.css('opacity', 0).animate({opacity: 1}, {duration: 1000});
-    })
-  });
-});
-"
-
-rz_pedestrian <- reactiveValues(zoom = 'OUT')
-
-js <- "
-$(document).ready(function(){
-  $('#plotContainer').on('show', function(){
-    $(this).css('opacity', 0).animate({opacity: 1}, {duration: 1000});
-  }).on('hide', function(){
-    var $this = $(this);
-    setTimeout(function(){
-      $this.css('opacity', 0).animate({opacity: 1}, {duration: 1000});
-    })
-  });
-});
-"
-
-js2 <- "
-$(document).ready(function(){
-  $('#menuContainer').on('show', function(){
-    $(this).css('opacity', 0).animate({opacity: 1}, {duration: 1000});
-  }).on('hide', function(){
-    var $this = $(this);
-    setTimeout(function(){
-       $(this).css('opacity', 1).animate({opacity: 0}, {duration: 1000});
-    })
-  });
-});
-"
-
-
-js3 <- "
-$(document).ready(function(){
-  $('#plotContainer2').on('show', function(){
-    $(this).css('opacity', 0).animate({opacity: 1}, {duration: 1000});
-  }).on('hide', function(){
-    var $this = $(this);
-    setTimeout(function(){
-       $(this).css('opacity', 1).animate({opacity: 0}, {duration: 1000});
-    })
-  });
-});
-"
-
-rz <- reactiveValues(zoom = 'IN')
-
-loadingLogo <- 
-  function(href, src, loadingsrc, height = NULL, width = NULL, alt = NULL) {
-    tagList(
-      tags$head(
-        tags$script(
-        "setInterval(function(){
-        if ($('html').attr('class')=='shiny-busy') {
-        $('div.busy').show();
-        $('div.notbusy').hide();
-        } else {
-        $('div.busy').hide();
-        $('div.notbusy').show();
-        }
-        },100)")
-        ),
-    tags$a(href = href,
-           div(class = "busy",  
-               img(src = loadingsrc, height = height, width = width, alt = alt)),
-           div(class = 'notbusy',
-               img(src = src, height = height, width = width, alt = alt))
-    )
-  )
-}
 
 
 # Main UI function --------------------------------------------------------
@@ -106,9 +13,9 @@ loadingLogo <-
 shinyUI(
   
   dashboardPage(
-    
+
     skin = "black", 
-    
+
     dashboardHeader(tags$li(class = "dropdown",
                             tags$style(".main-header {max-height: 55px}"),
                             tags$style(".main-header .logo {height: 50px}")),
