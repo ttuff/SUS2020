@@ -386,16 +386,16 @@ shinyUI(
               fluidPage(
                 mapdeckOutput(outputId = "biodiversityMap",
                               height = "1200px"),
-                # absolutePanel(
-                #   id="bivariate_legend",
-                #   style="z-index:500;",
-                #   class = "panel panel-default",
-                #   draggable = TRUE, 
-                #   top = 100, left = "50%",
-                #   width=0,height = 0,
-                #   conditionalPanel(
-                #     condition = "input.tabs == 'Biodiversity'",
-                # imageOutput("bivariate_legend", height = 100))),
+                absolutePanel(
+                  id="bivariate_legend",
+                  style="z-index:500;",
+                  class = "panel panel-default",
+                  draggable = TRUE,
+                  top = 100, left = "50%",
+                  width=0,height = 0,
+                  conditionalPanel(
+                    condition = "input.tabs == 'Biodiversity'",
+                imageOutput("bivariate_legend2", height = 100))),
                 absolutePanel(
                   id="Uni_left",
                   style="z-index:500;",

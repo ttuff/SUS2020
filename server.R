@@ -14,6 +14,12 @@ shinyServer(function(input, output, session) {
                 height = 300))
   }, deleteFile = FALSE)
   
+  output$bivariate_legend2 <- renderImage({
+    filename <- normalizePath(file.path("www/bivariate_legend.png"))
+    return(list(src = filename, contentType = "image/png",  width = 300,
+                height = 300))
+  }, deleteFile = FALSE)
+  
   output$Univariate_left_legend <- renderImage({
     filename <- normalizePath(file.path("www/Univariate_left.png"))
     return(list(src = filename, contentType = "image/png",  width = 200,
