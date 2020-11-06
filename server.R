@@ -2,7 +2,7 @@
 
 # Load libraries, functions and variables ---------------------------------
 
-source("libs.R")
+#source("global.R")
 
 
 # Load data ---------------------------------------------------------------
@@ -14,22 +14,27 @@ load(file = "data/data_for_plot.Rdata")
 load(file = "data/census_analysis.Rdata")
 load(file = "data/census_circular.Rdata")
 load(file = "data/data_for_app.Rdata")
-load(file = "data/color_scale.Rdata")
-load(file = "data/bivariate_color_scale.Rdata")
+#load(file = "data/color_scale.Rdata")
+#load(file = "data/bivariate_color_scale.Rdata")
 load(file = "data/sample_points_for_app_WSG.Rdata")
 load(file = "data/census_analysis_WSG.Rdata")
 load(file = "data/data_for_app_WSG.Rdata")
 load(file = "data/centroids.Rdata")
 load(file = "data/original_VAS_plan.Rdata")
 load(file = "data/revised_VAS_plan.Rdata")
+cycling1 <- loadRData("data/car_1_finals.Rdata")
+cycling2 <- loadRData("data/car_3_finals.Rdata")
+cycling_network <- loadRData("data/reseau_cyclable.Rdata")
+car_share <- loadRData("data/Car_Share.Rdata")
+cycling_access <- loadRData("data/Cycling_Access.Rdata")
+trip_distance <- loadRData("data/Trip_Distance.Rdata")
+
 
 dropshadow1 <- normalizePath(file.path("www/dropshadow1.png"))
 dropshadow2 <- normalizePath(file.path("www/dropshadow2.png"))
 
 
 # Other prep --------------------------------------------------------------
-
-qz <- reactiveValues(zoom_level = 'NO')
 
 js_ped <- "$(document).ready(function(){
   $('#plotContainer').on('show', function(){
@@ -43,9 +48,15 @@ js_ped <- "$(document).ready(function(){
 });
 "
 
+
+### Establish reactiveValues
+
+qz <- reactiveValues(zoom_level = 'NO')
+
 rz_pedestrian <- reactiveValues(zoom = 'OUT')
 
 rz <- reactiveValues(zoom = 'IN')
+
 
 # Set access token  
 set_token('pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ')
@@ -419,12 +430,13 @@ shinyServer(function(input, output, session) {
       data_for_plot_bivariate %>% 
       st_transform(4326) %>% 
       st_cast("MULTIPOLYGON")
-    
   })
   
   
   
   
+  ##############################################
+  ## isochrones
   isochrones <- mb_isochrone(c(-73.75,45.5),
                              time = c(30),
                              profile = c("walking"),
@@ -438,65 +450,38 @@ shinyServer(function(input, output, session) {
                                   access_token='pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ',
                                   keep_color_cols = TRUE)
   
+  ### Call initial map
   output$myMap <- renderMapdeck({
-    
     mapdeck(style = "mapbox://styles/ttuff/ckg422ljr1leo1al42f920pa8", zoom=10.1,location=c(-73.58,45.39), pitch=35) 
   })
   
-  output$myMap2 <- renderMapdeck({
-    mapdeck(style = "mapbox://styles/ttuff/ckg422ljr1leo1al42f920pa8", zoom=10,location=c(-73.75,45.4), pitch=35) 
-  })
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+  ### Set zoom breaks
   observeEvent(input$myMap_view_change$zoom, {
-    #print(rz$zoom)
     if( input$myMap_view_change$zoom >= 9 & input$myMap_view_change$zoom <= 12){rz$zoom <- 'IN'} else {
       if(  input$myMap_view_change$zoom > 12){rz$zoom <- 'ISO'} else {
         rz$zoom <- 'OUT'}}
-  })
+    })
   
+  ### Second zoom reactive 
   output$zoom_ALP <- reactive({
-    
-    
     return(rz$zoom)
-    
   })
   outputOptions(output, "zoom_ALP", suspendWhenHidden = FALSE)
+  ## needs different formating
   
   
-  
+  ### Click polygon
   observeEvent({input$myMap_polygon_click},{
     js <- input$myMap_polygon_click
     lst <- jsonlite::fromJSON( js )
     print( lst )
-    #print(input$myMap_polygon_click)
-    
-    
-    
-    
+
     temporary_here <- data_for_plot_r_bivar() 
-    #print(temporary_here$fill)
     temporary_here[which(temporary_here$fill != lst$object$properties$fill_colour),5] <- 0
     temporary_here[which(temporary_here$fill == lst$object$properties$fill_colour),5] <- 4000
-    # print("left_variable")
-    #print(crs(data_for_plot_bivariate))
+   
     if( rz$zoom == "ISO"){
-      
-      # mapdeck_update(map_id = "myMap") %>%  
-      #  clear_polygon(layer_id = "polylayer")
-      
-      # print("left_variable")
-      #print(crs(data_for_plot_bivariate))
       mapdeck_update(map_id = "myMap")  %>%  
         clear_polygon(layer_id = "polylayer") %>%
         add_polygon(data = isochrones,
@@ -508,12 +493,6 @@ shinyServer(function(input, output, session) {
     } 
     
     if( rz$zoom == "IN"){
-      
-      # mapdeck_update(map_id = "myMap") %>%  
-      #  clear_polygon(layer_id = "polylayer")
-      
-      # print("left_variable")
-      #print(crs(data_for_plot_bivariate))
       mapdeck_update(map_id = "myMap")  %>%
         add_polygon(
           data = temporary_here
@@ -539,21 +518,15 @@ shinyServer(function(input, output, session) {
     
   }) 
   
+  
+### Observe several triggers
+  ### zoom, tag, or dataset change
+  
   observeEvent({rz$zoom
     data_for_plot_r_bivar()
     input$tabs},{
-      #print(input$myMap_view_change$zoom)
-      # print(rz$zoom )
-      # print(head(data_for_plot_r_bivar()))   
-      
-      
+   
       if (rz$zoom == "ISO") {
-        
-        # mapdeck_update(map_id = "myMap") %>%  
-        #  clear_polygon(layer_id = "polylayer")
-        
-        # print("left_variable")
-        #print(crs(data_for_plot_bivariate))
         mapdeck_update(map_id = "myMap")  %>%  
           clear_polygon(layer_id = "polylayer") %>%
           add_polygon(data = isochrones,
@@ -565,12 +538,6 @@ shinyServer(function(input, output, session) {
       } 
       
       if( rz$zoom == "IN"){
-        
-        # mapdeck_update(map_id = "myMap") %>%  
-        #  clear_polygon(layer_id = "polylayer")
-        
-        # print("left_variable")
-        #print(crs(data_for_plot_bivariate))
         mapdeck_update(map_id = "myMap")  %>%  
           clear_polygon(layer_id = "isolayer") %>%
           add_polygon(
@@ -666,7 +633,7 @@ shinyServer(function(input, output, session) {
     data_for_plot_bi <- data_for_app_WSG %>%
       dplyr::select(social_distancing_capacity_pop_perc_2m_quant3, input$data_for_plot_ped)
     if(length(colnames(data_for_plot_bi)) == 2){data_for_plot_bi <- cbind(data_for_plot_bi[,1], data_for_plot_bi)[,1:3]}
-    #print(head(data_for_plot_bi))
+  
     colnames(data_for_plot_bi) <- c("left_variable", "right_variable",  "geometry")
     data_for_plot_bivariate <- data_for_plot_bi %>%
       mutate(
@@ -711,30 +678,20 @@ shinyServer(function(input, output, session) {
   
   # May plan
   may_vas_plan <- reactive({
-    
     may_vas_plan <- original_plan_disaggregated %>% 
       st_transform(4326)
-    
     may_vas_plan  <- st_cast(may_vas_plan, "MULTILINESTRING")
-    
   })
   
-  
-  
   # July plan
-  
   july_vas_plan <- reactive({
-    
     july_vas_plan <- revised_plan %>% 
       st_transform(4326)
-    
     july_vas_plan  <- st_cast( july_vas_plan, "MULTILINESTRING")
   })
   
-  
   # Set zoom bins
   observeEvent(input$PedestrianMap_view_change$zoom, {
-    #print(rz_pedestrian$zoom)
     if( input$PedestrianMap_view_change$zoom >= 10.5 & input$PedestrianMap_view_change$zoom <= 14){rz_pedestrian$zoom <- 'IN'} else {
       if(  input$PedestrianMap_view_change$zoom > 14){rz_pedestrian$zoom <- 'FINAL'} else {
         rz_pedestrian$zoom <- 'OUT'}}
@@ -747,8 +704,9 @@ shinyServer(function(input, output, session) {
   })
   outputOptions(output, "zoom", suspendWhenHidden = FALSE)
   
-  # Update map if there is a zoom / dataframe / tab / input change
   
+  
+  # Update map if there is a zoom / dataframe / tab / input change
   observeEvent({rz_pedestrian$zoom
     bivariate_chloropleth()
     input$vas_plan
@@ -957,14 +915,13 @@ shinyServer(function(input, output, session) {
           clear_path(layer_id = "july_plan")
       } 
     })
-  cycling1 <- loadRData("data/car_1_finals.Rdata")
-  cycling2 <- loadRData("data/car_3_finals.Rdata")
-  cycling_network <- loadRData("data/reseau_cyclable.Rdata")
-  car_share <- loadRData("data/Car_Share.Rdata")
-  cycling_access <- loadRData("data/Cycling_Access.Rdata")
-  trip_distance <- loadRData("data/Trip_Distance.Rdata")
+  
+  
+ 
   scenario1 <- data.frame(c("Criteria: Cycling Distance (km)","Potential Cyclable Trips (per day)", "VMT Savings (per day)"), c(4.4, 60460, 102862))
   scenario2 <- data.frame(c("Criteria: Cycling Distance (km)","Criteria: Elevation Gain (m)", "Criteria: Time Ratio","Potential Cyclable Trips (per day)", "VMT Savings (per day)"), c(4.4,45,2.4, 44205, 72992))
+  
+  
   ###########legend#####
   df_pal1 <- data.frame(
     color = c(1,2,3,4,5),
@@ -1021,24 +978,21 @@ shinyServer(function(input, output, session) {
     mapdeck(token = "pk.eyJ1Ijoiemhhb3FpYW8wMTIwIiwiYSI6ImNrYXBnbHB3dTFtbDIycWxvZ285cjNmcG0ifQ.fieGPt1pLEgHs1AI8NvjYg",
             style = "mapbox://styles/zhaoqiao0120/ckh1hkzwe02br19nvzt9bvxcg", zoom=10,location=c(-73.611,45.526))
   })
+  
   observeEvent(input$qzmyMap_view_change$zoom, {
     if( input$qzmyMap_view_change$zoom > 10){qz$zoom_level <- 'OUT'} else {
       qz$zoom_level <- 'ISO'}}
   )
   
-  observeEvent(input$myMap_view_change$zoom, {
+  #observeEvent(input$myMap_view_change$zoom, {
     #print(rz$zoom)
-    
-  })
-  
+  #})
   
   output$zoom_level <- reactive({
-    
     return(qz$zoom_level)
-    
   })
-  
   outputOptions(output, "zoom_level", suspendWhenHidden = FALSE)
+  
   
   observeEvent(input$radio1, {
     if(input$radio1 == 1){
@@ -1068,9 +1022,9 @@ shinyServer(function(input, output, session) {
       # showNotification("A potentially cyclable trip:\nA car trip where the cycling distance between its origin and destination is shorter than 4.4 kilometers",
       #                  type = "message", duration = 3)
     }
-    
-  }
-  )
+    })
+  
+  
   observeEvent(input$switch2, {
     if(input$switch2 == TRUE){
       mapdeck_update(map_id = "qzmyMap")  %>%
@@ -1084,6 +1038,7 @@ shinyServer(function(input, output, session) {
         clear_path(layer_id = "network")
     }
   })
+  
   observeEvent(input$variable,{
     if(input$variable == 1){
       updateKnobInput(session = session,

@@ -115,3 +115,25 @@ colors <- as.character(color_scale$fill)
 default_background_color <- "transparent"
 default_font_color <- "black"
 default_font_family <- "Helvetica"
+
+
+
+var_list_2 <- list(
+  choices = list(
+    "Tenant housing" = "TenantH_quant3",
+    "Sublet rental" = "Subs_quant3",
+    "Over 30 yrs old" = "Plus30_quant3",
+    "Median Rent" = "MedRent_quant3",
+    "Average Rent" = "AvRent_quant3",
+    "Median morgage price" = "MedMort_quant3",
+    "Average morgage price" = "AvMort_quant3",
+    "Median property value" = "MedVal_quant3",
+    "Average property value" = "AvVal_quant3",
+    "Number of owners" = "Owner_quant3",
+    "Owners with morgages" = "Wmortg_quant3",
+    "Over 30yr old that own home" = "Plus30Own_quant3",
+    "CTIR" = "CTIR_quant3",
+    "Less than 30" = "Less30_quant3",
+    "More than 30" = "More30_quant3"))
+
+

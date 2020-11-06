@@ -1,3 +1,9 @@
+
+# Load libraries, functions and variables ---------------------------------
+
+#source("global.R")
+
+
 ##### SUS UI SCRIPT ############################################################
 
 qz <- reactiveValues(zoom_level = 'NO')
