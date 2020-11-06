@@ -91,32 +91,32 @@ theme_map <- function(...) {
 
 ## save colors
 bivariate_color_scale <- tibble(
-  "3 - 3" = "#3F2949",
-  "2 - 3" = "#435786",
-  "1 - 3" = "#4885C1",
-  "3 - 2" = "#77324C",
-  "2 - 2" = "#806A8A",
-  "1 - 2" = "#89A1C8",
-  "3 - 1" = "#AE3A4E",
-  "2 - 1" = "#BC7C8F",
-  "1 - 1" = "#CABED0") %>%
+  "3 - 3" = "#2A5A5B",
+  "2 - 3" = "#567994",
+  "1 - 3" = "#6C83B5",
+  "3 - 2" = "#5A9178",
+  "2 - 2" = "#90B2B3",
+  "1 - 2" = "#B5C0DA",
+  "3 - 1" = "#73AE80",
+  "2 - 1" = "#B8D6BE",
+  "1 - 1" = "#E8E8E8") %>%
   gather("group", "fill")
 
 color_scale <- tibble(
-  "6" = "#AE3A4E",
-  "5" = "#BC7C8F", # medium inequality, medium income
-  "4" = "#CABED0",
-  "3" = "#4885C1", # high inequality, low income
-  "2" = "#89A1C8",
-  "1" = "#CABED0" # low inequality, low income
+  "6" = "#73AE80",
+  "5" = "#B8D6BE", # medium inequality, medium income
+  "4" = "#E8E8E8",
+  "3" = "#6C83B5", # high inequality, low income
+  "2" = "#B5C0DA",
+  "1" = "#E8E8E8" # low inequality, low income
 ) %>%
   gather("group", "fill") 
 
 color_scale_2 <- 
   tibble(
-    "3" = "#AE3A4E",
-    "2" = "#BC7C8F",
-    "1" = "#CABED0"
+    "3" = "#73AE80",
+    "2" = "#B8D6BE",
+    "1" = "#E8E8E8"
   ) %>%
   gather("group", "fill")
 
