@@ -53,6 +53,13 @@ shinyUI(
                            tabName = "Covid", badgeLabel = "health and safety", 
                            badgeColor = "red"),
                   
+                  menuItem("Pedestrian realm", icon = icon("walking"), 
+                           tabName = "Pedestrian", badgeLabel = "suggested", 
+                           badgeColor = "aqua"),
+                  conditionalPanel(condition = "input.tabs == 'Pedestrian'",
+                                   plotOutput("pedestrian_map_left", 
+                                              height = 250)),
+                  
                   menuItem("Economic health", icon = icon("dollar-sign"), 
                            tabName = "Economic"),
                   
@@ -67,13 +74,6 @@ shinyUI(
                   
                   menuItem("Land use", icon = icon("warehouse"), 
                            tabName = "Land"),
-                  
-                  menuItem("Pedestrian realm", icon = icon("walking"), 
-                           tabName = "Pedestrian", badgeLabel = "suggested", 
-                           badgeColor = "aqua"),
-                  conditionalPanel(condition = "input.tabs == 'Pedestrian'",
-                                   plotOutput("pedestrian_map_left", 
-                                              height = 250)),
                   
                   menuItem("Public transit", icon = icon("train"), 
                            tabName = "transit", badgeLabel = "on the ballot", 
