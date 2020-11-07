@@ -39,7 +39,7 @@ shinyServer(function(input, output, session) {
       ggplot(data_for_plot_left) +
       geom_sf(aes(fill = as.factor(left_variable)), color = "white", 
               size = 0.01) +
-      scale_fill_manual(values = rev(colors[c(1:3)])) +
+      scale_fill_manual(values = rev(colors[c(1:3)]), na.value = "grey70") +
       theme_map() + 
       theme(legend.position = "none")
     
@@ -166,6 +166,7 @@ shinyServer(function(input, output, session) {
       data %>%
       mutate(group = paste(left_variable, "-", right_variable)) %>%
       left_join(bivariate_color_scale, by = "group") %>% 
+      mutate(fill = if_else(str_detect(group, "NA"), "#B3B3BB", fill)) %>% 
       mutate(elevation = (left_variable * right_variable) ^ 2 * 50) %>% 
       mutate(fill_opacity = paste0(fill, opacity),
              fill = paste0(fill, "FF"))
@@ -184,27 +185,63 @@ shinyServer(function(input, output, session) {
     })
   
   
-  ## Update the title box text -------------------------------------------------
+  ## Update link text ----------------------------------------------------------
   
+  # More info
   output$more_info_status <- reactive({
     input$more_info %% 2 == 1
   })
   
   outputOptions(output, "more_info_status", suspendWhenHidden = FALSE)
-  
+
   observeEvent(input$more_info, {
-    
-    print(bivariate_color_scale)
     
     print(data_for_plot_r_bivar())
     
-    print(filter(data_for_plot_r_bivar(), ID == rz$click))
-    if (input$more_info %% 2 == 1) {
-      txt <- "Hide"
-    } else {
-      txt <- "Learn more"
-    }
+    if (input$more_info %% 2 == 1) txt <- "Hide" else txt <- "Learn more"
     updateActionButton(session, "more_info", label = txt)
+    
+  })
+  
+  # Hide compare status
+  output$active_hide_compare_status <- reactive({
+    input$active_hide_compare %% 2 == 0
+  })
+  
+  outputOptions(output, "active_hide_compare_status", suspendWhenHidden = FALSE)
+
+  observeEvent(input$active_hide_compare, {
+    
+    if (input$active_hide_compare %% 2 == 0) txt <- "Hide" else txt <- "Show"
+    updateActionButton(session, "active_hide_compare", label = txt)
+    
+  })
+  
+  # Hide explore status
+  output$active_hide_explore_status <- reactive({
+    input$active_hide_explore %% 2 == 0
+  })
+  
+  outputOptions(output, "active_hide_explore_status", suspendWhenHidden = FALSE)
+
+  observeEvent(input$active_hide_explore, {
+    
+    if (input$active_hide_explore %% 2 == 0) txt <- "Hide" else txt <- "Show"
+    updateActionButton(session, "active_hide_explore", label = txt)
+    
+  })
+  
+  # Hide DYK status
+  output$active_hide_dyk_status <- reactive({
+    input$active_hide_dyk %% 2 == 0
+  })
+  
+  outputOptions(output, "active_hide_dyk_status", suspendWhenHidden = FALSE)
+  
+  observeEvent(input$active_hide_dyk, {
+    
+    if (input$active_hide_dyk %% 2 == 0) txt <- "Hide" else txt <- "Show"
+    updateActionButton(session, "active_hide_dyk", label = txt)
     
   })
   
