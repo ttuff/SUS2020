@@ -45,7 +45,8 @@ shinyServer(function(input, output, session) {
     
     p <-
       ggplot(data_for_plot_left) +
-      geom_sf(aes(fill = as.factor(left_variable)), color = "white", size = 0.01) +
+      geom_sf(aes(fill = as.factor(left_variable)), color = "white", 
+              size = 0.01) +
       scale_fill_manual(values = rev(colors[c(1:3)])) +
       theme_map() + 
       theme(legend.position = "none")
@@ -66,7 +67,8 @@ shinyServer(function(input, output, session) {
       set_names(c("left_variable",  "geometry"))
     
     ggplot(data_for_plot_left) +
-      geom_sf(aes(fill = as.factor(left_variable)), color = "white", size = 0.01) +
+      geom_sf(aes(fill = as.factor(left_variable)), color = "white", 
+              size = 0.01) +
       scale_fill_manual(values = rev(colors[c(1:3)])) +
       theme_map()
     
@@ -80,7 +82,8 @@ shinyServer(function(input, output, session) {
       geom_sf(data = census_circular, fill = "transparent", color = "black", 
               size = 0.05) +
       geom_sf(data = census_analysis_quantile,
-              aes(fill = as.factor(social_distancing_capacity_pop_perc_2m_quant3)),
+              aes(fill = as.factor(
+                social_distancing_capacity_pop_perc_2m_quant3)),
               color = "white", size = 0.03) +
       scale_fill_manual(values = rev(colors[c(1:3)])) +
       theme_void() +
@@ -126,197 +129,343 @@ shinyServer(function(input, output, session) {
   }, bg = "transparent")
   
   
+  ### Active living potential ##################################################
   
-
-  ### Create the data frame to generate bivariate maps #########################
+  ## Create the data frame to generate bivariate maps --------------------------
   
   data_for_plot_r_bivar <- reactive({
     
-    data_for_plot_bi <- 
-      data_for_plot %>%
-      dplyr::select(ale_tranis_quant3, input$data_for_plot_right)
-    
-    if (length(colnames(data_for_plot_bi)) == 2) {
-      data_for_plot_bi <- 
-        cbind(data_for_plot_bi[,1], data_for_plot_bi)[,1:3]
+    if (rz$zoom == "IN") {
+      data <- data_CT
+      opacity <- "BB"
+    } else if (rz$zoom == "OUT") {
+      data <- data_borough 
+      opacity <- "EE"
+    } else if (rz$zoom == "ISO") {
+      data <- data_DA
+      opacity <- "80"
     }
     
-    colnames(data_for_plot_bi) <- c("left_variable", "right_variable",  "geometry")
+    # Starting case for no selection
+    if (input$data_for_plot_right == "") {
+      
+      data <- 
+        data %>% 
+        dplyr::select(ID, name, left_variable_full = ale_index,
+                      left_variable = ale_index_quant3, width) %>%
+        mutate(right_variable = 1)
+      
+    } else {
+      
+      data <- 
+        data %>%
+        dplyr::select(ID, name, ale_index, ale_index_quant3, 
+                      input$data_for_plot_right, 
+                      paste0(input$data_for_plot_right, "_quant3"), width) %>% 
+        set_names(c("ID", "name", "left_variable_full", "left_variable", 
+                    "right_variable_full", "right_variable", "width", 
+                    "geometry"))
+    }
     
-    data_for_plot_bivariate <- 
-      data_for_plot_bi %>%
-      mutate(group = paste(as.numeric(left_variable), "-", 
-                           as.numeric(right_variable))) %>%
-      left_join(bivariate_color_scale, by = "group")
+    data <- 
+      data %>%
+      mutate(group = paste(left_variable, "-", right_variable)) %>%
+      left_join(bivariate_color_scale, by = "group") %>% 
+      mutate(elevation = (left_variable * right_variable) ^ 2 * 50) %>% 
+      mutate(fill_opacity = paste0(fill, opacity),
+             fill = paste0(fill, "FF"))
     
-    data_for_plot_bivariate <- 
-      cbind(data_for_plot_bivariate, 
-            as.numeric(data_for_plot_bivariate$left_variable) * 
-              as.numeric(data_for_plot_bivariate$right_variable))
-    
-    names(data_for_plot_bivariate)[5] <- 'elevation'
-    
-    data_for_plot_bivariate <- data_for_plot_bivariate[,-7]
-    
-    data_for_plot_bivariate$elevation <- 
-      (data_for_plot_bivariate$elevation) ^ 2 * 50
-
-    data_for_plot_r_bivar <- 
-      data_for_plot_bivariate %>% 
-      st_transform(4326) %>% 
-      st_cast("MULTIPOLYGON")
+    return(data)
   })
   
   
+  ## Render the map ------------------------------------------------------------
   
-  
-  ##############################################
-  ## isochrones
-  isochrones <- mb_isochrone(c(-73.75,45.5),
-                             time = c(30),
-                             profile = c("walking"),
-                             geometry = "polygon",
-                             access_token='pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ')
-  
-  isochrones_path <- mb_isochrone(c(-73.75,45.5),
-                                  time = c(30),
-                                  profile = c("driving"),
-                                  geometry = "linestring",
-                                  access_token='pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ',
-                                  keep_color_cols = TRUE)
-  
-  ### Call initial map
   output$myMap <- renderMapdeck({
-    mapdeck(style = "mapbox://styles/ttuff/ckg422ljr1leo1al42f920pa8", 
-            token = 'pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ',
-            zoom=10.1,location=c(-73.58,45.39), pitch=35) 
-  })
-  
-  ### Call initial map
-  output$biodiversityMap <- renderMapdeck({
-    mapdeck(style = "mapbox://styles/ttuff/ckg422ljr1leo1al42f920pa8",
-            token = 'pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ',
-            zoom=10.1,location=c(-73.58,45.39), pitch=35) 
-  })
-  
-  
-  ### Set zoom breaks
-  observeEvent(input$myMap_view_change$zoom, {
-    if( input$myMap_view_change$zoom >= 9 & input$myMap_view_change$zoom <= 12){rz$zoom <- 'IN'} else {
-      if(  input$myMap_view_change$zoom > 12){rz$zoom <- 'ISO'} else {
-        rz$zoom <- 'OUT'}}
+    mapdeck(style = "mapbox://styles/dwachsmuth/ckh6cg4wg05nw19p5yrs9tib7",
+            token = paste0("pk.eyJ1IjoiZHdhY2hzbXV0aCIsImEiOiJja2g2Y2JpbDc",
+                           "wMDc5MnltbWpja2xpYTZhIn0.BXdU7bsQYWcSwmmBx8DNqQ"),
+            zoom = 10.1, location = c(-73.58, 45.39), pitch = 0) 
     })
   
-  ### Second zoom reactive 
-  output$zoom_ALP <- reactive({
-    return(rz$zoom)
+  
+  ## Update the title box text -------------------------------------------------
+  
+  output$more_info_status <- reactive({
+    input$more_info %% 2 == 1
   })
-  outputOptions(output, "zoom_ALP", suspendWhenHidden = FALSE)
-  ## needs different formating
+  
+  outputOptions(output, "more_info_status", suspendWhenHidden = FALSE)
+  
+  observeEvent(input$more_info, {
+    
+    print(bivariate_color_scale)
+    
+    print(data_for_plot_r_bivar())
+    
+    print(filter(data_for_plot_r_bivar(), ID == rz$click))
+    if (input$more_info %% 2 == 1) {
+      txt <- "Hide"
+    } else {
+      txt <- "Learn more"
+    }
+    updateActionButton(session, "more_info", label = txt)
+    
+  })
   
   
-  ### Click polygon
+  ## Render the info table -----------------------------------------------------
+  
+  output$bivariate_table <- renderTable({
+    
+    data <- data_for_plot_r_bivar()
+    
+    if (input$data_for_plot_right == "") {
+      
+      tibble(
+        "Descriptive" = c(
+          "Minimum", "Maximum", "Median", "Mean", "Standard deviation"),
+        "Value" = c(min(data$left_variable_full, na.rm = TRUE),
+                    max(data$left_variable_full, na.rm = TRUE),
+                    median(data$left_variable_full, na.rm = TRUE),
+                    mean(data$left_variable_full, na.rm = TRUE),
+                    sd(data$left_variable_full, na.rm = TRUE)))
+      
+    } else {
+      
+      tibble(
+        "Descriptive" = c("Correlation"),
+        "Value" = c(cor(data$left_variable_full, data$right_variable_full))
+      )
+      
+    }
+  })
+  
+  
+  ## Render the histogram/scatterplot ------------------------------------------
+  
+  output$bivariate_graph <- renderPlot({
+    
+    data <- data_for_plot_r_bivar()
+    
+    # Histogram for a single variable
+    if (input$data_for_plot_right == "") {
+      
+      if ((nrow(filter(data, ID == rz$click)) != 1)) {
+        
+        data %>%
+          ggplot(aes(left_variable_full)) +
+          geom_histogram(aes(fill = fill)) +
+          labs(x = "CanALE index") +
+          theme_minimal() +
+          theme(legend.position = "none")  
+        
+      } else {
+        
+        data %>%
+          ggplot(aes(left_variable_full)) +
+          geom_histogram(aes(fill = fill)) +
+          gghighlight(
+            left_variable_full == left_variable_full[ID == rz$click]) +
+          labs(x = "CanALE index") +
+          theme_minimal() +
+          theme(legend.position = "none")  
+        
+      }
+      
+    # Scatterplot for two variables
+    } else {
+      
+      if (nrow(filter(data, ID == rz$click)) != 1) {
+        
+        y_var_name <- as.character(input$data_for_plot_right)
+        
+        data %>% 
+          ggplot(aes(left_variable_full, right_variable_full)) +
+          geom_point(aes(colour = fill)) +
+          geom_smooth(se = FALSE, colour = "grey50") +
+          labs(x = "CanALE index", y = y_var_name) +
+          theme_minimal() +
+          theme(legend.position = "none")
+        
+      } else {
+        
+        data %>% 
+          ggplot(aes(left_variable_full, right_variable_full)) +
+          geom_point(aes(colour = fill)) +
+          gghighlight(ID == rz$click, keep_scales = TRUE) +
+          geom_smooth(se = FALSE, colour = "grey50") +
+          labs(x = "CanALE index", y = y_var_name) +
+          theme_minimal() +
+          theme(legend.position = "none")
+        
+      }
+    }
+  })
+  
+  
+  ## Render the did-you-knows --------------------------------------------------
+  
+  output$did_you_know <- renderText({
+    
+    did_you_know %>% 
+      filter(right_variable == input$data_for_plot_right) %>% 
+      pull(text) %>% 
+      paste(collapse = "\n\n")
+    
+  })
+  
+  
+  ## Observe zoom and coalesce to three values ---------------------------------
+  
+  observeEvent(input$myMap_view_change$zoom, {
+    
+    rz$zoom <- case_when(
+      input$myMap_view_change$zoom >= 10.5 && 
+        input$myMap_view_change$zoom <= 12 ~ "IN",
+      input$myMap_view_change$zoom > 12 ~ "ISO",
+      TRUE ~ "OUT")
+    
+  })
+  
+
+  ## Update map in response to variable changes, zooming, or options -----------
+  
+  observeEvent(
+    {
+      data_for_plot_r_bivar()
+      input$tabs
+      input$active_extrude
+    },
+    {
+      if (!input$active_extrude) {
+        
+        mapdeck_update(map_id = "myMap")  %>%  
+          clear_polygon(layer_id = "extrude") %>%
+          add_polygon(
+            data = data_for_plot_r_bivar(), 
+            stroke_width = "width",
+            stroke_colour = "#FFFFFF",
+            fill_colour = "fill_opacity", 
+            update_view = FALSE,
+            layer_id = "polylayer", 
+            auto_highlight = TRUE, 
+            highlight_colour = '#FFFFFF90', 
+            legend = FALSE, 
+            light_settings = list(
+              lightsPosition = c(0,0, 5000), 
+              numberOfLights = 1, 
+              ambientRatio = 1))
+        
+      } else {
+        mapdeck_update(map_id = "myMap")  %>%  
+          clear_polygon(layer_id = "polylayer") %>%
+          add_polygon(
+            data = data_for_plot_r_bivar(), 
+            fill_colour = "fill", 
+            elevation = "elevation", 
+            update_view = FALSE, 
+            layer_id = "extrude", 
+            auto_highlight = TRUE, 
+            highlight_colour = '#FFFFFF90', 
+            legend = FALSE, 
+            light_settings = list(
+              lightsPosition = c(0,0, 5000), 
+              numberOfLights = 1, 
+              ambientRatio = 1)) #%>% 
+        # mapdeck_view(zoom = input$myMap_view_change$zoom,
+        #              location = c(input$myMap_view_change$longitude, 
+        #                           input$myMap_view_change$latitude),
+        #              bearing = input$myMap_view_change$bearing,
+        #              pitch = 35)
+        
+      }
+      
+    })
+  
+  
+  ## Observe polygon clicks and deliver output ---------------------------------
+  
   observeEvent({input$myMap_polygon_click},{
     js <- input$myMap_polygon_click
-    lst <- jsonlite::fromJSON( js )
-    print( lst )
-
-    temporary_here <- data_for_plot_r_bivar() 
-    temporary_here[which(temporary_here$fill != lst$object$properties$fill_colour),5] <- 0
-    temporary_here[which(temporary_here$fill == lst$object$properties$fill_colour),5] <- 4000
-   
-    if( rz$zoom == "ISO"){
-      mapdeck_update(map_id = "myMap")  %>%  
-        clear_polygon(layer_id = "polylayer") %>%
-        add_polygon(data = isochrones,
-                    fill_colour = "time",
-                    fill_opacity = 0.5,
-                    legend = TRUE,
-                    layer_id = "isolayer",
-                    update_view = FALSE)  
-    } 
+    lst <- jsonlite::fromJSON(js)
     
-    if( rz$zoom == "IN"){
-      mapdeck_update(map_id = "myMap")  %>%
-        add_polygon(
-          data = temporary_here
-          , fill_colour = "fill"
-          , fill_opacity = 0
-          , elevation = "elevation"
-          , update_view = FALSE
-          , layer_id = "polylayer"
-          , auto_highlight = TRUE
-          , highlight_colour = '#FFFFFF90'
-          , light_settings =  list(
-            lightsPosition = c(-73.75,45, 5000, -74,45.5, 10000)
-            , numberOfLights = 2
-            , ambientRatio = 1
-          ) 
-        )  
-    }
-    if (rz$zoom == "OUT") {
-      mapdeck_update(map_id = "myMap")  %>%  
-        clear_polygon(layer_id = "polylayer") %>%  
-        clear_polygon(layer_id = "isolayer")
-    } 
+    int_point <- st_sfc(st_point(c(lst$lon, lst$lat)), crs = 4326)
+    
+    print(int_point)
+    
+    rz$click <- 
+      data_for_plot_r_bivar() %>% 
+      filter(lengths(st_intersects(geometry, int_point)) > 0) %>% 
+      pull(ID)
+    
+    print(rz$click)
+    
+    # temporary_here <- data_for_plot_r_bivar() 
+    # #print(temporary_here$fill)
+    # temporary_here[which(temporary_here$fill != lst$object$properties$fill_colour),5] <- 0
+    # temporary_here[which(temporary_here$fill == lst$object$properties$fill_colour),5] <- 4000
+    # # print("left_variable")
+    # #print(crs(data_for_plot_bivariate))
+    # 
+    # if( rz$zoom == "ISO"){
+    #   
+    #   # mapdeck_update(map_id = "myMap") %>%  
+    #   #  clear_polygon(layer_id = "polylayer")
+    #   
+    #   # print("left_variable")
+    #   #print(crs(data_for_plot_bivariate))
+    #   mapdeck_update(map_id = "myMap")  %>%  
+    #     clear_polygon(layer_id = "polylayer") %>%
+    #     add_polygon(data = isochrones,
+    #                 fill_colour = "time",
+    #                 fill_opacity = 0.5,
+    #                 legend = TRUE,
+    #                 layer_id = "isolayer",
+    #                 update_view = FALSE)  
+    # } 
+    # 
+    # if( rz$zoom == "IN"){
+    #   
+    #   # mapdeck_update(map_id = "myMap") %>%  
+    #   #  clear_polygon(layer_id = "polylayer")
+    #   
+    #   # print("left_variable")
+    #   #print(crs(data_for_plot_bivariate))
+    #   mapdeck_update(map_id = "myMap")  %>%
+    #     add_polygon(
+    #       data = temporary_here
+    #       , fill_colour = "fill"
+    #       , fill_opacity = 0
+    #       , elevation = "elevation"
+    #       , update_view = FALSE
+    #       , layer_id = "polylayer"
+    #       , auto_highlight = TRUE
+    #       , highlight_colour = '#FFFFFF90'
+    #       , light_settings =  list(
+    #         lightsPosition = c(-73.75,45, 5000, -74,45.5, 10000)
+    #         , numberOfLights = 2
+    #         , ambientRatio = 1
+    #       ) 
+    #     )  
+    # }
+    # if (rz$zoom == "OUT") {
+    #   mapdeck_update(map_id = "myMap")  %>%  
+    #     clear_polygon(layer_id = "polylayer") %>%  
+    #     clear_polygon(layer_id = "isolayer")
+    # } 
     
   }) 
   
   
-### Observe several triggers
-  ### zoom, tag, or dataset change
-  
-  observeEvent({rz$zoom
-    data_for_plot_r_bivar()
-    input$tabs},{
-   
-      if (rz$zoom == "ISO") {
-        mapdeck_update(map_id = "myMap")  %>%  
-          clear_polygon(layer_id = "polylayer") %>%
-          add_polygon(data = isochrones,
-                      fill_colour = "time",
-                      fill_opacity = 0.5,
-                      legend = TRUE,
-                      layer_id = "isolayer",
-                      update_view = FALSE)  
-      } 
-      
-      if( rz$zoom == "IN"){
-        mapdeck_update(map_id = "myMap")  %>%  
-          clear_polygon(layer_id = "isolayer") %>%
-          add_polygon(
-            data = data_for_plot_r_bivar()
-            , fill_colour = "fill"
-            , fill_opacity = 0
-            , elevation = "elevation"
-            , update_view = FALSE
-            , layer_id = "polylayer"
-            , auto_highlight = TRUE
-            , highlight_colour = '#FFFFFF90'
-            , legend = FALSE
-            , light_settings =  list(
-              lightsPosition = c(0,0, 5000)
-              , numberOfLights = 1
-              , ambientRatio = 1
-            ) 
-          )  
-      }
-      if( rz$zoom == "OUT") {
-        mapdeck_update(map_id = "myMap")  %>%  
-          clear_polygon(layer_id = "polylayer") %>%  
-          clear_polygon(layer_id = "isolayer")
-      }  
-      
-    })
-  
-  
-  ### Pedestrian zone - no cars ALLOWED ###
+  ### Pedestrian realm #########################################################
   
   # MapBox studio base map
   output$PedestrianMap <- renderMapdeck({
-    mapdeck(style = "mapbox://styles/skohn90/ckgjqwg1w00bv1bmorr5oad7q", token = 'pk.eyJ1Ijoic2tvaG45MCIsImEiOiJja2JpNGZjMnUwYm9hMnFwN3Q2bmV5c3prIn0.M-AJKxYD1ETFiBB6swQmJw',
-            zoom=9,location=c(-73.75,45), pitch=35) 
-  })
+    mapdeck(style = "mapbox://styles/skohn90/ckgjqwg1w00bv1bmorr5oad7q", 
+            token = 'pk.eyJ1Ijoic2tvaG45MCIsImEiOiJja2JpNGZjMnUwYm9hMnFwN3Q2bmV5c3prIn0.M-AJKxYD1ETFiBB6swQmJw',
+            zoom = 9,location = c(-73.75, 45), pitch = 35) 
+    })
   
   # Choose your second variable
   output$second_variable <- renderPlot({
