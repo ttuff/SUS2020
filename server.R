@@ -32,10 +32,11 @@ shinyServer(function(input, output, session) {
                 height = 200))
   }, deleteFile = FALSE)
   
+  
   ### Plot output calls for all 'left' plots ###################################
   
   # Active living potential
-  output$mapActiveLivingPotential <- renderPlot({
+  output$active_map_left <- renderPlot({
     
     data_for_plot_left <- 
       data_for_plot %>%
@@ -57,7 +58,7 @@ shinyServer(function(input, output, session) {
     }, bg = "white")
   
   # Commuter mode shift
-  output$mapModeShift <- renderPlot({
+  output$commuter_map_left <- renderPlot({
     
     data_for_plot_left <- 
       data_for_plot %>%
@@ -72,7 +73,7 @@ shinyServer(function(input, output, session) {
   })
 
   # Pedestrian social distancing capacity map
-  output$map_distancing_capacity <- renderPlot({
+  output$pedestrian_map_left <- renderPlot({
     
     p <- 
       ggplot() +
@@ -91,33 +92,42 @@ shinyServer(function(input, output, session) {
     
     })
   
-
   
-  ####################################################
-  # plot output calls for all 'right' plots
-  ####################################################
+  ### Plot output calls for all 'right' plots ##################################
   
-  output$map2 <- renderPlot({
+  # Active living potential
+  output$active_map_right <- renderPlot({
     
-    data_for_plot_right <- 
-      data_for_plot %>%
-      dplyr::select(input$data_for_plot_right) %>% 
-      set_names(c("right_variable",  "geometry"))
-    
-    p <- 
-      ggplot(data_for_plot_right) +
-      geom_sf(aes(fill = as.factor(right_variable)), color = "white", size = 0.01) +
-      scale_fill_manual(values = rev(colors[c(4:6)])) +
-      theme_map()
+    if (input$data_for_plot_right == "") {
+      
+      p <- 
+        ggplot(data_for_plot) +
+        geom_sf(fill = "#CABED0", color = "white", size = 0.01) +
+        theme_map()
+      
+    } else {
+      
+      p <- 
+        data_for_plot_r_bivar() %>% 
+        st_transform(3347) %>% 
+        ggplot() +
+        geom_sf(aes(fill = as.factor(right_variable)), color = "white", 
+                size = 0.01) +
+        scale_fill_manual(values = rev(colors[c(4:6)])) +
+        theme_map()
+      
+    }
     
     ggdraw() + 
       draw_image(dropshadow1, scale = 1.49, vjust = -0.003, hjust = -0.003) +
-      draw_plot(p)+
+      draw_plot(p) +
       draw_image(uni_legend_right, scale = .5, vjust = 0.25, hjust = -0.25)
     
-    }, bg = "transparent")
+  }, bg = "transparent")
   
   
+  
+
   ### Create the data frame to generate bivariate maps #########################
   
   data_for_plot_r_bivar <- reactive({

@@ -209,7 +209,7 @@ shinyUI(
                                   condition = "output.zoom_ALP == 'IN'",
                                   selectInput("data_for_plot_right", 
                                               label = h3("Try comparing Active Living Potential with other variables"), 
-                                              selected = "MedRent_quant3", choices = var_list_2),
+                                              selected = "", choices = var_list),
                                   plotOutput("map2", height = 250),
                                   imageOutput("bivariate_legend", height = 300),
                                                  HTML(markdownToHTML(fragment.only=TRUE, text=c(
