@@ -9,15 +9,9 @@ shinyServer(function(input, output, session) {
     }, deleteFile = FALSE)
   
   output$bivariate_legend <- renderImage({
-    filename <- normalizePath(file.path("www/bivariate_legend.png"))
-    return(list(src = filename, contentType = "image/png",  width = 300,
-                height = 300))
-  }, deleteFile = FALSE)
-  
-  output$bivariate_legend2 <- renderImage({
-    filename <- normalizePath(file.path("www/bivariate_legend.png"))
-    return(list(src = filename, contentType = "image/png",  width = 300,
-                height = 300))
+    filename <- normalizePath(file.path("www/bivariate_legend_2.png"))
+    return(list(src = filename, contentType = "image/png",  width = 250,
+                height = 221))
   }, deleteFile = FALSE)
   
   output$Univariate_left_legend <- renderImage({
@@ -276,14 +270,14 @@ shinyServer(function(input, output, session) {
     # Scatterplot for two variables
     } else {
       
+      y_var_name <- as.character(input$data_for_plot_right)
+      
       if (nrow(filter(data, ID == rz$click)) != 1) {
-        
-        y_var_name <- as.character(input$data_for_plot_right)
         
         data %>% 
           ggplot(aes(left_variable_full, right_variable_full)) +
-          geom_point(aes(colour = fill)) +
           geom_smooth(se = FALSE, colour = "grey50") +
+          geom_point(aes(colour = fill)) +
           labs(x = "CanALE index", y = y_var_name) +
           theme_minimal() +
           theme(legend.position = "none")
@@ -292,9 +286,9 @@ shinyServer(function(input, output, session) {
         
         data %>% 
           ggplot(aes(left_variable_full, right_variable_full)) +
+          geom_smooth(se = FALSE, colour = "grey50") +
           geom_point(aes(colour = fill)) +
           gghighlight(ID == rz$click, keep_scales = TRUE) +
-          geom_smooth(se = FALSE, colour = "grey50") +
           labs(x = "CanALE index", y = y_var_name) +
           theme_minimal() +
           theme(legend.position = "none")

@@ -167,6 +167,8 @@ shinyUI(
           #input_control_left2 {background-color: rgba(0,0,255,0.0);
           border-width: 0px;}
           #input_control_right {background-color: rgba(0,0,255,0.0);
+          border-width: 0px;}
+          #active_legend_container {background-color: rgba(0,0,255,0.0);
           border-width: 0px;}'))),
           
           absolutePanel(
@@ -190,7 +192,6 @@ shinyUI(
                         label = h4("Compare"), 
                         selected = "", choices = var_list),
             plotOutput("active_map_right", height = 250),
-            imageOutput("bivariate_legend", height = 200),
             hr(),
             h4("Explore"),
             tableOutput("bivariate_table"),
@@ -203,7 +204,16 @@ shinyUI(
               inputId = "active_extrude", 
               label = "View in 3D", 
               status = "primary",
-              value = FALSE))),
+              value = FALSE)),
+          
+          absolutePanel(
+            id = "active_legend_container", class = "panel panel-default", 
+            style = "z-index:500;", bottom = 50, left = 270,
+            conditionalPanel(condition = 'input.data_for_plot_right != ""',
+                             id = "active_legend", 
+                             imageOutput("bivariate_legend")))
+          
+          ),
         
         
         ## Pedestrian realm ----------------------------------------------------
@@ -282,6 +292,7 @@ shinyUI(
                                     color = "#B2D235"),
                    sliderInput(inputId = "slider_ped", label = "", 0, 12, 
                                value = c(0, 12), step = 1)))))),
+        
         
         ## Commuting mode switch -----------------------------------------------
         
