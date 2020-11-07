@@ -307,8 +307,9 @@ shinyUI(
         #   id = "ped_legend_container", class = "panel panel-default", 
         #   style = "z-index:500;", bottom = 10, left = 270,
         #   conditionalPanel(condition = "input.switch_biv == true",
-        #                    id = "active_legend", 
+        #                    id = "ped_legend", 
         #                    imageOutput("bivariate_legend")))
+        
             
         ## Commuting mode switch -----------------------------------------------
         
