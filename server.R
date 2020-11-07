@@ -33,9 +33,7 @@ shinyServer(function(input, output, session) {
   output$active_map_left <- renderPlot({
     
     data_for_plot_left <- 
-      data_for_plot %>%
-      dplyr::select(ale_tranis_quant3) %>% 
-      set_names(c("left_variable",  "geometry"))
+      data_for_plot_r_bivar()
     
     p <-
       ggplot(data_for_plot_left) +
@@ -303,13 +301,13 @@ shinyServer(function(input, output, session) {
   
   ## Render the did-you-knows --------------------------------------------------
   
-  output$did_you_know <- renderText({
+  output$did_you_know <- renderUI({
     
     did_you_know %>% 
       filter(right_variable == input$data_for_plot_right) %>% 
       pull(text) %>% 
-      paste(collapse = "\n\n")
-    
+      as.list() %>% 
+      lapply(HTML)
   })
   
   

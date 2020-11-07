@@ -220,7 +220,7 @@ shinyUI(
               column(width = 4, align = "right",
                      actionLink(inputId = "active_hide_dyk",
                                 label = "Hide"))),
-            textOutput("did_you_know")
+            htmlOutput("did_you_know")
             ),
           
           absolutePanel(
