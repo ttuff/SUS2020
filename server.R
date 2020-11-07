@@ -32,29 +32,9 @@ shinyServer(function(input, output, session) {
                 height = 200))
   }, deleteFile = FALSE)
   
-  ####################################################
-  # plot output calls for all 'left' plots
-  ####################################################
+  ### Plot output calls for all 'left' plots ###################################
   
-  output$context_plot <- renderPlot({
-    
-    data_for_plot_left <- 
-      data_for_plot %>%
-      dplyr::select(ale_tranis_quant3) %>% 
-      set_names(c("left_variable",  "geometry"))
-    
-    p <- 
-      ggplot(data_for_plot_left) +
-      geom_sf(aes(fill = as.factor(left_variable)), color = "white", size = 0.01) +
-      scale_fill_manual(values = rev(colors[c(1:3)])) +
-      theme_map() 
-    
-    ggdraw() + 
-      draw_image(dropshadow1, scale = 1, vjust = -0.003, hjust = -0.003) +
-      draw_plot(p)
-    
-    }, bg = "transparent")
-  
+  # Active living potential
   output$mapActiveLivingPotential <- renderPlot({
     
     data_for_plot_left <- 
@@ -71,11 +51,12 @@ shinyServer(function(input, output, session) {
     
     ggdraw() + 
       draw_image(dropshadow2, scale = 1.59, vjust = 0.003, hjust = 0.003) +
-      draw_plot(p)+
+      draw_plot(p) +
       draw_image(uni_legend, scale = .45, vjust = 0.25, hjust = 0.25) 
     
     }, bg = "white")
   
+  # Commuter mode shift
   output$mapModeShift <- renderPlot({
     
     data_for_plot_left <- 
@@ -88,227 +69,29 @@ shinyServer(function(input, output, session) {
       scale_fill_manual(values = rev(colors[c(1:3)])) +
       theme_map()
     
-    })
-  
-  output$mapBiodiversity <- renderPlot({
+  })
+
+  # Pedestrian social distancing capacity map
+  output$map_distancing_capacity <- renderPlot({
     
-    data_for_plot_left <- 
-      data_for_plot %>%
-      dplyr::select(ale_tranis_quant3) %>% 
-      set_names(c("left_variable",  "geometry"))
-    
-    ggplot(data_for_plot_left) +
-      geom_sf(aes(fill = as.factor(left_variable)), color = "white", size = 0.01) +
+    p <- 
+      ggplot() +
+      geom_sf(data = census_circular, fill = "transparent", color = "black", 
+              size = 0.05) +
+      geom_sf(data = census_analysis_quantile,
+              aes(fill = as.factor(social_distancing_capacity_pop_perc_2m_quant3)),
+              color = "white", size = 0.03) +
       scale_fill_manual(values = rev(colors[c(1:3)])) +
-      theme_map()
+      theme_void() +
+      theme(legend.position = "none")
+    
+    ggdraw() + 
+      draw_image(dropshadow2, scale = 1.85, vjust = 0.01) +
+      draw_plot(p)
     
     })
   
-  output$mapGreenSpace <- renderPlot({
-    
-    data_for_plot_left <- 
-      data_for_plot %>%
-      dplyr::select(ale_tranis_quant3) %>% 
-      set_names(c("left_variable",  "geometry"))
-    
-    ggplot(data_for_plot_left) +
-      geom_sf(aes(fill = as.factor(left_variable)), color = "white", size = 0.01) +
-      scale_fill_manual(values = rev(colors[c(1:3)])) +
-      theme_map()
-    
-    })
-  
-  output$mapShortTermRentals <- renderPlot({
-    
-    data_for_plot_left <- 
-      data_for_plot %>%
-      dplyr::select(TenantH_quant3) %>% 
-      set_names(c("left_variable",  "geometry"))
-    
-    ggplot(data_for_plot_left) +
-      geom_sf(aes(fill = as.factor(left_variable)), color = "white", size = 0.01) +
-      scale_fill_manual(values = rev(colors[c(1:3)])) +
-      theme_map()
-    
-    })
-  
-  output$mapEnergy <- renderPlot({
-    
-    data_for_plot_left <- 
-      data_for_plot %>%
-      dplyr::select(ale_tranis_quant3) %>% 
-      set_names(c("left_variable",  "geometry"))
-    
-    ggplot(data_for_plot_left) +
-      geom_sf(aes(fill = as.factor(left_variable)), color = "white", size = 0.01) +
-      scale_fill_manual(values = rev(colors[c(1:3)])) +
-      theme_map()
-    
-    })
-  
-  output$mapClimateChange <- renderPlot({
-    
-    data_for_plot_left <- data_for_plot %>%
-      dplyr::select(ale_tranis_quant3)
-    
-    colnames(data_for_plot_left) <- c("left_variable",  "geometry")
-    
-    ggplot(data_for_plot_left) +
-      geom_sf(
-        aes(
-          fill = as.factor(left_variable)
-        ),
-        # use thin white stroke for municipalities
-        color = "white",
-        size = 0.01
-      ) +
-      scale_fill_manual(values=rev(colors[c(1:3)]))+
-      theme_map()
-  })
-  
-  output$mapEconomic_health <- renderPlot({
-    
-    data_for_plot_left <- data_for_plot %>%
-      dplyr::select(over_40K_quant3)
-    
-    colnames(data_for_plot_left) <- c("left_variable",  "geometry")
-    
-    ggplot(data_for_plot_left) +
-      geom_sf(
-        aes(
-          fill = as.factor(left_variable)
-        ),
-        # use thin white stroke for municipalities
-        color = "white",
-        size = 0.01
-      ) +
-      scale_fill_manual(values=rev(colors[c(1:3)]))+
-      theme_map()
-  })
-  
-  output$mapAgriculture <- renderPlot({
-    
-    data_for_plot_left <- data_for_plot %>%
-      dplyr::select(ale_tranis_quant3)
-    
-    colnames(data_for_plot_left) <- c("left_variable",  "geometry")
-    
-    ggplot(data_for_plot_left) +
-      geom_sf(
-        aes(
-          fill = as.factor(left_variable)
-        ),
-        # use thin white stroke for municipalities
-        color = "white",
-        size = 0.01
-      ) +
-      scale_fill_manual(values=rev(colors[c(1:3)]))+
-      theme_map()
-  })
-  
-  output$mapFood <- renderPlot({
-    
-    data_for_plot_left <- data_for_plot %>%
-      dplyr::select(ale_tranis_quant3)
-    
-    colnames(data_for_plot_left) <- c("left_variable",  "geometry")
-    
-    ggplot(data_for_plot_left) +
-      geom_sf(
-        aes(
-          fill = as.factor(left_variable)
-        ),
-        # use thin white stroke for municipalities
-        color = "white",
-        size = 0.01
-      ) +
-      scale_fill_manual(values=rev(colors[c(1:3)]))+
-      theme_map()
-  })
-  
-  output$mapWater <- renderPlot({
-    
-    data_for_plot_left <- data_for_plot %>%
-      dplyr::select(ale_tranis_quant3)
-    
-    colnames(data_for_plot_left) <- c("left_variable",  "geometry")
-    
-    ggplot(data_for_plot_left) +
-      geom_sf(
-        aes(
-          fill = as.factor(left_variable)
-        ),
-        # use thin white stroke for municipalities
-        color = "white",
-        size = 0.01
-      ) +
-      scale_fill_manual(values=rev(colors[c(1:3)]))+
-      theme_map()
-  })
-  
-  output$mapLandUse <- renderPlot({
-    
-    data_for_plot_left <- data_for_plot %>%
-      dplyr::select(MedVal_quant3)
-    
-    colnames(data_for_plot_left) <- c("left_variable",  "geometry")
-    
-    ggplot(data_for_plot_left) +
-      geom_sf(
-        aes(
-          fill = as.factor(left_variable)
-        ),
-        # use thin white stroke for municipalities
-        color = "white",
-        size = 0.01
-      ) +
-      scale_fill_manual(values=rev(colors[c(1:3)]))+
-      theme_map()
-  })
-  
-  output$mapCovid19 <- renderPlot({
-    
-    data_for_plot_left <- data_for_plot %>%
-      dplyr::select(ale_tranis_quant3)
-    
-    colnames(data_for_plot_left) <- c("left_variable",  "geometry")
-    
-    ggplot(data_for_plot_left) +
-      geom_sf(
-        aes(
-          fill = as.factor(left_variable)
-        ),
-        # use thin white stroke for municipalities
-        color = "white",
-        size = 0.01
-      ) +
-      scale_fill_manual(values=rev(colors[c(1:3)]))+
-      theme_map()
-  })
-  
-  output$mapTransitLine <- renderPlot({
-    
-    data_for_plot_left <- data_for_plot %>%
-      dplyr::select(Pubtrans_proportion_quant3)
-    
-    colnames(data_for_plot_left) <- c("left_variable",  "geometry")
-    
-    ggplot(data_for_plot_left) +
-      geom_sf(
-        aes(
-          fill = as.factor(left_variable)
-        ),
-        # use thin white stroke for municipalities
-        color = "white",
-        size = 0.01
-      ) +
-      scale_fill_manual(values=rev(colors[c(1:3)]))+
-      theme_map()
-  })
-  
-  
-  
-  
+
   
   ####################################################
   # plot output calls for all 'right' plots
@@ -518,28 +301,6 @@ shinyServer(function(input, output, session) {
   
   
   ### Pedestrian zone - no cars ALLOWED ###
-  
-  # Pedestrian social distancing capacity map
-  output$map_distancing_capacity <- renderPlot({
-    
-    p <- ggplot() +
-      geom_sf(data = census_circular, fill = "transparent", color = "black", size = 0.05) +
-      geom_sf(data = census_analysis_quantile,
-              aes(
-                fill = as.factor(social_distancing_capacity_pop_perc_2m_quant3)
-              ),
-              # use thin white stroke for municipalities
-              color = "white",
-              size = 0.03
-      ) +
-      scale_fill_manual(values=rev(colors[c(1:3)]))+
-      theme_void() +
-      theme(legend.position = "none")
-    
-    ggdraw() + 
-      draw_image(dropshadow2, scale = 1.85, vjust = 0.01) +
-      draw_plot(p)
-  })
   
   # MapBox studio base map
   output$PedestrianMap <- renderMapdeck({
