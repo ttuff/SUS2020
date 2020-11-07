@@ -190,12 +190,13 @@ shinyUI(
             class = "panel panel-default", top = 70, right = 50, width = 300,
             selectInput("data_for_plot_right", 
                         label = h4("Compare"), 
-                        selected = "", choices = var_list),
+                        choices = var_list),
             plotOutput("active_map_right", height = 250),
             hr(),
             h4("Explore"),
             tableOutput("bivariate_table"),
             plotOutput("bivariate_graph", height = 200),
+            # actionLink(inputId = "active_extrude", label = "Clear selection"),
             hr(),
             h4("Did you know?"),
             textOutput("did_you_know"),
@@ -208,8 +209,8 @@ shinyUI(
           
           absolutePanel(
             id = "active_legend_container", class = "panel panel-default", 
-            style = "z-index:500;", bottom = 50, left = 270,
-            conditionalPanel(condition = 'input.data_for_plot_right != ""',
+            style = "z-index:500;", bottom = 0, left = 270,
+            conditionalPanel(condition = 'input.data_for_plot_right != " "',
                              id = "active_legend", 
                              imageOutput("bivariate_legend")))
           

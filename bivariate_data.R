@@ -198,7 +198,7 @@ data_borough <-
 did_you_know <-
   tibble(
     "left_variable" = "ale_index",
-    "right_variable" = c("", "", "", "", "", "", "immigrant_prop", "walk_or_bike_prop", "walk_or_bike_prop", "median_income"),
+    "right_variable" = c(" ", " ", " ", " ", " ", " ", "immigrant_prop", "walk_or_bike_prop", "walk_or_bike_prop", "median_income"),
     "text" = c("21.3% of people walk or cycle to work in areas in the highest class of active living potential. In areas with the lowest active living potential, only 2.5% do, compared to a regional average of 6%.\n",
                "Two thirds of new immigrants (67.4%) live in areas with the best access to active living potential (ALE class 5).\n",
                "11% of new immigrants live in areas with the worst access to active living potential (ALE class 1).\n",

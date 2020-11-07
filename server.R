@@ -95,7 +95,7 @@ shinyServer(function(input, output, session) {
   # Active living potential
   output$active_map_right <- renderPlot({
     
-    if (input$data_for_plot_right == "") {
+    if (input$data_for_plot_right == " ") {
       
       p <- 
         ggplot(data_for_plot) +
@@ -141,7 +141,7 @@ shinyServer(function(input, output, session) {
     }
     
     # Starting case for no selection
-    if (input$data_for_plot_right == "") {
+    if (input$data_for_plot_right == " ") {
       
       data <- 
         data %>% 
@@ -214,7 +214,7 @@ shinyServer(function(input, output, session) {
     
     data <- data_for_plot_r_bivar()
     
-    if (input$data_for_plot_right == "") {
+    if (input$data_for_plot_right == " ") {
       
       tibble(
         "Descriptive" = c(
@@ -243,7 +243,7 @@ shinyServer(function(input, output, session) {
     data <- data_for_plot_r_bivar()
     
     # Histogram for a single variable
-    if (input$data_for_plot_right == "") {
+    if (input$data_for_plot_right == " ") {
       
       if ((nrow(filter(data, ID == rz$click)) != 1)) {
         

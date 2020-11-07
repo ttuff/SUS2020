@@ -135,7 +135,7 @@ default_font_family <- "Helvetica"
 # Drop down list for variable selection -----------------------------------
 
 var_list <- 
-  list("----" = "", 
+  list("----" = " ", 
        "Housing" = list("Tenant-occupied (%)" = "tenant_prop",
                         "Average rent" = "avg_rent",
                         "Average property value" = "avg_property_value",
