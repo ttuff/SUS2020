@@ -501,8 +501,10 @@ shinyServer(function(input, output, session) {
   
   bivariate_chloropleth <- reactive({
     data_for_plot_bi <- census_analysis_quantile_WSG %>%
-      dplyr::select(social_distancing_capacity_pop_perc_2m_quant3, input$data_for_plot_ped)
-    if(length(colnames(data_for_plot_bi)) == 2){data_for_plot_bi <- cbind(data_for_plot_bi[,1], data_for_plot_bi)[,1:3]}
+      dplyr::select(social_distancing_capacity_pop_perc_2m_quant3, 
+                    input$data_for_plot_ped)
+    if (length(colnames(data_for_plot_bi)) == 2){
+      data_for_plot_bi <- cbind(data_for_plot_bi[,1], data_for_plot_bi)[,1:3]}
     #print(head(data_for_plot_bi))
     colnames(data_for_plot_bi) <- c("left_variable", "right_variable",  "geometry")
     data_for_plot_bivariate <- data_for_plot_bi %>%
@@ -622,8 +624,11 @@ shinyServer(function(input, output, session) {
   # Set zoom bins
   observeEvent(input$PedestrianMap_view_change$zoom, {
     #print(rz_pedestrian$zoom)
-    if( input$PedestrianMap_view_change$zoom >= 10.5 & input$PedestrianMap_view_change$zoom <= 14){rz_pedestrian$zoom <- 'IN'} else {
-      if(  input$PedestrianMap_view_change$zoom > 14){rz_pedestrian$zoom <- 'FINAL'} else {
+    if (input$PedestrianMap_view_change$zoom >= 10.5 && 
+        input$PedestrianMap_view_change$zoom <= 14) {
+      rz_pedestrian$zoom <- 'IN'} else {
+      if (input$PedestrianMap_view_change$zoom > 14) {
+        rz_pedestrian$zoom <- 'FINAL'} else {
         rz_pedestrian$zoom <- 'OUT'}}
   })
   
@@ -974,7 +979,9 @@ shinyServer(function(input, output, session) {
       updateSliderTextInput(session = session,
                             inputId = "slider3",
                             selected = 2.4)
-      # showNotification("A potentially cyclable trip:\nA car trip where the cycling distance between its origin and destination is shorter than 4.4 kilometers",
+      # showNotification("A potentially cyclable trip:\n",
+      #                  "A car trip where the cycling distance between its ",
+      #                  "origin and destination is shorter than 4.4 kilometers",
       #                  type = "message", duration = 3)
     }
     })
