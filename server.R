@@ -55,16 +55,18 @@ shinyServer(function(input, output, session) {
   # Commuter mode shift
   output$commuter_map_left <- renderPlot({
     
-    data_for_plot_left <- 
-      data_for_plot %>%
-      dplyr::select(Bicycle_proportion_quant3) %>% 
-      set_names(c("left_variable",  "geometry"))
+    quant_car_share <- car_share %>% mutate(quant3 = ntile(car_share$Car_per, 3))
     
-    ggplot(data_for_plot_left) +
-      geom_sf(aes(fill = as.factor(left_variable)), color = "white", 
-              size = 0.01) +
+    p <- ggplot(quant_car_share) +
+      geom_sf(aes(fill = as.factor(quant3)), color = "white", 
+              size = 0.05) +
       scale_fill_manual(values = rev(colors[c(1:3)])) +
       theme_map()
+    
+    ggdraw() + 
+      draw_image(dropshadow2, scale = 1.59, vjust = 0.003, hjust = 0.003) +
+      draw_plot(p, scale = .85) +
+      draw_image(uni_legend, scale = .45, vjust = 0.25, hjust = 0.25) 
     
   })
 
@@ -85,7 +87,8 @@ shinyServer(function(input, output, session) {
     
     ggdraw() + 
       draw_image(dropshadow2, scale = 1.85, vjust = 0.01) +
-      draw_plot(p)
+      draw_plot(p)+
+      draw_image(uni_legend, scale = .45, vjust = 0.3, hjust = 0.3)
     
     })
   
@@ -454,45 +457,57 @@ shinyServer(function(input, output, session) {
   
   ### Pedestrian realm #########################################################
   
-  # MapBox studio base map
+  ## Load MapBox Base Map  -------------------------------------------------
   output$PedestrianMap <- renderMapdeck({
     mapdeck(style = "mapbox://styles/skohn90/ckgjqwg1w00bv1bmorr5oad7q", 
             token = 'pk.eyJ1Ijoic2tvaG45MCIsImEiOiJja2JpNGZjMnUwYm9hMnFwN3Q2bmV5c3prIn0.M-AJKxYD1ETFiBB6swQmJw',
             zoom = 9,location = c(-73.75, 45), pitch = 35) 
     })
   
-  # Choose your second variable
-  output$second_variable <- renderPlot({
+  ## Univariate chloropleth map + Legend  --------------------------------------
+
+  data_for_plot_uni <- reactive({
     
-    colors <- color_scale$fill
-    colors <- as.character(colors)
+    data_for_plot_uni <- census_analysis_quantile_WSG %>%
+      dplyr::select(social_distancing_capacity_pop_perc_2m_quant3)
     
-    data_for_plot_ped <- census_analysis_quantile %>%
-      dplyr::select(input$data_for_plot_ped)
+    colnames(data_for_plot_uni) <- c("left_variable", "geometry")
     
-    colnames(data_for_plot_ped) <- c("right_variable",  "geometry")
+    data_for_plot_uni <- data_for_plot_uni %>%
+      mutate(
+        group = paste(
+          as.numeric(left_variable)
+        )
+      ) %>%
+      left_join(color_scale_2, by = "group") %>% 
+      mutate(prop_driving = round(census_analysis_quantile_WSG$prop_driving, 0),
+             pop_density = log(round(census_analysis_quantile_WSG$`pop_density(sqkm)`, 0)),
+             trip_scale = census_analysis_quantile_WSG$trip_scale,
+             social_distancing = census_analysis_quantile_WSG$social_distancing_capacity_pop_perc_2m)
     
-    p <- ggplot(data_for_plot_ped) +
-      geom_sf(data = census_circular, fill = "transparent", color = "black", size = 0.05) +
-      geom_sf(
-        aes(
-          fill = as.factor(right_variable)
-        ),
-        # use thin white stroke for municipalities
-        color = "white",
-        size = 0.03
-      ) +
-      scale_fill_manual(values=rev(colors[c(4:6)]))+
-      theme_void() +
-      theme(legend.position = "none")
     
-    ggdraw() + 
-      draw_image(dropshadow1, scale = 1.8, vjust = 0.01) +
-      draw_plot(p)
-  }, bg="transparent")
+    if (input$variable_ped == 3) {
+      data_for_plot_uni <- data_for_plot_uni %>% 
+        filter(prop_driving >= input$slider_ped[1] & prop_driving <= input$slider_ped[2])
+    } else if (input$variable_ped == 2) {data_for_plot_uni <- data_for_plot_uni %>% 
+      filter(social_distancing >= input$slider_ped[1] & social_distancing <= input$slider_ped[2]) 
+    } else if (input$variable_ped == 1) {data_for_plot_uni <- data_for_plot_uni %>% 
+      filter(pop_density >= input$slider_ped[1] & pop_density <= input$slider_ped[2]) 
+    } else {data_for_plot_uni <- data_for_plot_uni %>% 
+      filter(trip_scale >= input$slider_ped[1] & trip_scale <= input$slider_ped[2])}
+  })
   
-  ## Bivariate chloropleth map (reactive value)
+  # Legend
+  legend_uni_chloro <- legend_element(
+    variables = c("Low capacity", "Medium capacity", "High capacity"),
+    colours = c('#CABED0', '#BC7C8F', '#AE3A4E'),
+    colour_type = "fill",
+    variable_type = "category",
+    title = "Pedestrian Capacity for Social Distancing (2 meters)"
+  )
+  legend_uni_chloro <- mapdeck_legend(legend_uni_chloro)
   
+  ## Bivariate chloropleth map -------------------------------------------------
   bivariate_chloropleth <- reactive({
     data_for_plot_bi <- census_analysis_quantile_WSG %>%
       dplyr::select(social_distancing_capacity_pop_perc_2m_quant3, 
@@ -528,94 +543,50 @@ shinyServer(function(input, output, session) {
       filter(trip_scale >= input$slider_ped[1] & trip_scale <= input$slider_ped[2])}
   })
   
-  ## Bivariate dot density map (reactive value)
-  
-  # bivariate_dotdensity <- reactive({
-  #   data_for_plot_bi_dot <- sample_points_for_app_WSG %>%
-  #     dplyr::select(social_distancing_capacity_pop_perc_2m_quant3, input$data_for_plot_ped)
-  #   if(length(colnames(data_for_plot_bi_dot)) == 2){data_for_plot_bi_dot <- cbind(data_for_plot_bi_dot[,1], data_for_plot_bi_dot)[,1:3]}
-  #   #print(head(data_for_plot_bi_dot))
-  #   colnames(data_for_plot_bi_dot) <- c("left_variable", "right_variable",  "geometry")
-  #   data_for_plot_bi_dotdensity <- data_for_plot_bi_dot %>%
-  #     mutate(
-  #       group = paste(
-  #         as.numeric(left_variable), "-",
-  #         as.numeric(right_variable)
-  #       )
-  #     ) %>%
-  #     left_join(bivariate_color_scale, by = "group") %>% 
-  #     drop_na()
-  #   
-  #   bivariate_dotdensity  <- st_cast(data_for_plot_bi_dotdensity, "POINT")
-  # })
-  
-  ## Univariate chloropleth map
-  
-  data_for_plot_uni <- reactive({
+  ## Second variable plot -------------------------------------------------
+  output$second_variable <- renderPlot({
     
-    data_for_plot_uni <- census_analysis_quantile_WSG %>%
-      dplyr::select(social_distancing_capacity_pop_perc_2m_quant3)
+    colors <- color_scale$fill
+    colors <- as.character(colors)
     
-    colnames(data_for_plot_uni) <- c("left_variable", "geometry")
+    data_for_plot_ped <- census_analysis_quantile %>%
+      dplyr::select(input$data_for_plot_ped)
     
-    data_for_plot_uni <- data_for_plot_uni %>%
-      mutate(
-        group = paste(
-          as.numeric(left_variable)
-        )
-      ) %>%
-      left_join(color_scale_2, by = "group") %>% 
-      mutate(prop_driving = round(census_analysis_quantile_WSG$prop_driving, 0),
-             pop_density = log(round(census_analysis_quantile_WSG$`pop_density(sqkm)`, 0)),
-             trip_scale = census_analysis_quantile_WSG$trip_scale,
-             social_distancing = census_analysis_quantile_WSG$social_distancing_capacity_pop_perc_2m)
-      
+    colnames(data_for_plot_ped) <- c("right_variable",  "geometry")
     
-    if (input$variable_ped == 3) {
-    data_for_plot_uni <- data_for_plot_uni %>% 
-      filter(prop_driving >= input$slider_ped[1] & prop_driving <= input$slider_ped[2])
-    } else if (input$variable_ped == 2) {data_for_plot_uni <- data_for_plot_uni %>% 
-      filter(social_distancing >= input$slider_ped[1] & social_distancing <= input$slider_ped[2]) 
-    } else if (input$variable_ped == 1) {data_for_plot_uni <- data_for_plot_uni %>% 
-      filter(pop_density >= input$slider_ped[1] & pop_density <= input$slider_ped[2]) 
-    } else {data_for_plot_uni <- data_for_plot_uni %>% 
-      filter(trip_scale >= input$slider_ped[1] & trip_scale <= input$slider_ped[2])}
-    })
-
+    p <- ggplot(data_for_plot_ped) +
+      geom_sf(data = census_circular, fill = "transparent", color = "black", size = 0.05) +
+      geom_sf(
+        aes(
+          fill = as.factor(right_variable)
+        ),
+        # use thin white stroke for municipalities
+        color = "white",
+        size = 0.03
+      ) +
+      scale_fill_manual(values=rev(colors[c(4:6)]))+
+      theme_void() +
+      theme(legend.position = "none")
+    
+    ggdraw() + 
+      draw_image(dropshadow1, scale = 1.8, vjust = 0.01) +
+      draw_plot(p) +
+      draw_image(uni_legend_right, scale = .5, vjust = 0.25, hjust = -0.25)
+    
+  }, bg = "transparent")
   
-  # Legend
   
-  legend_uni_chloro <- legend_element(
-    variables = c("Low capacity", "Medium capacity", "High capacity"),
-    colours = c('#CABED0', '#BC7C8F', '#AE3A4E'),
-    colour_type = "fill",
-    variable_type = "category",
-    title = "Pedestrian Capacity for Social Distancing (2 meters)"
-  )
-  legend_uni_chloro <- mapdeck_legend(legend_uni_chloro)
-  
-  ## Create both VAS plans
+  ## Create VAS plans  -------------------------------------------------
   
   # May plan
-  
   may_vas_plan <- original_plan_disaggregated %>% 
     st_transform(4326)
-  
-  # Legend
-  # legend_vas_1 <- legend_element(
-  #   variables = c(""),
-  #   colours = c('#fac402'),
-  #   colour_type = "stroke",
-  #   variable_type = "category",
-  #   title = "May 2020 Plan"
-  # )
-  # legend_vas_1 <- mapdeck_legend(legend_vas_1)
   
   # July plan
   july_vas_plan <- revised_plan %>% 
     st_transform(4326)
   
-  # Set zoom bins
+  ## Set zoom bins  -------------------------------------------------
   observeEvent(input$PedestrianMap_view_change$zoom, {
     #print(rz_pedestrian$zoom)
     if (input$PedestrianMap_view_change$zoom >= 10.5 && 
@@ -625,15 +596,62 @@ shinyServer(function(input, output, session) {
         rz_pedestrian$zoom <- 'FINAL'} else {
         rz_pedestrian$zoom <- 'OUT'}}
   })
-  
-  
+
   # Send reactive zoom variable back to the UI
   output$zoom <- reactive({
     return(rz_pedestrian$zoom)
   })
   outputOptions(output, "zoom", suspendWhenHidden = FALSE)
   
-  # Update map if there is a zoom / dataframe / tab / input change
+  ## Titles & Text  -------------------------------------------------
+  
+  # Set title across zoom levels
+  output$title_text_ped <- renderText({
+    if( rz_pedestrian$zoom == "OUT"){
+      paste0("Pedestrian Capacity for Social Distancing, Census Tracts")
+    } else if (rz_pedestrian$zoom == "IN") {
+      "Pedestrian Capacity for Social Distancing, Dissemination Area"  
+    } else {"Explore Sidewalks and Parks"}
+  })
+  
+  # Main text
+  output$info_text_ped <- renderText({
+    if( rz_pedestrian$zoom == "OUT"){
+      title_text %>% 
+        filter(tab == "pedestrian_ct", type == "main") %>% 
+        pull(text)
+    }
+  })
+  
+  # Update the title box text 
+  
+  output$more_info_ped_status <- reactive({
+    input$more_info_ped %% 2 == 1
+  })
+  
+  outputOptions(output, "more_info_ped_status", suspendWhenHidden = FALSE)
+  
+  observeEvent(input$more_info_ped, {
+
+    if (input$more_info_ped %% 2 == 1) {
+      txt <- "Hide"
+    } else {
+      txt <- "Learn more"
+    }
+    updateActionButton(session, "more_info_ped", label = txt)
+    
+  })
+  
+  # Additional text info
+  output$more_info_text_ped <- renderText({
+    if( rz_pedestrian$zoom == "OUT" & input$more_info_ped_status == 1){
+      title_text %>% 
+        filter(tab == "pedestrian_ct", type == "extra") %>% 
+        pull(text)
+    }
+  })
+  
+  ## Update map if there is a zoom / dataframe / tab / input change  -----------
   
   observeEvent({rz_pedestrian$zoom
     bivariate_chloropleth()
@@ -816,36 +834,6 @@ shinyServer(function(input, output, session) {
         }
         
       }
-        
-        
-        #             add_polygon(
-        #               data = bivariate_chloropleth()
-        #               , na_colour = "#FFFFFF"
-        #               ,stroke_colour = "#000000"
-        #               ,stroke_width = 5
-        #               ,fill_colour = "#FFFFFF"
-        #               , fill_opacity = 0
-        #               , update_view = FALSE
-        #               , layer_id = "chloropleth_layer"
-        #               , auto_highlight = TRUE
-        #               , highlight_colour = '#FFFFFF90'
-        #               , legend = FALSE
-        #               , light_settings =  list(
-        #                 lightsPosition = c(0,0, 5000)
-        #                 , numberOfLights = 1
-        #                 , ambientRatio = 1
-        #               )
-        #             ) %>%
-        #             add_scatterplot(data = bivariate_dotdensity()
-        #                             , fill_colour = "fill"
-        #                             , radius = 20
-        #                             , layer_id = "dot_density"
-        #                             , na_colour = "#000000"
-        #                             , radius_min_pixels = 2
-        #                             , update_view = FALSE
-        #                             , palette = "ped_color_palette")
-        #         }
-        
       
       if( rz_pedestrian$zoom == "OUT") {
         mapdeck_update(map_id = "PedestrianMap")  %>%  

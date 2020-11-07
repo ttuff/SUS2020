@@ -53,6 +53,13 @@ shinyUI(
                            tabName = "Covid", badgeLabel = "health and safety", 
                            badgeColor = "red"),
                   
+                  menuItem("Pedestrian realm", icon = icon("walking"), 
+                           tabName = "Pedestrian", badgeLabel = "suggested", 
+                           badgeColor = "aqua"),
+                  conditionalPanel(condition = "input.tabs == 'Pedestrian'",
+                                   plotOutput("pedestrian_map_left", 
+                                              height = 250)),
+                  
                   menuItem("Economic health", icon = icon("dollar-sign"), 
                            tabName = "Economic"),
                   
@@ -67,13 +74,6 @@ shinyUI(
                   
                   menuItem("Land use", icon = icon("warehouse"), 
                            tabName = "Land"),
-                  
-                  menuItem("Pedestrian realm", icon = icon("walking"), 
-                           tabName = "Pedestrian", badgeLabel = "suggested", 
-                           badgeColor = "aqua"),
-                  conditionalPanel(condition = "input.tabs == 'Pedestrian'",
-                                   plotOutput("pedestrian_map_left", 
-                                              height = 250)),
                   
                   menuItem("Public transit", icon = icon("train"), 
                            tabName = "transit", badgeLabel = "on the ballot", 
@@ -166,8 +166,6 @@ shinyUI(
           border-width: 0px;}
           #input_control_left2 {background-color: rgba(0,0,255,0.0);
           border-width: 0px;}
-          #input_control_right {background-color: rgba(0,0,255,0.0);
-          border-width: 0px;}
           #active_legend_container {background-color: rgba(0,0,255,0.0);
           border-width: 0px;}'))),
           
@@ -224,77 +222,95 @@ shinyUI(
           
           mapdeckOutput(outputId = 'PedestrianMap', height = "1200px"),
           
-          absolutePanel(
-            id = "input_control_right", style="z-index:501;", 
-            class = "panel panel-default", draggable = TRUE, top = 60, 
-            left = "40%", width = 250, 
-            conditionalPanel(
-              condition = "output.zoom == 'IN' && input.switch_biv == true",
-              id = "plotContainer_ped", 
-              helpText(h2(tags$div(align = 'center', 
-                                   (strong("Your second variable:", 
-                                           style = "color:#B2D235"))))),
-              plotOutput("second_variable", width = 250, height = 250),
-              helpText(tags$div(align = 'center', 
-                                (strong("Drag to move", 
-                                        style = "color:#B2D235")))))),
+          tags$head(tags$style(HTML('
+          #title_bar_ped {border-width: 10px; border-color: rgb(255, 255, 255);}
+          #input_control_right {border-width: 10px; 
+          border-color: rgba(255,255,255,1);}
+          #ped_legend_container {background-color: rgba(0,0,255,0.0);
+          border-width: 0px;}'))),
           
           absolutePanel(
-            id = "controls", class = "panel panel-default", 
-            draggable = FALSE, top = "5%", 
+            id = "title_bar_ped", class = "panel panel-default", 
+            draggable = FALSE, top = 70, left = 270, width = "40%",
+            h3(textOutput("title_text_ped")),
+            p(h6(textOutput("info_text_ped"))),
+            actionLink("more_info_ped", "Learn more"),
             conditionalPanel(
-              condition = "output.zoom == 'IN'", 
+              condition = "output.more_info_ped_status == 1",
+              id = "plotContainer_ped", 
+              p(h6(textOutput("more_info_text_ped"))))), 
+          
+          absolutePanel(
+            id = "input_control_right", style="z-index:501;", 
+            class = "panel panel-default", top = 70, right = 50, width = 300,
+            conditionalPanel(
+              condition = "output.zoom == 'IN'",
               id = "plotContainer_ped_control",
-              dropdownButton(
-                label = "", icon = icon("gear"), status = "primary", 
-                circle = TRUE, width = 350, 
-                materialSwitch(inputId = "switch_biv", 
-                               label = h3(strong("Perform a Bivariate Analysis", 
-                                                 style = "color:#B2D235")), 
-                               status = "primary", value = FALSE),
-                conditionalPanel(
-                  condition = "input.switch_biv == true", 
-                  id = "plotContainer_ped_control", 
-                  selectInput("data_for_plot_ped", 
-                              label = h4(tags$em(tags$span(
-                                style = "color:#3C3C3B", 
-                                "Select your second variable"))), 
-                              selected = "agg_proximity_score_quant3", 
-                              choices = list(
-                                "Walkable Access to Key Amenities" = 
-                                  "agg_proximity_score_quant3",
-                                "Net Median Income" = 
-                                  "net_median_income_quant3",
-                                "Visible Minority Population" = 
-                                  "visible_minority_pop_quant3", 
-                                "Immigrant Population" = 
-                                  "immigrants_quant3"))),
-                h4(strong("Montreal Covid-19 Expanded Active Transit Corridors", 
-                          style = "color:#B2D235")), 
-                materialSwitch(inputId = "vas_1", 
-                               label = "Original Plan (May 15, 2020)", 
-                               status = "info", value = FALSE),
-                materialSwitch(inputId = "vas_2", 
-                               label = "Revised Plan (July 25, 2020", 
-                               status = "info", value = FALSE),
-                selectInput(
-                  inputId = "variable_ped",
-                  label = h4(strong("Choose more variables and explore further", 
-                                    style = "color:#B2D235")), 
-                  choices = list("Population density per square km" = 1, 
-                                 "Pedestrian social distancing capacity" = 2, 
-                                 "Work commutes by car (%)" = 3, 
-                                 "Trajet MTL 2016 data on pedestrian flows" = 4),
-                  selected = 1),
-                h5(tags$em(tags$span(style = "color:#3C3C3B", 
-                                     "Play with the slider to filter the map"))), 
-                h5(chooseSliderSkin(skin = "Flat",
-                                    #c("Shiny", "Flat", "Modern", "Nice", "Simple", "HTML5", "Round", "Square"),
-                                    color = "#B2D235"),
-                   sliderInput(inputId = "slider_ped", label = "", 0, 12, 
-                               value = c(0, 12), step = 1)))))),
+            materialSwitch(inputId = "switch_biv", 
+                           label = h3(strong("Perform a Bivariate Analysis", 
+                                             style = "color:#B2D235")), 
+                           status = "primary", value = FALSE),
+            conditionalPanel(
+              condition = "input.switch_biv == true",
+              id = "plotContainer_ped_control",
+              selectInput("data_for_plot_ped", 
+                        label = h4(tags$em(tags$span(
+                          style = "color:#3C3C3B", 
+                          "Select your second variable"))), 
+                        selected = "agg_proximity_score_quant3", 
+                        choices = list(
+                          "Walkable Access to Key Amenities" = 
+                            "agg_proximity_score_quant3",
+                          "Net Median Income" = 
+                            "net_median_income_quant3",
+                          "Visible Minority Population" = 
+                            "visible_minority_pop_quant3", 
+                          "Immigrant Population" = 
+                            "immigrants_quant3")),
+          plotOutput("second_variable", width = 250, height = 250)),
+          hr(),
+          h4(strong("Montreal Covid-19 Expanded Active Transit Corridors", 
+                    style = "color:#B2D235")), 
+          materialSwitch(inputId = "vas_1", 
+                         label = "Original Plan (May 15, 2020)", 
+                         status = "info", value = FALSE),
+          materialSwitch(inputId = "vas_2", 
+                         label = "Revised Plan (July 25, 2020", 
+                         status = "info", value = FALSE),
+          selectInput(
+            inputId = "variable_ped",
+            label = h4(strong("Choose more variables and explore further", 
+                              style = "color:#B2D235")), 
+            choices = list("Population density per square km" = 1, 
+                           "Pedestrian social distancing capacity" = 2, 
+                           "Work commutes by car (%)" = 3, 
+                           "Trajet MTL 2016 data on pedestrian flows" = 4),
+            selected = 1),
+          h5(tags$em(tags$span(style = "color:#3C3C3B", 
+                               "Play with the slider to filter the map"))), 
+          h5(chooseSliderSkin(skin = "Flat",
+                              #c("Shiny", "Flat", "Modern", "Nice", "Simple", "HTML5", "Round", "Square"),
+                              color = "#B2D235"),
+             sliderInput(inputId = "slider_ped", label = "", 0, 12, 
+                         value = c(0, 12), step = 1))),
+          tableOutput("table_ped"),
+          plotOutput("graph_ped", height = 200),
+          hr(),
+          h4("Did you know?"),
+          textOutput("did_you_know_ped"))
+          
+          ),
         
+        # ,
+        # 
+        # absolutePanel(
+        #   id = "ped_legend_container", class = "panel panel-default", 
+        #   style = "z-index:500;", bottom = 10, left = 270,
+        #   conditionalPanel(condition = "input.switch_biv == true",
+        #                    id = "ped_legend", 
+        #                    imageOutput("bivariate_legend")))
         
+            
         ## Commuting mode switch -----------------------------------------------
         
         tabItem(

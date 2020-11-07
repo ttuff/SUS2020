@@ -216,8 +216,8 @@ did_you_know <-
 
 title_text <- 
   tibble(
-    tab = c("active", "active", "commute", "commute", "pedestrian", "pedestrian"),
-    type = rep(c("main", "extra"), 3),
+    tab = c("active", "active", "commute", "commute", "pedestrian_ct", "pedestrian_ct", "pedestrian_da", "pedestrian_da", "pedestrian_sidewalk", "pedestrian_sidewalk"),
+    type = rep(c("main", "extra"), 5),
     text = c(paste0("The CanALE dataset (developed by Prof. Nancy Ross ",
                     "and her team) captures four key elements related ",
                     "to active living environments: population density, ", 
@@ -239,7 +239,29 @@ title_text <-
                     "improved pedestrian infrastructure. In other ",
                     "words, who can afford to live in walkable ",
                     "neighbourhoods?"),
-             "", "", "", "")
+             "", "", paste0("The capacity for pedestrian social ",
+                            "distancing is a capacity measurement that determines ",
+                            "the percentage of a neighbourhood’s population that ",
+                            "can make local trips on foot at the same time while respecting ",
+                            "‘social distancing’ regulations."), 
+             paste0("Neighbourhoods where less than ",
+                            "100% of the local population can make trips on foot at the same time ",
+                            "are above capacity and more at risk of overcrowding from local ",
+                            "pedestrian trips. While it is still important to take into account ",
+                            "pedestrian flows coming from external neighbourhoods (some data on pedestrian ",
+                            "flows obtained from 2016 TrajetMtl data is presented in this research), the measurement’s focus on local pedestrian ",
+                            "capacity is especially relevant during a pandemic situation where shelter ",
+                            "in place and travel restrictions have generally led to a rise in local trips ",
+                            "and a decline in trips from other neighbourhoods. Using open data ",
+                            "from Montreal's open data portal as well as OpenStreetMap, it was possible to ",
+                            "calculate the total surface area of sidewalks, neighbourhood parks, and pre-Covid ",
+                            "pedestrian streets. Summing these surface areas ",
+                            "gets us the neighbourhood's total walkable surface area. It is ",
+                            "then possible to calculate how many residents can ‘fit’ into the pedestrian realm ",
+                            "while respecting ‘social distancing’ regulations of 2 meters (total walkable surface ",
+                            "area divided by the surface area of a circle with a 2-meter radius, that is 12.54 ",
+                            "square meters). Finally, we normalize the value by representing it as a percentage of the residential population."),
+                            "", "", "", "")
   )
 
 save(data_DA, data_CT, data_borough, did_you_know, title_text,

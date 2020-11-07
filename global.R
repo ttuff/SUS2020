@@ -217,7 +217,7 @@ uni_legend_right <- normalizePath(file.path("www/Univariate_right.png"))
 
 # Other prep --------------------------------------------------------------
 
-js_ped <- "$(document).ready(function(){
+js_ped_1 <- "$(document).ready(function(){
   $('#plotContainer').on('show', function(){
     $(this).css('opacity', 0).animate({opacity: 1}, {duration: 1000});
   }).on('hide', function(){
@@ -298,7 +298,7 @@ $(document).ready(function(){
 
 qz <- reactiveValues(zoom_level = 'ISO')
 
-rz_pedestrian <- reactiveValues(zoom = 'FINAL')
+rz_pedestrian <- reactiveValues(zoom = 'OUT')
 
 rz <- reactiveValues(zoom = 'IN',
                      click = NA)
