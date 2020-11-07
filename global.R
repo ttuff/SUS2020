@@ -186,6 +186,10 @@ loadingLogo <-
 load(file = "data/data_for_plot.Rdata")
 load("data/new_bivariate.Rdata")
 
+did_you_know <- 
+  read_csv("data/did_you_know.csv") %>% 
+  mutate(right_variable = if_else(is.na(right_variable), " ", right_variable))
+
 # Load data for pedestrian realm 
 load(file = "data/census_analysis.Rdata")
 load(file = "data/census_circular.Rdata")

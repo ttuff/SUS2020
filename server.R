@@ -99,7 +99,8 @@ shinyServer(function(input, output, session) {
     if (input$data_for_plot_right == " ") {
       
       p <- 
-        ggplot(data_for_plot) +
+        data_for_plot_r_bivar() %>% 
+        ggplot() +
         geom_sf(fill = "#CABED0", color = "white", size = 0.01) +
         theme_map()
       
@@ -107,7 +108,6 @@ shinyServer(function(input, output, session) {
       
       p <- 
         data_for_plot_r_bivar() %>% 
-        st_transform(3347) %>% 
         ggplot() +
         geom_sf(aes(fill = as.factor(right_variable)), color = "white", 
                 size = 0.01) +
@@ -132,11 +132,14 @@ shinyServer(function(input, output, session) {
     
     if (rz$zoom == "IN") {
       data <- data_CT
-      opacity <- "BB"
+      opacity <- "CC"
     } else if (rz$zoom == "OUT") {
       data <- data_borough 
       opacity <- "EE"
     } else if (rz$zoom == "ISO") {
+      data <- data_DA
+      opacity <- "AA"
+    } else if (rz$zoom == "ISO_2") {
       data <- data_DA
       opacity <- "80"
     }
@@ -286,22 +289,29 @@ shinyServer(function(input, output, session) {
       if ((nrow(filter(data, ID == rz$click)) != 1)) {
         
         data %>%
+          filter(!is.na(left_variable)) %>% 
           ggplot(aes(left_variable_full)) +
           geom_histogram(aes(fill = fill)) +
-          labs(x = "CanALE index") +
+          scale_fill_manual(values = colors[c(1:3)]) +
+          labs(x = "CanALE index", y = NULL) +
           theme_minimal() +
-          theme(legend.position = "none")  
-        
+          theme(legend.position = "none",
+                panel.grid.minor.x = element_blank(),
+                panel.grid.major.x = element_blank(),
+                panel.grid.minor.y = element_blank())        
       } else {
         
         data %>%
+          filter(!is.na(left_variable)) %>% 
           ggplot(aes(left_variable_full)) +
-          geom_histogram(aes(fill = fill)) +
-          gghighlight(
-            left_variable_full == left_variable_full[ID == rz$click]) +
-          labs(x = "CanALE index") +
+          geom_histogram(aes(fill = ID == rz$click)) +
+          scale_fill_manual(values = colors[c(3, 1)]) +
+          labs(x = "CanALE index", y = NULL) +
           theme_minimal() +
-          theme(legend.position = "none")  
+          theme(legend.position = "none",
+                panel.grid.minor.x = element_blank(),
+                panel.grid.major.x = element_blank(),
+                panel.grid.minor.y = element_blank())
         
       }
       
@@ -342,9 +352,11 @@ shinyServer(function(input, output, session) {
     
     did_you_know %>% 
       filter(right_variable == input$data_for_plot_right) %>% 
+      slice_sample(n = 3) %>% 
       pull(text) %>% 
-      as.list() %>% 
-      lapply(HTML)
+      paste("<li> ", ., collapse = "") %>% 
+      paste0("<ul>", ., "</ul>") %>%
+      HTML()
   })
   
   
@@ -355,7 +367,9 @@ shinyServer(function(input, output, session) {
     rz$zoom <- case_when(
       input$myMap_view_change$zoom >= 10.5 && 
         input$myMap_view_change$zoom <= 12 ~ "IN",
-      input$myMap_view_change$zoom > 12 ~ "ISO",
+      input$myMap_view_change$zoom > 12 &&
+        input$myMap_view_change$zoom < 14 ~ "ISO",
+      input$myMap_view_change$zoom >= 14 ~ "ISO_2",
       TRUE ~ "OUT")
     
   })
