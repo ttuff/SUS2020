@@ -232,13 +232,13 @@ shinyUI(
           absolutePanel(
             id = "title_bar_ped", class = "panel panel-default", 
             draggable = FALSE, top = 70, left = 270, width = "40%",
-            verbatimTextOutput("title_text_ped"),
-            p(helpText(verbatimTextOutput("info_text_ped"))),
+            h3(textOutput("title_text_ped")),
+            p(h6(textOutput("info_text_ped"))),
             actionLink("more_info_ped", "Learn more"),
             conditionalPanel(
               condition = "output.more_info_ped_status == 1",
               id = "plotContainer_ped", 
-              p(helpText(h6(verbatimTextOutput("more_info_text_ped")))))), 
+              p(h6(textOutput("more_info_text_ped"))))), 
           
           absolutePanel(
             id = "input_control_right", style="z-index:501;", 
