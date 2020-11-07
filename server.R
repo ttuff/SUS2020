@@ -289,10 +289,11 @@ shinyServer(function(input, output, session) {
       if ((nrow(filter(data, ID == rz$click)) != 1)) {
         
         data %>%
-          filter(!is.na(left_variable)) %>% 
+          # filter(!is.na(left_variable)) %>% 
           ggplot(aes(left_variable_full)) +
-          geom_histogram(aes(fill = fill)) +
-          scale_fill_manual(values = colors[c(1:3)]) +
+          geom_histogram(aes(fill = fill), bins = 25) +
+          scale_fill_manual(values = colors[c(1:3)],
+                            na.translate = FALSE) +
           labs(x = "CanALE index", y = NULL) +
           theme_minimal() +
           theme(legend.position = "none",
@@ -302,10 +303,13 @@ shinyServer(function(input, output, session) {
       } else {
         
         data %>%
-          filter(!is.na(left_variable)) %>% 
+          # filter(!is.na(left_variable)) %>% 
           ggplot(aes(left_variable_full)) +
-          geom_histogram(aes(fill = ID == rz$click)) +
-          scale_fill_manual(values = colors[c(3, 1)]) +
+          geom_histogram(aes(fill = round(left_variable_full) == 
+                               round(left_variable_full[ID == rz$click])), 
+                         bins = 25) +
+          scale_fill_manual(values = colors[c(3, 1)],
+                            na.translate = FALSE) +
           labs(x = "CanALE index", y = NULL) +
           theme_minimal() +
           theme(legend.position = "none",
