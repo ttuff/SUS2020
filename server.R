@@ -491,8 +491,10 @@ shinyServer(function(input, output, session) {
     
     ggdraw() + 
       draw_image(dropshadow1, scale = 1.8, vjust = 0.01) +
-      draw_plot(p)
-  }, bg="transparent")
+      draw_plot(p) +
+      draw_image(uni_legend_right, scale = .5, vjust = 0.25, hjust = -0.25)
+    
+  }, bg = "transparent")
   
   ## Bivariate chloropleth map (reactive value)
   
