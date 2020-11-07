@@ -153,59 +153,57 @@ shinyUI(
         
         ## Active living potential ---------------------------------------------
         
-        tabItem(tabName = "active",
-                mapdeckOutput(outputId = 'myMap', height = "1200px"),
-                tags$head(tags$style(HTML('
-                #title_bar {border-width: 10px; border-color: rgb(255, 255, 255);}
-                #input_control_overlay {border-width: 10px; 
-                border-color: rgba(255,255,255,1);}
-             #input_control_left {background-color: rgba(0,0,255,0.0);border-width: 0px;}
-             #input_control_left2 {background-color: rgba(0,0,255,0.0);border-width: 0px;}
-             #input_control_right {background-color: rgba(0,0,255,0.0);border-width: 0px;}')
-                )),
-                
-                absolutePanel(
-                  id = "title_bar", class = "panel panel-default", 
-                  draggable = FALSE, top = 70, left = 270, width = "40%",
-                  h2("Active living potential: the CanALE index"),
-                  p(title_text %>% 
-                      filter(tab == "active", type == "main") %>% 
-                      pull(text)),
-                  actionLink("more_info", "Learn more"),
-                  conditionalPanel(
-                    condition = "output.more_info_status == 1",
-                    p(title_text %>% 
-                        filter(tab == "active", type == "extra") %>% 
-                        pull(text))
-                  )
-                ),
-                
-                absolutePanel(
-                  id = "input_control_overlay",
-                  style = "z-index:500;",
-                  class = "panel panel-default",
-                  top = 70, 
-                  right = 50,
-                  width = 300,
-                  selectInput("data_for_plot_right", 
-                              label = h4("Compare"), 
-                              selected = "", choices = var_list),
-                  plotOutput("active_map_right", height = 250),
-                  imageOutput("bivariate_legend", height = 200),
-                  hr(),
-                  h4("Explore"),
-                  tableOutput("bivariate_table"),
-                  plotOutput("bivariate_graph", height = 200),
-                  hr(),
-                  h4("Did you know?"),
-                  textOutput("did_you_know"),
-                  hr(),
-                  materialSwitch(
-                    inputId = "active_extrude", 
-                    label = "View in 3D", 
-                    status = "primary",
-                    value = FALSE))
-        ),
+        tabItem(
+          tabName = "active",
+          
+          mapdeckOutput(outputId = 'myMap', height = "1200px"),
+          
+          tags$head(tags$style(HTML('
+          #title_bar {border-width: 10px; border-color: rgb(255, 255, 255);}
+          #input_control_overlay {border-width: 10px; 
+          border-color: rgba(255,255,255,1);}
+          #input_control_left {background-color: rgba(0,0,255,0.0);
+          border-width: 0px;}
+          #input_control_left2 {background-color: rgba(0,0,255,0.0);
+          border-width: 0px;}
+          #input_control_right {background-color: rgba(0,0,255,0.0);
+          border-width: 0px;}'))),
+          
+          absolutePanel(
+            id = "title_bar", class = "panel panel-default", 
+            draggable = FALSE, top = 70, left = 270, width = "40%",
+            h2("Active living potential: the CanALE index"),
+            p(title_text %>% 
+                filter(tab == "active", type == "main") %>% 
+                pull(text)),
+            actionLink("more_info", "Learn more"),
+            conditionalPanel(
+              condition = "output.more_info_status == 1",
+              p(title_text %>% 
+                  filter(tab == "active", type == "extra") %>% 
+                  pull(text)))),
+          
+          absolutePanel(
+            id = "input_control_overlay", style = "z-index:500;",
+            class = "panel panel-default", top = 70, right = 50, width = 300,
+            selectInput("data_for_plot_right", 
+                        label = h4("Compare"), 
+                        selected = "", choices = var_list),
+            plotOutput("active_map_right", height = 250),
+            imageOutput("bivariate_legend", height = 200),
+            hr(),
+            h4("Explore"),
+            tableOutput("bivariate_table"),
+            plotOutput("bivariate_graph", height = 200),
+            hr(),
+            h4("Did you know?"),
+            textOutput("did_you_know"),
+            hr(),
+            materialSwitch(
+              inputId = "active_extrude", 
+              label = "View in 3D", 
+              status = "primary",
+              value = FALSE))),
         
         
         ## Pedestrian realm ----------------------------------------------------
@@ -269,11 +267,7 @@ shinyUI(
                                           ))))), 
                
                
-                    tabItem(tabName = "home",
-                            fluidPage(
-                              imageOutput("homepic", height = 600)
-                            )  
-                            
+
                     ),
                     tabItem(tabName = "mode",
                             fluidPage(
@@ -374,42 +368,7 @@ shinyUI(
                               )
                             )  
                     ), 
-      tabItem(tabName = "Biodiversity",
-              fluidPage(
-                mapdeckOutput(outputId = "biodiversityMap",
-                              height = "1200px"),
-                absolutePanel(
-                  id="bivariate_legend",
-                  style="z-index:500;",
-                  class = "panel panel-default",
-                  draggable = TRUE,
-                  top = 100, left = "50%",
-                  width=0,height = 0,
-                  conditionalPanel(
-                    condition = "input.tabs == 'Biodiversity'",
-                imageOutput("bivariate_legend2", height = 100))),
-                absolutePanel(
-                  id="Uni_left",
-                  style="z-index:500;",
-                  class = "panel panel-default",
-                  draggable = TRUE, 
-                  top = 200, left = "30%",
-                  width=0,height = 0,
-                  conditionalPanel(
-                    condition = "input.tabs == 'Biodiversity'",
-                    imageOutput("Univariate_left_legend", height = 100)))
-                ,
-                absolutePanel(
-                  id="Uni_right",
-                  style="z-index:500;",
-                  class = "panel panel-default",
-                  draggable = TRUE, 
-                  top = 200, left = "70%",
-                  width=0,height = 0,
-                  conditionalPanel(
-                    condition = "input.tabs == 'Biodiversity'",
-                    imageOutput("Univariate_right_legend", height = 100)))
-              )))
+      )
               
       )
                   
