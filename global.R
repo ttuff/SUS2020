@@ -1,5 +1,7 @@
 #### Packages and functions ####################################################
 
+# Packages ----------------------------------------------------------------
+
 library(mapdeck)
 library(shiny)
 library(shinydashboard)
@@ -27,7 +29,10 @@ library(shinydashboard)
 library(shinyWidgets)
 library(leaflet)
 library(DT)
+library(gghighlight)
 
+
+# Functions ---------------------------------------------------------------
 
 loadRData <- function(fileName){
   #loads an RData file, and returns it
@@ -127,26 +132,28 @@ default_font_color <- "black"
 default_font_family <- "Helvetica"
 
 
+# Drop down list for variable selection -----------------------------------
 
-var_list_2 <- list(
-  choices = list(
-    "Tenant housing" = "TenantH_quant3",
-    "Sublet rental" = "Subs_quant3",
-    "Over 30 yrs old" = "Plus30_quant3",
-    "Median Rent" = "MedRent_quant3",
-    "Average Rent" = "AvRent_quant3",
-    "Median morgage price" = "MedMort_quant3",
-    "Average morgage price" = "AvMort_quant3",
-    "Median property value" = "MedVal_quant3",
-    "Average property value" = "AvVal_quant3",
-    "Number of owners" = "Owner_quant3",
-    "Owners with morgages" = "Wmortg_quant3",
-    "Over 30yr old that own home" = "Plus30Own_quant3",
-    "CTIR" = "CTIR_quant3",
-    "Less than 30" = "Less30_quant3",
-    "More than 30" = "More30_quant3"))
-
-
+var_list <- 
+  list("----" = "", 
+       "Housing" = list("Tenant-occupied (%)" = "tenant_prop",
+                        "Average rent" = "avg_rent",
+                        "Average property value" = "avg_property_value",
+                        "Unaffordable housing (%)" = "unaffordable_prop",
+                        "Unsuitable housing (%)" = "unsuitable_prop"),
+       "Income" = list("Median household income" = "median_income",
+                       "Income under $50k (%)" = "income_50_prop",
+                       "Income between $50k-$100k (%)" = "income_100_prop",
+                       "Income above $100k (%)" = "income_high_prop"),
+       "Immigration" = list("Immigrants (%)" =  "immigrant_prop",
+                            "New immigrants (%)" = "immigrant_new_prop"),
+       "Transportation" = list("Drive to work (%)" = "car_prop",
+                               "Walk or cycle to work (%)" = "walk_or_bike_prop",
+                               "Public transit to work (%)" = "transit_prop",
+                               "15 minutes to work (%)" = "time_15_prop",
+                               "15-30 minutes to work (%)" = "time_30_prop",
+                               "30-45 minutes to work (%)" = "time_45_prop",
+                               "45-60 minutes to work (%)" = "time_60_prop"))
 
 loadingLogo <- 
   function(href, src, loadingsrc, height = NULL, width = NULL, alt = NULL) {
@@ -177,6 +184,7 @@ loadingLogo <-
 
 # Load bivariate census data
 load(file = "data/data_for_plot.Rdata")
+load("data/new_bivariate.Rdata")
 
 # Load data for pedestrian realm 
 load(file = "data/census_analysis.Rdata")
@@ -200,12 +208,12 @@ trip_distance <- loadRData("data/Trip_Distance.Rdata")
 census_analysis_quantile_WSG <- census_analysis_quantile %>% 
   st_transform(4326)
 
-
 dropshadow1 <- normalizePath(file.path("www/dropshadow1.png"))
 dropshadow2 <- normalizePath(file.path("www/dropshadow2.png"))
 
 uni_legend <- normalizePath(file.path("www/Univariate_left.png"))
 uni_legend_right <- normalizePath(file.path("www/Univariate_right.png"))
+
 
 # Other prep --------------------------------------------------------------
 
@@ -286,27 +294,30 @@ $(document).ready(function(){
 "
 
 
-
-### Establish reactiveValues
+# Establish reactiveValues ------------------------------------------------
 
 qz <- reactiveValues(zoom_level = 'ISO')
 
 rz_pedestrian <- reactiveValues(zoom = 'FINAL')
 
-rz <- reactiveValues(zoom = 'IN')
-
+rz <- reactiveValues(zoom = 'IN',
+                     click = NA)
 
 # Set access token  
 set_token('pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ')
 
+scenario1 <- tibble(c("Criteria: Cycling Distance (km)",
+                      "Potential Cyclable Trips (per day)", 
+                      "VMT Savings (per day)"), 
+                    c(4.4, 60460, 102862))
 
+scenario2 <- tibble(c("Criteria: Cycling Distance (km)",
+                      "Criteria: Elevation Gain (m)", 
+                      "Criteria: Time Ratio","Potential Cyclable Trips (per day)", 
+                      "VMT Savings (per day)"), 
+                    c(4.4, 45, 2.4, 44205, 72992))
 
-
-scenario1 <- data.frame(c("Criteria: Cycling Distance (km)","Potential Cyclable Trips (per day)", "VMT Savings (per day)"), c(4.4, 60460, 102862))
-scenario2 <- data.frame(c("Criteria: Cycling Distance (km)","Criteria: Elevation Gain (m)", "Criteria: Time Ratio","Potential Cyclable Trips (per day)", "VMT Savings (per day)"), c(4.4,45,2.4, 44205, 72992))
-
-
-###########legend#####
+# Legend
 df_pal1 <- data.frame(
   color = c(1,2,3,4,5),
   color_value = c('#ECF4CD','#C6DE68','#B2D235','#8AA324','#5C6D18'),
@@ -358,5 +369,3 @@ legend_po3 <- legend_element(
 )
 
 legend3 <- mapdeck_legend(legend_po3)
-
-
