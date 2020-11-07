@@ -211,4 +211,36 @@ did_you_know <-
                "Median household income factoid.\n")
   )
 
-save(data_DA, data_CT, data_borough, did_you_know, file = "data/new_bivariate.Rdata")
+
+# Build title text --------------------------------------------------------
+
+title_text <- 
+  tibble(
+    tab = c("active", "active", "commute", "commute", "pedestrian", "pedestrian"),
+    type = rep(c("main", "extra"), 3),
+    text = c(paste0("The CanALE dataset (developed by Prof. Nancy Ross ",
+                    "and her team) captures four key elements related ",
+                    "to active living environments: population density, ", 
+                    "points of interest, street grid, and proximity of ",
+                    "transit service."),
+             paste0("A safe and inviting pedestrian ",
+                    "realm is not distributed equally across ",
+                    "socio-demographic factors. The risks of ", 
+                    "pedestrian injuries and fatalities are higher in ",
+                    "low-income and racialized communities where ", 
+                    "residents often rely on walking as a daily mode ",
+                    "of transport but where the local environment is ",
+                    "not necessarily inviting and safe. In addition to ",
+                    "evidence pointing towards large discrepancies in ",
+                    "the provision of walkable urban space across ",
+                    "income and racial lines, concern has been ",
+                    "raised with regard to the possible ",
+                    "gentrification and displacement impacts of ",
+                    "improved pedestrian infrastructure. In other ",
+                    "words, who can afford to live in walkable ",
+                    "neighbourhoods?"),
+             "", "", "", "")
+  )
+
+save(data_DA, data_CT, data_borough, did_you_know, title_text,
+     file = "data/new_bivariate.Rdata")

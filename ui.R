@@ -85,7 +85,8 @@ shinyUI(
       ), collapsed = FALSE),
     
     
-    ## BODY  
+    ## Body --------------------------------------------------------------------
+    
     dashboardBody(
       tags$head(tags$script(HTML(js))),
       tags$head(tags$script(HTML(js2))),
@@ -141,54 +142,77 @@ shinyUI(
       
       #setShadow(id = "input_control_left2"),
       
-      tabItems(tabItem(tabName = "active",
-                            mapdeckOutput(
-                              outputId = 'myMap'
-                              , height = "1200px"
-                            ),
-                            tags$head(tags$style(
-                              HTML('
-             #input_control_overlay {background-color: rgba(0,0,255,0.0);border-width: 0px;}
+      tabItems(
+        
+        ## Home page -----------------------------------------------------------
+        
+        tabItem(tabName = "home", 
+                fluidPage(imageOutput("homepic", height = 600), 
+                          align = "center")),
+        
+        
+        ## Active living potential ---------------------------------------------
+        
+        tabItem(tabName = "active",
+                mapdeckOutput(outputId = 'myMap', height = "1200px"),
+                tags$head(tags$style(HTML('
+                #title_bar {border-width: 10px; border-color: rgb(255, 255, 255);}
+                #input_control_overlay {border-width: 10px; 
+                border-color: rgba(255,255,255,1);}
              #input_control_left {background-color: rgba(0,0,255,0.0);border-width: 0px;}
              #input_control_left2 {background-color: rgba(0,0,255,0.0);border-width: 0px;}
              #input_control_right {background-color: rgba(0,0,255,0.0);border-width: 0px;}')
-                            )),
-                       
-                       absolutePanel(
-                         id="input_control_left2",
-                         style="z-index:501;",
-                         class = "panel panel-default",
-                         draggable = FALSE, 
-                         top = 60, right = 50,
-                         width = 500,
-                         
-                         conditionalPanel(condition = "output.zoom_ALP == 'OUT'", 
-                                          plotOutput("context_plot", height = 200), 
-                                          id = "plotContainer2")),
-                       jqui_draggable(
-                         absolutePanel(
-                                id="input_control_overlay",
-                                style="z-index:500;",
-                                class = "panel panel-default",
-                                draggable = TRUE, 
-                                top = 60, right = 50,
-                                conditionalPanel(
-                                  id = "menuContainer",
-                                  condition = "output.zoom_ALP == 'IN'",
-                                  selectInput("data_for_plot_right", 
-                                              label = h3("Try comparing Active Living Potential with other variables"), 
-                                              selected = "", choices = var_list),
-                                  plotOutput("map2", height = 250),
-                                  imageOutput("bivariate_legend", height = 300),
-                                                 HTML(markdownToHTML(fragment.only=TRUE, text=c(
-                                                   "")))))
-                         , verbatimTextOutput(outputId = "observed_click"))),
-               tabItem(tabName = "Pedestrian",
-                       mapdeckOutput(
-                         outputId = 'PedestrianMap'
-                         , height = "1200px"
-                       ),
-                       absolutePanel(
+                )),
+                
+                absolutePanel(
+                  id = "title_bar", class = "panel panel-default", 
+                  draggable = FALSE, top = 70, left = 270, width = "40%",
+                  h2("Active living potential: the CanALE index"),
+                  p(title_text %>% 
+                      filter(tab == "active", type == "main") %>% 
+                      pull(text)),
+                  actionLink("more_info", "Learn more"),
+                  conditionalPanel(
+                    condition = "output.more_info_status == 1",
+                    p(title_text %>% 
+                        filter(tab == "active", type == "extra") %>% 
+                        pull(text))
+                  )
+                ),
+                
+                absolutePanel(
+                  id = "input_control_overlay",
+                  style = "z-index:500;",
+                  class = "panel panel-default",
+                  top = 70, 
+                  right = 50,
+                  width = 300,
+                  selectInput("data_for_plot_right", 
+                              label = h4("Compare"), 
+                              selected = "", choices = var_list),
+                  plotOutput("active_map_right", height = 250),
+                  imageOutput("bivariate_legend", height = 200),
+                  hr(),
+                  h4("Explore"),
+                  tableOutput("bivariate_table"),
+                  plotOutput("bivariate_graph", height = 200),
+                  hr(),
+                  h4("Did you know?"),
+                  textOutput("did_you_know"),
+                  hr(),
+                  materialSwitch(
+                    inputId = "active_extrude", 
+                    label = "View in 3D", 
+                    status = "primary",
+                    value = FALSE))
+        ),
+        
+        
+        ## Pedestrian realm ----------------------------------------------------
+        
+        tabItem(tabName = "Pedestrian",
+                mapdeckOutput(outputId = 'PedestrianMap', height = "1200px"),
+                absolutePanel(
                          id="input_control_right",
                          style="z-index:501;",
                          class = "panel panel-default",
