@@ -209,7 +209,7 @@ shinyUI(
           
           absolutePanel(
             id = "active_legend_container", class = "panel panel-default", 
-            style = "z-index:500;", bottom = 0, left = 270,
+            style = "z-index:500;", bottom = -200, left = 270, fixed = TRUE,
             conditionalPanel(condition = 'input.data_for_plot_right != " "',
                              id = "active_legend", 
                              imageOutput("bivariate_legend")))
