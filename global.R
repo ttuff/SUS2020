@@ -185,7 +185,6 @@ loadingLogo <-
 # Load data ---------------------------------------------------------------
 
 # Load bivariate census data
-load(file = "data/data_for_plot.Rdata")
 qload("data/new_bivariate.qsm")
 
 did_you_know <- 
@@ -195,14 +194,9 @@ did_you_know <-
 # Load data for pedestrian realm 
 load(file = "data/census_analysis.Rdata")
 load(file = "data/census_circular.Rdata")
-load(file = "data/data_for_app.Rdata")
-load(file = "data/sample_points_for_app_WSG.Rdata")
 load(file = "data/census_analysis_WSG.Rdata")
-load(file = "data/data_for_app_WSG.Rdata")
-load(file = "data/centroids.Rdata")
 load(file = "data/original_VAS_plan.Rdata")
 load(file = "data/revised_VAS_plan.Rdata")
-load(file = "data/sample_points_for_app.Rdata")
 load(file = "data/census_analysis_quantile.Rdata")
 cycling1 <- loadRData("data/car_1_finals.Rdata")
 cycling2 <- loadRData("data/car_3_finals.Rdata")
