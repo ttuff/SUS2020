@@ -181,7 +181,7 @@ shinyServer(function(input, output, session) {
       data <- 
         data %>% 
         select(ID, name, name_2, population, left_variable_full = ale_index,
-               left_variable = ale_index_quant3, width,
+               left_variable = ale_index_quant3, ale_class, width,
                group, fill, elevation, fill_opacity)
       
     } else {
@@ -191,7 +191,7 @@ shinyServer(function(input, output, session) {
         data_borough_large %>% 
         dplyr::select(
           ID, name, name_2, population, left_variable_full = ale_index, 
-          left_variable = ale_index_quant3, 
+          left_variable = ale_index_quant3, ale_class,
           right_variable_full = input$data_for_plot_right, 
           right_variable = paste0(input$data_for_plot_right, "_quant3"), 
           width, group = paste0(input$data_for_plot_right, "_quant3_group"),
@@ -295,56 +295,80 @@ shinyServer(function(input, output, session) {
         scale_singular == "dissemination area" ~ "dissemination areas"
       )
       
-      min_val <- round(min(data_bivar()$left_variable_full, 
-                           na.rm = TRUE), 2)
+      vec <- 
+        data_bivar() %>% 
+        filter(!is.na(left_variable), !is.na(left_variable_full)) %>% 
+        pull(left_variable_full)
       
-      max_val <- round(max(data_bivar()$left_variable_full, 
-                           na.rm = TRUE), 2)
-      
-      mean_val <- round(mean(data_bivar()$left_variable_full, 
-                             na.rm = TRUE), 2)
-      
-      sd_minus <- round(mean(data_bivar()$left_variable_full, 
-                             na.rm = TRUE) - 
-                          sd(data_bivar()$left_variable_full, 
-                             na.rm = TRUE), 2)
-      
-      sd_plus <- round(mean(data_bivar()$left_variable_full, 
-                            na.rm = TRUE) +
-                         sd(data_bivar()$left_variable_full, 
-                            na.rm = TRUE), 2)
+      min_val <- round(min(vec), 2)
+      max_val <- round(max(vec), 2)
+      mean_val <- round(mean(vec), 2)
+      median_val <- round(median(vec), 2)
+      sd_val <- sd(vec)
+      quant_low <- round(quantile(vec, c(1/3, 2/3))[1], 2)
+      quant_high <- round(quantile(vec, c(1/3, 2/3))[2], 2)
       
       # Case for no poly selected
       if (!rz$poly_select) {
         
         HTML(
           glue("At the {scale_singular} scale, the CanALE index varies from ",
-               "{min_val} to {max_val}, with an average value of {mean_val}. ",
-               "Two thirds of {scale_plural} have a score between {sd_minus} ",
-               "and {sd_plus}."))  
+               "{min_val} to {max_val}, with an average value of {mean_val} ",
+               "and a median value of {median_val}. ",
+               "Two thirds of {scale_plural} have a score between {quant_low} ",
+               "and {quant_high}."))  
         
       # Case for selected poly
       } else {
         
         dat <- data_bivar() %>% filter(ID == rz$click)
         
-        place_heading <- case_when(
+        place_name <- case_when(
           scale_singular == "borough/city" ~ 
-            glue("{dat$name_2} of {dat$name}"),
+            glue("{dat$name}"),
           scale_singular == "census tract" ~ 
-            glue("Census tract {dat$name} ({dat$name_2})"),
+            glue("Census tract {dat$name}"),
           scale_singular == "dissemination area" ~ 
-            glue("Dissemination area {dat$name} ({dat$name_2})")
+            glue("Dissemination area {dat$name}")
         )
           
+        place_heading <- 
+          if_else(scale_singular == "borough/city",
+                  glue("{dat$name_2} of {place_name}"),
+                  glue("{place_name} ({dat$name_2})"))
+        
+        poly_value <- dat$left_variable_full
+        
+        quintile <- quantile(vec, c(0.2, 0.4, 0.6, 0.8))
+        
+        larger_smaller <- case_when(
+          poly_value >= quintile[4] ~ "much larger than",
+          poly_value >= quintile[3] ~ "larger than",
+          poly_value >= quintile[2] ~ "almost the same as",
+          poly_value >= quintile[1] ~ "smaller than",
+          TRUE ~ "much smaller than"
+        )
+         
+        poor_strong <- case_when(
+          str_detect(larger_smaller, "larger") ~ "strong",
+          str_detect(larger_smaller, "smaller") ~ "poor",
+          TRUE ~ "moderate"
+        )
+        
+        percentile <- 
+          {length(vec[vec <= dat$left_variable_full]) / length(vec) * 100} %>% 
+          round()
+        
         HTML(glue("<strong>{place_heading}</strong>", 
-             "<p>The borough of {dat$name} has a population of ",
+                  
+             "<p>{place_name} has a population of ",
              "{prettyNum(dat$population, ',')} and a CanALE index ",
-             "score of value, which is larger than/smaller than/almost the same as ",
-             "the region-wide mean of {mean_val}.", 
-             "<p>{dat$name} has poor/moderate/strong potential for active ", 
-             "living, with a CanALE index score higher than percentile",
-             "percent of {scale_plural}."))
+             "score of {round(poly_value, 2)}, which is {larger_smaller} ",
+             "the region-wide median of {median_val}.", 
+             
+             "<p>{place_name} has {poor_strong} potential for active ", 
+             "living, with a CanALE index score higher than {percentile} ",
+             "percent of {scale_plural} in the Montreal region."))
         
       }
       
@@ -617,6 +641,16 @@ shinyServer(function(input, output, session) {
     output$active_poly_select <- reactive(rz$poly_select)
     
     outputOptions(output, "active_poly_select", suspendWhenHidden = FALSE)
+    
+    
+    ## Clear polygon select on zoom change -------------------------------------
+    
+    observeEvent(rz$zoom, {rz$poly_select <- FALSE}, ignoreInit = TRUE)
+    
+    
+    ## Flush status on tab change ----------------------------------------------
+    
+    
     
   }) 
   
@@ -1049,7 +1083,8 @@ shinyServer(function(input, output, session) {
     else if (input$variable_ped == 2) {
       updateSliderInput(session = session,
                         inputId = "slider_ped",
-                        label = "Capacity of local population to make trips on foot while maintaining 2 meters distance (%)",
+                        label = paste0("Capacity of local population to make ",
+                                       "trips on foot while maintaining 2 meters distance (%)"),
                         0, 1000,
                         value = c(0, 1000),
                         step = 25)
@@ -1093,18 +1128,16 @@ shinyServer(function(input, output, session) {
  
   ########Output#######
   output$qzmyMap <- renderMapdeck({
-    mapdeck(token = "pk.eyJ1Ijoiemhhb3FpYW8wMTIwIiwiYSI6ImNrYXBnbHB3dTFtbDIycWxvZ285cjNmcG0ifQ.fieGPt1pLEgHs1AI8NvjYg",
-            style = "mapbox://styles/zhaoqiao0120/ckh1hkzwe02br19nvzt9bvxcg", zoom=10,location=c(-73.611,45.526))
+    mapdeck(token = 
+              "pk.eyJ1Ijoiemhhb3FpYW8wMTIwIiwiYSI6ImNrYXBnbHB3dTFtbDIycWxvZ285cjNmcG0ifQ.fieGPt1pLEgHs1AI8NvjYg",
+            style = "mapbox://styles/zhaoqiao0120/ckh1hkzwe02br19nvzt9bvxcg",
+            zoom=10,location=c(-73.611,45.526))
   })
   
   observeEvent(input$qzmyMap_view_change$zoom, {
     if( input$qzmyMap_view_change$zoom > 10){qz$zoom_level <- 'OUT'} else {
       qz$zoom_level <- 'ISO'}}
   )
-  
-  #observeEvent(input$myMap_view_change$zoom, {
-    #print(rz$zoom)
-  #})
   
   output$zoom_level <- reactive({
     return(qz$zoom_level)
