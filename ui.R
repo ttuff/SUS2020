@@ -33,9 +33,6 @@ shinyUI(
                                    plotOutput("active_map_left", 
                                               height = 250)),
                   
-                  menuItem("Agriculture", icon = icon("carrot"), 
-                           tabName = "Agriculture"),
-                  
                   menuItem("Biodiversity", icon = icon("bug"), 
                            tabName = "Biodiversity"),
                   
@@ -53,13 +50,6 @@ shinyUI(
                            tabName = "Covid", badgeLabel = "health and safety", 
                            badgeColor = "red"),
                   
-                  menuItem("Pedestrian realm", icon = icon("walking"), 
-                           tabName = "Pedestrian", badgeLabel = "suggested", 
-                           badgeColor = "aqua"),
-                  conditionalPanel(condition = "input.tabs == 'Pedestrian'",
-                                   plotOutput("pedestrian_map_left", 
-                                              height = 250)),
-                  
                   menuItem("Economic health", icon = icon("dollar-sign"), 
                            tabName = "Economic"),
                   
@@ -75,12 +65,16 @@ shinyUI(
                   menuItem("Land use", icon = icon("warehouse"), 
                            tabName = "Land"),
                   
+                  menuItem("Pedestrian realm", icon = icon("walking"), 
+                           tabName = "Pedestrian", badgeLabel = "suggested", 
+                           badgeColor = "aqua"),
+                  conditionalPanel(condition = "input.tabs == 'Pedestrian'",
+                                   plotOutput("pedestrian_map_left", 
+                                              height = 250)),
+                  
                   menuItem("Public transit", icon = icon("train"), 
                            tabName = "transit", badgeLabel = "on the ballot", 
-                           badgeColor = "teal"),
-                  
-                  menuItem("Water availability", icon = icon("water"), 
-                           tabName = "Water")
+                           badgeColor = "teal")
                   
       ), collapsed = FALSE),
     
@@ -152,7 +146,7 @@ shinyUI(
                            align = "center"),
                   fluidRow(hr()),
                   fluidRow(br()),
-                  fluidRow(imageOutput("mssipic", height = 200), 
+                  fluidRow(imageOutput("mssipic", height = 150), 
                            align = "center"),
                   fluidRow(h3(
                     "An initiative of the McGill Sustainability Systems Initiative"),
