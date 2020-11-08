@@ -189,7 +189,7 @@ shinyUI(
             materialSwitch(
               inputId = "active_extrude", 
               label = "View in 3D", 
-              status = "primary",
+              status = "danger",
               value = FALSE),
             hr(),
             fluidRow(
