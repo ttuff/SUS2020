@@ -63,7 +63,7 @@ shinyServer(function(input, output, session) {
   output$active_map_left <- renderPlot({
     
     data_for_plot_left <- 
-      data_for_plot_r_bivar()
+      data_bivar()
     
     p <-
       ggplot(data_for_plot_left) +
@@ -129,7 +129,7 @@ shinyServer(function(input, output, session) {
     if (input$data_for_plot_right == " ") {
       
       p <- 
-        data_for_plot_r_bivar() %>% 
+        data_bivar() %>% 
         ggplot() +
         geom_sf(fill = "#CABED0", color = "white", size = 0.01) +
         theme_map()
@@ -141,7 +141,7 @@ shinyServer(function(input, output, session) {
     } else {
       
       p <- 
-        data_for_plot_r_bivar() %>% 
+        data_bivar() %>% 
         ggplot() +
         geom_sf(aes(fill = as.factor(right_variable)), color = "white", 
                 size = 0.01) +
@@ -163,7 +163,7 @@ shinyServer(function(input, output, session) {
   
   ## Create the data frame to generate bivariate maps --------------------------
   
-  data_for_plot_r_bivar <- reactive({
+  data_bivar <- reactive({
     
     if (rz$zoom == "IN") {
       data <- data_CT_large
@@ -180,7 +180,7 @@ shinyServer(function(input, output, session) {
       
       data <- 
         data %>% 
-        select(ID, name, left_variable_full = ale_index,
+        select(ID, name, name_2, population, left_variable_full = ale_index,
                left_variable = ale_index_quant3, width,
                group, fill, elevation, fill_opacity)
       
@@ -190,7 +190,7 @@ shinyServer(function(input, output, session) {
         data %>%
         data_borough_large %>% 
         dplyr::select(
-          ID, name, left_variable_full = ale_index, 
+          ID, name, name_2, population, left_variable_full = ale_index, 
           left_variable = ale_index_quant3, 
           right_variable_full = input$data_for_plot_right, 
           right_variable = paste0(input$data_for_plot_right, "_quant3"), 
@@ -226,7 +226,7 @@ shinyServer(function(input, output, session) {
 
   observeEvent(input$more_info, {
     
-    print(data_for_plot_r_bivar())
+    print(data_bivar())
     
     if (input$more_info %% 2 == 1) txt <- "Hide" else txt <- "Learn more"
     updateActionButton(session, "more_info", label = txt)
@@ -280,6 +280,7 @@ shinyServer(function(input, output, session) {
   
   output$active_info <- renderUI({
     
+    # Univariate case
     if (input$data_for_plot_right == " ") {
       
       scale_singular <- case_when(
@@ -294,34 +295,65 @@ shinyServer(function(input, output, session) {
         scale_singular == "dissemination area" ~ "dissemination areas"
       )
       
-      min_val <- round(min(data_for_plot_r_bivar()$left_variable_full, 
+      min_val <- round(min(data_bivar()$left_variable_full, 
                            na.rm = TRUE), 2)
       
-      max_val <- round(max(data_for_plot_r_bivar()$left_variable_full, 
+      max_val <- round(max(data_bivar()$left_variable_full, 
                            na.rm = TRUE), 2)
       
-      mean_val <- round(mean(data_for_plot_r_bivar()$left_variable_full, 
+      mean_val <- round(mean(data_bivar()$left_variable_full, 
                              na.rm = TRUE), 2)
       
-      sd_minus <- round(mean(data_for_plot_r_bivar()$left_variable_full, 
+      sd_minus <- round(mean(data_bivar()$left_variable_full, 
                              na.rm = TRUE) - 
-                          sd(data_for_plot_r_bivar()$left_variable_full, 
+                          sd(data_bivar()$left_variable_full, 
                              na.rm = TRUE), 2)
       
-      sd_plus <- round(mean(data_for_plot_r_bivar()$left_variable_full, 
+      sd_plus <- round(mean(data_bivar()$left_variable_full, 
                             na.rm = TRUE) +
-                         sd(data_for_plot_r_bivar()$left_variable_full, 
+                         sd(data_bivar()$left_variable_full, 
                             na.rm = TRUE), 2)
       
-      HTML(glue("At the {scale_singular} scale, the CanALE index varies from ",
-                "{min_val} to {max_val}, with an average value of {mean_val}. ",
-                "Two thirds of {scale_plural} have a score between {sd_minus} ",
-                "and {sd_plus}."))
+      # Case for no poly selected
+      if (!rz$poly_select) {
+        
+        HTML(
+          glue("At the {scale_singular} scale, the CanALE index varies from ",
+               "{min_val} to {max_val}, with an average value of {mean_val}. ",
+               "Two thirds of {scale_plural} have a score between {sd_minus} ",
+               "and {sd_plus}."))  
+        
+      # Case for selected poly
+      } else {
+        
+        dat <- data_bivar() %>% filter(ID == rz$click)
+        
+        place_heading <- case_when(
+          scale_singular == "borough/city" ~ 
+            glue("{dat$name_2} of {dat$name}"),
+          scale_singular == "census tract" ~ 
+            glue("Census tract {dat$name} ({dat$name_2})"),
+          scale_singular == "dissemination area" ~ 
+            glue("Dissemination area {dat$name} ({dat$name_2})")
+        )
+          
+        HTML(glue("<strong>{place_heading}</strong>", 
+             "<p>The borough of {dat$name} has a population of ",
+             "{prettyNum(dat$population, ',')} and a CanALE index ",
+             "score of value, which is larger than/smaller than/almost the same as ",
+             "the region-wide mean of {mean_val}.", 
+             "<p>{dat$name} has poor/moderate/strong potential for active ", 
+             "living, with a CanALE index score higher than percentile",
+             "percent of {scale_plural}."))
+        
+      }
       
+      
+    # Bivariate case
     } else {
       
-      HTML(cor(data_for_plot_r_bivar()$left_variable_full, 
-               data_for_plot_r_bivar()$right_variable_full))
+      HTML(cor(data_bivar()$left_variable_full, 
+               data_bivar()$right_variable_full))
   
     }
   })  
@@ -335,7 +367,7 @@ shinyServer(function(input, output, session) {
       
       if (!rz$poly_select) {
         
-        data_for_plot_r_bivar() %>%
+        data_bivar() %>%
           filter(!is.na(left_variable)) %>%
           ggplot(aes(left_variable_full)) +
           geom_histogram(aes(fill = fill), bins = 25) +
@@ -350,12 +382,12 @@ shinyServer(function(input, output, session) {
         
       } else {
         
-        if ({data_for_plot_r_bivar() %>% 
+        if ({data_bivar() %>% 
             filter(ID == rz$click) %>% 
             filter(!is.na(left_variable)) %>% 
             nrow()} == 0) {
           
-          data_for_plot_r_bivar() %>% 
+          data_bivar() %>% 
             filter(!is.na(left_variable)) %>%
             ggplot(aes(left_variable_full)) +
             geom_histogram(bins = 25, fill = colors[3]) +
@@ -368,7 +400,7 @@ shinyServer(function(input, output, session) {
           
         } else {
           
-          data_for_plot_r_bivar() %>%
+          data_bivar() %>%
             filter(!is.na(left_variable)) %>%
             ggplot(aes(left_variable_full)) +
             geom_histogram(aes(fill = round(left_variable_full) == 
@@ -391,9 +423,9 @@ shinyServer(function(input, output, session) {
       
       y_var_name <- as.character(input$data_for_plot_right)
       
-      if (nrow(filter(data_for_plot_r_bivar(), ID == rz$click)) != 1) {
+      if (nrow(filter(data_bivar(), ID == rz$click)) != 1) {
         
-        data_for_plot_r_bivar() %>% 
+        data_bivar() %>% 
           ggplot(aes(left_variable_full, right_variable_full)) +
           geom_smooth(se = FALSE, colour = "grey50") +
           geom_point(aes(colour = fill)) +
@@ -403,7 +435,7 @@ shinyServer(function(input, output, session) {
         
       } else {
         
-        data_for_plot_r_bivar() %>% 
+        data_bivar() %>% 
           ggplot(aes(left_variable_full, right_variable_full)) +
           geom_smooth(se = FALSE, colour = "grey50") +
           geom_point(aes(colour = fill)) +
@@ -455,7 +487,7 @@ shinyServer(function(input, output, session) {
   
   observeEvent(
     {
-      data_for_plot_r_bivar()
+      data_bivar()
       input$tabs
       input$active_extrude
     },
@@ -465,7 +497,7 @@ shinyServer(function(input, output, session) {
         mapdeck_update(map_id = "myMap")  %>%  
           clear_polygon(layer_id = "extrude") %>%
           add_polygon(
-            data = data_for_plot_r_bivar(), 
+            data = data_bivar(), 
             stroke_width = "width",
             stroke_colour = "#FFFFFF",
             fill_colour = "fill_opacity", 
@@ -483,7 +515,7 @@ shinyServer(function(input, output, session) {
         mapdeck_update(map_id = "myMap")  %>%  
           clear_polygon(layer_id = "polylayer") %>%
           add_polygon(
-            data = data_for_plot_r_bivar(), 
+            data = data_bivar(), 
             fill_colour = "fill", 
             elevation = "elevation", 
             update_view = FALSE, 
@@ -517,7 +549,7 @@ shinyServer(function(input, output, session) {
     print(int_point)
     
     rz$click <- 
-      data_for_plot_r_bivar() %>% 
+      data_bivar() %>% 
       filter(lengths(st_intersects(geometry, int_point)) > 0) %>% 
       pull(ID)
     
@@ -525,7 +557,7 @@ shinyServer(function(input, output, session) {
     
     print(rz$click)
     
-    # temporary_here <- data_for_plot_r_bivar() 
+    # temporary_here <- data_bivar() 
     # #print(temporary_here$fill)
     # temporary_here[which(temporary_here$fill != lst$object$properties$fill_colour),5] <- 0
     # temporary_here[which(temporary_here$fill == lst$object$properties$fill_colour),5] <- 4000
