@@ -671,10 +671,12 @@ shinyServer(function(input, output, session) {
           
           mapdeck_update(map_id = "active_map")  %>%
             add_polygon(
-              data = filter(data_bivar(), ID == rz$click),
+              data = {
+                data_bivar() %>% 
+                  filter(ID == rz$click)},
               stroke_width = "width",
-              stroke_colour = "#FFFFFF",
-              fill_colour = "#FF0000",
+              stroke_colour = "#000000",
+              fill_colour = "fill",
               update_view = FALSE,
               layer_id = "poly_highlight",
               auto_highlight = TRUE,
