@@ -302,4 +302,102 @@ title_text <-
              "both edges of a given sidewalk polygon segment. This process is illustrated below."))
   )
 
-save(data_DA, data_CT, data_borough, title_text, file = "data/new_bivariate.Rdata")
+
+# New large data files ----------------------------------------------------
+
+opacity <- "EE"
+
+data_borough_large <- 
+  data_borough %>% 
+  mutate(across(tenant_prop_quant3:time_60_prop_quant3, list(
+    group = ~paste(ale_index_quant3, "-", .x),
+    elevation = ~{(ale_index_quant3 * .x) ^ 2 * 50}))) %>% 
+  mutate(across(ends_with("_group"), ~{
+    tibble(.x) %>% 
+      left_join(bivariate_color_scale, by = c(".x" = "group")) %>% 
+      mutate(fill = if_else(str_detect(.x, "NA"), "#B3B3BB", fill)) %>% 
+      pull(fill) %>% 
+      paste0("FF")}, .names = "{str_remove(.col, '_group')}_fill")) %>% 
+  mutate(across(tenant_prop_quant3_fill:time_60_prop_quant3_fill,
+                ~paste0(substr(.x, 1, 7), opacity),
+                .names = "{.col}_opacity")) %>% 
+  mutate(group = paste(ale_index_quant3, "- 1")) %>%
+  left_join(bivariate_color_scale, by = "group") %>% 
+  mutate(fill = if_else(str_detect(group, "NA"), "#B3B3BB", fill)) %>% 
+  mutate(elevation = (ale_index_quant3 * 1) ^ 2 * 50) %>% 
+  mutate(fill_opacity = paste0(fill, opacity),
+         fill = paste0(fill, "FF"))
+
+opacity <- "CC"
+
+data_CT_large <- 
+  data_CT %>% 
+  mutate(across(tenant_prop_quant3:time_60_prop_quant3, list(
+    group = ~paste(ale_index_quant3, "-", .x),
+    elevation = ~{(ale_index_quant3 * .x) ^ 2 * 50}))) %>% 
+  mutate(across(ends_with("_group"), ~{
+    tibble(.x) %>% 
+      left_join(bivariate_color_scale, by = c(".x" = "group")) %>% 
+      mutate(fill = if_else(str_detect(.x, "NA"), "#B3B3BB", fill)) %>% 
+      pull(fill) %>% 
+      paste0("FF")}, .names = "{str_remove(.col, '_group')}_fill")) %>% 
+  mutate(across(tenant_prop_quant3_fill:time_60_prop_quant3_fill,
+                ~paste0(substr(.x, 1, 7), opacity),
+                .names = "{.col}_opacity")) %>% 
+  mutate(group = paste(ale_index_quant3, "- 1")) %>%
+  left_join(bivariate_color_scale, by = "group") %>% 
+  mutate(fill = if_else(str_detect(group, "NA"), "#B3B3BB", fill)) %>% 
+  mutate(elevation = (ale_index_quant3 * 1) ^ 2 * 50) %>% 
+  mutate(fill_opacity = paste0(fill, opacity),
+         fill = paste0(fill, "FF"))
+
+opacity <- "AA"
+
+data_DA_1_large <- 
+  data_DA %>% 
+  mutate(across(tenant_prop_quant3:time_60_prop_quant3, list(
+    group = ~paste(ale_index_quant3, "-", .x),
+    elevation = ~{(ale_index_quant3 * .x) ^ 2 * 50}))) %>% 
+  mutate(across(ends_with("_group"), ~{
+    tibble(.x) %>% 
+      left_join(bivariate_color_scale, by = c(".x" = "group")) %>% 
+      mutate(fill = if_else(str_detect(.x, "NA"), "#B3B3BB", fill)) %>% 
+      pull(fill) %>% 
+      paste0("FF")}, .names = "{str_remove(.col, '_group')}_fill")) %>% 
+  mutate(across(tenant_prop_quant3_fill:time_60_prop_quant3_fill,
+                ~paste0(substr(.x, 1, 7), opacity),
+                .names = "{.col}_opacity")) %>% 
+  mutate(group = paste(ale_index_quant3, "- 1")) %>%
+  left_join(bivariate_color_scale, by = "group") %>% 
+  mutate(fill = if_else(str_detect(group, "NA"), "#B3B3BB", fill)) %>% 
+  mutate(elevation = (ale_index_quant3 * 1) ^ 2 * 50) %>% 
+  mutate(fill_opacity = paste0(fill, opacity),
+         fill = paste0(fill, "FF")) %>% 
+  mutate(width = 5)
+
+opacity <- "80"
+
+data_DA_2_large <- 
+  data_DA %>% 
+  mutate(across(tenant_prop_quant3:time_60_prop_quant3, list(
+    group = ~paste(ale_index_quant3, "-", .x),
+    elevation = ~{(ale_index_quant3 * .x) ^ 2 * 50}))) %>% 
+  mutate(across(ends_with("_group"), ~{
+    tibble(.x) %>% 
+      left_join(bivariate_color_scale, by = c(".x" = "group")) %>% 
+      mutate(fill = if_else(str_detect(.x, "NA"), "#B3B3BB", fill)) %>% 
+      pull(fill) %>% 
+      paste0("FF")}, .names = "{str_remove(.col, '_group')}_fill")) %>% 
+  mutate(across(tenant_prop_quant3_fill:time_60_prop_quant3_fill,
+                ~paste0(substr(.x, 1, 7), opacity),
+                .names = "{.col}_opacity")) %>% 
+  mutate(group = paste(ale_index_quant3, "- 1")) %>%
+  left_join(bivariate_color_scale, by = "group") %>% 
+  mutate(fill = if_else(str_detect(group, "NA"), "#B3B3BB", fill)) %>% 
+  mutate(elevation = (ale_index_quant3 * 1) ^ 2 * 50) %>% 
+  mutate(fill_opacity = paste0(fill, opacity),
+         fill = paste0(fill, "FF"))
+
+qsavem(data_DA, data_CT, data_borough, title_text, 
+       data_borough_large, data_CT_large, data_DA_1_large, data_DA_2_large,
+       file = "data/new_bivariate.qsm")

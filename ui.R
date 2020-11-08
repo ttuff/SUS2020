@@ -214,11 +214,12 @@ shinyUI(
             conditionalPanel(
               condition = "output.active_hide_explore_status == 1",
               tableOutput("bivariate_table"),
-              plotOutput("bivariate_graph", height = 200),
               conditionalPanel(
                 condition = "output.active_poly_select == 1",
                 actionLink(inputId = "active_clear_selection", 
-                           label = "Clear selection"))),
+                           label = "Clear selection")),
+              plotOutput("bivariate_graph", height = 200)
+              ),
             hr(),
             fluidRow(
               column(width = 8,
@@ -355,10 +356,14 @@ shinyUI(
           absolutePanel(
             id = "ped_legend_container", class = "panel panel-default",
             style = "z-index:500;", bottom = -200, left = 270, fixed = TRUE,
-            conditionalPanel(condition = "input.switch_biv == true && output.zoom == 'IN' && output.more_info_ped_status == 0",
+            conditionalPanel(
+              condition = 
+                "input.switch_biv == true && output.zoom == 'IN' && output.more_info_ped_status == 0",
                              id = "ped_legend",
                              imageOutput("bivariate_legend_ped")),
-            conditionalPanel(condition = "output.zoom == 'OUT' || output.zoom == 'IN' && input.switch_biv == false && output.more_info_ped_status == 0",
+            conditionalPanel(
+              condition = 
+                "output.zoom == 'OUT' || output.zoom == 'IN' && input.switch_biv == false && output.more_info_ped_status == 0",
                              id = "ped_legend",
                              imageOutput("univariate_legend_ped")),
             conditionalPanel(condition = "output.zoom == 'FINAL' && output.more_info_ped_status == 0",

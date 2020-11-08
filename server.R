@@ -161,17 +161,13 @@ shinyServer(function(input, output, session) {
   data_for_plot_r_bivar <- reactive({
     
     if (rz$zoom == "IN") {
-      data <- data_CT
-      opacity <- "CC"
+      data <- data_CT_large
     } else if (rz$zoom == "OUT") {
-      data <- data_borough 
-      opacity <- "EE"
+      data <- data_borough_large 
     } else if (rz$zoom == "ISO") {
-      data <- data_DA
-      opacity <- "AA"
+      data <- data_DA_1_large
     } else if (rz$zoom == "ISO_2") {
-      data <- data_DA
-      opacity <- "80"
+      data <- data_DA_2_large
     }
     
     # Starting case for no selection
@@ -179,30 +175,26 @@ shinyServer(function(input, output, session) {
       
       data <- 
         data %>% 
-        dplyr::select(ID, name, left_variable_full = ale_index,
-                      left_variable = ale_index_quant3, width) %>%
-        mutate(right_variable = 1)
+        select(ID, name, left_variable_full = ale_index,
+               left_variable = ale_index_quant3, width,
+               group, fill, elevation, fill_opacity)
       
     } else {
       
       data <- 
         data %>%
-        dplyr::select(ID, name, ale_index, ale_index_quant3, 
-                      input$data_for_plot_right, 
-                      paste0(input$data_for_plot_right, "_quant3"), width) %>% 
-        set_names(c("ID", "name", "left_variable_full", "left_variable", 
-                    "right_variable_full", "right_variable", "width", 
-                    "geometry"))
+        data_borough_large %>% 
+        dplyr::select(
+          ID, name, left_variable_full = ale_index, 
+          left_variable = ale_index_quant3, 
+          right_variable_full = input$data_for_plot_right, 
+          right_variable = paste0(input$data_for_plot_right, "_quant3"), 
+          width, group = paste0(input$data_for_plot_right, "_quant3_group"),
+          fill = paste0(input$data_for_plot_right, "_quant3_fill"),
+          elevation = paste0(input$data_for_plot_right, "_quant3_elevation"),
+          fill_opacity = paste0(input$data_for_plot_right, 
+                                "_quant3_fill_opacity"))
     }
-    
-    data <- 
-      data %>%
-      mutate(group = paste(left_variable, "-", right_variable)) %>%
-      left_join(bivariate_color_scale, by = "group") %>% 
-      mutate(fill = if_else(str_detect(group, "NA"), "#B3B3BB", fill)) %>% 
-      mutate(elevation = (left_variable * right_variable) ^ 2 * 50) %>% 
-      mutate(fill_opacity = paste0(fill, opacity),
-             fill = paste0(fill, "FF"))
     
     return(data)
   })
@@ -410,6 +402,11 @@ shinyServer(function(input, output, session) {
       paste0("<ul>", ., "</ul>") %>%
       HTML()
   })
+  
+  
+  ## Clear click status --------------------------------------------------------
+  
+  observeEvent(input$active_clear_selection, {rz$poly_select <- FALSE})
   
   
   ## Observe zoom and coalesce to three values ---------------------------------

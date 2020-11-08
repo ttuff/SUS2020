@@ -30,6 +30,7 @@ library(shinyWidgets)
 library(leaflet)
 library(DT)
 library(gghighlight)
+library(qs)
 
 
 # Functions ---------------------------------------------------------------
@@ -184,7 +185,7 @@ loadingLogo <-
 
 # Load bivariate census data
 load(file = "data/data_for_plot.Rdata")
-load("data/new_bivariate.Rdata")
+qload("data/new_bivariate.qsm")
 
 did_you_know <- 
   read_csv("data/did_you_know.csv") %>% 
@@ -304,7 +305,7 @@ qz <- reactiveValues(zoom_level = 'ISO')
 
 rz_pedestrian <- reactiveValues(zoom = 'OUT')
 
-rz <- reactiveValues(zoom = 'IN',
+rz <- reactiveValues(zoom = 'OUT',
                      click = NA,
                      poly_select = FALSE)
 
