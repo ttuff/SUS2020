@@ -347,11 +347,29 @@ shinyUI(
                               color = "#B2D235"),
              sliderInput(inputId = "slider_ped", label = "", 0, 12, 
                          value = c(0, 12), step = 1))),
-          tableOutput("table_ped"),
-          plotOutput("graph_ped", height = 200),
           hr(),
-          h4("Did you know?"),
-          textOutput("did_you_know_ped")),
+          fluidRow(
+            column(width = 8,
+                   h4("Explore")),
+            column(width = 4, align = "right",
+                   actionLink(inputId = "pedestrian_hide_explore",
+                              label = "Hide"))),
+          conditionalPanel(
+            condition = "output.pedestrian_hide_explore_status == 1",
+            htmlOutput("pedestrian_info"),
+            # conditionalPanel to add later which clears selection if a polygon is clicked
+            plotOutput("pedestrian_graph", height = 150)),
+          hr(),
+          fluidRow(
+            column(width = 8,
+                   h4("Did you know?")),
+            column(width = 4, align = "right",
+                   actionLink(inputId = "pedestrian_hide_dyk",
+                              label = "Hide"))),
+          conditionalPanel(
+            condition = "output.pedestrian_hide_dyk_status == 1",
+            htmlOutput("did_you_know_ped"))
+          ),
           
           absolutePanel(
             id = "ped_legend_container", class = "panel panel-default",

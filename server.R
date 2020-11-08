@@ -738,7 +738,7 @@ shinyServer(function(input, output, session) {
   })
   outputOptions(output, "zoom", suspendWhenHidden = FALSE)
   
-  ## Titles & Text  -------------------------------------------------
+  ## Titles & and Link Text  -------------------------------------------------
   
   # Set title across zoom levels
   output$title_text_ped <- renderText({
@@ -749,7 +749,7 @@ shinyServer(function(input, output, session) {
     } else {"Explore Sidewalks and Parks"}
   })
   
-  # Action button
+  # Hide extra text
   output$more_info_ped_status <- reactive({
     input$more_info_ped %% 2 == 1
   })
@@ -764,6 +764,34 @@ shinyServer(function(input, output, session) {
       txt <- "Learn more"
     }
     updateActionButton(session, "more_info_ped", label = txt)
+    
+  })
+  
+  # Hide explore status
+  output$pedestrian_hide_explore_status <- reactive({
+    input$pedestrian_hide_explore %% 2 == 0
+  })
+  
+  outputOptions(output, "pedestrian_hide_explore_status", suspendWhenHidden = FALSE)
+  
+  observeEvent(input$pedestrian_hide_explore, {
+    
+    if (input$pedestrian_hide_explore %% 2 == 0) txt <- "Hide" else txt <- "Show"
+    updateActionButton(session, "pedestrian_hide_explore", label = txt)
+    
+  })
+  
+  # Hide DYK status
+  output$pedestrian_hide_dyk_status <- reactive({
+    input$pedestrian_hide_dyk %% 2 == 0
+  })
+  
+  outputOptions(output, "pedestrian_hide_dyk_status", suspendWhenHidden = FALSE)
+  
+  observeEvent(input$pedestrian_hide_dyk, {
+    
+    if (input$pedestrian_hide_dyk %% 2 == 0) txt <- "Hide" else txt <- "Show"
+    updateActionButton(session, "pedestrian_hide_dyk", label = txt)
     
   })
   
