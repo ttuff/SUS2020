@@ -167,15 +167,11 @@ shinyServer(function(input, output, session) {
   
   data_bivar <- reactive({
     
-    if (rz$zoom == "IN") {
-      data <- data_CT_large
-    } else if (rz$zoom == "OUT") {
-      data <- data_borough_large 
-    } else if (rz$zoom == "ISO") {
-      data <- data_DA_1_large
-    } else if (rz$zoom == "ISO_2") {
-      data <- data_DA_2_large
-    }
+    if (input$active_extrude) {data <- data_DA_1_large
+    } else if (rz$zoom == "OUT") {data <- data_borough_large
+    } else if (rz$zoom == "IN") {data <- data_CT_large
+    } else if (rz$zoom == "ISO") {data <- data_DA_1_large
+    } else if (rz$zoom == "ISO_2") {data <- data_DA_2_large}
     
     # Starting case for no selection
     if (input$data_for_plot_right == " ") {
@@ -244,6 +240,10 @@ shinyServer(function(input, output, session) {
   # Clear polygon select on tab change
   observeEvent(input$tabs, {rz$poly_selected <- NA}, ignoreInit = TRUE)
   
+  
+  ## Observe and react to change in extrude status -----------------------------
+  
+  observeEvent(input$active_extrude, {rz$poly_selected <- NA})
   
   
   ## Render the map ------------------------------------------------------------
@@ -663,6 +663,7 @@ shinyServer(function(input, output, session) {
             elevation = "elevation", 
             update_view = FALSE, 
             layer_id = "extrude", 
+            id = "ID",
             auto_highlight = TRUE, 
             highlight_colour = '#FFFFFF90', 
             legend = FALSE, 
@@ -676,42 +677,107 @@ shinyServer(function(input, output, session) {
     })
   
   
-  ## Add highlight polygon on click --------------------------------------------
+  ## Update map on click -------------------------------------------------------
   
   observeEvent(rz$poly_selected, {
     
-    if (!is.na(rz$poly_selected)) {
+    # Mode if not in 3D
+    if (!input$active_extrude) {
       
-      print(paste0("Selecting polygon ", rz$poly_selected))
+      if (!is.na(rz$poly_selected)) {
+        
+        print(paste0("Selecting polygon ", rz$poly_selected))
+        
+        mapdeck_update(map_id = "active_map")  %>%
+          add_polygon(
+            data = {
+              data_bivar() %>% 
+                filter(ID == rz$poly_selected)},
+            stroke_width = "width",
+            stroke_colour = "#000000",
+            fill_colour = "fill",
+            update_view = FALSE,
+            layer_id = "poly_highlight",
+            auto_highlight = TRUE,
+            highlight_colour = '#FFFFFF90',
+            legend = FALSE,
+            light_settings = list(
+              lightsPosition = c(0,0, 5000),
+              numberOfLights = 1,
+              ambientRatio = 1))
+        
+      }
       
-      mapdeck_update(map_id = "active_map")  %>%
-        add_polygon(
-          data = {
-            data_bivar() %>% 
-              filter(ID == rz$poly_selected)},
-          stroke_width = "width",
-          stroke_colour = "#000000",
-          fill_colour = "fill",
-          update_view = FALSE,
-          layer_id = "poly_highlight",
-          auto_highlight = TRUE,
-          highlight_colour = '#FFFFFF90',
-          legend = FALSE,
-          light_settings = list(
-            lightsPosition = c(0,0, 5000),
-            numberOfLights = 1,
-            ambientRatio = 1))
+      if (is.na(rz$poly_selected)) {
+        
+        print("Removing selection")
+        
+        mapdeck_update(map_id = "active_map")  %>%
+          clear_polygon(layer_id = "poly_highlight")
+        
+      }
+      
+    # Mode if in 3D
+    } else if (input$active_extrude) {
+      
+      if (!is.na(rz$poly_selected)) {
+        
+        print(paste0("Selecting 3D polygon ", rz$poly_selected))
+        
+        mapdeck_update(map_id = "active_map")  %>%
+          clear_polygon(layer_id = "polylayer") %>%
+          clear_polygon(layer_id = "extrude") %>%
+          add_polygon(
+            data = {
+              data_bivar() %>% 
+                mutate(elevation = if_else(
+                  group == group[ID == rz$poly_selected], 4000, 0))}, 
+            fill_colour = "fill", 
+            elevation = "elevation", 
+            update_view = FALSE, 
+            layer_id = "extrude", 
+            id = "ID",
+            auto_highlight = TRUE, 
+            highlight_colour = '#FFFFFF90', 
+            legend = FALSE, 
+            light_settings = list(
+              lightsPosition = c(0,0, 5000), 
+              numberOfLights = 1, 
+              ambientRatio = 1))
+        
+      }
+      
+      if (is.na(rz$poly_selected)) {
+        
+        print("Removing 3D selection")
+        
+        mapdeck_update(map_id = "active_map")  %>%
+          clear_polygon(layer_id = "poly_highlight") %>% 
+          clear_polygon(layer_id = "extrude") %>%
+          add_polygon(
+            data = data_bivar(), 
+            fill_colour = "fill", 
+            elevation = "elevation", 
+            update_view = FALSE, 
+            layer_id = "extrude", 
+            id = "ID",
+            auto_highlight = TRUE, 
+            highlight_colour = '#FFFFFF90', 
+            legend = FALSE, 
+            light_settings = list(
+              lightsPosition = c(0,0, 5000), 
+              numberOfLights = 1, 
+              ambientRatio = 1))
+        
+        
+      }
+      
+      # Mode if in 3D
+      
+      
       
     }
     
-    if (is.na(rz$poly_selected)) {
-      
-      print("Removing selection")
-      
-      mapdeck_update(map_id = "active_map")  %>%
-        clear_polygon(layer_id = "poly_highlight")
-      
-    }
     
   })
     
