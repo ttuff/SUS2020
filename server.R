@@ -843,6 +843,23 @@ shinyServer(function(input, output, session) {
             zoom = 9,location = c(-73.75, 45), pitch = 35) 
     })
   
+  ## Univariate chloropleth info CT Level   ------------------------------------
+  
+  census_analysis_ct_plot <- census_analysis_ct %>%
+      dplyr::select(social_distancing_capacity_pop_perc_2m_quant3)
+    
+    colnames(census_analysis_ct_plot) <- c("left_variable", "geometry")
+    
+    census_analysis_ct_plot <- census_analysis_ct_plot %>%
+      mutate(
+        group = paste(
+          as.numeric(left_variable)
+        )
+      ) %>%
+      left_join(color_scale_2, by = "group") %>% 
+      mutate(social_distancing = census_analysis_ct$social_distancing_capacity_pop_perc_2m,
+             population = census_analysis_ct$population.x)
+    
   ## Univariate chloropleth map + Legend  --------------------------------------
 
   data_for_plot_uni <- reactive({
@@ -904,7 +921,10 @@ shinyServer(function(input, output, session) {
       mutate(prop_driving = round(census_analysis_quantile_WSG$prop_driving, 0),
              pop_density = log(round(census_analysis_quantile_WSG$`pop_density(sqkm)`, 0)),
              trip_scale = census_analysis_quantile_WSG$trip_scale,
-             social_distancing = census_analysis_quantile_WSG$social_distancing_capacity_pop_perc_2m) %>% 
+             social_distancing = census_analysis_quantile_WSG$social_distancing_capacity_pop_perc_2m,
+             net_median_income = census_analysis_quantile_WSG$net_median_income,
+             visible_minority_pop = census_analysis_quantile_WSG$visible_minority_pop,
+             immigrants_pop = census_analysis_quantile_WSG$immigrants) %>% 
       left_join(bivariate_color_scale, by = "group") %>% 
       drop_na(right_variable) 
     
@@ -1303,19 +1323,20 @@ shinyServer(function(input, output, session) {
   ## Render the info table -----------------------------------------------------
   
   output$pedestrian_info <- renderUI({
-    census_analysis_ct <- census_analysis_ct %>% 
-      filter(social_distancing_capacity_pop_perc_2m != Inf,
-             population.x >= 500)
+    
+    census_analysis_ct_plot <- census_analysis_ct_plot %>% 
+      filter(social_distancing != Inf,
+             population >= 500)
     
     if (rz_pedestrian$zoom == "OUT") {
       
-      min_ped_ct <- round(min(census_analysis_ct$social_distancing_capacity_pop_perc_2m), 2)
-      max_ped_ct <- round(max(census_analysis_ct$social_distancing_capacity_pop_perc_2m), 2)
-      mean_ped_ct <- round(mean(census_analysis_ct$social_distancing_capacity_pop_perc_2m), 2)
-      median_ped_ct <- round(median(census_analysis_ct$social_distancing_capacity_pop_perc_2m), 2)
-      sd_ped_ct <- sd(census_analysis_ct$social_distancing_capacity_pop_perc_2m)
-      quant_low_ped_ct <- round(quantile(census_analysis_ct$social_distancing_capacity_pop_perc_2m, c(1/3, 2/3))[1], 2)
-      quant_high_ped_ct <- round(quantile(census_analysis_ct$social_distancing_capacity_pop_perc_2m, c(1/3, 2/3))[2], 2)
+      min_ped_ct <- round(min(census_analysis_ct_plot$social_distancing), 2)
+      max_ped_ct <- round(max(census_analysis_ct_plot$social_distancing), 2)
+      mean_ped_ct <- round(mean(census_analysis_ct_plot$social_distancing), 2)
+      median_ped_ct <- round(median(census_analysis_ct_plot$social_distancing), 2)
+      sd_ped_ct <- sd(census_analysis_ct_plot$social_distancing)
+      quant_low_ped_ct <- round(quantile(census_analysis_ct_plot$social_distancing, c(1/3, 2/3))[1], 2)
+      quant_high_ped_ct <- round(quantile(census_analysis_ct_plot$social_distancing, c(1/3, 2/3))[2], 2)
         
         HTML(
           glue("At the census tract scale, after removing outliers with a population below 500, the capacity for pedestrian social distancing varies from ",
@@ -1323,6 +1344,33 @@ shinyServer(function(input, output, session) {
                "and a median value of {median_ped_ct}%. ",
                "Two thirds of census tracts have a score between {quant_low_ped_ct}% ",
                "and {quant_high_ped_ct}%. Out of the 532 census tracts, 227 of them have a capacity score below 100%, while 85 of them have a capacity score below 50%. "))
+    }
+  })
+  
+  ## Render the histogram/scatterplot ------------------------------------------
+  
+  output$pedestrian_graph <- renderPlot({
+    
+    # Zoom out
+    if (rz_pedestrian$zoom == "OUT") {
+        
+        census_analysis_ct_plot %>%
+          ggplot(aes(social_distancing)) +
+          geom_histogram(aes(fill = fill), bins = 25) +
+          scale_fill_manual(values = colors[c(1:3)],
+                            na.translate = FALSE) +
+        scale_x_continuous(name = "Capacity for pedestrian social distancing",
+                           limits = c(0, 500),
+                           expand = c(0,0),
+                           breaks = seq(0, 500, by = 100),
+                           labels = c("0%", "100 %", "200 %", "300 %", "400 %", "500 %"),
+                           oob = scales::squish) +
+          labs(y = NULL) +
+          theme_minimal() +
+          theme(legend.position = "none",
+                panel.grid.minor.x = element_blank(),
+                panel.grid.major.x = element_blank(),
+                panel.grid.minor.y = element_blank())
     }
   })
   
