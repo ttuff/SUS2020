@@ -62,10 +62,10 @@ data <-
   rename(households = Households,
          households_affordable = CTIR,
          households_suitable = Househol_1,
-         pop_immigrants = Pop,
+         population = Pop,
          mode = Mode) %>%
   relocate(households, households_affordable, households_suitable,
-           pop_immigrants, mode, .after = ale_class) %>%
+           population, mode, .after = ale_class) %>%
   rename(tenant = TenantH,
          avg_rent = AvRent,
          avg_property_value = AvVal,
@@ -103,8 +103,8 @@ data_DA <-
                 ~{.x / households}, .names = "{.col}_prop"),
          unaffordable_prop = unaffordable / households_affordable,
          unsuitable_prop = unsuitable / households_suitable,
-         immigrant_prop = immigrant / pop_immigrants,
-         immigrant_new_prop = immigrant_new / pop_immigrants,
+         immigrant_prop = immigrant / population,
+         immigrant_new_prop = immigrant_new / population,
          across(c(car:time_60), ~{.x / mode}, .names = "{.col}_prop")) %>%
   mutate(across(c(ale_index, tenant_prop, avg_rent, avg_property_value,
                   unaffordable_prop, unsuitable_prop, median_income,
@@ -115,7 +115,7 @@ data_DA <-
   st_intersection(data_circle) %>%
   st_transform(4326) %>%
   st_cast("MULTIPOLYGON") %>%
-  rename(ID = DAUID, name = DA_12, city_name = CSDNAME) %>%
+  rename(ID = DAUID, name = DA_12, name_2 = CSDNAME) %>%
   mutate(across(where(is.numeric), ~if_else(is.nan(.x), 0, as.numeric(.x))))
 
 data_CT <-
@@ -138,8 +138,8 @@ data_CT <-
                 ~{.x / households}, .names = "{.col}_prop"),
          unaffordable_prop = unaffordable / households_affordable,
          unsuitable_prop = unsuitable / households_suitable,
-         immigrant_prop = immigrant / pop_immigrants,
-         immigrant_new_prop = immigrant_new / pop_immigrants,
+         immigrant_prop = immigrant / population,
+         immigrant_new_prop = immigrant_new / population,
          across(c(car:time_60), ~{.x / mode}, .names = "{.col}_prop")) %>%
   mutate(across(c(ale_index, tenant_prop, avg_rent, avg_property_value,
                   unaffordable_prop, unsuitable_prop, median_income,
@@ -151,8 +151,9 @@ data_CT <-
   st_intersection(data_circle) %>%
   st_transform(4326) %>%
   st_cast("MULTIPOLYGON") %>%
-  rename(ID = CTUID, name = CTNAME, city_name = CSDNAME) %>%
-  mutate(across(where(is.numeric), ~if_else(is.nan(.x), 0, as.numeric(.x))))
+  rename(ID = CTUID, name = CTNAME, name_2 = CSDNAME) %>%
+  mutate(across(where(is.numeric), ~if_else(is.nan(.x), 0, as.numeric(.x)))) %>% 
+  relocate(name_2, .after = name)
 
 borough_join <-
   data %>%
@@ -215,8 +216,8 @@ data_borough <-
                 ~{.x / households}, .names = "{.col}_prop"),
          unaffordable_prop = unaffordable / households_affordable,
          unsuitable_prop = unsuitable / households_suitable,
-         immigrant_prop = immigrant / pop_immigrants,
-         immigrant_new_prop = immigrant_new / pop_immigrants,
+         immigrant_prop = immigrant / population,
+         immigrant_new_prop = immigrant_new / population,
          across(c(car:time_60), ~{.x / mode}, .names = "{.col}_prop")) %>%
   mutate(across(c(ale_index, tenant_prop, avg_rent, avg_property_value,
                   unaffordable_prop, unsuitable_prop, median_income,
@@ -230,7 +231,8 @@ data_borough <-
   st_transform(4326) %>%
   st_cast("MULTIPOLYGON") %>%
   mutate(ID = 1:n(), .before = name) %>%
-  mutate(across(where(is.numeric), ~if_else(is.nan(.x), 0, as.numeric(.x))))
+  mutate(across(where(is.numeric), ~if_else(is.nan(.x), 0, as.numeric(.x)))) %>% 
+  rename(name_2 = type)
 
 
 # Build title text --------------------------------------------------------
