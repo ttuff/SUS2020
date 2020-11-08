@@ -1408,6 +1408,21 @@ shinyServer(function(input, output, session) {
   outputOptions(output, "zoom_level", suspendWhenHidden = FALSE)
   
   
+  ## Show/hide more info panel in title bar ------------------------------------
+  
+  # More info
+  output$commute_more_info_status <- reactive(input$commute_more_info %% 2 == 1)
+  outputOptions(output, "commute_more_info_status", suspendWhenHidden = FALSE)
+  
+  observeEvent(input$commute_more_info, {
+    
+    if (input$commute_more_info %% 2 == 1) txt <- "Hide" else txt <- "Learn more"
+    updateActionButton(session, "commute_more_info", label = txt)
+    
+  })
+  
+  
+  
   observeEvent(input$radio1, {
     if(input$radio1 == 1){
       updateSliderTextInput(session = session,
