@@ -2,6 +2,8 @@
 
 shinyServer(function(input, output, session) {
   
+  ### Render images from files #################################################
+  
   output$homepic <- renderImage({
     filename <- normalizePath(file.path("www/Sus logo transparent.png"))
     return(list(src = filename, contentType = "image/png",  width = 571,
@@ -188,7 +190,6 @@ shinyServer(function(input, output, session) {
       
       data <- 
         data %>%
-        data_borough_large %>% 
         dplyr::select(
           ID, name, name_2, population, left_variable_full = ale_index, 
           left_variable = ale_index_quant3, ale_class,
@@ -203,6 +204,25 @@ shinyServer(function(input, output, session) {
     
     return(data)
   })
+  
+  ## Observe zoom and coalesce to four values ----------------------------------
+  
+  observeEvent(input$active_map_view_change$zoom, {
+    
+    rz$zoom <- case_when(
+      input$active_map_view_change$zoom >= 10.5 && 
+        input$active_map_view_change$zoom <= 12 ~ "IN",
+      input$active_map_view_change$zoom > 12 &&
+        input$active_map_view_change$zoom < 14 ~ "ISO",
+      input$active_map_view_change$zoom >= 14 ~ "ISO_2",
+      TRUE ~ "OUT")
+    
+  })
+  
+  
+  ## Observe click status and produce reactive values --------------------------
+  
+  
   
   
   ## Render the map ------------------------------------------------------------
@@ -492,19 +512,6 @@ shinyServer(function(input, output, session) {
   observeEvent(input$active_clear_selection, {rz$poly_select <- FALSE})
   
   
-  ## Observe zoom and coalesce to three values ---------------------------------
-  
-  observeEvent(input$active_map_view_change$zoom, {
-    
-    rz$zoom <- case_when(
-      input$active_map_view_change$zoom >= 10.5 && 
-        input$active_map_view_change$zoom <= 12 ~ "IN",
-      input$active_map_view_change$zoom > 12 &&
-        input$active_map_view_change$zoom < 14 ~ "ISO",
-      input$active_map_view_change$zoom >= 14 ~ "ISO_2",
-      TRUE ~ "OUT")
-    
-  })
   
 
   ## Update map in response to variable changes, zooming, or options -----------
@@ -566,11 +573,10 @@ shinyServer(function(input, output, session) {
   ## Observe polygon clicks and deliver output ---------------------------------
   
   observeEvent({input$active_map_polygon_click},{
-    js <- input$active_map_polygon_click
-    lst <- jsonlite::fromJSON(js)
     
-    rz$click <- 
-      lst$object$properties$id
+    lst <- jsonlite::fromJSON(input$active_map_polygon_click)
+    
+    rz$click <- lst$object$properties$id
     
     rz$poly_select = TRUE
     
@@ -628,8 +634,10 @@ shinyServer(function(input, output, session) {
     #     clear_polygon(layer_id = "isolayer")
     # } 
     
-    
-    ## Output polygon select status --------------------------------------------
+  })
+  
+  
+  ## Output polygon select status --------------------------------------------
     
     output$active_poly_select <- reactive(rz$poly_select)
     
@@ -649,40 +657,45 @@ shinyServer(function(input, output, session) {
       }, ignoreInit = TRUE)
     
     
-    # ## Add highlight polygon on click ------------------------------------------
-    # 
-    # observeEvent(rz$poly_select, {
-    #   
-    #   if (rz$poly_select) {
-    #     
-    #     mapdeck_update(map_id = "active_map")  %>%  
-    #       add_polygon( 
-    #         data = filter(data_bivar(), ID == rz$click), 
-    #         stroke_width = "width",
-    #         stroke_colour = "#FFFFFF",
-    #         fill_colour = "#FF0000", 
-    #         update_view = FALSE,
-    #         layer_id = "poly_highlight", 
-    #         auto_highlight = TRUE, 
-    #         highlight_colour = '#FFFFFF90', 
-    #         legend = FALSE, 
-    #         light_settings = list(
-    #           lightsPosition = c(0,0, 5000), 
-    #           numberOfLights = 1, 
-    #           ambientRatio = 1))
-    #     }
-    #   
-    #   if (!rz$poly_select) {
-    #     
-    #     mapdeck_update(map_id = "active_map")  %>%  
-    #       clear_polygon(layer_id = "poly_highlight")
-    #     }
-    #   
-    #   }, ignoreInit = TRUE)
+    ## Add highlight polygon on click ------------------------------------------
+
+    observeEvent(
+      {
+        rz$poly_select
+        rz$click
+        }, 
+      {
+        if (rz$poly_select && !is.na(rz$click)) {
+          
+          print(rz$click)
+          
+          mapdeck_update(map_id = "active_map")  %>%
+            add_polygon(
+              data = filter(data_bivar(), ID == rz$click),
+              stroke_width = "width",
+              stroke_colour = "#FFFFFF",
+              fill_colour = "#FF0000",
+              update_view = FALSE,
+              layer_id = "poly_highlight",
+              auto_highlight = TRUE,
+              highlight_colour = '#FFFFFF90',
+              legend = FALSE,
+              light_settings = list(
+                lightsPosition = c(0,0, 5000),
+                numberOfLights = 1,
+                ambientRatio = 1))
+          
+          } else {
+            
+            print("Removing selection")
+            
+            mapdeck_update(map_id = "active_map")  %>%
+              clear_polygon(layer_id = "poly_highlight")
+            
+            }
+
+      }, ignoreInit = TRUE)
     
-  }) 
-  
-  
   
   
   ### Pedestrian realm #########################################################
