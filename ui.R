@@ -193,43 +193,44 @@ shinyUI(
               value = FALSE),
             hr(),
             fluidRow(
-              column(width = 8,
-                     h4("Compare")),
+              column(width = 8, h4("Compare")),
               column(width = 4, align = "right",
-                     actionLink(inputId = "active_hide_compare",
+                     actionLink(inputId = "active_hide_compare", 
                                 label = "Hide"))),
             conditionalPanel(
               condition = "output.active_hide_compare_status == 1",
-              selectInput("data_for_plot_right", 
-                          label = NULL, 
+              selectInput("data_for_plot_right", label = NULL, 
                           choices = var_list),
               plotOutput("active_map_right", height = 250)),
-            hr(),
-            fluidRow(
-              column(width = 8,
-                     h4("Explore")),
-              column(width = 4, align = "right",
-                     actionLink(inputId = "active_hide_explore",
-                                label = "Hide"))),
             conditionalPanel(
-              condition = "output.active_hide_explore_status == 1",
-              htmlOutput("active_info"),
+              condition = "input.active_extrude == 0",
+              hr(),
+              fluidRow(
+                column(width = 8,
+                       h4("Explore")),
+                column(width = 4, align = "right",
+                       actionLink(inputId = "active_hide_explore",
+                                  label = "Hide"))),
               conditionalPanel(
-                condition = "output.active_poly_selected == 1",
-                actionLink(inputId = "active_clear_selection", 
-                           label = "Clear selection")),
-              plotOutput("bivariate_graph", height = 150)
+                condition = "output.active_hide_explore_status == 1",
+                htmlOutput("active_info"),
+                conditionalPanel(
+                  condition = "output.active_poly_selected == 1",
+                  actionLink(inputId = "active_clear_selection", 
+                             label = "Clear selection")),
+                plotOutput("bivariate_graph", height = 150)
               ),
-            hr(),
-            fluidRow(
-              column(width = 8,
-                     h4("Did you know?")),
-              column(width = 4, align = "right",
-                     actionLink(inputId = "active_hide_dyk",
-                                label = "Hide"))),
-            conditionalPanel(
-              condition = "output.active_hide_dyk_status == 1",
-              htmlOutput("did_you_know"))
+              hr(),
+              fluidRow(
+                column(width = 8,
+                       h4("Did you know?")),
+                column(width = 4, align = "right",
+                       actionLink(inputId = "active_hide_dyk",
+                                  label = "Hide"))),
+              conditionalPanel(
+                condition = "output.active_hide_dyk_status == 1",
+                htmlOutput("did_you_know"))
+              )
             ),
           
           absolutePanel(

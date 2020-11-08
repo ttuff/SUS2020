@@ -167,15 +167,11 @@ shinyServer(function(input, output, session) {
   
   data_bivar <- reactive({
     
-    if (rz$zoom == "IN") {
-      data <- data_CT_large
-    } else if (rz$zoom == "OUT") {
-      data <- data_borough_large 
-    } else if (rz$zoom == "ISO") {
-      data <- data_DA_1_large
-    } else if (rz$zoom == "ISO_2") {
-      data <- data_DA_2_large
-    }
+    if (input$active_extrude) {data <- data_DA_1_large
+    } else if (rz$zoom == "OUT") {data <- data_borough_large
+    } else if (rz$zoom == "IN") {data <- data_CT_large
+    } else if (rz$zoom == "ISO") {data <- data_DA_1_large
+    } else if (rz$zoom == "ISO_2") {data <- data_DA_2_large}
     
     # Starting case for no selection
     if (input$data_for_plot_right == " ") {
@@ -245,13 +241,9 @@ shinyServer(function(input, output, session) {
   observeEvent(input$tabs, {rz$poly_selected <- NA}, ignoreInit = TRUE)
   
   
-  ## Observe and react to extrude status ---------------------------------------
+  ## Observe and react to change in extrude status -----------------------------
   
-  observeEvent(input$active_extrude, {
-    
-    if (input$active_extrude) rz$poly_selected <- NA
-    
-  })
+  observeEvent(input$active_extrude, {rz$poly_selected <- NA})
   
   
   ## Render the map ------------------------------------------------------------
