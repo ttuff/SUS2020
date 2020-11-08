@@ -260,20 +260,20 @@ shinyServer(function(input, output, session) {
   
   output$active_info <- renderUI({
     
+    scale_singular <- case_when(
+      rz$zoom == "OUT" ~ "borough/city",
+      rz$zoom == "IN" ~ "census tract",
+      TRUE ~ "dissemination area"
+    )
+    
+    scale_plural <- case_when(
+      scale_singular == "borough/city" ~ "boroughs or cities",
+      scale_singular == "census tract" ~ "census tracts",
+      scale_singular == "dissemination area" ~ "dissemination areas"
+    )
+    
     # Univariate case
     if (input$data_for_plot_right == " ") {
-      
-      scale_singular <- case_when(
-        rz$zoom == "OUT" ~ "borough/city",
-        rz$zoom == "IN" ~ "census tract",
-        TRUE ~ "dissemination area"
-      )
-      
-      scale_plural <- case_when(
-        scale_singular == "borough/city" ~ "boroughs or cities",
-        scale_singular == "census tract" ~ "census tracts",
-        scale_singular == "dissemination area" ~ "dissemination areas"
-      )
       
       vec <- 
         data_bivar() %>% 
@@ -339,25 +339,96 @@ shinyServer(function(input, output, session) {
           {length(vec[vec <= dat$left_variable_full]) / length(vec) * 100} %>% 
           round()
         
-        HTML(glue("<strong>{place_heading}</strong>", 
-                  
-             "<p>{place_name} has a population of ",
-             "{prettyNum(dat$population, ',')} and a CanALE index ",
-             "score of {round(poly_value, 2)}, which is {larger_smaller} ",
-             "the region-wide median of {median_val}.", 
-             
-             "<p>{place_name} has {poor_strong} potential for active ", 
-             "living, with a CanALE index score higher than {percentile} ",
-             "percent of {scale_plural} in the Montreal region."))
+        # Special case for Kahnawake
+        if (dat$ID %in% c(56, "4620832.00", 24670285)) {
+          HTML(paste0("<strong>Kahnawake Mohawk Territory</strong>",
+                      "<p>Statistics Canada does not gather the same ",
+                      "data for indigenous reserves in the Census as it does ",
+                      "for other jurisdictions, so we cannot display findings ",
+                      "here."))
+        } else {
+          
+          HTML(glue("<strong>{place_heading}</strong>", 
+                    
+                    "<p>{place_name} has a population of ",
+                    "{prettyNum(dat$population, ',')} and a CanALE index ",
+                    "score of {round(poly_value, 2)}, which is {larger_smaller} ",
+                    "the region-wide median of {median_val}.", 
+                    
+                    "<p>{place_name} has {poor_strong} potential for active ", 
+                    "living, with a CanALE index score higher than {percentile} ",
+                    "percent of {scale_plural} in the Montreal region."))
+          
+        }
         
       }
-      
       
     # Bivariate case
     } else {
       
-      HTML(cor(data_bivar()$left_variable_full, 
-               data_bivar()$right_variable_full))
+      var_name <- 
+        variable_explanations %>% 
+        filter(var_code == input$data_for_plot_right) %>% 
+        pull(var_name)
+      
+      var_explanation <- 
+        variable_explanations %>% 
+        filter(var_code == input$data_for_plot_right) %>% 
+        pull(explanation)
+      
+      correlation <- 
+        cor(data_bivar()$left_variable_full, 
+            data_bivar()$right_variable_full) %>% 
+        round(2)
+      
+      pos_neg <- if_else(correlation > 0, "positive", "negative")
+      
+      strong_weak <- case_when(
+        abs(correlation) > 0.6 ~ "strong",
+        abs(correlation) > 0.3 ~ "moderate",
+        TRUE ~ "weak")
+      
+      higher_lower <- if_else(pos_neg == "positive", "higher", "lower")
+  
+      high_low_disclaimer <- case_when(
+        strong_weak == "strong" ~ "with only a few exceptions",
+        strong_weak == "moderate" ~ "although with some exceptions",
+        strong_weak == "weak" ~ "although with many exceptions",
+      )
+  
+      # Case for no poly selected
+      if (is.na(rz$poly_selected)) {
+        
+        # If correlation is close to zero
+        if (correlation < 0.05 && correlation > -0.05) {
+          
+          HTML(glue(
+            "<p>{var_explanation}", 
+            "<p>The CanALE index has effectively no correlation ",
+            "({correlation}) with {var_name} at the ",
+            "{scale_singular} scale.",
+            "<p>This means that, at the {scale_singular} scale, ", 
+            "there is no relationship between the two variables."))
+          
+        } else {
+          
+          HTML(glue(
+            "<p>{var_explanation}", 
+            "<p>The CanALE index has a {strong_weak} {pos_neg} ",
+            "correlation ({correlation}) with '{tolower(var_name)}' at the ",
+            "{scale_singular} scale.",
+            "<p>This means that, in general, {scale_plural} with higher ",
+            "potential for active living tend to have {higher_lower} ",
+            "values for '{tolower(var_name)}', {high_low_disclaimer}."))
+          
+        }
+        
+      } else{
+        
+        HTML(cor(data_bivar()$left_variable_full, 
+                 data_bivar()$right_variable_full))  
+      }
+      
   
     }
   })  
@@ -415,8 +486,7 @@ shinyServer(function(input, output, session) {
               fill = round(left_variable_full) == 
                 round(left_variable_full[ID == rz$poly_selected])), 
                            bins = 25) +
-            scale_fill_manual(values = colors[c(3, 1)],
-                              na.translate = FALSE) +
+            scale_fill_manual(values = colors[c(3, 1)], na.translate = FALSE) +
             labs(x = "CanALE index", y = NULL) +
             theme_minimal() +
             theme(legend.position = "none",
@@ -430,28 +500,43 @@ shinyServer(function(input, output, session) {
     # Scatterplot for two variables
     } else {
       
-      y_var_name <- as.character(input$data_for_plot_right)
+      var_name <- 
+        variable_explanations %>% 
+        filter(var_code == input$data_for_plot_right) %>% 
+        pull(var_name)
+      
       
       if (nrow(filter(data_bivar(), ID == rz$poly_selected)) != 1) {
         
         data_bivar() %>% 
+          drop_na() %>% 
           ggplot(aes(left_variable_full, right_variable_full)) +
-          geom_smooth(se = FALSE, colour = "grey50") +
-          geom_point(aes(colour = fill)) +
-          labs(x = "CanALE index", y = y_var_name) +
+          geom_point(aes(colour = group)) +
+          geom_smooth(method = "lm", se = FALSE, colour = "grey50") +
+          scale_colour_manual(values = deframe(bivariate_color_scale)) +
+          labs(x = "CanALE index", y = var_name) +
           theme_minimal() +
-          theme(legend.position = "none")
+          theme(legend.position = "none",
+                panel.grid.minor.x = element_blank(),
+                panel.grid.major.x = element_blank(),
+                panel.grid.minor.y = element_blank())
         
       } else {
         
         data_bivar() %>% 
+          drop_na() %>% 
           ggplot(aes(left_variable_full, right_variable_full)) +
-          geom_smooth(se = FALSE, colour = "grey50") +
-          geom_point(aes(colour = fill)) +
-          gghighlight(ID == rz$click, keep_scales = TRUE) +
-          labs(x = "CanALE index", y = y_var_name) +
+          geom_point(aes(colour = ID == rz$poly_selected,
+                         size = ID == rz$poly_selected)) +
+          geom_smooth(method = "lm", se = FALSE, colour = "grey50") +
+          scale_colour_manual(values = bivariate_color_scale$fill[c(9, 1)]) +
+          scale_size_manual(values = c(1, 3)) +
+          labs(x = "CanALE index", y = var_name) +
           theme_minimal() +
-          theme(legend.position = "none")
+          theme(legend.position = "none",
+                panel.grid.minor.x = element_blank(),
+                panel.grid.major.x = element_blank(),
+                panel.grid.minor.y = element_blank())
         
       }
     }
@@ -464,7 +549,7 @@ shinyServer(function(input, output, session) {
     
     did_you_know %>% 
       filter(right_variable == input$data_for_plot_right) %>% 
-      slice_sample(n = 3) %>% 
+      slice_sample(n = 2) %>% 
       pull(text) %>% 
       paste("<li> ", ., collapse = "") %>% 
       paste0("<ul>", ., "</ul>") %>%

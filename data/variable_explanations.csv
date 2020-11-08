@@ -1,0 +1,19 @@
+var_code,var_name,explanation
+tenant_prop,Tenant-occupied (%),Tenant-occupied (%) is the percentage of private dwellings which are occupied by tenants.
+avg_rent,Average rent,NA
+avg_property_value,Average property value,NA
+unaffordable_prop,Unaffordable housing (%),NA
+unsuitable_prop,Unsuitable housing (%),NA
+median_income,Median household income,NA
+income_50_prop,Income under $50k (%) rent,NA
+income_100_prop,Income between $50k-$100k (%),NA
+income_high_prop,Income above $100k (%),NA
+immigrant_prop,Immigrants (%),NA
+immigrant_new_prop,New immigrants (%),NA
+car_prop,Drive to work (%),NA
+walk_or_bike_prop,Walk or cycle to work (%),NA
+transit_prop,Public transit to work (%),NA
+time_15_prop,15 minutes to work (%),NA
+time_30_prop,15-30 minutes to work (%),NA
+time_45_prop,30-45 minutes to work (%),NA
+time_60_prop,45-60 minutes to work (%),NA
