@@ -14,6 +14,12 @@ shinyServer(function(input, output, session) {
                 height = 177))
   }, deleteFile = FALSE)
   
+  output$bivariate_legend_ped <- renderImage({
+    filename <- normalizePath(file.path("www/bivariate_legend_2.png"))
+    return(list(src = filename, contentType = "image/png",  width = 200,
+                height = 177))
+  }, deleteFile = FALSE)
+  
   output$Univariate_left_legend <- renderImage({
     filename <- normalizePath(file.path("www/Univariate_left.png"))
     return(list(src = filename, contentType = "image/png",  width = 200,
@@ -24,6 +30,30 @@ shinyServer(function(input, output, session) {
     filename <- normalizePath(file.path("www/Univariate_right.png"))
     return(list(src = filename, contentType = "image/png",  width = 200,
                 height = 200))
+  }, deleteFile = FALSE)
+  
+  output$exemplar_ped <- renderImage({
+    filename <- normalizePath(file.path("www/Exemplar.png"))
+    return(list(src = filename, contentType = "image/png",  width = 550,
+                height = 600))
+  }, deleteFile = FALSE)
+  
+  output$sidewalk_calculation <- renderImage({
+    filename <- normalizePath(file.path("www/sidewalk_calc.png"))
+    return(list(src = filename, contentType = "image/png",  width = 400,
+                height = 400))
+  }, deleteFile = FALSE)
+  
+  output$univariate_legend_ped <- renderImage({
+    filename <- normalizePath(file.path("www/legend_social_distancing_cap.png"))
+    return(list(src = filename, contentType = "image/png",  width = 180,
+                height = 140))
+  }, deleteFile = FALSE)
+  
+  output$sidewalk_legend_ped <- renderImage({
+    filename <- normalizePath(file.path("www/legend_sidewalk.png"))
+    return(list(src = filename, contentType = "image/png",  width = 250,
+                height = 140))
   }, deleteFile = FALSE)
   
   
@@ -484,7 +514,7 @@ shinyServer(function(input, output, session) {
              pop_density = log(round(census_analysis_quantile_WSG$`pop_density(sqkm)`, 0)),
              trip_scale = census_analysis_quantile_WSG$trip_scale,
              social_distancing = census_analysis_quantile_WSG$social_distancing_capacity_pop_perc_2m)
-    
+
     
     if (input$variable_ped == 3) {
       data_for_plot_uni <- data_for_plot_uni %>% 
@@ -496,16 +526,15 @@ shinyServer(function(input, output, session) {
     } else {data_for_plot_uni <- data_for_plot_uni %>% 
       filter(trip_scale >= input$slider_ped[1] & trip_scale <= input$slider_ped[2])}
   })
-  
-  # Legend
-  legend_uni_chloro <- legend_element(
-    variables = c("Low capacity", "Medium capacity", "High capacity"),
-    colours = c('#CABED0', '#BC7C8F', '#AE3A4E'),
-    colour_type = "fill",
-    variable_type = "category",
-    title = "Pedestrian Capacity for Social Distancing (2 meters)"
-  )
-  legend_uni_chloro <- mapdeck_legend(legend_uni_chloro)
+
+  # legend_uni_chloro <- legend_element(
+  #   variables = c("0-1 m", "1-2 m", "2-4 m", "4-6 m", "6-10 m", "10-20 m"),
+  #   colours = c('#feebe2', '#fcc5c0', '#fa9fb5', '#f768a1', '#c51b8a', '#7a0177'),
+  #   colour_type = "stroke",
+  #   variable_type = "gradient",
+  #   title = "Sidewalk Width"
+  # )
+  # legend_uni_chloro <- mapdeck_legend(legend_uni_chloro)
   
   ## Bivariate chloropleth map -------------------------------------------------
   bivariate_chloropleth <- reactive({
@@ -614,17 +643,7 @@ shinyServer(function(input, output, session) {
     } else {"Explore Sidewalks and Parks"}
   })
   
-  # Main text
-  output$info_text_ped <- renderText({
-    if( rz_pedestrian$zoom == "OUT"){
-      title_text %>% 
-        filter(tab == "pedestrian_ct", type == "main") %>% 
-        pull(text)
-    }
-  })
-  
-  # Update the title box text 
-  
+  # Action button
   output$more_info_ped_status <- reactive({
     input$more_info_ped %% 2 == 1
   })
@@ -640,15 +659,6 @@ shinyServer(function(input, output, session) {
     }
     updateActionButton(session, "more_info_ped", label = txt)
     
-  })
-  
-  # Additional text info
-  output$more_info_text_ped <- renderText({
-    if( rz_pedestrian$zoom == "OUT" & input$more_info_ped_status == 1){
-      title_text %>% 
-        filter(tab == "pedestrian_ct", type == "extra") %>% 
-        pull(text)
-    }
   })
   
   ## Update map if there is a zoom / dataframe / tab / input change  -----------
@@ -766,7 +776,7 @@ shinyServer(function(input, output, session) {
                 , layer_id = "univariate_layer"
                 , auto_highlight = TRUE
                 , highlight_colour = '#FFFFFF90'
-                , legend = legend_uni_chloro
+                , legend = FALSE
                 , light_settings =  list(
                   lightsPosition = c(0,0, 5000)
                   , numberOfLights = 1

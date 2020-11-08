@@ -248,15 +248,42 @@ shinyUI(
           border-width: 0px;}'))),
           
           absolutePanel(
-            id = "title_bar_ped", class = "panel panel-default", 
+            id = "title_bar_ped", class = "panel panel-default",
             draggable = FALSE, top = 70, left = 270, width = "40%",
             h3(textOutput("title_text_ped")),
-            p(h6(textOutput("info_text_ped"))),
+            conditionalPanel(
+              condition = "output.zoom == 'OUT'",
+              id = "plotContainer_ped",
+              p(title_text %>%
+                  filter(tab == "pedestrian_ct", type == "main") %>%
+                  pull(text))),
+            conditionalPanel(
+              condition = "output.zoom == 'IN'",
+              id = "plotContainer_ped",
+              p(title_text %>%
+                  filter(tab == "pedestrian_da", type == "main") %>%
+                  pull(text))),
             actionLink("more_info_ped", "Learn more"),
             conditionalPanel(
-              condition = "output.more_info_ped_status == 1",
-              id = "plotContainer_ped", 
-              p(h6(textOutput("more_info_text_ped"))))), 
+              condition = "output.more_info_ped_status == 1 && output.zoom == 'OUT'",
+              id = "plotContainer_ped",
+              p(title_text %>%
+                  filter(tab == "pedestrian_ct", type == "extra") %>%
+                  pull(text))),
+            conditionalPanel(
+              condition = "output.more_info_ped_status == 1 && output.zoom == 'IN'",
+              id = "plotContainer_ped",
+              p(title_text %>%
+                  filter(tab == "pedestrian_da", type == "extra") %>%
+                  pull(text)),
+              imageOutput("exemplar_ped")),
+            conditionalPanel(
+              condition = "output.more_info_ped_status == 1 && output.zoom == 'FINAL'",
+              id = "plotContainer_ped",
+              p(title_text %>%
+                  filter(tab == "pedestrian_sidewalk", type == "extra") %>%
+                  pull(text)),
+              imageOutput("sidewalk_calculation"))),
           
           absolutePanel(
             id = "input_control_right", style="z-index:501;", 
@@ -315,18 +342,23 @@ shinyUI(
           plotOutput("graph_ped", height = 200),
           hr(),
           h4("Did you know?"),
-          textOutput("did_you_know_ped"))
+          textOutput("did_you_know_ped")),
+          
+          absolutePanel(
+            id = "ped_legend_container", class = "panel panel-default",
+            style = "z-index:500;", bottom = -200, left = 270, fixed = TRUE,
+            conditionalPanel(condition = "input.switch_biv == true && output.zoom == 'IN' && output.more_info_ped_status == 0",
+                             id = "ped_legend",
+                             imageOutput("bivariate_legend_ped")),
+            conditionalPanel(condition = "output.zoom == 'OUT' || output.zoom == 'IN' && input.switch_biv == false && output.more_info_ped_status == 0",
+                             id = "ped_legend",
+                             imageOutput("univariate_legend_ped")),
+            conditionalPanel(condition = "output.zoom == 'FINAL' && output.more_info_ped_status == 0",
+                             id = "ped_legend",
+                             imageOutput("sidewalk_legend_ped"))
+            )
           
           ),
-        
-        # ,
-        # 
-        # absolutePanel(
-        #   id = "ped_legend_container", class = "panel panel-default", 
-        #   style = "z-index:500;", bottom = 10, left = 270,
-        #   conditionalPanel(condition = "input.switch_biv == true",
-        #                    id = "ped_legend", 
-        #                    imageOutput("bivariate_legend")))
         
             
         ## Commuting mode switch -----------------------------------------------
