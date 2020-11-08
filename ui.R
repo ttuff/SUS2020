@@ -179,9 +179,9 @@ shinyUI(
             actionLink("more_info", "Learn more"),
             conditionalPanel(
               condition = "output.more_info_status == 1",
-              p(title_text %>% 
-                  filter(tab == "active", type == "extra") %>% 
-                  pull(text)))),
+              HTML(title_text %>% 
+                     filter(tab == "active", type == "extra") %>% 
+                     pull(text)))),
           
           absolutePanel(
             id = "input_control_overlay", style = "z-index:500;",
