@@ -1357,6 +1357,22 @@ shinyServer(function(input, output, session) {
                "Two thirds of census tracts have a score between {quant_low_ped_ct}% ",
                "and {quant_high_ped_ct}%. Out of the 532 census tracts, 227 of them have a capacity score below 100%, while 85 of them have a capacity score below 50%. "))
     }
+    
+    else if (rz_pedestrian$zoom == "FINAL") {
+      min_sidewalk <- round(min(sidewalks_WSG$sidewalk_width), 2)
+      max_sidewalk <- round(max(sidewalks_WSG$sidewalk_width), 2)
+      mean_sidewalk <- round(mean(sidewalks_WSG$sidewalk_width), 2)
+      median_sidewalk <- round(median(sidewalks_WSG$sidewalk_width), 2)
+      sd_sidewalk <- sd(sidewalks_WSG$sidewalk_width)
+      quant_low_sidewalk <- round(quantile(sidewalks_WSG$sidewalk_width, c(1/3, 2/3))[1], 2)
+      quant_high_sidewalk <- round(quantile(sidewalks_WSG$sidewalk_width, c(1/3, 2/3))[2], 2)
+      
+      HTML(
+        glue("Sidewalk width in Montreal varies from ",
+             "{min_sidewalk} meters to {max_sidewalk} meters, with an average value of {mean_sidewalk} meters ",
+             "and a median value of {median_sidewalk} meters. ",
+             "Two thirds of Montreal's sidewalks have widths between {quant_low_sidewalk} meters and {quant_high_sidewalk} meters. "))
+    }
   })
   
   ## Render the histogram/scatterplot ------------------------------------------
@@ -1383,6 +1399,19 @@ shinyServer(function(input, output, session) {
                 panel.grid.minor.x = element_blank(),
                 panel.grid.major.x = element_blank(),
                 panel.grid.minor.y = element_blank())
+    }
+    
+    else if (rz_pedestrian$zoom == "FINAL") {
+      sidewalks_WSG %>%
+        ggplot(aes(sidewalk_width)) +
+        geom_histogram(aes(fill = rounded_sidewalk_width), bins = 25) +
+        scale_fill_manual(values = c('#feebe2', '#fcc5c0', '#fa9fb5', '#f768a1', '#c51b8a', '#7a0177')) +
+        labs(x = "Sidewalk width (meters)", y = NULL) +
+        theme_minimal() +
+        theme(legend.position = "none",
+              panel.grid.minor.x = element_blank(),
+              panel.grid.major.x = element_blank(),
+              panel.grid.minor.y = element_blank())
     }
   })
   
