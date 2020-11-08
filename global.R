@@ -195,9 +195,8 @@ variable_explanations <-
   read_csv("data/variable_explanations.csv")
 
 # Load data for pedestrian realm 
-load(file = "data/census_analysis.Rdata")
+load(file = "data/sidewalks_WSG.Rdata")
 load(file = "data/census_circular.Rdata")
-load(file = "data/census_analysis_WSG.Rdata")
 load(file = "data/original_VAS_plan.Rdata")
 load(file = "data/revised_VAS_plan.Rdata")
 load(file = "data/census_analysis_quantile.Rdata")
