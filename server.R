@@ -134,6 +134,10 @@ shinyServer(function(input, output, session) {
         geom_sf(fill = "#CABED0", color = "white", size = 0.01) +
         theme_map()
       
+      ggdraw() + 
+        draw_image(dropshadow1, scale = 1.49, vjust = -0.003, hjust = -0.003) +
+        draw_plot(p)
+      
     } else {
       
       p <- 
@@ -144,12 +148,13 @@ shinyServer(function(input, output, session) {
         scale_fill_manual(values = rev(colors[c(4:6)])) +
         theme_map()
       
+      ggdraw() + 
+        draw_image(dropshadow1, scale = 1.49, vjust = -0.003, hjust = -0.003) +
+        draw_plot(p) +
+        draw_image(uni_legend_right, scale = .5, vjust = 0.25, hjust = -0.25)
+      
     }
     
-    ggdraw() + 
-      draw_image(dropshadow1, scale = 1.49, vjust = -0.003, hjust = -0.003) +
-      draw_plot(p) +
-      draw_image(uni_legend_right, scale = .5, vjust = 0.25, hjust = -0.25)
     
   }, bg = "transparent")
   
@@ -206,7 +211,7 @@ shinyServer(function(input, output, session) {
     mapdeck(style = "mapbox://styles/dwachsmuth/ckh6cg4wg05nw19p5yrs9tib7",
             token = paste0("pk.eyJ1IjoiZHdhY2hzbXV0aCIsImEiOiJja2g2Y2JpbDc",
                            "wMDc5MnltbWpja2xpYTZhIn0.BXdU7bsQYWcSwmmBx8DNqQ"),
-            zoom = 10.1, location = c(-73.58, 45.39), pitch = 0) 
+            zoom = 10.1, location = c(-73.58, 45.53), pitch = 0) 
     })
   
   
@@ -273,31 +278,53 @@ shinyServer(function(input, output, session) {
   
   ## Render the info table -----------------------------------------------------
   
-  output$bivariate_table <- renderTable({
+  output$active_info <- renderUI({
     
     if (input$data_for_plot_right == " ") {
       
-      tibble(
-        "Descriptive" = c(
-          "Minimum", "Maximum", "Median", "Mean", "Standard deviation"),
-        "Value" = c(
-          min(data_for_plot_r_bivar()$left_variable_full, na.rm = TRUE),
-          max(data_for_plot_r_bivar()$left_variable_full, na.rm = TRUE),
-          median(data_for_plot_r_bivar()$left_variable_full, na.rm = TRUE),
-          mean(data_for_plot_r_bivar()$left_variable_full, na.rm = TRUE),
-          sd(data_for_plot_r_bivar()$left_variable_full, na.rm = TRUE)))
+      scale_singular <- case_when(
+        rz$zoom == "OUT" ~ "borough/city",
+        rz$zoom == "IN" ~ "census tract",
+        TRUE ~ "dissemination area"
+      )
+      
+      scale_plural <- case_when(
+        scale_singular == "borough/city" ~ "boroughs or cities",
+        scale_singular == "census tract" ~ "census tracts",
+        scale_singular == "dissemination area" ~ "dissemination areas"
+      )
+      
+      min_val <- round(min(data_for_plot_r_bivar()$left_variable_full, 
+                           na.rm = TRUE), 2)
+      
+      max_val <- round(max(data_for_plot_r_bivar()$left_variable_full, 
+                           na.rm = TRUE), 2)
+      
+      mean_val <- round(mean(data_for_plot_r_bivar()$left_variable_full, 
+                             na.rm = TRUE), 2)
+      
+      sd_minus <- round(mean(data_for_plot_r_bivar()$left_variable_full, 
+                             na.rm = TRUE) - 
+                          sd(data_for_plot_r_bivar()$left_variable_full, 
+                             na.rm = TRUE), 2)
+      
+      sd_plus <- round(mean(data_for_plot_r_bivar()$left_variable_full, 
+                            na.rm = TRUE) +
+                         sd(data_for_plot_r_bivar()$left_variable_full, 
+                            na.rm = TRUE), 2)
+      
+      HTML(glue("At the {scale_singular} scale, the CanALE index varies from ",
+                "{min_val} to {max_val}, with an average value of {mean_val}. ",
+                "Two thirds of {scale_plural} have a score between {sd_minus} ",
+                "and {sd_plus}."))
       
     } else {
       
-      tibble(
-        "Descriptive" = c("Correlation"),
-        "Value" = c(cor(data_for_plot_r_bivar()$left_variable_full, 
-                        data_for_plot_r_bivar()$right_variable_full))
-      )
-      
-    }
-  })
+      HTML(cor(data_for_plot_r_bivar()$left_variable_full, 
+               data_for_plot_r_bivar()$right_variable_full))
   
+    }
+  })  
   
   ## Render the histogram/scatterplot ------------------------------------------
   

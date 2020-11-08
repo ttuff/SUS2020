@@ -31,6 +31,7 @@ library(leaflet)
 library(DT)
 library(gghighlight)
 library(qs)
+library(glue)
 
 
 # Functions ---------------------------------------------------------------
