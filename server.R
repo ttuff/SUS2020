@@ -220,8 +220,29 @@ shinyServer(function(input, output, session) {
   })
   
   
-  ## Observe click status and produce reactive values --------------------------
+  ## Observe and change click status -------------------------------------------
   
+  # Update poly_selected on click
+  observeEvent(input$active_map_polygon_click, {
+    
+    lst <- jsonlite::fromJSON(input$active_map_polygon_click)
+    rz$poly_selected <- lst$object$properties$id
+    
+    })
+  
+  # Clear click status if prompted
+  observeEvent(input$active_clear_selection, {rz$poly_selected <- NA})
+  
+  # Output polygon select status
+  output$active_poly_selected <- reactive({
+    if (is.na(rz$poly_selected)) FALSE else TRUE})
+  outputOptions(output, "active_poly_selected", suspendWhenHidden = FALSE)
+  
+  # Clear polygon select on zoom change
+  observeEvent(rz$zoom, {rz$poly_selected <- NA}, ignoreInit = TRUE)
+  
+  # Clear polygon select on tab change
+  observeEvent(input$tabs, {rz$poly_selected <- NA}, ignoreInit = TRUE)
   
   
   
@@ -234,68 +255,7 @@ shinyServer(function(input, output, session) {
             zoom = 10.1, location = c(-73.58, 45.53), pitch = 0) 
     })
   
-  
-  ## Update link text ----------------------------------------------------------
-  
-  # More info
-  output$more_info_status <- reactive({
-    input$more_info %% 2 == 1
-  })
-  
-  outputOptions(output, "more_info_status", suspendWhenHidden = FALSE)
 
-  observeEvent(input$more_info, {
-    
-    print(data_bivar())
-    
-    if (input$more_info %% 2 == 1) txt <- "Hide" else txt <- "Learn more"
-    updateActionButton(session, "more_info", label = txt)
-    
-  })
-  
-  # Hide compare status
-  output$active_hide_compare_status <- reactive({
-    input$active_hide_compare %% 2 == 0
-  })
-  
-  outputOptions(output, "active_hide_compare_status", suspendWhenHidden = FALSE)
-
-  observeEvent(input$active_hide_compare, {
-    
-    if (input$active_hide_compare %% 2 == 0) txt <- "Hide" else txt <- "Show"
-    updateActionButton(session, "active_hide_compare", label = txt)
-    
-  })
-  
-  # Hide explore status
-  output$active_hide_explore_status <- reactive({
-    input$active_hide_explore %% 2 == 0
-  })
-  
-  outputOptions(output, "active_hide_explore_status", suspendWhenHidden = FALSE)
-
-  observeEvent(input$active_hide_explore, {
-    
-    if (input$active_hide_explore %% 2 == 0) txt <- "Hide" else txt <- "Show"
-    updateActionButton(session, "active_hide_explore", label = txt)
-    
-  })
-  
-  # Hide DYK status
-  output$active_hide_dyk_status <- reactive({
-    input$active_hide_dyk %% 2 == 0
-  })
-  
-  outputOptions(output, "active_hide_dyk_status", suspendWhenHidden = FALSE)
-  
-  observeEvent(input$active_hide_dyk, {
-    
-    if (input$active_hide_dyk %% 2 == 0) txt <- "Hide" else txt <- "Show"
-    updateActionButton(session, "active_hide_dyk", label = txt)
-    
-  })
-  
-  
   ## Render the info table -----------------------------------------------------
   
   output$active_info <- renderUI({
@@ -329,7 +289,7 @@ shinyServer(function(input, output, session) {
       quant_high <- round(quantile(vec, c(1/3, 2/3))[2], 2)
       
       # Case for no poly selected
-      if (!rz$poly_select) {
+      if (is.na(rz$poly_selected)) {
         
         HTML(
           glue("At the {scale_singular} scale, the CanALE index varies from ",
@@ -341,7 +301,7 @@ shinyServer(function(input, output, session) {
       # Case for selected poly
       } else {
         
-        dat <- data_bivar() %>% filter(ID == rz$click)
+        dat <- data_bivar() %>% filter(ID == rz$poly_selected)
         
         place_name <- case_when(
           scale_singular == "borough/city" ~ 
@@ -409,7 +369,8 @@ shinyServer(function(input, output, session) {
     # Histogram for a single variable
     if (input$data_for_plot_right == " ") {
       
-      if (!rz$poly_select) {
+      # If no poly is selected
+      if (is.na(rz$poly_selected)) {
         
         data_bivar() %>%
           filter(!is.na(left_variable)) %>%
@@ -424,10 +385,12 @@ shinyServer(function(input, output, session) {
                 panel.grid.major.x = element_blank(),
                 panel.grid.minor.y = element_blank())    
         
+      # If there is an active selection
       } else {
         
+        # If the selection is NA
         if ({data_bivar() %>% 
-            filter(ID == rz$click) %>% 
+            filter(ID == rz$poly_selected) %>% 
             filter(!is.na(left_variable)) %>% 
             nrow()} == 0) {
           
@@ -442,13 +405,15 @@ shinyServer(function(input, output, session) {
                   panel.grid.major.x = element_blank(),
                   panel.grid.minor.y = element_blank())
           
+        # If the selection should be plotted
         } else {
           
           data_bivar() %>%
             filter(!is.na(left_variable)) %>%
             ggplot(aes(left_variable_full)) +
-            geom_histogram(aes(fill = round(left_variable_full) == 
-                                 round(left_variable_full[ID == rz$click])), 
+            geom_histogram(aes(
+              fill = round(left_variable_full) == 
+                round(left_variable_full[ID == rz$poly_selected])), 
                            bins = 25) +
             scale_fill_manual(values = colors[c(3, 1)],
                               na.translate = FALSE) +
@@ -467,7 +432,7 @@ shinyServer(function(input, output, session) {
       
       y_var_name <- as.character(input$data_for_plot_right)
       
-      if (nrow(filter(data_bivar(), ID == rz$click)) != 1) {
+      if (nrow(filter(data_bivar(), ID == rz$poly_selected)) != 1) {
         
         data_bivar() %>% 
           ggplot(aes(left_variable_full, right_variable_full)) +
@@ -505,13 +470,6 @@ shinyServer(function(input, output, session) {
       paste0("<ul>", ., "</ul>") %>%
       HTML()
   })
-  
-  
-  ## Clear click status --------------------------------------------------------
-  
-  observeEvent(input$active_clear_selection, {rz$poly_select <- FALSE})
-  
-  
   
 
   ## Update map in response to variable changes, zooming, or options -----------
@@ -558,146 +516,103 @@ shinyServer(function(input, output, session) {
             light_settings = list(
               lightsPosition = c(0,0, 5000), 
               numberOfLights = 1, 
-              ambientRatio = 1)) #%>% 
-        # mapdeck_view(zoom = input$active_map_view_change$zoom,
-        #              location = c(input$active_map_view_change$longitude, 
-        #                           input$active_map_view_change$latitude),
-        #              bearing = input$active_map_view_change$bearing,
-        #              pitch = 35)
+              ambientRatio = 1))
         
       }
       
     })
   
   
-  ## Observe polygon clicks and deliver output ---------------------------------
+  ## Add highlight polygon on click --------------------------------------------
   
-  observeEvent({input$active_map_polygon_click},{
+  observeEvent(rz$poly_selected, {
     
-    lst <- jsonlite::fromJSON(input$active_map_polygon_click)
+    if (!is.na(rz$poly_selected)) {
+      
+      print(paste0("Selecting polygon ", rz$poly_selected))
+      
+      mapdeck_update(map_id = "active_map")  %>%
+        add_polygon(
+          data = {
+            data_bivar() %>% 
+              filter(ID == rz$poly_selected)},
+          stroke_width = "width",
+          stroke_colour = "#000000",
+          fill_colour = "fill",
+          update_view = FALSE,
+          layer_id = "poly_highlight",
+          auto_highlight = TRUE,
+          highlight_colour = '#FFFFFF90',
+          legend = FALSE,
+          light_settings = list(
+            lightsPosition = c(0,0, 5000),
+            numberOfLights = 1,
+            ambientRatio = 1))
+      
+    }
     
-    rz$click <- lst$object$properties$id
+    if (is.na(rz$poly_selected)) {
+      
+      print("Removing selection")
+      
+      mapdeck_update(map_id = "active_map")  %>%
+        clear_polygon(layer_id = "poly_highlight")
+      
+    }
     
-    rz$poly_select = TRUE
+  })
     
-    # temporary_here <- data_bivar() 
-    # #print(temporary_here$fill)
-    # temporary_here[which(temporary_here$fill != lst$object$properties$fill_colour),5] <- 0
-    # temporary_here[which(temporary_here$fill == lst$object$properties$fill_colour),5] <- 4000
-    # # print("left_variable")
-    # #print(crs(data_for_plot_bivariate))
-    # 
-    # if( rz$zoom == "ISO"){
-    #   
-    #   # mapdeck_update(map_id = "active_map") %>%  
-    #   #  clear_polygon(layer_id = "polylayer")
-    #   
-    #   # print("left_variable")
-    #   #print(crs(data_for_plot_bivariate))
-    #   mapdeck_update(map_id = "active_map")  %>%  
-    #     clear_polygon(layer_id = "polylayer") %>%
-    #     add_polygon(data = isochrones,
-    #                 fill_colour = "time",
-    #                 fill_opacity = 0.5,
-    #                 legend = TRUE,
-    #                 layer_id = "isolayer",
-    #                 update_view = FALSE)  
-    # } 
-    # 
-    # if( rz$zoom == "IN"){
-    #   
-    #   # mapdeck_update(map_id = "active_map") %>%  
-    #   #  clear_polygon(layer_id = "polylayer")
-    #   
-    #   # print("left_variable")
-    #   #print(crs(data_for_plot_bivariate))
-    #   mapdeck_update(map_id = "active_map")  %>%
-    #     add_polygon(
-    #       data = temporary_here
-    #       , fill_colour = "fill"
-    #       , fill_opacity = 0
-    #       , elevation = "elevation"
-    #       , update_view = FALSE
-    #       , layer_id = "polylayer"
-    #       , auto_highlight = TRUE
-    #       , highlight_colour = '#FFFFFF90'
-    #       , light_settings =  list(
-    #         lightsPosition = c(-73.75,45, 5000, -74,45.5, 10000)
-    #         , numberOfLights = 2
-    #         , ambientRatio = 1
-    #       ) 
-    #     )  
-    # }
-    # if (rz$zoom == "OUT") {
-    #   mapdeck_update(map_id = "active_map")  %>%  
-    #     clear_polygon(layer_id = "polylayer") %>%  
-    #     clear_polygon(layer_id = "isolayer")
-    # } 
+  
+  ## Update link text ----------------------------------------------------------
+  
+  # More info
+  output$more_info_status <- reactive(input$more_info %% 2 == 1)
+  outputOptions(output, "more_info_status", suspendWhenHidden = FALSE)
+  
+  observeEvent(input$more_info, {
+    
+    if (input$more_info %% 2 == 1) txt <- "Hide" else txt <- "Learn more"
+    updateActionButton(session, "more_info", label = txt)
+    
+  })
+  
+  # Hide compare status
+  output$active_hide_compare_status <- 
+    reactive(input$active_hide_compare %% 2 == 0)
+  outputOptions(output, "active_hide_compare_status", suspendWhenHidden = FALSE)
+  
+  observeEvent(input$active_hide_compare, {
+    
+    if (input$active_hide_compare %% 2 == 0) txt <- "Hide" else txt <- "Show"
+    updateActionButton(session, "active_hide_compare", label = txt)
+    
+  })
+  
+  # Hide explore status
+  output$active_hide_explore_status <- 
+    reactive(input$active_hide_explore %% 2 == 0)
+  outputOptions(output, "active_hide_explore_status", suspendWhenHidden = FALSE)
+  
+  observeEvent(input$active_hide_explore, {
+    
+    if (input$active_hide_explore %% 2 == 0) txt <- "Hide" else txt <- "Show"
+    updateActionButton(session, "active_hide_explore", label = txt)
+    
+  })
+  
+  # Hide DYK status
+  output$active_hide_dyk_status <- reactive(input$active_hide_dyk %% 2 == 0)
+  outputOptions(output, "active_hide_dyk_status", suspendWhenHidden = FALSE)
+  
+  observeEvent(input$active_hide_dyk, {
+    
+    if (input$active_hide_dyk %% 2 == 0) txt <- "Hide" else txt <- "Show"
+    updateActionButton(session, "active_hide_dyk", label = txt)
     
   })
   
   
-  ## Output polygon select status --------------------------------------------
-    
-    output$active_poly_select <- reactive(rz$poly_select)
-    
-    outputOptions(output, "active_poly_select", suspendWhenHidden = FALSE)
-    
-    
-    ## Clear polygon select on zoom change -------------------------------------
-    
-    observeEvent(rz$zoom, {rz$poly_select <- FALSE}, ignoreInit = TRUE)
-    
-    
-    ## Flush status on tab change ----------------------------------------------
-    
-    observeEvent(input$tabs, {
-      rz$poly_select <- FALSE
-      rz$click <- NA
-      }, ignoreInit = TRUE)
-    
-    
-    ## Add highlight polygon on click ------------------------------------------
-
-    observeEvent(
-      {
-        rz$poly_select
-        rz$click
-        }, 
-      {
-        if (rz$poly_select && !is.na(rz$click)) {
-          
-          print(rz$click)
-          
-          mapdeck_update(map_id = "active_map")  %>%
-            add_polygon(
-              data = {
-                data_bivar() %>% 
-                  filter(ID == rz$click)},
-              stroke_width = "width",
-              stroke_colour = "#000000",
-              fill_colour = "fill",
-              update_view = FALSE,
-              layer_id = "poly_highlight",
-              auto_highlight = TRUE,
-              highlight_colour = '#FFFFFF90',
-              legend = FALSE,
-              light_settings = list(
-                lightsPosition = c(0,0, 5000),
-                numberOfLights = 1,
-                ambientRatio = 1))
-          
-          } else {
-            
-            print("Removing selection")
-            
-            mapdeck_update(map_id = "active_map")  %>%
-              clear_polygon(layer_id = "poly_highlight")
-            
-            }
-
-      }, ignoreInit = TRUE)
-    
+  ##############################################################################
   
   
   ### Pedestrian realm #########################################################

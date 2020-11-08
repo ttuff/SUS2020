@@ -302,8 +302,7 @@ qz <- reactiveValues(zoom_level = 'ISO')
 rz_pedestrian <- reactiveValues(zoom = 'OUT')
 
 rz <- reactiveValues(zoom = 'OUT',
-                     click = NA,
-                     poly_select = FALSE)
+                     poly_selected = NA)
 
 
 # Commute mode change globals ---------------------------------------------

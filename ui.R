@@ -215,7 +215,7 @@ shinyUI(
               condition = "output.active_hide_explore_status == 1",
               htmlOutput("active_info"),
               conditionalPanel(
-                condition = "output.active_poly_select == 1",
+                condition = "output.active_poly_selected == 1",
                 actionLink(inputId = "active_clear_selection", 
                            label = "Clear selection")),
               plotOutput("bivariate_graph", height = 150)
