@@ -156,7 +156,7 @@ shinyUI(
         tabItem(
           tabName = "active",
           
-          mapdeckOutput(outputId = 'myMap', height = "1200px"),
+          mapdeckOutput(outputId = 'active_map', height = "1200px"),
           
           tags$head(tags$style(HTML('
           #title_bar {border-width: 10px; border-color: rgb(255, 255, 255);}

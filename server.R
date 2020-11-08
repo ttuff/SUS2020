@@ -207,7 +207,7 @@ shinyServer(function(input, output, session) {
   
   ## Render the map ------------------------------------------------------------
   
-  output$myMap <- renderMapdeck({
+  output$active_map <- renderMapdeck({
     mapdeck(style = "mapbox://styles/dwachsmuth/ckh6cg4wg05nw19p5yrs9tib7",
             token = paste0("pk.eyJ1IjoiZHdhY2hzbXV0aCIsImEiOiJja2g2Y2JpbDc",
                            "wMDc5MnltbWpja2xpYTZhIn0.BXdU7bsQYWcSwmmBx8DNqQ"),
@@ -494,14 +494,14 @@ shinyServer(function(input, output, session) {
   
   ## Observe zoom and coalesce to three values ---------------------------------
   
-  observeEvent(input$myMap_view_change$zoom, {
+  observeEvent(input$active_map_view_change$zoom, {
     
     rz$zoom <- case_when(
-      input$myMap_view_change$zoom >= 10.5 && 
-        input$myMap_view_change$zoom <= 12 ~ "IN",
-      input$myMap_view_change$zoom > 12 &&
-        input$myMap_view_change$zoom < 14 ~ "ISO",
-      input$myMap_view_change$zoom >= 14 ~ "ISO_2",
+      input$active_map_view_change$zoom >= 10.5 && 
+        input$active_map_view_change$zoom <= 12 ~ "IN",
+      input$active_map_view_change$zoom > 12 &&
+        input$active_map_view_change$zoom < 14 ~ "ISO",
+      input$active_map_view_change$zoom >= 14 ~ "ISO_2",
       TRUE ~ "OUT")
     
   })
@@ -518,7 +518,7 @@ shinyServer(function(input, output, session) {
     {
       if (!input$active_extrude) {
         
-        mapdeck_update(map_id = "myMap")  %>%  
+        mapdeck_update(map_id = "active_map")  %>%  
           clear_polygon(layer_id = "extrude") %>%
           add_polygon(
             data = data_bivar(), 
@@ -527,6 +527,7 @@ shinyServer(function(input, output, session) {
             fill_colour = "fill_opacity", 
             update_view = FALSE,
             layer_id = "polylayer", 
+            id = "ID",
             auto_highlight = TRUE, 
             highlight_colour = '#FFFFFF90', 
             legend = FALSE, 
@@ -536,7 +537,7 @@ shinyServer(function(input, output, session) {
               ambientRatio = 1))
         
       } else {
-        mapdeck_update(map_id = "myMap")  %>%  
+        mapdeck_update(map_id = "active_map")  %>%  
           clear_polygon(layer_id = "polylayer") %>%
           add_polygon(
             data = data_bivar(), 
@@ -551,10 +552,10 @@ shinyServer(function(input, output, session) {
               lightsPosition = c(0,0, 5000), 
               numberOfLights = 1, 
               ambientRatio = 1)) #%>% 
-        # mapdeck_view(zoom = input$myMap_view_change$zoom,
-        #              location = c(input$myMap_view_change$longitude, 
-        #                           input$myMap_view_change$latitude),
-        #              bearing = input$myMap_view_change$bearing,
+        # mapdeck_view(zoom = input$active_map_view_change$zoom,
+        #              location = c(input$active_map_view_change$longitude, 
+        #                           input$active_map_view_change$latitude),
+        #              bearing = input$active_map_view_change$bearing,
         #              pitch = 35)
         
       }
@@ -564,22 +565,14 @@ shinyServer(function(input, output, session) {
   
   ## Observe polygon clicks and deliver output ---------------------------------
   
-  observeEvent({input$myMap_polygon_click},{
-    js <- input$myMap_polygon_click
+  observeEvent({input$active_map_polygon_click},{
+    js <- input$active_map_polygon_click
     lst <- jsonlite::fromJSON(js)
     
-    int_point <- st_sfc(st_point(c(lst$lon, lst$lat)), crs = 4326)
-    
-    print(int_point)
-    
     rz$click <- 
-      data_bivar() %>% 
-      filter(lengths(st_intersects(geometry, int_point)) > 0) %>% 
-      pull(ID)
+      lst$object$properties$id
     
     rz$poly_select = TRUE
-    
-    print(rz$click)
     
     # temporary_here <- data_bivar() 
     # #print(temporary_here$fill)
@@ -590,12 +583,12 @@ shinyServer(function(input, output, session) {
     # 
     # if( rz$zoom == "ISO"){
     #   
-    #   # mapdeck_update(map_id = "myMap") %>%  
+    #   # mapdeck_update(map_id = "active_map") %>%  
     #   #  clear_polygon(layer_id = "polylayer")
     #   
     #   # print("left_variable")
     #   #print(crs(data_for_plot_bivariate))
-    #   mapdeck_update(map_id = "myMap")  %>%  
+    #   mapdeck_update(map_id = "active_map")  %>%  
     #     clear_polygon(layer_id = "polylayer") %>%
     #     add_polygon(data = isochrones,
     #                 fill_colour = "time",
@@ -607,12 +600,12 @@ shinyServer(function(input, output, session) {
     # 
     # if( rz$zoom == "IN"){
     #   
-    #   # mapdeck_update(map_id = "myMap") %>%  
+    #   # mapdeck_update(map_id = "active_map") %>%  
     #   #  clear_polygon(layer_id = "polylayer")
     #   
     #   # print("left_variable")
     #   #print(crs(data_for_plot_bivariate))
-    #   mapdeck_update(map_id = "myMap")  %>%
+    #   mapdeck_update(map_id = "active_map")  %>%
     #     add_polygon(
     #       data = temporary_here
     #       , fill_colour = "fill"
@@ -630,7 +623,7 @@ shinyServer(function(input, output, session) {
     #     )  
     # }
     # if (rz$zoom == "OUT") {
-    #   mapdeck_update(map_id = "myMap")  %>%  
+    #   mapdeck_update(map_id = "active_map")  %>%  
     #     clear_polygon(layer_id = "polylayer") %>%  
     #     clear_polygon(layer_id = "isolayer")
     # } 
@@ -650,7 +643,42 @@ shinyServer(function(input, output, session) {
     
     ## Flush status on tab change ----------------------------------------------
     
+    observeEvent(input$tabs, {
+      rz$poly_select <- FALSE
+      rz$click <- NA
+      }, ignoreInit = TRUE)
     
+    
+    # ## Add highlight polygon on click ------------------------------------------
+    # 
+    # observeEvent(rz$poly_select, {
+    #   
+    #   if (rz$poly_select) {
+    #     
+    #     mapdeck_update(map_id = "active_map")  %>%  
+    #       add_polygon( 
+    #         data = filter(data_bivar(), ID == rz$click), 
+    #         stroke_width = "width",
+    #         stroke_colour = "#FFFFFF",
+    #         fill_colour = "#FF0000", 
+    #         update_view = FALSE,
+    #         layer_id = "poly_highlight", 
+    #         auto_highlight = TRUE, 
+    #         highlight_colour = '#FFFFFF90', 
+    #         legend = FALSE, 
+    #         light_settings = list(
+    #           lightsPosition = c(0,0, 5000), 
+    #           numberOfLights = 1, 
+    #           ambientRatio = 1))
+    #     }
+    #   
+    #   if (!rz$poly_select) {
+    #     
+    #     mapdeck_update(map_id = "active_map")  %>%  
+    #       clear_polygon(layer_id = "poly_highlight")
+    #     }
+    #   
+    #   }, ignoreInit = TRUE)
     
   }) 
   
