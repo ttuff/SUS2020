@@ -16,3 +16,10 @@ ale_index,median_income,"Montréal-Est has the highest proportion of people with
 ale_index,median_income,"Villeray-Saint-Michel-Parc-Extension has the highest proportion of people with income less than $50,000 (57.7%) of all boroughs or municipalities with high active living potential. "
 ale_index,immigrant_new_prop,Côte-des-Neiges-Notre-Dame-de-Grâce has the highest proportion of new immigrants (12%)  of any borough with high active living potential (average ALE class >4 across the entire borough). It also has the highest proportion of immigrants in general (46.7%) for the same conditions. 
 ale_index,immigrant_new_prop,"Senneville has the highest proportion of new immigrants (4.4%) of any borough or municipality with low active living potential, followed by L'Île-Bizard-Sainte-Geneviève (3.6%). "
+ct_ped,ct_ped,"The top 3 boroughs that have the highest proportion of people living in census tracts with a low capacity for pedestrian physical distancing were 1) Le Plateau-Mont-Royal (74%), 2) Villeray-Saint-Michel-Parc-Extension (65%) and 3) Montréal Nord (60%). "
+da_ped,da_ped,"14.8% of Montreal Agglomeration's total population live in DAs with a pedestrian social distancing capacity below 25%. Of those, 76.31% were not directly serviced by the original May 15th expanded active transit plan, and  79.85% were not directly serviced by the revised July 25th plan."
+da_ped,agg_proximity_score_quant3,
+da_ped,net_median_income_quant3,"DAs with a capacity for pedestrian social distancing less than 25% contain, on average, a net median income of $44,773 compared to $54,930 for the city as a whole and $61,651 for DAs with over 100% capacity."
+da_ped,visible_minority_pop_quant3,"DAs with a capacity for pedestrian social distancing less than 25% contain, on average, a 50.4% visible minority population compared to 32% for the city as a whole and 28% for DAs with over 100% capacity."
+da_ped,immigrants_quant3,"DAs with a capacity for pedestrian social distancing less than 25% contain, on average, a 45.25% immigrant population compared to 33% for the city as a whole and 30% for DAs with over 100% capacity."
+sidewalk_ped,sidewalk_ped,

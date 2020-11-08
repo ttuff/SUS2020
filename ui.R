@@ -424,7 +424,10 @@ shinyUI(
           conditionalPanel(
             condition = "output.pedestrian_hide_explore_status == 1",
             htmlOutput("pedestrian_info"),
-            # conditionalPanel to add later which clears selection if a polygon is clicked
+            conditionalPanel(
+              condition = "output.pedestrian_poly_selected == 1",
+              actionLink(inputId = "pedestrian_clear_selection", 
+                         label = "Clear selection")),
             plotOutput("pedestrian_graph", height = 150)),
           hr(),
           fluidRow(

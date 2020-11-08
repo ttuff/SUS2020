@@ -1013,6 +1013,29 @@ shinyServer(function(input, output, session) {
   })
   outputOptions(output, "zoom", suspendWhenHidden = FALSE)
   
+  ## Observe and change click status -------------------------------------------
+  
+  # Update poly_selected on click
+  observeEvent(input$PedestrianMap_polygon_click, {
+    print(rz_pedestrian$poly_selected)
+    lst_ped <- jsonlite::fromJSON(input$PedestrianMap_polygon_click)
+    rz_pedestrian$poly_selected <- lst_ped$object$properties$id
+  })
+  
+  # Clear click status if prompted
+  observeEvent(input$pedestrian_clear_selection, {rz_pedestrian$poly_selected <- NA})
+  
+  # Output polygon select status
+  output$pedestrian_poly_selected <- reactive({
+    if (is.na(rz_pedestrian$poly_selected)) FALSE else TRUE})
+  outputOptions(output, "pedestrian_poly_selected", suspendWhenHidden = FALSE)
+  
+  # Clear polygon select on zoom change
+  observeEvent(rz_pedestrian$zoom, {rz_pedestrian$poly_selected <- NA}, ignoreInit = TRUE)
+  
+  # Clear polygon select on tab change
+  observeEvent(input$tabs, {rz_pedestrian$poly_selected <- NA}, ignoreInit = TRUE)
+  
   ## Titles & and Link Text  -------------------------------------------------
   
   # Set title across zoom levels
@@ -1413,6 +1436,45 @@ shinyServer(function(input, output, session) {
               panel.grid.major.x = element_blank(),
               panel.grid.minor.y = element_blank())
     }
+  })
+  
+  ## Render the did-you-knows --------------------------------------------------
+  
+  output$did_you_know_ped <- renderUI({
+    if (rz_pedestrian$zoom == "OUT") {
+      did_you_know %>% 
+        filter(right_variable == "ct_ped") %>% 
+        pull(text) %>% 
+        paste("<li> ", ., collapse = "") %>% 
+        paste0("<ul>", ., "</ul>") %>%
+        HTML()
+    }
+    else if (rz_pedestrian$zoom == "IN" & input$switch_biv == FALSE) {
+      did_you_know %>% 
+        filter(right_variable == "da_ped") %>% 
+        pull(text) %>% 
+        paste("<li> ", ., collapse = "") %>% 
+        paste0("<ul>", ., "</ul>") %>%
+        HTML()
+    }
+    
+    else if (rz_pedestrian$zoom == "IN" & input$switch_biv == TRUE) {
+      did_you_know %>% 
+        filter(right_variable == input$data_for_plot_ped) %>% 
+        pull(text) %>% 
+        paste("<li> ", ., collapse = "") %>% 
+        paste0("<ul>", ., "</ul>") %>%
+        HTML()
+    }
+    else {
+      did_you_know %>% 
+        filter(right_variable == "sidewalk_ped") %>% 
+        pull(text) %>% 
+        paste("<li> ", ., collapse = "") %>% 
+        paste0("<ul>", ., "</ul>") %>%
+        HTML()
+    }
+    
   })
   
   #####################
