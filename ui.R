@@ -463,60 +463,79 @@ shinyUI(
         
         tabItem(
           tabName = "mode",
-          fluidPage(mapdeckOutput(outputId = "qzmyMap", height = "1200px"),
-                    absolutePanel(
-                      id = "controls", class = "panel panel-default",
-                      draggable = FALSE, top = 55, left = 300,
-                      width = 0, height = 0,
-                      dropdownButton(
-                        label = "",
-                        inputId = "drop",
-                        icon = icon("gear"),
-                        status = "primary",
-                        circle = TRUE,
-                        width = 330,
-                        h4(strong("Modal Shift Scenarios")),
-                        radioGroupButtons("radio1",label = "Predefined Scenarios",
-                                          checkIcon = list(
-                                            yes = tags$i(class = "fa fa-check-square", 
-                                                         style = "color: steelblue"),
-                                            no = tags$i(class = "fa fa-square-o", 
-                                                        style = "color: steelblue")),
-                                          choices = list("Scenario 1" = 1,"Scenario 2" = 2, "Reset" = 3),
-                                          selected = 3),
-                        sliderTextInput(
-                          inputId = "slider1",
-                          label = "Cycling Distance (km):", 
-                          choices = seq(from = 1,
-                                        to = 10,
-                                        by = 0.1),
-                          grid = TRUE),
-                        sliderTextInput(
-                          inputId = "slider2",
-                          label = "Elevation Gain (m):", 
-                          choices = seq(from = 10,
-                                        to = 55,
-                                        by = 5),
-                          grid = TRUE
-                        ),
-                        sliderTextInput(
-                          inputId = "slider3",
-                          label = "Time Ratio:", 
-                          choices = seq(from = 1.0,
-                                        to = 3.0,
-                                        by = 0.2),
-                          grid = TRUE
-                        ),
-                        # materialSwitch(inputId = "switch1", 
-                                  #                label = "Modelled Cycling Route", 
-                                  #                status = "primary", value = FALSE),
-                        hr(),
-                        materialSwitch(inputId = "switch2", 
-                                       label = "Cycling Network", 
-                                       status = "primary", value = TRUE)
-                        
-                      )
-                    ),
+          tags$head(tags$style(HTML('
+          #title_bar_commute {border-width: 10px; border-color: rgb(255, 255, 255);}'))),
+          
+          mapdeckOutput(outputId = "qzmyMap", height = "1200px"),
+          
+          absolutePanel(
+            id = "title_bar_commute", class = "panel panel-default", 
+            draggable = FALSE, top = 70, left = 270, width = "40%",
+            h2("Shifting car trips to cycling"),
+            p(title_text %>% 
+                filter(tab == "commute", type == "main") %>% 
+                pull(text)),
+            actionLink("commute_more_info", "Learn more"),
+            conditionalPanel(
+              condition = "output.commute_more_info_status == 1",
+              HTML(title_text %>% 
+                     filter(tab == "commute", type == "extra") %>% 
+                     pull(text)))),
+            
+          absolutePanel(
+            id = "controls", class = "panel panel-default",
+            draggable = FALSE, top = 55, left = 300,
+            width = 0, height = 0,
+            dropdownButton(
+              label = "",
+              inputId = "drop",
+              icon = icon("gear"),
+              status = "primary",
+              circle = TRUE,
+              width = 330,
+              h4(strong("Modal Shift Scenarios")),
+              radioGroupButtons("radio1",label = "Predefined Scenarios",
+                                checkIcon = list(
+                                  yes = tags$i(class = "fa fa-check-square", 
+                                               style = "color: steelblue"),
+                                  no = tags$i(class = "fa fa-square-o", 
+                                              style = "color: steelblue")),
+                                choices = list("Scenario 1" = 1,"Scenario 2" = 2, "Reset" = 3),
+                                selected = 3),
+              sliderTextInput(
+                inputId = "slider1",
+                label = "Cycling Distance (km):", 
+                choices = seq(from = 1,
+                              to = 10,
+                              by = 0.1),
+                grid = TRUE),
+              sliderTextInput(
+                inputId = "slider2",
+                label = "Elevation Gain (m):", 
+                choices = seq(from = 10,
+                              to = 55,
+                              by = 5),
+                grid = TRUE
+              ),
+              sliderTextInput(
+                inputId = "slider3",
+                label = "Time Ratio:", 
+                choices = seq(from = 1.0,
+                              to = 3.0,
+                              by = 0.2),
+                grid = TRUE
+              ),
+              # materialSwitch(inputId = "switch1", 
+              #                label = "Modelled Cycling Route", 
+              #                status = "primary", value = FALSE),
+              hr(),
+              materialSwitch(inputId = "switch2", 
+                             label = "Cycling Network", 
+                             status = "primary", value = TRUE)
+              
+            )
+          ),
+          
                     absolutePanel(
                       id="panel1",
                       style="z-index:500;",
@@ -553,5 +572,5 @@ shinyUI(
                         h4(strong("VMT Reduction")),
                         DT::DTOutput("table")
                         
-                        )))))))
+                        ))))))
   )
