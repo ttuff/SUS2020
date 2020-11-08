@@ -147,8 +147,17 @@ shinyUI(
         ## Home page -----------------------------------------------------------
         
         tabItem(tabName = "home", 
-                fluidPage(imageOutput("homepic", height = 600), 
-                          align = "center")),
+                fluidPage(
+                  fluidRow(imageOutput("homepic", height = 600), 
+                           align = "center"),
+                  fluidRow(hr()),
+                  fluidRow(br()),
+                  fluidRow(imageOutput("mssipic", height = 200), 
+                           align = "center"),
+                  fluidRow(h3(
+                    "An initiative of the McGill Sustainability Systems Initiative"),
+                    align = "center")
+                  )),
         
         
         ## Active living potential ---------------------------------------------
