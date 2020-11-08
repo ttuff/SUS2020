@@ -1306,6 +1306,32 @@ shinyServer(function(input, output, session) {
       
       })
   
+  ## Render the info table -----------------------------------------------------
+  
+  output$pedestrian_info <- renderUI({
+    census_analysis_ct <- census_analysis_ct %>% 
+      filter(social_distancing_capacity_pop_perc_2m != Inf,
+             population.x >= 500)
+    
+    if (rz_pedestrian$zoom == "OUT") {
+      
+      min_ped_ct <- round(min(census_analysis_ct$social_distancing_capacity_pop_perc_2m), 2)
+      max_ped_ct <- round(max(census_analysis_ct$social_distancing_capacity_pop_perc_2m), 2)
+      mean_ped_ct <- round(mean(census_analysis_ct$social_distancing_capacity_pop_perc_2m), 2)
+      median_ped_ct <- round(median(census_analysis_ct$social_distancing_capacity_pop_perc_2m), 2)
+      sd_ped_ct <- sd(census_analysis_ct$social_distancing_capacity_pop_perc_2m)
+      quant_low_ped_ct <- round(quantile(census_analysis_ct$social_distancing_capacity_pop_perc_2m, c(1/3, 2/3))[1], 2)
+      quant_high_ped_ct <- round(quantile(census_analysis_ct$social_distancing_capacity_pop_perc_2m, c(1/3, 2/3))[2], 2)
+        
+        HTML(
+          glue("At the census tract scale, after removing outliers with a population below 500, the capacity for pedestrian social distancing varies from ",
+               "{min_ped_ct}% to {max_ped_ct}%, with an average value of {mean_ped_ct}% ",
+               "and a median value of {median_ped_ct}%. ",
+               "Two thirds of census tracts have a score between {quant_low_ped_ct}% ",
+               "and {quant_high_ped_ct}%. Out of the 532 census tracts, 227 of them have a capacity score below 100%, while 85 of them have a capacity score below 50%. "))
+    }
+  })
+  
   #####################
   ## MODE
  
