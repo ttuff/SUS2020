@@ -272,13 +272,13 @@ shinyServer(function(input, output, session) {
       scale_singular == "dissemination area" ~ "dissemination areas"
     )
     
+    vec <- 
+      data_bivar() %>% 
+      filter(!is.na(left_variable), !is.na(left_variable_full)) %>% 
+      pull(left_variable_full)
+    
     # Univariate case
     if (input$data_for_plot_right == " ") {
-      
-      vec <- 
-        data_bivar() %>% 
-        filter(!is.na(left_variable), !is.na(left_variable_full)) %>% 
-        pull(left_variable_full)
       
       min_val <- round(min(vec), 2)
       max_val <- round(max(vec), 2)
@@ -356,8 +356,8 @@ shinyServer(function(input, output, session) {
                     "the region-wide median of {median_val}.", 
                     
                     "<p>{place_name} has {poor_strong} potential for active ", 
-                    "living, with a CanALE index score higher than {percentile} ",
-                    "percent of {scale_plural} in the Montreal region."))
+                    "living, with a CanALE index score higher than {percentile}% ",
+                    "of {scale_plural} in the Montreal region."))
           
         }
         
@@ -423,10 +423,76 @@ shinyServer(function(input, output, session) {
           
         }
         
+      # Case for poly selected
       } else{
         
-        HTML(cor(data_bivar()$left_variable_full, 
-                 data_bivar()$right_variable_full))  
+        dat <- data_bivar() %>% filter(ID == rz$poly_selected)
+        
+        vec_2 <- 
+          data_bivar() %>% 
+          filter(!is.na(right_variable), !is.na(right_variable_full)) %>% 
+          pull(right_variable_full)
+        
+        poly_value_1 <- dat$left_variable_full
+        poly_value_2 <- dat$right_variable_full
+        
+        
+        place_name <- case_when(
+          scale_singular == "borough/city" ~ 
+            glue("{dat$name}"),
+          scale_singular == "census tract" ~ 
+            glue("Census tract {dat$name}"),
+          scale_singular == "dissemination area" ~ 
+            glue("Dissemination area {dat$name}")
+        )
+        
+        place_heading <- 
+          if_else(scale_singular == "borough/city",
+                  glue("{dat$name_2} of {place_name}"),
+                  glue("{place_name} ({dat$name_2})"))
+        
+        
+        percentile_left <- 
+          {length(vec[vec <= dat$left_variable_full]) / length(vec) * 100} %>% 
+          round()
+        
+        percentile_right <- 
+          {length(vec_2[vec_2 <= dat$right_variable_full]) / 
+              length(vec_2) * 100} %>% 
+          round()
+        
+        relative_position <- case_when(
+          abs(percentile_left - percentile_right) > 50 ~ "dramatically different",
+          abs(percentile_left - percentile_right) > 30 ~ "substantially different",
+          abs(percentile_left - percentile_right) > 10 ~ "considerably different",
+          TRUE ~ "similar"
+        )
+          
+        # Special case for Kahnawake
+        if (dat$ID %in% c(56, "4620832.00", 24670285)) {
+          HTML(paste0("<strong>Kahnawake Mohawk Territory</strong>",
+                      "<p>Statistics Canada does not gather the same ",
+                      "data for indigenous reserves in the Census as it does ",
+                      "for other jurisdictions, so we cannot display findings ",
+                      "here."))
+        } else {
+          
+          HTML(glue("<strong>{place_heading}</strong>", 
+                    
+                    "<p>{place_name} has a population of ",
+                    "{prettyNum(dat$population, ',')}, a CanALE index score ",
+                    "of {round(poly_value_1, 2)}, and a '{tolower(var_name)}' ",
+                    "value of {round(poly_value_2, 2)}. ",
+                    
+                    "<p>These two scores are {relative_position}, in relative ",
+                    "terms. {place_name} has a CanALE index score higher ",
+                    "than {percentile_left}% of {scale_plural} and ",
+                    "a '{tolower(var_name)}' score higher than ", 
+                    "{percentile_right}% of {scale_plural} in the ",
+                    "Montreal region."))
+          
+        }
+        
       }
       
   
@@ -526,11 +592,13 @@ shinyServer(function(input, output, session) {
         data_bivar() %>% 
           drop_na() %>% 
           ggplot(aes(left_variable_full, right_variable_full)) +
-          geom_point(aes(colour = ID == rz$poly_selected,
-                         size = ID == rz$poly_selected)) +
+          geom_point(colour = bivariate_color_scale$fill[9]) +
           geom_smooth(method = "lm", se = FALSE, colour = "grey50") +
-          scale_colour_manual(values = bivariate_color_scale$fill[c(9, 1)]) +
-          scale_size_manual(values = c(1, 3)) +
+          geom_point(data = filter(data_bivar(), ID == rz$poly_selected,
+                                   !is.na(left_variable_full), 
+                                   !is.na(right_variable_full)),
+                     colour = bivariate_color_scale$fill[1],
+                     size = 3) +
           labs(x = "CanALE index", y = var_name) +
           theme_minimal() +
           theme(legend.position = "none",
