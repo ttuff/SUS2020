@@ -198,10 +198,12 @@ shinyUI(
               column(width = 4, align = "right",
                      actionLink(inputId = "active_hide_compare",
                                 label = "Hide"))),
-            selectInput("data_for_plot_right", 
-                        label = NULL, 
-                        choices = var_list),
-            plotOutput("active_map_right", height = 250),
+            conditionalPanel(
+              condition = "output.active_hide_compare_status == 1",
+              selectInput("data_for_plot_right", 
+                          label = NULL, 
+                          choices = var_list),
+              plotOutput("active_map_right", height = 250)),
             hr(),
             fluidRow(
               column(width = 8,
@@ -209,10 +211,12 @@ shinyUI(
               column(width = 4, align = "right",
                      actionLink(inputId = "active_hide_explore",
                                 label = "Hide"))),
-            tableOutput("bivariate_table"),
-            plotOutput("bivariate_graph", height = 200),
-            actionLink(inputId = "active_clear_selection", 
-                       label = "Clear selection"),
+            conditionalPanel(
+              condition = "output.active_hide_explore_status == 1",
+              tableOutput("bivariate_table"),
+              plotOutput("bivariate_graph", height = 200),
+              actionLink(inputId = "active_clear_selection", 
+                         label = "Clear selection")),
             hr(),
             fluidRow(
               column(width = 8,
@@ -220,7 +224,9 @@ shinyUI(
               column(width = 4, align = "right",
                      actionLink(inputId = "active_hide_dyk",
                                 label = "Hide"))),
-            textOutput("did_you_know")
+            conditionalPanel(
+              condition = "output.active_hide_dyk_status == 1",
+              htmlOutput("did_you_know"))
             ),
           
           absolutePanel(

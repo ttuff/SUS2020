@@ -193,25 +193,6 @@ data_borough <-
   mutate(across(where(is.numeric), ~if_else(is.nan(.x), 0, as.numeric(.x))))
 
 
-# Build did-you-know table ------------------------------------------------
-
-did_you_know <-
-  tibble(
-    "left_variable" = "ale_index",
-    "right_variable" = c(" ", " ", " ", " ", " ", " ", "immigrant_prop", "walk_or_bike_prop", "walk_or_bike_prop", "median_income"),
-    "text" = c("21.3% of people walk or cycle to work in areas in the highest class of active living potential. In areas with the lowest active living potential, only 2.5% do, compared to a regional average of 6%.\n",
-               "Two thirds of new immigrants (67.4%) live in areas with the best access to active living potential (ALE class 5).\n",
-               "11% of new immigrants live in areas with the worst access to active living potential (ALE class 1).\n",
-               "While, overall, there is a trend towards lower income DAs being in high ALE class, roughly 340,000 people are in CanALE class 3 or lower AND have median household income less than $50,000.\n",
-               "Areas in class 4 of active living potential have the highest average dwelling values, but nearly 10% less are renters than areas with active living class 5.\n",
-               "Roughly 90% of the region’s population live within a 1km walk of a transit station. The vast majority of areas which access are located off the island of Montreal.\n",
-               "Immigrant factoid.\n",
-               "The Plateau-Mont-Royal has the highest active mode share to work (36% walking or biking), followed by Ville Marie with 32.5%.\n",
-               "Pierrefonds-Roxboro and L'Île-Bizard-Sainte-Geneviève are the two boroughs with the lowest active mode share to work (less than 3% walk or bike).\n",
-               "Median household income factoid.\n")
-  )
-
-
 # Build title text --------------------------------------------------------
 
 title_text <- 
@@ -277,5 +258,4 @@ title_text <-
              "sidewalk width is to sum the distances between the centreline and both edges of a given sidewalk polygon segment. This process is illustrated below."))
   )
 
-save(data_DA, data_CT, data_borough, did_you_know, title_text,
-     file = "data/new_bivariate.Rdata")
+save(data_DA, data_CT, data_borough, title_text, file = "data/new_bivariate.Rdata")

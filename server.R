@@ -63,15 +63,13 @@ shinyServer(function(input, output, session) {
   output$active_map_left <- renderPlot({
     
     data_for_plot_left <- 
-      data_for_plot %>%
-      dplyr::select(ale_tranis_quant3) %>% 
-      set_names(c("left_variable",  "geometry"))
+      data_for_plot_r_bivar()
     
     p <-
       ggplot(data_for_plot_left) +
       geom_sf(aes(fill = as.factor(left_variable)), color = "white", 
               size = 0.01) +
-      scale_fill_manual(values = rev(colors[c(1:3)])) +
+      scale_fill_manual(values = rev(colors[c(1:3)]), na.value = "grey70") +
       theme_map() + 
       theme(legend.position = "none")
     
@@ -131,7 +129,8 @@ shinyServer(function(input, output, session) {
     if (input$data_for_plot_right == " ") {
       
       p <- 
-        ggplot(data_for_plot) +
+        data_for_plot_r_bivar() %>% 
+        ggplot() +
         geom_sf(fill = "#CABED0", color = "white", size = 0.01) +
         theme_map()
       
@@ -139,7 +138,6 @@ shinyServer(function(input, output, session) {
       
       p <- 
         data_for_plot_r_bivar() %>% 
-        st_transform(3347) %>% 
         ggplot() +
         geom_sf(aes(fill = as.factor(right_variable)), color = "white", 
                 size = 0.01) +
@@ -164,11 +162,14 @@ shinyServer(function(input, output, session) {
     
     if (rz$zoom == "IN") {
       data <- data_CT
-      opacity <- "BB"
+      opacity <- "CC"
     } else if (rz$zoom == "OUT") {
       data <- data_borough 
       opacity <- "EE"
     } else if (rz$zoom == "ISO") {
+      data <- data_DA
+      opacity <- "AA"
+    } else if (rz$zoom == "ISO_2") {
       data <- data_DA
       opacity <- "80"
     }
@@ -198,6 +199,7 @@ shinyServer(function(input, output, session) {
       data %>%
       mutate(group = paste(left_variable, "-", right_variable)) %>%
       left_join(bivariate_color_scale, by = "group") %>% 
+      mutate(fill = if_else(str_detect(group, "NA"), "#B3B3BB", fill)) %>% 
       mutate(elevation = (left_variable * right_variable) ^ 2 * 50) %>% 
       mutate(fill_opacity = paste0(fill, opacity),
              fill = paste0(fill, "FF"))
@@ -216,27 +218,63 @@ shinyServer(function(input, output, session) {
     })
   
   
-  ## Update the title box text -------------------------------------------------
+  ## Update link text ----------------------------------------------------------
   
+  # More info
   output$more_info_status <- reactive({
     input$more_info %% 2 == 1
   })
   
   outputOptions(output, "more_info_status", suspendWhenHidden = FALSE)
-  
+
   observeEvent(input$more_info, {
-    
-    print(bivariate_color_scale)
     
     print(data_for_plot_r_bivar())
     
-    print(filter(data_for_plot_r_bivar(), ID == rz$click))
-    if (input$more_info %% 2 == 1) {
-      txt <- "Hide"
-    } else {
-      txt <- "Learn more"
-    }
+    if (input$more_info %% 2 == 1) txt <- "Hide" else txt <- "Learn more"
     updateActionButton(session, "more_info", label = txt)
+    
+  })
+  
+  # Hide compare status
+  output$active_hide_compare_status <- reactive({
+    input$active_hide_compare %% 2 == 0
+  })
+  
+  outputOptions(output, "active_hide_compare_status", suspendWhenHidden = FALSE)
+
+  observeEvent(input$active_hide_compare, {
+    
+    if (input$active_hide_compare %% 2 == 0) txt <- "Hide" else txt <- "Show"
+    updateActionButton(session, "active_hide_compare", label = txt)
+    
+  })
+  
+  # Hide explore status
+  output$active_hide_explore_status <- reactive({
+    input$active_hide_explore %% 2 == 0
+  })
+  
+  outputOptions(output, "active_hide_explore_status", suspendWhenHidden = FALSE)
+
+  observeEvent(input$active_hide_explore, {
+    
+    if (input$active_hide_explore %% 2 == 0) txt <- "Hide" else txt <- "Show"
+    updateActionButton(session, "active_hide_explore", label = txt)
+    
+  })
+  
+  # Hide DYK status
+  output$active_hide_dyk_status <- reactive({
+    input$active_hide_dyk %% 2 == 0
+  })
+  
+  outputOptions(output, "active_hide_dyk_status", suspendWhenHidden = FALSE)
+  
+  observeEvent(input$active_hide_dyk, {
+    
+    if (input$active_hide_dyk %% 2 == 0) txt <- "Hide" else txt <- "Show"
+    updateActionButton(session, "active_hide_dyk", label = txt)
     
   })
   
@@ -281,22 +319,33 @@ shinyServer(function(input, output, session) {
       if ((nrow(filter(data, ID == rz$click)) != 1)) {
         
         data %>%
+          # filter(!is.na(left_variable)) %>% 
           ggplot(aes(left_variable_full)) +
-          geom_histogram(aes(fill = fill)) +
-          labs(x = "CanALE index") +
+          geom_histogram(aes(fill = fill), bins = 25) +
+          scale_fill_manual(values = colors[c(1:3)],
+                            na.translate = FALSE) +
+          labs(x = "CanALE index", y = NULL) +
           theme_minimal() +
-          theme(legend.position = "none")  
-        
+          theme(legend.position = "none",
+                panel.grid.minor.x = element_blank(),
+                panel.grid.major.x = element_blank(),
+                panel.grid.minor.y = element_blank())        
       } else {
         
         data %>%
+          # filter(!is.na(left_variable)) %>% 
           ggplot(aes(left_variable_full)) +
-          geom_histogram(aes(fill = fill)) +
-          gghighlight(
-            left_variable_full == left_variable_full[ID == rz$click]) +
-          labs(x = "CanALE index") +
+          geom_histogram(aes(fill = round(left_variable_full) == 
+                               round(left_variable_full[ID == rz$click])), 
+                         bins = 25) +
+          scale_fill_manual(values = colors[c(3, 1)],
+                            na.translate = FALSE) +
+          labs(x = "CanALE index", y = NULL) +
           theme_minimal() +
-          theme(legend.position = "none")  
+          theme(legend.position = "none",
+                panel.grid.minor.x = element_blank(),
+                panel.grid.major.x = element_blank(),
+                panel.grid.minor.y = element_blank())
         
       }
       
@@ -333,13 +382,15 @@ shinyServer(function(input, output, session) {
   
   ## Render the did-you-knows --------------------------------------------------
   
-  output$did_you_know <- renderText({
+  output$did_you_know <- renderUI({
     
     did_you_know %>% 
       filter(right_variable == input$data_for_plot_right) %>% 
+      slice_sample(n = 3) %>% 
       pull(text) %>% 
-      paste(collapse = "\n\n")
-    
+      paste("<li> ", ., collapse = "") %>% 
+      paste0("<ul>", ., "</ul>") %>%
+      HTML()
   })
   
   
@@ -350,7 +401,9 @@ shinyServer(function(input, output, session) {
     rz$zoom <- case_when(
       input$myMap_view_change$zoom >= 10.5 && 
         input$myMap_view_change$zoom <= 12 ~ "IN",
-      input$myMap_view_change$zoom > 12 ~ "ISO",
+      input$myMap_view_change$zoom > 12 &&
+        input$myMap_view_change$zoom < 14 ~ "ISO",
+      input$myMap_view_change$zoom >= 14 ~ "ISO_2",
       TRUE ~ "OUT")
     
   })

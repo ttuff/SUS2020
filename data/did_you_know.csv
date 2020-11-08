@@ -1,0 +1,18 @@
+﻿left_variable,right_variable,text
+ale_index, ,"21.3% of people walk or cycle to work in areas in the highest class of active living potential. In areas with the lowest active living potential, only 2.5% do, compared to a regional average of 6%."
+ale_index, ,Two thirds of new immigrants (67.4%) live in areas with the best access to active living potential (ALE class 5).
+ale_index, ,11% of new immigrants live in areas with the worst access to active living potential (ALE class 1).
+ale_index, ,"While, overall, there is a trend towards lower income DAs being in high ALE class, roughly 340,000 people are in CanALE class 3 or lower AND have median household income less than $50,000."
+ale_index, ,"Areas in class 4 of active living potential have the highest average dwelling values, but nearly 10% less are renters than areas with active living class 5."
+ale_index, ,Roughly 90% of the region’s population live within a 1km walk of a transit station. The vast majority of areas which lack access are located off the island of Montreal.
+ale_index,walk_or_bike_prop,"The Plateau-Mont-Royal has the highest active mode share to work (36% walking or biking), followed by Ville Marie with 32.5%."
+ale_index,walk_or_bike_prop,"Sainte-Marthe-sur-le-Lac, Pointe-Calumet, Mascouche, Saint-Joseph-du-Lac, and Léry all have active mode shares of less than 2% to work. "
+ale_index,walk_or_bike_prop,Pierrefonds-Roxboro and L'Île-Bizard-Sainte-Geneviève are the two Montreal boroughs with the lowest active mode share to work (less than 3% walk or bike).
+ale_index,walk_or_bike_prop,"Hampstead, Côte-des-Neiges-Notre-Dame-de-Grâce, and Villeray-Saint-Michel-Parc-Extension all have high active living potential (ALE class 4 or higher) and active mode shares of less than 15%."
+ale_index,walk_or_bike_prop,"Sainte-Julie has the highest active mode share (9.1%) of any borough or municipality with low active living potential, followed by Senneville (5.8%) and Montréal-Est (5.8%). "
+ale_index,median_income,"Hampstead has the highest proportion of people with income greater than $100,000 (55.0%) of high walkable boroughs or municipalities, closely followed by Westmount (50.1%). "
+ale_index,median_income,"Sainte-Anne-de-Bellevue has the highest proportion of people with income greater than $100,000 (55.0%) of less walkable boroughs or municipalities, closely followed by Beaconsfield (59.7%). "
+ale_index,median_income,"Montréal-Est has the highest proportion of people with income less than $50,000 (49.1%) of all boroughs or municipalities with low active living potential "
+ale_index,median_income,"Villeray-Saint-Michel-Parc-Extension has the highest proportion of people with income less than $50,000 (57.7%) of all boroughs or municipalities with high active living potential. "
+ale_index,immigrant_new_prop,Côte-des-Neiges-Notre-Dame-de-Grâce has the highest proportion of new immigrants (12%)  of any borough with high active living potential (average ALE class >4 across the entire borough). It also has the highest proportion of immigrants in general (46.7%) for the same conditions. 
+ale_index,immigrant_new_prop,"Senneville has the highest proportion of new immigrants (4.4%) of any borough or municipality with low active living potential, followed by L'Île-Bizard-Sainte-Geneviève (3.6%). "
