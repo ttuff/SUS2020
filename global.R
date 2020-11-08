@@ -305,7 +305,11 @@ qz <- reactiveValues(zoom_level = 'ISO')
 rz_pedestrian <- reactiveValues(zoom = 'OUT')
 
 rz <- reactiveValues(zoom = 'IN',
-                     click = NA)
+                     click = NA,
+                     poly_select = FALSE)
+
+
+# Commute mode change globals ---------------------------------------------
 
 # Set access token  
 set_token('pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ')

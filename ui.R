@@ -215,8 +215,10 @@ shinyUI(
               condition = "output.active_hide_explore_status == 1",
               tableOutput("bivariate_table"),
               plotOutput("bivariate_graph", height = 200),
-              actionLink(inputId = "active_clear_selection", 
-                         label = "Clear selection")),
+              conditionalPanel(
+                condition = "output.active_poly_select == 1",
+                actionLink(inputId = "active_clear_selection", 
+                           label = "Clear selection"))),
             hr(),
             fluidRow(
               column(width = 8,

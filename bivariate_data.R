@@ -8,6 +8,7 @@ CSDs <-
   filter(name != "Montréal (V)") %>%
   mutate(type = "City") %>%
   select(name, type, geometry) %>%
+  mutate(name = str_replace_all(name, "\\(PE\\)", "--parish municipality")) %>% 
   mutate(name = str_remove(name, " \\(.*\\)"))
 
 
@@ -28,7 +29,16 @@ boroughs <-
   read_sf("data/montreal_boroughs_2019.shp") %>%
   st_intersection(CMA) %>%
   select(name = NOM, type = TYPE, geometry) %>%
-  mutate(type = if_else(type == "Arrondissement", "Borough", "City")) %>%
+  mutate(type = if_else(type == "Arrondissement", "Borough", "City"))
+
+CSDs <- 
+  CSDs %>% 
+  st_centroid() %>% 
+  st_filter(boroughs) %>% pull(name) %>% 
+  {filter(CSDs, !name %in% .)}
+
+boroughs <- 
+  boroughs %>% 
   rbind(CSDs) %>%
   st_cast("MULTIPOLYGON")
 
@@ -150,16 +160,46 @@ borough_join <-
   st_cast("MULTIPOLYGON") %>%
   st_centroid(of_largest_polygon = TRUE) %>%
   st_join(boroughs, left = FALSE) %>%
-  select(DAUID, name, type) %>%
+  select(DAUID, name) %>%
   st_drop_geometry() %>%
   group_by(DAUID) %>%
   slice(1) %>%
   ungroup()
 
+leftovers <- 
+  data %>% 
+  filter(!DAUID %in% borough_join$DAUID) %>% 
+  st_transform(4326) %>%
+  st_cast("MULTIPOLYGON")
+
+borough_join <- 
+  leftovers %>% 
+  filter(CSDNAME %in% borough_join$name) %>% 
+  st_drop_geometry() %>% 
+  select(DAUID, name = CSDNAME) %>% 
+  bind_rows(borough_join)
+
+leftovers <- 
+  data %>% 
+  filter(!DAUID %in% borough_join$DAUID) %>% 
+  st_transform(4326) %>%
+  st_cast("MULTIPOLYGON")
+
+borough_join <- 
+  leftovers %>% 
+  st_drop_geometry() %>% 
+  select(DAUID) %>% 
+  mutate(name = "Ahuntsic-Cartierville") %>% 
+  bind_rows(borough_join)
+
+borough_join <- 
+  borough_join %>% 
+  left_join(st_drop_geometry(boroughs))
+
 data_borough <-
   data %>%
   st_drop_geometry() %>%
-  left_join(borough_join) %>%
+  inner_join(borough_join) %>%
   group_by(name, type) %>%
   summarize(across(c(ale_index, ale_class, avg_rent, avg_property_value,
                      median_income),
@@ -197,7 +237,9 @@ data_borough <-
 
 title_text <- 
   tibble(
-    tab = c("active", "active", "commute", "commute", "pedestrian_ct", "pedestrian_ct", "pedestrian_da", "pedestrian_da", "pedestrian_sidewalk", "pedestrian_sidewalk"),
+    tab = c("active", "active", "commute", "commute", "pedestrian_ct", 
+            "pedestrian_ct", "pedestrian_da", "pedestrian_da", 
+            "pedestrian_sidewalk", "pedestrian_sidewalk"),
     type = rep(c("main", "extra"), 5),
     text = c(paste0("The CanALE dataset (developed by Prof. Nancy Ross ",
                     "and her team) captures four key elements related ",
@@ -220,11 +262,12 @@ title_text <-
                     "improved pedestrian infrastructure. In other ",
                     "words, who can afford to live in walkable ",
                     "neighbourhoods?"),
-             "", "", paste0("The capacity for pedestrian social ",
-                            "distancing is a capacity measurement that determines ",
-                            "the percentage of a neighbourhood’s population that ",
-                            "can make local trips on foot at the same time while respecting ",
-                            "‘social distancing’ regulations."), 
+             "", "", 
+             paste0("The capacity for pedestrian social ",
+                    "distancing is a capacity measurement that determines ",
+                    "the percentage of a neighbourhood’s population that ",
+                    "can make local trips on foot at the same time while respecting ",
+                    "‘social distancing’ regulations."), 
              paste0("Using open data from Montreal's open data portal as well as OpenStreetMap, it was possible to ",
                     "calculate the total surface area of sidewalks, neighbourhood parks, and pre-Covid ",
                     "pedestrian streets. Summing these surface areas ",
@@ -255,7 +298,8 @@ title_text <-
              "we developed a function which first creates negative buffers inside each sidewalk segment, and then iteratively adjusts the distance ",
              "of that buffer until the maximum distance is achieved which still produces valid buffer geometry (if the buffer boundaries overlap, ",
              "the geometry becomes invalid). The outcome is the equivalent of a centreline inside each sidewalk polygon. The last step to determine ",
-             "sidewalk width is to sum the distances between the centreline and both edges of a given sidewalk polygon segment. This process is illustrated below."))
+             "sidewalk width is to sum the distances between the centreline and ",
+             "both edges of a given sidewalk polygon segment. This process is illustrated below."))
   )
 
 save(data_DA, data_CT, data_borough, title_text, file = "data/new_bivariate.Rdata")

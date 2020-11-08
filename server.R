@@ -115,7 +115,7 @@ shinyServer(function(input, output, session) {
     
     ggdraw() + 
       draw_image(dropshadow2, scale = 1.85, vjust = 0.01) +
-      draw_plot(p)+
+      draw_plot(p) +
       draw_image(uni_legend, scale = .45, vjust = 0.3, hjust = 0.3)
     
     })
@@ -283,24 +283,24 @@ shinyServer(function(input, output, session) {
   
   output$bivariate_table <- renderTable({
     
-    data <- data_for_plot_r_bivar()
-    
     if (input$data_for_plot_right == " ") {
       
       tibble(
         "Descriptive" = c(
           "Minimum", "Maximum", "Median", "Mean", "Standard deviation"),
-        "Value" = c(min(data$left_variable_full, na.rm = TRUE),
-                    max(data$left_variable_full, na.rm = TRUE),
-                    median(data$left_variable_full, na.rm = TRUE),
-                    mean(data$left_variable_full, na.rm = TRUE),
-                    sd(data$left_variable_full, na.rm = TRUE)))
+        "Value" = c(
+          min(data_for_plot_r_bivar()$left_variable_full, na.rm = TRUE),
+          max(data_for_plot_r_bivar()$left_variable_full, na.rm = TRUE),
+          median(data_for_plot_r_bivar()$left_variable_full, na.rm = TRUE),
+          mean(data_for_plot_r_bivar()$left_variable_full, na.rm = TRUE),
+          sd(data_for_plot_r_bivar()$left_variable_full, na.rm = TRUE)))
       
     } else {
       
       tibble(
         "Descriptive" = c("Correlation"),
-        "Value" = c(cor(data$left_variable_full, data$right_variable_full))
+        "Value" = c(cor(data_for_plot_r_bivar()$left_variable_full, 
+                        data_for_plot_r_bivar()$right_variable_full))
       )
       
     }
@@ -311,15 +311,13 @@ shinyServer(function(input, output, session) {
   
   output$bivariate_graph <- renderPlot({
     
-    data <- data_for_plot_r_bivar()
-    
     # Histogram for a single variable
     if (input$data_for_plot_right == " ") {
       
-      if ((nrow(filter(data, ID == rz$click)) != 1)) {
+      if (!rz$poly_select) {
         
-        data %>%
-          # filter(!is.na(left_variable)) %>% 
+        data_for_plot_r_bivar() %>%
+          filter(!is.na(left_variable)) %>%
           ggplot(aes(left_variable_full)) +
           geom_histogram(aes(fill = fill), bins = 25) +
           scale_fill_manual(values = colors[c(1:3)],
@@ -329,24 +327,44 @@ shinyServer(function(input, output, session) {
           theme(legend.position = "none",
                 panel.grid.minor.x = element_blank(),
                 panel.grid.major.x = element_blank(),
-                panel.grid.minor.y = element_blank())        
+                panel.grid.minor.y = element_blank())    
+        
       } else {
         
-        data %>%
-          # filter(!is.na(left_variable)) %>% 
-          ggplot(aes(left_variable_full)) +
-          geom_histogram(aes(fill = round(left_variable_full) == 
-                               round(left_variable_full[ID == rz$click])), 
-                         bins = 25) +
-          scale_fill_manual(values = colors[c(3, 1)],
-                            na.translate = FALSE) +
-          labs(x = "CanALE index", y = NULL) +
-          theme_minimal() +
-          theme(legend.position = "none",
-                panel.grid.minor.x = element_blank(),
-                panel.grid.major.x = element_blank(),
-                panel.grid.minor.y = element_blank())
-        
+        if ({data_for_plot_r_bivar() %>% 
+            filter(ID == rz$click) %>% 
+            filter(!is.na(left_variable)) %>% 
+            nrow()} == 0) {
+          
+          data_for_plot_r_bivar() %>% 
+            filter(!is.na(left_variable)) %>%
+            ggplot(aes(left_variable_full)) +
+            geom_histogram(bins = 25, fill = colors[3]) +
+            labs(x = "CanALE index", y = NULL) +
+            theme_minimal() +
+            theme(legend.position = "none",
+                  panel.grid.minor.x = element_blank(),
+                  panel.grid.major.x = element_blank(),
+                  panel.grid.minor.y = element_blank())
+          
+        } else {
+          
+          data_for_plot_r_bivar() %>%
+            filter(!is.na(left_variable)) %>%
+            ggplot(aes(left_variable_full)) +
+            geom_histogram(aes(fill = round(left_variable_full) == 
+                                 round(left_variable_full[ID == rz$click])), 
+                           bins = 25) +
+            scale_fill_manual(values = colors[c(3, 1)],
+                              na.translate = FALSE) +
+            labs(x = "CanALE index", y = NULL) +
+            theme_minimal() +
+            theme(legend.position = "none",
+                  panel.grid.minor.x = element_blank(),
+                  panel.grid.major.x = element_blank(),
+                  panel.grid.minor.y = element_blank())
+          
+        }
       }
       
     # Scatterplot for two variables
@@ -354,9 +372,9 @@ shinyServer(function(input, output, session) {
       
       y_var_name <- as.character(input$data_for_plot_right)
       
-      if (nrow(filter(data, ID == rz$click)) != 1) {
+      if (nrow(filter(data_for_plot_r_bivar(), ID == rz$click)) != 1) {
         
-        data %>% 
+        data_for_plot_r_bivar() %>% 
           ggplot(aes(left_variable_full, right_variable_full)) +
           geom_smooth(se = FALSE, colour = "grey50") +
           geom_point(aes(colour = fill)) +
@@ -366,7 +384,7 @@ shinyServer(function(input, output, session) {
         
       } else {
         
-        data %>% 
+        data_for_plot_r_bivar() %>% 
           ggplot(aes(left_variable_full, right_variable_full)) +
           geom_smooth(se = FALSE, colour = "grey50") +
           geom_point(aes(colour = fill)) +
@@ -479,6 +497,8 @@ shinyServer(function(input, output, session) {
       filter(lengths(st_intersects(geometry, int_point)) > 0) %>% 
       pull(ID)
     
+    rz$poly_select = TRUE
+    
     print(rz$click)
     
     # temporary_here <- data_for_plot_r_bivar() 
@@ -535,7 +555,16 @@ shinyServer(function(input, output, session) {
     #     clear_polygon(layer_id = "isolayer")
     # } 
     
+    
+    ## Output polygon select status --------------------------------------------
+    
+    output$active_poly_select <- reactive(rz$poly_select)
+    
+    outputOptions(output, "active_poly_select", suspendWhenHidden = FALSE)
+    
   }) 
+  
+  
   
   
   ### Pedestrian realm #########################################################
