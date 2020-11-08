@@ -16,6 +16,12 @@ shinyServer(function(input, output, session) {
                 height = 100))
   }, deleteFile = FALSE)
   
+  output$glamour_shot <- renderImage({
+    filename <- normalizePath(file.path("www/glamour_shot.png"))
+    return(list(src = filename, contentType = "image/png",  width = 600,
+                height = 281))
+  }, deleteFile = FALSE) 
+  
   output$bivariate_legend <- renderImage({
     filename <- normalizePath(file.path("www/bivariate_legend_2.png"))
     return(list(src = filename, contentType = "image/png",  width = 200,
