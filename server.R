@@ -1482,16 +1482,20 @@ shinyServer(function(input, output, session) {
     
   })
   
-  #####################
-  ## MODE
- 
+  ##############################################################################
+  
+  ### Commuter mode shift ######################################################
+  
+  
   ########Output#######
   output$qzmyMap <- renderMapdeck({
-    mapdeck(token = 
-              "pk.eyJ1Ijoiemhhb3FpYW8wMTIwIiwiYSI6ImNrYXBnbHB3dTFtbDIycWxvZ285cjNmcG0ifQ.fieGPt1pLEgHs1AI8NvjYg",
+    
+    mapdeck(token = paste0("pk.eyJ1Ijoiemhhb3FpYW8wMTIwIiwiYSI6ImNrYXBnbHB3d",
+                           "TFtbDIycWxvZ285cjNmcG0ifQ.fieGPt1pLEgHs1AI8NvjYg"),
             style = "mapbox://styles/zhaoqiao0120/ckh1hkzwe02br19nvzt9bvxcg",
-            zoom=10,location=c(-73.611,45.526))
-  })
+            zoom = 10, location = c(-73.611, 45.526))
+    
+    })
   
   observeEvent(input$qzmyMap_view_change$zoom, {
     if( input$qzmyMap_view_change$zoom > 10){qz$zoom_level <- 'OUT'} else {

@@ -306,7 +306,7 @@ title_text <-
                     "Other mitigation measures are necessary for achieving ",
                     "GHG emissions reduction targets.",
                     "<br>",
-                    "<i>Module lead authors: Qiao Zhao, Kevin Manaugh</i>"), 
+                    "<p><i>Module lead authors: Qiao Zhao, Kevin Manaugh</i>"), 
              paste0("The capacity for pedestrian social ",
                     "distancing is a capacity measurement that determines ",
                     "the percentage of a neighbourhood’s population that ",
