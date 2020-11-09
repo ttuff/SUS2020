@@ -983,11 +983,16 @@ shinyServer(function(input, output, session) {
   
   ## Create VAS plans  -------------------------------------------------
   
+  ## Creating problem on server. See: https://github.com/r-spatial/sf/issues/1419
+    ## also: https://stackoverflow.com/questions/61286108/error-in-cpl-transformx-crs-aoi-pipeline-reverse-ogrcreatecoordinatetrans 
+    
   # May plan
+  #st_crs(original_plan_disaggregated) = 4326
   may_vas_plan <- original_plan_disaggregated %>% 
     st_transform(4326)
   
   # July plan
+  #st_crs(revised_plan) = 4326
   july_vas_plan <- revised_plan %>% 
     st_transform(4326)
   

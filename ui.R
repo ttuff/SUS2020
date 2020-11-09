@@ -12,6 +12,7 @@ shinyUI(
                     
                     title = loadingLogo('http:www.drtuff.com', 'logo.png',
                                         'spinning_logo.gif', 50, 50, 50)),
+    ### https://stackoverflow.com/questions/31440564/adding-a-company-logo-to-shinydashboard-header
     
     ## Left sidebar ------------------------------------------------------------
     
