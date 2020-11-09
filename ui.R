@@ -1,4 +1,12 @@
 ##### SUS UI SCRIPT ############################################################
+dbHeader <- dashboardHeader(tags$li(class = "dropdown",
+                                    tags$style(".main-header {max-height: 55px}"),
+                                    tags$style(".main-header .logo {height: 50px}")),
+                            title = "SUS")
+
+dbHeader$children[[2]]$children <-  loadingLogo('http:www.drtuff.com', 'logo.png',
+                                                'spinning_logo.gif', 50, 50, 50)
+
 
 shinyUI(
   
@@ -6,12 +14,7 @@ shinyUI(
 
     skin = "black", 
 
-    dashboardHeader(tags$li(class = "dropdown",
-                            tags$style(".main-header {max-height: 55px}"),
-                            tags$style(".main-header .logo {height: 50px}")),
-                    
-                    title = loadingLogo('http:www.drtuff.com', 'logo.png',
-                                        'spinning_logo.gif', 50, 50, 50)),
+    dbHeader,
     ### https://stackoverflow.com/questions/31440564/adding-a-company-logo-to-shinydashboard-header
     
     ## Left sidebar ------------------------------------------------------------
@@ -88,6 +91,7 @@ shinyUI(
     ## Body --------------------------------------------------------------------
     
     dashboardBody(
+      tags$head(tags$link(rel = "icon", type = "image/png", href = "logo.png")),
       tags$head(tags$script(HTML(js))),
       tags$head(tags$script(HTML(js2))),
       tags$head(tags$script(HTML(js3))),
