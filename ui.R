@@ -518,7 +518,8 @@ shinyUI(
                 label = "% of trips taken by car, by census tract",
                 min = 0,
                 max = 100,
-                value = c(0, 100))
+                value = c(0, 100)),
+              plotOutput("commute_histogram", height = 200)
               ),
             
             # Simulate panel

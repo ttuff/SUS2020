@@ -1561,6 +1561,40 @@ shinyServer(function(input, output, session) {
   })
   
   
+  ## Draw histogram ------------------------------------------------------------
+  
+  output$commute_histogram <- renderPlot({
+    
+    if (input$commute_variable == 1) {
+      data <- rename(cycling_access, var = cycling_ac)
+    } else if (input$commute_variable == 2) {
+      data <- rename(car_share, var = Car_per)
+    } else if (input$commute_variable == 3) {
+      data <- rename(trip_distance, var = avg_dist)
+    }
+    
+    data <- st_drop_geometry(data) %>% mutate(color = as.character(color))
+  
+    selection <- as.numeric(input$commute_variable)
+    
+    x_var_name <- c("Access to cycling inf. (km/sq.km)", 
+                    "Share of trips taken by car (%)", 
+                    "Average commuting distance (km)")[selection] 
+    
+    data %>%
+      ggplot() +
+      geom_histogram(aes(var, fill = color), bins = 25) +
+      scale_fill_manual(values = deframe(distinct(select(data, color, color_value)))) +
+      labs(x = x_var_name, y = NULL) +
+      theme_minimal() +
+      theme(legend.position = "none",
+            panel.grid.minor.x = element_blank(),
+            panel.grid.major.x = element_blank(),
+            panel.grid.minor.y = element_blank())    
+    
+  })
+  
+  
   ## Set zoom level ------------------------------------------------------------
   
   observeEvent(input$qzmyMap_view_change$zoom, {
@@ -1705,7 +1739,7 @@ shinyServer(function(input, output, session) {
             stroke_colour = "#868683",
             stroke_width = 50,
             layer_id = "choropleth",
-            legend = legend1,
+            legend = FALSE,
             highlight_colour  =  "#AAFFFFFF",
             auto_highlight = TRUE,
             update_view = FALSE)
@@ -1723,7 +1757,7 @@ shinyServer(function(input, output, session) {
             stroke_colour = "#CCD1D1",
             stroke_width = 50,
             layer_id = "choropleth",
-            legend = legend2,
+            legend = FALSE,
             highlight_colour = "#AAFFFFFF",
             auto_highlight = TRUE,
             update_view = FALSE)
@@ -1741,7 +1775,7 @@ shinyServer(function(input, output, session) {
             stroke_colour = "#CCD1D1",
             stroke_width = 50,
             layer_id = "choropleth",
-            legend = legend3,
+            legend = FALSE,
             highlight_colour  =  "#AAFFFFFF",
             auto_highlight = TRUE,
             update_view = FALSE)
