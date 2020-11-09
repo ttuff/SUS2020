@@ -478,7 +478,9 @@ shinyUI(
         tabItem(
           tabName = "mode",
           tags$head(tags$style(HTML('
-          #title_bar_commute {border-width: 10px; border-color: rgb(255, 255, 255);}'))),
+          #title_bar_commute {border-width: 10px; border-color: rgb(255, 255, 255);}
+          #commute_right_bar {border-width: 10px; 
+          border-color: rgba(255,255,255,1);}'))),
           
           # Main map
           mapdeckOutput(outputId = "qzmyMap", height = "1200px"),
@@ -498,6 +500,32 @@ shinyUI(
                      filter(tab == "commute", type == "extra") %>% 
                      pull(text)))),
             
+          # Explore panel
+          absolutePanel(
+            id = "commute_right_bar", style = "z-index:500;",
+            class = "panel panel-default", top = 70, right = 50, width = 300,
+            h4("Explore"),
+            conditionalPanel(
+              condition = "output.zoom_level == 'ISO'",
+              selectInput(
+                "commute_variable", label = NULL, 
+                choices = list("Share of trips taken by car" = 2, 
+                               "Average commuting distance" = 3, 
+                               "Access to cycling infrastructure" = 1),
+                selected = 2),
+              sliderInput(
+                inputId = "commute_explore_slider",
+                label = "% of trips taken by car, by census tract",
+                min = 0,
+                max = 100,
+                value = c(0, 100))
+              
+            )
+          ),
+            
+          
+          
+          
           absolutePanel(
             id = "controls", class = "panel panel-default",
             draggable = FALSE, top = 55, left = 300,
@@ -559,30 +587,7 @@ shinyUI(
                       draggable = FALSE, 
                       top = 60, right = 50,
                       widtth = 60,
-                      conditionalPanel(
-                        condition = "output.zoom_level == 'ISO'",
-                        h4(strong("Choropleth Map")),
-                        pickerInput(
-                          inputId = "variable",
-                          label = "Select a variable:", 
-                          choices = list("Share of Car Trips" = 2, 
-                                         "Average Commuting Distance" = 3, 
-                                         "Access to Cycling Infrastructure" = 1),
-                          selected = 2
-                        ),
-                        knobInput(
-                          inputId = "knob1",
-                          label = "Car Share by Origin Census Tract:",
-                          step = 0.5,
-                          min = 4,
-                          max = 17,
-                          value = 17,
-                          displayPrevious = TRUE,
-                          lineCap = "round",
-                          fgColor = "#B2D235",
-                          inputColor = "#B2D235"
-                        )
-                      ),
+                      
                       conditionalPanel(
                         condition = "output.zoom_level == 'OUT' & input.radio1 <3",
                         h4(strong("VMT Reduction")),
