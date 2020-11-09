@@ -1622,7 +1622,70 @@ shinyServer(function(input, output, session) {
                      panel.grid.minor.x = element_blank(),
                      panel.grid.major.x = element_blank(),
                      panel.grid.minor.y = element_blank())
-             }}
+           }}
+    
+    else if (rz_pedestrian$zoom == "IN" & input$switch_biv == TRUE) {
+      var_name_ped <- data_frame(code = c("agg_proximity_score", "net_median_income", "visible_minority_pop", "immigrants"),
+                                 name = c("Walkable Access to Key Amenities", "Net Median Income", "Visible Minority Population",
+                                          "Immigrant Population")) %>% 
+        as_tibble() %>% 
+        filter(code == input$data_for_plot_ped) %>%
+        pull(name)
+      
+      var_code_ped <- data_frame(code = c("agg_proximity_score", "net_median_income", "visible_minority_pop", "immigrants"),
+                                 name = c("Walkable Access to Key Amenities", "Net Median Income", "Visible Minority Population",
+                                          "Immigrant Population")) %>% 
+        as_tibble() %>% 
+        filter(code == input$data_for_plot_ped) %>%
+        pull(code)
+      
+      if (nrow(filter(bivariate_chloropleth(), ID == rz_pedestrian$poly_selected)) != 1) {
+        
+        bivariate_chloropleth() %>%
+          drop_na() %>%
+          ggplot(aes(left_variable_full, right_variable_full)) +
+          geom_point(aes(colour = group)) +
+          geom_smooth(method = "lm", se = FALSE, colour = "grey50") +
+          scale_colour_manual(values = deframe(bivariate_color_scale)) +
+          scale_x_continuous(name = "Capacity for pedestrian social distancing",
+                             limits = c(0, 500),
+                             expand = c(0,0),
+                             breaks = seq(0, 500, by = 100),
+                             labels = c("0%", "100 %", "200 %", "300 %", "400 %", "500 %"),
+                             oob = scales::squish) +
+          labs(y = var_name_ped) +
+          theme_minimal() +
+          theme(legend.position = "none",
+                panel.grid.minor.x = element_blank(),
+                panel.grid.major.x = element_blank(),
+                panel.grid.minor.y = element_blank())
+        
+      } else {
+        
+        bivariate_chloropleth() %>%
+          drop_na() %>%
+          ggplot(aes(left_variable_full, right_variable_full)) +
+          geom_point(colour = bivariate_color_scale$fill[9]) +
+          geom_smooth(method = "lm", se = FALSE, colour = "grey50") +
+          geom_point(data = filter(bivariate_chloropleth(), ID == rz_pedestrian$poly_selected,
+                                   !is.na(left_variable_full),
+                                   !is.na(right_variable_full)),
+                     colour = bivariate_color_scale$fill[1],
+                     size = 3) +
+          scale_x_continuous(name = "Capacity for pedestrian social distancing (%)",
+                             limits = c(0, 200),
+                             expand = c(0,0),
+                             breaks = seq(0, 200, by = 25),
+                             oob = scales::squish) +
+          labs(y = var_name_ped) +
+          theme_minimal() +
+          theme(legend.position = "none",
+                panel.grid.minor.x = element_blank(),
+                panel.grid.major.x = element_blank(),
+                panel.grid.minor.y = element_blank())
+        
+      }
+    }
     
     else if (rz_pedestrian$zoom == "FINAL") {
       sidewalks_WSG %>%
