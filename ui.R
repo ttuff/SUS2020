@@ -392,13 +392,13 @@ shinyUI(
                         selected = "agg_proximity_score_quant3", 
                         choices = list(
                           "Walkable Access to Key Amenities" = 
-                            "agg_proximity_score_quant3",
+                            "agg_proximity_score",
                           "Net Median Income" = 
-                            "net_median_income_quant3",
+                            "net_median_income",
                           "Visible Minority Population" = 
-                            "visible_minority_pop_quant3", 
+                            "visible_minority_pop", 
                           "Immigrant Population" = 
-                            "immigrants_quant3")),
+                            "immigrants")),
           plotOutput("second_variable", width = 250, height = 250)),
           hr(),
           h4(strong("Montreal Covid-19 Expanded Active Transit Corridors", 

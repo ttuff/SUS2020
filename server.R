@@ -877,9 +877,8 @@ shinyServer(function(input, output, session) {
   data_for_plot_uni <- reactive({
     
     data_for_plot_uni <- census_analysis_quantile_WSG %>%
-      dplyr::select(social_distancing_capacity_pop_perc_2m_quant3)
-    
-    colnames(data_for_plot_uni) <- c("left_variable", "geometry")
+      dplyr::select(left_variable_full = social_distancing_capacity_pop_perc_2m,
+                    left_variable = social_distancing_capacity_pop_perc_2m_quant3)
     
     data_for_plot_uni <- data_for_plot_uni %>%
       mutate(
@@ -919,12 +918,11 @@ shinyServer(function(input, output, session) {
   ## Bivariate chloropleth map -------------------------------------------------
   bivariate_chloropleth <- reactive({
     data_for_plot_bi <- census_analysis_quantile_WSG %>%
-      dplyr::select(social_distancing_capacity_pop_perc_2m_quant3, 
-                    input$data_for_plot_ped)
-    if (length(colnames(data_for_plot_bi)) == 2){
-      data_for_plot_bi <- cbind(data_for_plot_bi[,1], data_for_plot_bi)[,1:3]}
-    #print(head(data_for_plot_bi))
-    colnames(data_for_plot_bi) <- c("left_variable", "right_variable",  "geometry")
+      dplyr::select(left_variable_full = social_distancing_capacity_pop_perc_2m, 
+                    right_variable_full = input$data_for_plot_ped,
+                    left_variable = social_distancing_capacity_pop_perc_2m_quant3,
+                    right_variable = paste0(input$data_for_plot_ped, "_quant3"))
+    
     data_for_plot_bivariate <- data_for_plot_bi %>%
       mutate(
         group = paste(
@@ -936,9 +934,6 @@ shinyServer(function(input, output, session) {
              pop_density = log(round(census_analysis_quantile_WSG$`pop_density(sqkm)`, 0)),
              trip_scale = census_analysis_quantile_WSG$trip_scale,
              social_distancing = census_analysis_quantile_WSG$social_distancing_capacity_pop_perc_2m,
-             net_median_income = census_analysis_quantile_WSG$net_median_income,
-             visible_minority_pop = census_analysis_quantile_WSG$visible_minority_pop,
-             immigrants_pop = census_analysis_quantile_WSG$immigrants,
              ID = census_analysis_quantile_WSG$GeoUID,
              population = census_analysis_quantile_WSG$population) %>% 
       left_join(bivariate_color_scale, by = "group") %>% 
@@ -964,9 +959,7 @@ shinyServer(function(input, output, session) {
     colors <- as.character(colors)
     
     data_for_plot_ped <- census_analysis_quantile %>%
-      dplyr::select(input$data_for_plot_ped)
-    
-    colnames(data_for_plot_ped) <- c("right_variable",  "geometry")
+      dplyr::select(right_variable = paste0(input$data_for_plot_ped, "_quant3"))
     
     p <- ggplot(data_for_plot_ped) +
       geom_sf(data = census_circular, fill = "transparent", color = "black", size = 0.05) +
@@ -1445,6 +1438,66 @@ shinyServer(function(input, output, session) {
                   
                   "<p>Dissemination area {dat_ped_uni$ID} offers a {poor_strong_ped_uni} capacity for its residents to practice social distancing in the local pedestrian realm."))
       
+      }}
+    
+    else if (rz_pedestrian$zoom == "IN" & input$switch_biv == TRUE) {
+      
+      var_name_ped <- data_frame(code = c("agg_proximity_score", "net_median_income", "visible_minority_pop", "immigrants"),
+                                 name = c("Walkable Access to Key Amenities", "Net Median Income", "Visible Minority Population",
+                                          "Immigrant Population")) %>% 
+        as_tibble() %>% 
+        filter(code == input$data_for_plot_ped) %>%
+        pull(name)
+      
+      var_code_ped <- data_frame(code = c("agg_proximity_score", "net_median_income", "visible_minority_pop", "immigrants"),
+                                 name = c("Walkable Access to Key Amenities", "Net Median Income", "Visible Minority Population",
+                                          "Immigrant Population")) %>% 
+        as_tibble() %>% 
+        filter(code == input$data_for_plot_ped) %>%
+        pull(code)
+      
+      correlation_ped <-
+        cor.test(bivariate_chloropleth()$left_variable_full,
+            bivariate_chloropleth()$right_variable_full, method = "spearman", exact = FALSE) %>% 
+        pull(rho)
+      
+      pos_neg_ped <- if_else(correlation_ped > 0, "positive", "negative")
+      
+      strong_weak_ped <- case_when(
+        abs(correlation_ped) > 0.6 ~ "strong",
+        abs(correlation_ped) > 0.3 ~ "moderate",
+        TRUE ~ "weak")
+      
+      higher_lower_ped <- if_else(pos_neg_ped == "positive", "higher", "lower")
+      
+      high_low_disclaimer_ped <- case_when(
+        strong_weak_ped == "strong" ~ "with only a few exceptions",
+        strong_weak_ped == "moderate" ~ "although with some exceptions",
+        strong_weak_ped == "weak" ~ "although with many exceptions",
+      )
+      
+      # Case for no poly selected
+      if (is.na(rz_pedestrian$poly_selected)) {
+        
+        # If correlation is close to zero
+        if (correlation_ped < 0.05 && correlation_ped > -0.05) {
+          
+          HTML(glue(
+            "The capacity for pedestrian social distancing metric has effectively no correlation ",
+            "({correlation_ped}) with {var_name_ped} at the dissemination area scale. ",
+            "<p>This means that, at the dissemination area scale, ",
+            "there is no relationship between the two variables."))
+          
+        } else {
+          
+          HTML(glue(
+            "The capacity for pedestrian social distancing metric has a {strong_weak_ped} {pos_neg_ped} ",
+            "correlation ({correlation_ped}) with '{tolower(var_name_ped)}' at the dissemination area scale. ",
+            "<p>This means that, in general, dissemination areas with higher ",
+            "capacities to allow for pedestrian social distancing tend to have {higher_lower_ped} ",
+            "values for '{tolower(var_name_ped)}', {high_low_disclaimer_ped}."))
+          
+        }
     }}
     
     else if (rz_pedestrian$zoom == "FINAL") {
@@ -1465,7 +1518,6 @@ shinyServer(function(input, output, session) {
              "between {quant_low_sidewalk} meters and {quant_high_sidewalk} meters. "))
     }
   })
-  
   
   ## Render the histogram/scatterplot ------------------------------------------
   
@@ -1492,6 +1544,58 @@ shinyServer(function(input, output, session) {
                 panel.grid.major.x = element_blank(),
                 panel.grid.minor.y = element_blank())
     }
+    
+    else if (rz_pedestrian$zoom == "IN" & input$switch_biv == FALSE) {
+        
+        # If no poly is selected
+        if (is.na(rz_pedestrian$poly_selected)) {
+          
+          data_for_plot_uni() %>%
+            filter(!is.na(left_variable)) %>%
+            ggplot(aes(left_variable_full)) +
+            geom_histogram(aes(fill = fill), bins = 25) +
+            scale_fill_manual(values = colors[c(1:3)],
+                              na.translate = FALSE) +
+            scale_x_continuous(name = "Capacity for pedestrian social distancing",
+                               limits = c(0, 500),
+                               expand = c(0,0),
+                               breaks = seq(0, 500, by = 100),
+                               labels = c("0%", "100 %", "200 %", "300 %", "400 %", "500 %"),
+                               oob = scales::squish) +
+            labs(y = NULL) +
+            theme_minimal() +
+            theme(legend.position = "none",
+                  panel.grid.minor.x = element_blank(),
+                  panel.grid.major.x = element_blank(),
+                  panel.grid.minor.y = element_blank())  
+        }
+          
+          # If there is an active selection
+
+           else {
+            
+             data_for_plot_uni() %>%
+               filter(!is.na(left_variable)) %>%
+              ggplot(aes(left_variable_full)) +
+              geom_histogram(aes(
+                fill = round(left_variable_full) == 
+                  round(left_variable_full[ID == rz_pedestrian$poly_selected])), 
+                bins = 25) +
+               scale_fill_manual(values = colors[c(3, 1)],
+                                 na.translate = FALSE) +
+               scale_x_continuous(name = "Capacity for pedestrian social distancing",
+                                  limits = c(0, 500),
+                                  expand = c(0,0),
+                                  breaks = seq(0, 500, by = 100),
+                                  labels = c("0%", "100 %", "200 %", "300 %", "400 %", "500 %"),
+                                  oob = scales::squish) +
+               labs(y = NULL) +
+               theme_minimal() +
+               theme(legend.position = "none",
+                     panel.grid.minor.x = element_blank(),
+                     panel.grid.major.x = element_blank(),
+                     panel.grid.minor.y = element_blank())
+             }}
     
     else if (rz_pedestrian$zoom == "FINAL") {
       sidewalks_WSG %>%
@@ -1529,7 +1633,7 @@ shinyServer(function(input, output, session) {
     
     else if (rz_pedestrian$zoom == "IN" & input$switch_biv == TRUE) {
       did_you_know %>% 
-        filter(right_variable == input$data_for_plot_ped) %>% 
+        filter(right_variable == paste0(input$data_for_plot_ped, "_quant3")) %>% 
         pull(text) %>% 
         paste("<li> ", ., collapse = "") %>% 
         paste0("<ul>", ., "</ul>") %>%
