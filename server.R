@@ -1487,7 +1487,8 @@ shinyServer(function(input, output, session) {
   ### Commuter mode shift ######################################################
   
   
-  ########Output#######
+  ## Draw map ------------------------------------------------------------------
+  
   output$qzmyMap <- renderMapdeck({
     
     mapdeck(token = paste0("pk.eyJ1Ijoiemhhb3FpYW8wMTIwIiwiYSI6ImNrYXBnbHB3d",
@@ -1497,14 +1498,18 @@ shinyServer(function(input, output, session) {
     
     })
   
-  observeEvent(input$qzmyMap_view_change$zoom, {
-    if( input$qzmyMap_view_change$zoom > 10){qz$zoom_level <- 'OUT'} else {
-      qz$zoom_level <- 'ISO'}}
-  )
   
-  output$zoom_level <- reactive({
-    return(qz$zoom_level)
-  })
+  ## Set zoom level ------------------------------------------------------------
+  
+  observeEvent(input$qzmyMap_view_change$zoom, {
+    
+    if (input$qzmyMap_view_change$zoom > 10) {
+      qz$zoom_level <- 'OUT'} else {
+      qz$zoom_level <- 'ISO'}
+    
+    })
+  
+  output$zoom_level <- reactive(qz$zoom_level)
   outputOptions(output, "zoom_level", suspendWhenHidden = FALSE)
   
   
@@ -1534,8 +1539,6 @@ shinyServer(function(input, output, session) {
       updateSliderTextInput(session = session,
                             inputId = "slider3",
                             selected = 3)
-      # showNotification("yayaya",
-      #                  type = "message", duration = 3)
     }
     
     else if (input$radio1 == 2){
