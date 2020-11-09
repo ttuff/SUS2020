@@ -208,6 +208,8 @@ car_share <- loadRData("data/Car_Share.Rdata")
 cycling_access <- loadRData("data/Cycling_Access.Rdata")
 trip_distance <- loadRData("data/Trip_Distance.Rdata")
 
+load("data/cycling_total_final.Rdata")
+
 census_analysis_quantile_WSG <- census_analysis_quantile %>% 
   st_transform(4326)
 
@@ -299,7 +301,7 @@ $(document).ready(function(){
 
 # Establish reactiveValues ------------------------------------------------
 
-qz <- reactiveValues(zoom_level = 'ISO')
+qz <- reactiveValues(zoom_level = 'OUT')
 
 rz_pedestrian <- reactiveValues(zoom = 'OUT',
                                 poly_selected = NA)

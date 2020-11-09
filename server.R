@@ -1566,9 +1566,9 @@ shinyServer(function(input, output, session) {
   
   observeEvent(input$qzmyMap_view_change$zoom, {
     
-    if (input$qzmyMap_view_change$zoom > 10) {
-      qz$zoom_level <- 'OUT'} else {
-        qz$zoom_level <- 'ISO'}
+    if (input$qzmyMap_view_change$zoom > 10.2) {
+      qz$zoom_level <- 'IN'} else {
+        qz$zoom_level <- 'OUT'}
     
   })
   
@@ -1593,7 +1593,8 @@ shinyServer(function(input, output, session) {
   ## Control the scenario sliders ----------------------------------------------
   
   observeEvent(input$radio1, {
-    if(input$radio1 == 1){
+    
+    if (input$radio1 == 1) {
       updateSliderTextInput(session = session,
                             inputId = "slider1",
                             selected = 4.4)
@@ -1603,9 +1604,8 @@ shinyServer(function(input, output, session) {
       updateSliderTextInput(session = session,
                             inputId = "slider3",
                             selected = 3)
-    }
-    
-    else if (input$radio1 == 2){
+      
+    } else if (input$radio1 == 2) {
       updateSliderTextInput(session = session,
                             inputId = "slider1",
                             selected = 4.4)
@@ -1615,25 +1615,32 @@ shinyServer(function(input, output, session) {
       updateSliderTextInput(session = session,
                             inputId = "slider3",
                             selected = 2.4)
-      # showNotification("A potentially cyclable trip:\n",
-      #                  "A car trip where the cycling distance between its ",
-      #                  "origin and destination is shorter than 4.4 kilometers",
-      #                  type = "message", duration = 3)
+      
+    } else if (input$radio1 == 3) {
+      updateSliderTextInput(session = session,
+                            inputId = "slider1",
+                            selected = 1)
+      updateSliderTextInput(session = session,
+                            inputId = "slider2",
+                            selected = 10)
+      updateSliderTextInput(session = session,
+                            inputId = "slider3",
+                            selected = 1)
     }
   })
   
   
   
   observeEvent(input$switch2, {
-    if(input$switch2 == TRUE){
-      mapdeck_update(map_id = "qzmyMap")  %>%
+    if (input$switch2 == TRUE) {
+      mapdeck_update(map_id = "qzmyMap") %>%
         add_path(data = cycling_network,
                  stroke_colour = "#EA3546",
-                 stroke_width = 150,
+                 stroke_width = 50,
                  layer_id = "network",
                  update_view = FALSE)
     } else {
-      mapdeck_update(map_id = "qzmyMap")  %>%
+      mapdeck_update(map_id = "qzmyMap") %>%
         clear_path(layer_id = "network")
     }
   })
@@ -1679,7 +1686,7 @@ shinyServer(function(input, output, session) {
   observe({
     input$tabs
     
-    if (qz$zoom_level == "ISO") {
+    if (qz$zoom_level == "OUT") {
       
       updateMaterialSwitch(session = session, 
                            inputId = "switch2",
@@ -1738,14 +1745,14 @@ shinyServer(function(input, output, session) {
             update_view = FALSE)
       }
       
-      
     }
-    if(qz$zoom_level == "OUT") {
+    
+    # Scenario maps
+    if (qz$zoom_level == "IN") {
       
-      # updateMaterialSwitch(session = session,
-      #                      inputId = "switch2",
-      #                      value = TRUE)
-      if(input$radio1 == 1){
+      # Distance scenario
+      if (input$radio1 == 1) {
+        
         mapdeck_update(map_id = "qzmyMap")  %>%
           clear_polygon(layer_id = "choropleth") %>%
           add_path(data = cycling1,
@@ -1755,15 +1762,17 @@ shinyServer(function(input, output, session) {
                    update_view = FALSE)
         
         output$table <- renderDT({
+          
           DT::datatable(scenario1,
                         rownames = FALSE, colnames = c("",""), filter = "none",
                         style = "bootstrap",
-                        options = list(
-                          dom = 'b', ordering = FALSE
-                        )
-          )
+                        options = list(dom = 'b', ordering = FALSE))
+          
         })
-      } else if (input$radio1 == 2){
+        
+        # Elevation/time scenario
+      } else if (input$radio1 == 2) {
+        
         mapdeck_update(map_id = "qzmyMap")  %>%
           clear_polygon(layer_id = "choropleth") %>%
           add_path(data = cycling2,
@@ -1771,16 +1780,29 @@ shinyServer(function(input, output, session) {
                    stroke_colour = "#722AEE80",
                    layer_id = "cyclable",
                    update_view = FALSE)
+        
         output$table <- renderDT({
+          
           DT::datatable(scenario2,
                         rownames = FALSE, colnames = c("",""), filter = "none",
                         style = "bootstrap",
-                        options = list(
-                          dom = 'b', ordering = FALSE
-                        )
-          )
+                        options = list(dom = 'b', ordering = FALSE))
+          
         })
+        
+        # Baseline scenario
+      } else if (input$radio1 == 3) {
+        
+        mapdeck_update(map_id = "qzmyMap")  %>%
+          clear_polygon(layer_id = "choropleth") %>%
+          add_path(data = cycling_final,
+                   stroke_width  = "total_cycling",
+                   stroke_colour = "#722AEE80",
+                   layer_id = "cyclable",
+                   update_view = FALSE)
+        
       } else {
+        
         mapdeck_update(map_id = "qzmyMap")  %>%
           clear_polygon(layer_id = "choropleth") %>%
           clear_path(layer_id = "cyclable")

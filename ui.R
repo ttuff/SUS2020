@@ -504,9 +504,9 @@ shinyUI(
           absolutePanel(
             id = "commute_right_bar", style = "z-index:500;",
             class = "panel panel-default", top = 70, right = 50, width = 300,
-            h4("Explore"),
             conditionalPanel(
-              condition = "output.zoom_level == 'ISO'",
+              condition = "output.zoom_level == 'OUT'",
+              h4("Explore"),
               selectInput(
                 "commute_variable", label = NULL, 
                 choices = list("Share of trips taken by car" = 2, 
@@ -519,79 +519,63 @@ shinyUI(
                 min = 0,
                 max = 100,
                 value = c(0, 100))
-              
-            )
-          ),
+              ),
             
-          
-          
-          
-          absolutePanel(
-            id = "controls", class = "panel panel-default",
-            draggable = FALSE, top = 55, left = 300,
-            width = 0, height = 0,
-            dropdownButton(
-              label = "",
-              inputId = "drop",
-              icon = icon("gear"),
-              status = "primary",
-              circle = TRUE,
-              width = 330,
-              h4(strong("Modal Shift Scenarios")),
-              radioGroupButtons("radio1",label = "Predefined Scenarios",
-                                checkIcon = list(
-                                  yes = tags$i(class = "fa fa-check-square", 
-                                               style = "color: steelblue"),
-                                  no = tags$i(class = "fa fa-square-o", 
-                                              style = "color: steelblue")),
-                                choices = list("Scenario 1" = 1,"Scenario 2" = 2, "Reset" = 3),
-                                selected = 3),
+            # Simulate panel
+            conditionalPanel(
+              condition = "output.zoom_level == 'IN'",
+              
+              h4("Simulate"),
+              
+              radioGroupButtons(
+                "radio1",
+                label = "Modal shift scenarios",
+                choices = list("Baseline" = 3,
+                               "Modest" = 2,
+                               "Aggressive" = 1),
+                selected = 3),
+              
               sliderTextInput(
                 inputId = "slider1",
-                label = "Cycling Distance (km):", 
+                label = "Cycling distance (km):", 
                 choices = seq(from = 1,
                               to = 10,
                               by = 0.1),
                 grid = TRUE),
+              
               sliderTextInput(
                 inputId = "slider2",
-                label = "Elevation Gain (m):", 
+                label = "Elevation gain (m):", 
                 choices = seq(from = 10,
                               to = 55,
                               by = 5),
                 grid = TRUE
               ),
+              
               sliderTextInput(
                 inputId = "slider3",
-                label = "Time Ratio:", 
+                label = "Time ratio:", 
                 choices = seq(from = 1.0,
                               to = 3.0,
                               by = 0.2),
                 grid = TRUE
               ),
-              # materialSwitch(inputId = "switch1", 
-              #                label = "Modelled Cycling Route", 
-              #                status = "primary", value = FALSE),
+              
+              hr(),
+              
+              conditionalPanel(
+                condition = "output.zoom_level == 'IN' && input.radio1 <3",
+                h5(strong("VMT Reduction")),
+                DT::DTOutput("table")),
+              
               hr(),
               materialSwitch(inputId = "switch2", 
-                             label = "Cycling Network", 
+                             label = "Cycling network", 
                              status = "primary", value = TRUE)
-              
+              )
             )
-          ),
-          
-                    absolutePanel(
-                      id="panel1",
-                      style="z-index:500;",
-                      class = "panel panel-default",
-                      draggable = FALSE, 
-                      top = 60, right = 50,
-                      widtth = 60,
-                      
-                      conditionalPanel(
-                        condition = "output.zoom_level == 'OUT' & input.radio1 <3",
-                        h4(strong("VMT Reduction")),
-                        DT::DTOutput("table")
-                        
-                        ))))))
+          )
+        )
+      )
+    )
   )
