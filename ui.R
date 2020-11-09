@@ -371,7 +371,7 @@ shinyUI(
                   filter(tab == "pedestrian_sidewalk", type == "extra") %>%
                   pull(text)),
               imageOutput("sidewalk_calculation"))),
-          
+                   
           absolutePanel(
             id = "input_control_right", style="z-index:501;", 
             class = "panel panel-default", top = 70, right = 50, width = 300,
@@ -386,9 +386,9 @@ shinyUI(
               condition = "input.switch_biv == true",
               id = "plotContainer_ped_control",
               selectInput("data_for_plot_ped", 
-                        label = h4(tags$em(tags$span(
+                        label = h4(tags$span(
                           style = "color:#3C3C3B", 
-                          "Select your second variable"))), 
+                          "Select your second variable")), 
                         selected = "agg_proximity_score_quant3", 
                         choices = list(
                           "Walkable Access to Key Amenities" = 
@@ -399,20 +399,32 @@ shinyUI(
                             "visible_minority_pop", 
                           "Immigrant Population" = 
                             "immigrants")),
-          plotOutput("second_variable", width = 250, height = 250)),
+              fluidRow(
+                column(width = 2, offset = 10, align = "right",
+              actionLink(inputId = "pedestrian_hide_second_variable",
+                         label = "Hide"))),
+              conditionalPanel(
+                condition = "output.pedestrian_hide_second_variable_status == 1",
+                plotOutput("second_variable", width = 250, height = 250))),
           hr(),
-          h4(strong("Montreal Covid-19 Expanded Active Transit Corridors", 
-                    style = "color:#B2D235")), 
+          fluidRow(
+            column(width = 8,
+                   h4("Montreal Covid-19 Expanded Active Transit Corridors")),
+            column(width = 4, align = "right",
+                   actionLink(inputId = "vas_hide_explore",
+                              label = "Hide"))),
+          conditionalPanel(
+            condition = "output.vas_hide_explore_status == 1",
           materialSwitch(inputId = "vas_1", 
                          label = "Original Plan (May 15, 2020)", 
                          status = "info", value = FALSE),
           materialSwitch(inputId = "vas_2", 
-                         label = "Revised Plan (July 25, 2020", 
-                         status = "info", value = FALSE),
+                         label = "Revised Plan (July 25, 2020)", 
+                         status = "info", value = FALSE)),
+          hr(),
           selectInput(
             inputId = "variable_ped",
-            label = h4(strong("Choose more variables and explore further", 
-                              style = "color:#B2D235")), 
+            label = h4("Choose more variables and explore further"), 
             choices = list("Population density per square km" = 1, 
                            "Pedestrian social distancing capacity" = 2, 
                            "Work commutes by car (%)" = 3, 
