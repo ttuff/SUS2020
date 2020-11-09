@@ -6,7 +6,7 @@ shinyServer(function(input, output, session) {
   
   output$homepic <- renderImage({
     filename <- normalizePath(file.path("www/Sus_HOME.gif"))
-    return(list(src = filename, width = "90%",  contentType = "image/gif"))
+    return(list(src = filename, height = "100%",  contentType = "image/gif"))
     }, deleteFile = FALSE)
   
   output$mssipic <- renderImage({

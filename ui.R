@@ -153,7 +153,7 @@ shinyUI(
         tabItem(tabName = "home", 
                 fluidPage(
                   fluidRow(imageOutput("homepic", height = 800), 
-                           align = "left"),
+                           align = "center"),
                   fluidRow(hr()),
                   fluidRow(br()),
                   fluidRow(imageOutput("mssipic", height = 100), 
