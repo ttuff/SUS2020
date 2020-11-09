@@ -156,12 +156,12 @@ shinyUI(
                            align = "center"),
                   fluidRow(hr()),
                   fluidRow(br()),
-                  fluidRow(imageOutput("mssipic", height = 100), 
+                  fluidRow(imageOutput("mssipic", height = 80), 
                            align = "center"),
                   fluidRow(HTML(paste0(
-                    "<h4>An initiative of the <a href = ", "
+                    "<h5>An initiative of the <a href = ", "
                     'https://www.mcgill.ca/mssi/'>McGill ",
-                    "Sustainability Systems Initiative</a></h4>" 
+                    "Sustainability Systems Initiative</a></h5>" 
                   )),
                     align = "center")
                   )),

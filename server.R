@@ -11,8 +11,8 @@ shinyServer(function(input, output, session) {
   
   output$mssipic <- renderImage({
     filename <- normalizePath(file.path("www/mssi_logo.png"))
-    return(list(src = filename, contentType = "image/png",  width = 100,
-                height = 100))
+    return(list(src = filename, contentType = "image/png",  width = 80,
+                height = 80))
   }, deleteFile = FALSE)
   
   output$glamour_shot <- renderImage({
