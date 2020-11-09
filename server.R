@@ -102,13 +102,12 @@ shinyServer(function(input, output, session) {
     p <- ggplot(quant_car_share) +
       geom_sf(aes(fill = as.factor(quant3)), color = "white", 
               size = 0.05) +
-      scale_fill_manual(values = rev(colors[c(1:3)])) +
+      scale_fill_manual(values = rev(colors[c(4:6)])) +
       theme_map()
     
     ggdraw() + 
       draw_image(dropshadow2, scale = 1.59, vjust = 0.003, hjust = 0.003) +
-      draw_plot(p, scale = .85) +
-      draw_image(uni_legend, scale = .45, vjust = 0.25, hjust = 0.25) 
+      draw_plot(p, scale = .85) 
     
   })
 
@@ -1037,10 +1036,10 @@ shinyServer(function(input, output, session) {
   # Set title across zoom levels
   output$title_text_ped <- renderText({
     if( rz_pedestrian$zoom == "OUT"){
-      paste0("Pedestrian Capacity for Social Distancing, Census Tracts")
+      paste0("Pedestrian capacity for social distancing (census tracts)")
     } else if (rz_pedestrian$zoom == "IN") {
-      "Pedestrian Capacity for Social Distancing, Dissemination Area"  
-    } else {"Explore Sidewalks and Parks"}
+      "Pedestrian capacity for social distancing (dissemination areas)"  
+    } else {"Explore sidewalks and parks"}
   })
   
   # Hide extra text
@@ -1666,13 +1665,47 @@ shinyServer(function(input, output, session) {
   })
   
   
+  ## Draw histogram ------------------------------------------------------------
+  
+  output$commute_histogram <- renderPlot({
+    
+    if (input$commute_variable == 1) {
+      data <- rename(cycling_access, var = cycling_ac)
+    } else if (input$commute_variable == 2) {
+      data <- rename(car_share, var = Car_per)
+    } else if (input$commute_variable == 3) {
+      data <- rename(trip_distance, var = avg_dist)
+    }
+    
+    data <- st_drop_geometry(data) %>% mutate(color = as.character(color))
+  
+    selection <- as.numeric(input$commute_variable)
+    
+    x_var_name <- c("Access to cycling inf. (km/sq.km)", 
+                    "Share of trips taken by car (%)", 
+                    "Average commuting distance (km)")[selection] 
+    
+    data %>%
+      ggplot() +
+      geom_histogram(aes(var, fill = color), bins = 25) +
+      scale_fill_manual(values = deframe(distinct(select(data, color, color_value)))) +
+      labs(x = x_var_name, y = NULL) +
+      theme_minimal() +
+      theme(legend.position = "none",
+            panel.grid.minor.x = element_blank(),
+            panel.grid.major.x = element_blank(),
+            panel.grid.minor.y = element_blank())    
+    
+  })
+  
+  
   ## Set zoom level ------------------------------------------------------------
   
   observeEvent(input$qzmyMap_view_change$zoom, {
     
-    if (input$qzmyMap_view_change$zoom > 10) {
-      qz$zoom_level <- 'OUT'} else {
-        qz$zoom_level <- 'ISO'}
+    if (input$qzmyMap_view_change$zoom > 10.2) {
+      qz$zoom_level <- 'IN'} else {
+        qz$zoom_level <- 'OUT'}
     
   })
   
@@ -1697,7 +1730,8 @@ shinyServer(function(input, output, session) {
   ## Control the scenario sliders ----------------------------------------------
   
   observeEvent(input$radio1, {
-    if(input$radio1 == 1){
+    
+    if (input$radio1 == 1) {
       updateSliderTextInput(session = session,
                             inputId = "slider1",
                             selected = 4.4)
@@ -1707,9 +1741,8 @@ shinyServer(function(input, output, session) {
       updateSliderTextInput(session = session,
                             inputId = "slider3",
                             selected = 3)
-    }
-    
-    else if (input$radio1 == 2){
+      
+    } else if (input$radio1 == 2) {
       updateSliderTextInput(session = session,
                             inputId = "slider1",
                             selected = 4.4)
@@ -1719,25 +1752,32 @@ shinyServer(function(input, output, session) {
       updateSliderTextInput(session = session,
                             inputId = "slider3",
                             selected = 2.4)
-      # showNotification("A potentially cyclable trip:\n",
-      #                  "A car trip where the cycling distance between its ",
-      #                  "origin and destination is shorter than 4.4 kilometers",
-      #                  type = "message", duration = 3)
+      
+    } else if (input$radio1 == 3) {
+      updateSliderTextInput(session = session,
+                            inputId = "slider1",
+                            selected = 1)
+      updateSliderTextInput(session = session,
+                            inputId = "slider2",
+                            selected = 10)
+      updateSliderTextInput(session = session,
+                            inputId = "slider3",
+                            selected = 1)
     }
   })
   
   
   
   observeEvent(input$switch2, {
-    if(input$switch2 == TRUE){
-      mapdeck_update(map_id = "qzmyMap")  %>%
+    if (input$switch2 == TRUE) {
+      mapdeck_update(map_id = "qzmyMap") %>%
         add_path(data = cycling_network,
                  stroke_colour = "#EA3546",
-                 stroke_width = 150,
+                 stroke_width = 50,
                  layer_id = "network",
                  update_view = FALSE)
     } else {
-      mapdeck_update(map_id = "qzmyMap")  %>%
+      mapdeck_update(map_id = "qzmyMap") %>%
         clear_path(layer_id = "network")
     }
   })
@@ -1783,7 +1823,7 @@ shinyServer(function(input, output, session) {
   observe({
     input$tabs
     
-    if (qz$zoom_level == "ISO") {
+    if (qz$zoom_level == "OUT") {
       
       updateMaterialSwitch(session = session, 
                            inputId = "switch2",
@@ -1793,6 +1833,7 @@ shinyServer(function(input, output, session) {
         
         mapdeck_update(map_id = "qzmyMap")  %>%
           clear_path(layer_id = "cyclable") %>%
+          clear_path(layer_id = "baseline") %>%
           add_polygon(data = {
             cycling_access %>% 
               filter(cycling_ac >= input$commute_explore_slider[1],
@@ -1802,7 +1843,7 @@ shinyServer(function(input, output, session) {
             stroke_colour = "#868683",
             stroke_width = 50,
             layer_id = "choropleth",
-            legend = legend1,
+            legend = FALSE,
             highlight_colour  =  "#AAFFFFFF",
             auto_highlight = TRUE,
             update_view = FALSE)
@@ -1811,6 +1852,7 @@ shinyServer(function(input, output, session) {
         
         mapdeck_update(map_id = "qzmyMap") %>%
           clear_path(layer_id = "cyclable") %>%
+          clear_path(layer_id = "baseline") %>%
           add_polygon(data = {
             car_share %>% 
               filter(Car_per >= input$commute_explore_slider[1],
@@ -1819,7 +1861,7 @@ shinyServer(function(input, output, session) {
             stroke_colour = "#CCD1D1",
             stroke_width = 50,
             layer_id = "choropleth",
-            legend = legend2,
+            legend = FALSE,
             highlight_colour = "#AAFFFFFF",
             auto_highlight = TRUE,
             update_view = FALSE)
@@ -1828,6 +1870,7 @@ shinyServer(function(input, output, session) {
         
         mapdeck_update(map_id = "qzmyMap")  %>%
           clear_path(layer_id = "cyclable") %>%
+          clear_path(layer_id = "baseline") %>%
           add_polygon(data = {
             trip_distance %>% 
               filter(avg_dist >= input$commute_explore_slider[1],
@@ -1836,55 +1879,81 @@ shinyServer(function(input, output, session) {
             stroke_colour = "#CCD1D1",
             stroke_width = 50,
             layer_id = "choropleth",
-            legend = legend3,
+            legend = FALSE,
             highlight_colour  =  "#AAFFFFFF",
             auto_highlight = TRUE,
             update_view = FALSE)
       }
       
-      
     }
-    if(qz$zoom_level == "OUT") {
+    
+    # Scenario maps
+    if (qz$zoom_level == "IN") {
       
-      # updateMaterialSwitch(session = session,
-      #                      inputId = "switch2",
-      #                      value = TRUE)
-      if(input$radio1 == 1){
+      if (input$radio1 == 3) updateMaterialSwitch(session, "baseline_switch", 
+                                                  value = TRUE)
+      
+      # Baseline scenario
+      if (input$baseline_switch) {
+        mapdeck_update(map_id = "qzmyMap")  %>%
+          clear_polygon(layer_id = "choropleth") %>%
+          add_path(data = cycling_final,
+                   stroke_width  = "total_cycling",
+                   stroke_colour = "#722AEE80",
+                   layer_id = "baseline",
+                   width_scale = 0.2,
+                   update_view = FALSE)
+        
+      } else if (!input$baseline_switch) {
+        mapdeck_update(map_id = "qzmyMap")  %>%
+          clear_polygon(layer_id = "choropleth") %>%
+          clear_path("baseline")
+      }
+      
+      # Distance scenario
+      if (input$radio1 == 1) {
+        
         mapdeck_update(map_id = "qzmyMap")  %>%
           clear_polygon(layer_id = "choropleth") %>%
           add_path(data = cycling1,
                    stroke_width  = "total_car",
                    stroke_colour = "#0061FF80",
                    layer_id = "cyclable",
+                   width_scale = 0.2,
                    update_view = FALSE)
         
         output$table <- renderDT({
+          
           DT::datatable(scenario1,
                         rownames = FALSE, colnames = c("",""), filter = "none",
                         style = "bootstrap",
-                        options = list(
-                          dom = 'b', ordering = FALSE
-                        )
-          )
+                        options = list(dom = 'b', ordering = FALSE))
+          
         })
-      } else if (input$radio1 == 2){
+        
+        # Elevation/time scenario
+      } else if (input$radio1 == 2) {
+        
         mapdeck_update(map_id = "qzmyMap")  %>%
           clear_polygon(layer_id = "choropleth") %>%
           add_path(data = cycling2,
                    stroke_width  = "total_car",
-                   stroke_colour = "#722AEE80",
+                   stroke_colour = "#0061FF80",
                    layer_id = "cyclable",
+                   width_scale = 0.2,
                    update_view = FALSE)
+        
         output$table <- renderDT({
+          
           DT::datatable(scenario2,
                         rownames = FALSE, colnames = c("",""), filter = "none",
                         style = "bootstrap",
-                        options = list(
-                          dom = 'b', ordering = FALSE
-                        )
-          )
+                        options = list(dom = 'b', ordering = FALSE))
+          
         })
-      } else {
+        
+      } else if (input$radio1 == 3) {
+        
         mapdeck_update(map_id = "qzmyMap")  %>%
           clear_polygon(layer_id = "choropleth") %>%
           clear_path(layer_id = "cyclable")
