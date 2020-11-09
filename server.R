@@ -1374,11 +1374,14 @@ shinyServer(function(input, output, session) {
       quant_high_ped_ct <- round(quantile(census_analysis_ct_plot$social_distancing, c(1/3, 2/3))[2], 2)
         
         HTML(
-          glue("At the census tract scale, after removing outliers with a population below 500, the capacity for pedestrian social distancing varies from ",
+          glue("At the census tract scale, after removing outliers with a ",
+               "population below 500, the capacity for pedestrian social distancing varies from ",
                "{min_ped_ct}% to {max_ped_ct}%, with an average value of {mean_ped_ct}% ",
                "and a median value of {median_ped_ct}%. ",
                "Two thirds of census tracts have a score between {quant_low_ped_ct}% ",
-               "and {quant_high_ped_ct}%. Out of the 532 census tracts, 227 of them have a capacity score below 100%, while 85 of them have a capacity score below 50%. "))
+               "and {quant_high_ped_ct}%. Out of the 532 census tracts, ",
+               "227 of them have a capacity score below 100%, ",
+               "while 85 of them have a capacity score below 50%. "))
     }
     
     else if (rz_pedestrian$zoom == "FINAL") {
@@ -1392,9 +1395,11 @@ shinyServer(function(input, output, session) {
       
       HTML(
         glue("Sidewalk width in Montreal varies from ",
-             "{min_sidewalk} meters to {max_sidewalk} meters, with an average value of {mean_sidewalk} meters ",
+             "{min_sidewalk} meters to {max_sidewalk} meters, ",
+             "with an average value of {mean_sidewalk} meters ",
              "and a median value of {median_sidewalk} meters. ",
-             "Two thirds of Montreal's sidewalks have widths between {quant_low_sidewalk} meters and {quant_high_sidewalk} meters. "))
+             "Two thirds of Montreal's sidewalks have widths ",
+             "between {quant_low_sidewalk} meters and {quant_high_sidewalk} meters. "))
     }
   })
   
