@@ -5,9 +5,8 @@ shinyServer(function(input, output, session) {
   ### Render images from files #################################################
   
   output$homepic <- renderImage({
-    filename <- normalizePath(file.path("www/Sus logo transparent.png"))
-    return(list(src = filename, contentType = "image/png",  width = 571,
-                height = 551))
+    filename <- normalizePath(file.path("www/Sus_HOME.gif"))
+    return(list(src = filename, width = "90%",  contentType = "image/gif"))
     }, deleteFile = FALSE)
   
   output$mssipic <- renderImage({
