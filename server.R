@@ -1420,20 +1420,6 @@ shinyServer(function(input, output, session) {
         
         dat_ped_uni <- data_for_plot_uni() %>% filter(ID == rz_pedestrian$poly_selected)
         
-        # place_name <- case_when(
-        #   scale_singular == "borough/city" ~ 
-        #     glue("{dat_ped$ID}"),
-        #   scale_singular == "census tract" ~ 
-        #     glue("Census tract {dat$name}"),
-        #   scale_singular == "dissemination area" ~ 
-        #     glue("Dissemination area {dat$name}")
-        # )
-        # 
-        # place_heading <- 
-        #   if_else(scale_singular == "borough/city",
-        #           glue("{dat$name_2} of {place_name}"),
-        #           glue("{place_name} ({dat$name_2})"))
-        
         poly_value_ped_uni <- dat_ped_uni$social_distancing
         
         quintile_ped_uni <- quantile(vec_ped_uni, c(0.2, 0.4, 0.6, 0.8))
@@ -1451,10 +1437,6 @@ shinyServer(function(input, output, session) {
           str_detect(larger_smaller_ped_uni, "smaller") ~ "poor",
           TRUE ~ "moderate"
         )
-        
-        # percentile <- 
-        #   {length(vec[vec <= dat$left_variable_full]) / length(vec) * 100} %>% 
-        #   round()
         
         HTML(glue("The dissemination area {dat_ped_uni$ID} has a population of ",
                   "{prettyNum(dat_ped_uni$population, ',')} and a pedestrian social distancing capacity ",
@@ -1812,5 +1794,4 @@ shinyServer(function(input, output, session) {
   })
   
 })
-
 
