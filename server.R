@@ -1550,17 +1550,16 @@ shinyServer(function(input, output, session) {
   
   ### Commuter mode shift ######################################################
   
-  
   ## Draw map ------------------------------------------------------------------
   
   output$qzmyMap <- renderMapdeck({
     
-    mapdeck(token = paste0("pk.eyJ1Ijoiemhhb3FpYW8wMTIwIiwiYSI6ImNrYXBnbHB3d",
-                           "TFtbDIycWxvZ285cjNmcG0ifQ.fieGPt1pLEgHs1AI8NvjYg"),
-            style = "mapbox://styles/zhaoqiao0120/ckh1hkzwe02br19nvzt9bvxcg",
+    mapdeck(style = "mapbox://styles/dwachsmuth/ckh6cg4wg05nw19p5yrs9tib7",
+            token = paste0("pk.eyJ1IjoiZHdhY2hzbXV0aCIsImEiOiJja2g2Y2JpbDc",
+                           "wMDc5MnltbWpja2xpYTZhIn0.BXdU7bsQYWcSwmmBx8DNqQ"),
             zoom = 10, location = c(-73.611, 45.526))
     
-    })
+  })
   
   
   ## Set zoom level ------------------------------------------------------------
@@ -1569,9 +1568,9 @@ shinyServer(function(input, output, session) {
     
     if (input$qzmyMap_view_change$zoom > 10) {
       qz$zoom_level <- 'OUT'} else {
-      qz$zoom_level <- 'ISO'}
+        qz$zoom_level <- 'ISO'}
     
-    })
+  })
   
   output$zoom_level <- reactive(qz$zoom_level)
   outputOptions(output, "zoom_level", suspendWhenHidden = FALSE)
@@ -1591,6 +1590,7 @@ shinyServer(function(input, output, session) {
   })
   
   
+  ## Control the scenario sliders ----------------------------------------------
   
   observeEvent(input$radio1, {
     if(input$radio1 == 1){
@@ -1620,7 +1620,8 @@ shinyServer(function(input, output, session) {
       #                  "origin and destination is shorter than 4.4 kilometers",
       #                  type = "message", duration = 3)
     }
-    })
+  })
+  
   
   
   observeEvent(input$switch2, {
@@ -1637,110 +1638,104 @@ shinyServer(function(input, output, session) {
     }
   })
   
-  observeEvent(input$variable,{
-    if(input$variable == 1){
-      updateKnobInput(session = session,
-                      inputId = "knob1",
-                      label = "Access to Cycling Infrastructure (km/sq.km):",
-                      options = list(
-                        step = 0.5,
-                        min = 4,
+  
+  ## Change Explore sliders when menu selection changes ------------------------
+  
+  observeEvent(input$commute_variable, {
+    
+    if (input$commute_variable == 1) {
+      
+      updateSliderInput(session = session,
+                        inputId = "commute_explore_slider",
+                        label = "Cycling infrastructure (km/sq.km) by census tract:",
+                        min = 0, 
                         max = 17,
-                        displayPrevious = TRUE,
-                        lineCap = "round",
-                        fgColor = "#B2D235",
-                        inputColor = "#B2D235"))
-      updateKnobInput(session = session,
-                      inputId = "knob1",
-                      value = 17
-      )
-    } else if(input$variable == 2){
-      updateKnobInput(session = session,
-                      inputId = "knob1",
-                      label = "Car Share by Origin Census Tract (%):",
-                      options = list(
-                        step = 1,
-                        max = 91,
-                        min = 4,
-                        lineCap = "round",
-                        fgColor = "#1983B0",
-                        inputColor = "#1983B0"
-                      ))
-      updateKnobInput(session = session,
-                      inputId = "knob1",
-                      value = 91
-      )
-    } else {
-      updateKnobInput(session = session,
-                      inputId = "knob1",
-                      label = "Average Commuting Distance (km):",
-                      options = list(
-                        step = 0.5,
-                        max = 23.0,
-                        min = 3.5,
-                        lineCap = "round",
-                        fgColor = "#C56F34",
-                        inputColor = "#C56F34"
-                      )
-      )
-      updateKnobInput(session = session,
-                      inputId = "knob1",
-                      value = 23.0
-      )
+                        value = c(0, 17))
+      
+    } else if (input$commute_variable == 2) {
+      
+      updateSliderInput(session = session,
+                        inputId = "commute_explore_slider",
+                        label = "% of trips taken by car, by census tract",
+                        min = 0,
+                        max = 100,
+                        value = c(0, 100))
+      
+    } else if (input$commute_variable == 3) {
+      
+      updateSliderInput(session = session,
+                        inputId = "commute_explore_slider",
+                        label = "Length of the average commute (km), by census tract:",
+                        min = 0,
+                        max = 23,
+                        value = c(0, 100))
     }
+    
   })
+  
+  
+  ## Change map in reponse to inputs -------------------------------------------
   
   observe({
     input$tabs
-    if( qz$zoom_level == "ISO"){
-      updateMaterialSwitch(session = session,
+    
+    if (qz$zoom_level == "ISO") {
+      
+      updateMaterialSwitch(session = session, 
                            inputId = "switch2",
                            value = FALSE)
-      if (input$variable == 1) {
-        cycling_access_select <- cycling_access[which(cycling_access$cycling_ac <= input$knob1),]
+      
+      if (input$commute_variable == 1) {
+        
         mapdeck_update(map_id = "qzmyMap")  %>%
-          #clear_polygon(layer_id = "choropleth")%>%
           clear_path(layer_id = "cyclable") %>%
-          add_polygon(data = cycling_access_select,
-                      fill_opacity = 150,
-                      fill_colour = "color_value",
-                      stroke_colour = "#868683",
-                      stroke_width = 100,
-                      layer_id = "choropleth",
-                      legend = legend1,
-                      highlight_colour  =  "#AAFFFFFF",
-                      auto_highlight = TRUE,
-                      update_view = FALSE)
-      } else if (input$variable == 2) {
-        car_share_select <- car_share[which(car_share$Car_per <= input$knob1),]
-        mapdeck_update(map_id = "qzmyMap")  %>%
-          #clear_polygon(layer_id = "choropleth")%>%
+          add_polygon(data = {
+            cycling_access %>% 
+              filter(cycling_ac >= input$commute_explore_slider[1],
+                     cycling_ac <= input$commute_explore_slider[2])},
+            fill_opacity = 150,
+            fill_colour = "color_value",
+            stroke_colour = "#868683",
+            stroke_width = 50,
+            layer_id = "choropleth",
+            legend = legend1,
+            highlight_colour  =  "#AAFFFFFF",
+            auto_highlight = TRUE,
+            update_view = FALSE)
+        
+      } else if (input$commute_variable == 2) {
+        
+        mapdeck_update(map_id = "qzmyMap") %>%
           clear_path(layer_id = "cyclable") %>%
-          add_polygon(data = car_share_select,
-                      fill_opacity = 150,
-                      fill_colour = "color_value",#car_share
-                      stroke_colour = "#CCD1D1",
-                      stroke_width = 100,
-                      layer_id = "choropleth",
-                      legend = legend2,
-                      highlight_colour  =  "#AAFFFFFF",
-                      auto_highlight = TRUE,
-                      update_view = FALSE)
+          add_polygon(data = {
+            car_share %>% 
+              filter(Car_per >= input$commute_explore_slider[1],
+                     Car_per <= input$commute_explore_slider[2])},
+            fill_colour = "color_value",
+            stroke_colour = "#CCD1D1",
+            stroke_width = 50,
+            layer_id = "choropleth",
+            legend = legend2,
+            highlight_colour = "#AAFFFFFF",
+            auto_highlight = TRUE,
+            update_view = FALSE)
+        
       } else {
-        trip_distance_select <- trip_distance[which(trip_distance$avg_dist <= input$knob1),]
+        
         mapdeck_update(map_id = "qzmyMap")  %>%
-          #clear_polygon(layer_id = "choropleth")%>%
           clear_path(layer_id = "cyclable") %>%
-          add_polygon(data = trip_distance_select,
-                      fill_opacity = 150,
-                      fill_colour = "color_value",#car_share
-                      stroke_colour = "#CCD1D1",
-                      stroke_width = 100,
-                      layer_id = "choropleth",
-                      legend = legend3,
-                      highlight_colour  =  "#AAFFFFFF",
-                      auto_highlight = TRUE,
-                      update_view = FALSE)
+          add_polygon(data = {
+            trip_distance %>% 
+              filter(avg_dist >= input$commute_explore_slider[1],
+                     avg_dist <= input$commute_explore_slider[2])},
+            fill_colour = "color_value",
+            stroke_colour = "#CCD1D1",
+            stroke_width = 50,
+            layer_id = "choropleth",
+            legend = legend3,
+            highlight_colour  =  "#AAFFFFFF",
+            auto_highlight = TRUE,
+            update_view = FALSE)
       }
       
       
@@ -1794,4 +1789,3 @@ shinyServer(function(input, output, session) {
   })
   
 })
-
