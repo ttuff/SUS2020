@@ -392,13 +392,13 @@ shinyUI(
                         selected = "agg_proximity_score_quant3", 
                         choices = list(
                           "Walkable Access to Key Amenities" = 
-                            "agg_proximity_score_quant3",
+                            "agg_proximity_score",
                           "Net Median Income" = 
-                            "net_median_income_quant3",
+                            "net_median_income",
                           "Visible Minority Population" = 
-                            "visible_minority_pop_quant3", 
+                            "visible_minority_pop", 
                           "Immigrant Population" = 
-                            "immigrants_quant3")),
+                            "immigrants")),
           plotOutput("second_variable", width = 250, height = 250)),
           hr(),
           h4(strong("Montreal Covid-19 Expanded Active Transit Corridors", 
@@ -478,7 +478,9 @@ shinyUI(
         tabItem(
           tabName = "mode",
           tags$head(tags$style(HTML('
-          #title_bar_commute {border-width: 10px; border-color: rgb(255, 255, 255);}'))),
+          #title_bar_commute {border-width: 10px; border-color: rgb(255, 255, 255);}
+          #commute_right_bar {border-width: 10px; 
+          border-color: rgba(255,255,255,1);}'))),
           
           # Main map
           mapdeckOutput(outputId = "qzmyMap", height = "1200px"),
@@ -498,95 +500,90 @@ shinyUI(
                      filter(tab == "commute", type == "extra") %>% 
                      pull(text)))),
             
+          # Explore panel
           absolutePanel(
-            id = "controls", class = "panel panel-default",
-            draggable = FALSE, top = 55, left = 300,
-            width = 0, height = 0,
-            dropdownButton(
-              label = "",
-              inputId = "drop",
-              icon = icon("gear"),
-              status = "primary",
-              circle = TRUE,
-              width = 330,
-              h4(strong("Modal Shift Scenarios")),
-              radioGroupButtons("radio1",label = "Predefined Scenarios",
-                                checkIcon = list(
-                                  yes = tags$i(class = "fa fa-check-square", 
-                                               style = "color: steelblue"),
-                                  no = tags$i(class = "fa fa-square-o", 
-                                              style = "color: steelblue")),
-                                choices = list("Scenario 1" = 1,"Scenario 2" = 2, "Reset" = 3),
-                                selected = 3),
+            id = "commute_right_bar", style = "z-index:500;",
+            class = "panel panel-default", top = 70, right = 50, width = 300,
+            conditionalPanel(
+              condition = "output.zoom_level == 'OUT'",
+              h4("Explore"),
+              selectInput(
+                "commute_variable", label = NULL, 
+                choices = list("Share of trips taken by car" = 2, 
+                               "Average commuting distance" = 3, 
+                               "Access to cycling infrastructure" = 1),
+                selected = 2),
+              sliderInput(
+                inputId = "commute_explore_slider",
+                label = "% of trips taken by car, by census tract",
+                min = 0,
+                max = 100,
+                value = c(0, 100)),
+              plotOutput("commute_histogram", height = 200)
+              ),
+            
+            # Simulate panel
+            conditionalPanel(
+              condition = "output.zoom_level == 'IN'",
+              
+              h4("Simulate"),
+              
+              radioGroupButtons(
+                "radio1",
+                label = "Modal shift scenarios",
+                choices = list("Baseline" = 3,
+                               "Distance" = 1,
+                               "Elevation/time" = 2),
+                selected = 3),
+              
+              conditionalPanel(
+                condition = "output.zoom_level == 'IN' && input.radio1 <3",
+                materialSwitch(inputId = "baseline_switch", 
+                               label = "Show baseline", 
+                               status = "primary", value = TRUE)
+                ),
+              
               sliderTextInput(
                 inputId = "slider1",
-                label = "Cycling Distance (km):", 
+                label = "Cycling distance (km):", 
                 choices = seq(from = 1,
                               to = 10,
                               by = 0.1),
                 grid = TRUE),
+              
               sliderTextInput(
                 inputId = "slider2",
-                label = "Elevation Gain (m):", 
+                label = "Elevation gain (m):", 
                 choices = seq(from = 10,
                               to = 55,
                               by = 5),
                 grid = TRUE
               ),
+              
               sliderTextInput(
                 inputId = "slider3",
-                label = "Time Ratio:", 
+                label = "Time ratio:", 
                 choices = seq(from = 1.0,
                               to = 3.0,
                               by = 0.2),
                 grid = TRUE
               ),
-              # materialSwitch(inputId = "switch1", 
-              #                label = "Modelled Cycling Route", 
-              #                status = "primary", value = FALSE),
+              
+              hr(),
+              
+              conditionalPanel(
+                condition = "output.zoom_level == 'IN' && input.radio1 <3",
+                h5(strong("VMT Reduction")),
+                DT::DTOutput("table")),
+              
               hr(),
               materialSwitch(inputId = "switch2", 
-                             label = "Cycling Network", 
-                             status = "primary", value = TRUE)
-              
+                             label = "Cycling network", 
+                             status = "primary", value = FALSE)
+              )
             )
-          ),
-          
-                    absolutePanel(
-                      id="panel1",
-                      style="z-index:500;",
-                      class = "panel panel-default",
-                      draggable = FALSE, 
-                      top = 60, right = 50,
-                      widtth = 60,
-                      conditionalPanel(
-                        condition = "output.zoom_level == 'ISO'",
-                        h4(strong("Choropleth Map")),
-                        pickerInput(
-                          inputId = "variable",
-                          label = "Select a variable:", 
-                          choices = list("Share of Car Trips" = 2, 
-                                         "Average Commuting Distance" = 3, 
-                                         "Access to Cycling Infrastructure" = 1),
-                          selected = 2
-                        ),
-                        knobInput(
-                          inputId = "knob1",
-                          label = "Car Share by Origin Census Tract:",
-                          step = 0.5,
-                          min = 4,
-                          max = 17,
-                          value = 17,
-                          displayPrevious = TRUE,
-                          lineCap = "round",
-                          fgColor = "#B2D235",
-                          inputColor = "#B2D235"
-                        )
-                      ),
-                      conditionalPanel(
-                        condition = "output.zoom_level == 'OUT' & input.radio1 <3",
-                        h4(strong("VMT Reduction")),
-                        DT::DTOutput("table")
-                        
-                        ))))))
+          )
+        )
+      )
+    )
   )

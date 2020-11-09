@@ -101,13 +101,12 @@ shinyServer(function(input, output, session) {
     p <- ggplot(quant_car_share) +
       geom_sf(aes(fill = as.factor(quant3)), color = "white", 
               size = 0.05) +
-      scale_fill_manual(values = rev(colors[c(1:3)])) +
+      scale_fill_manual(values = rev(colors[c(4:6)])) +
       theme_map()
     
     ggdraw() + 
       draw_image(dropshadow2, scale = 1.59, vjust = 0.003, hjust = 0.003) +
-      draw_plot(p, scale = .85) +
-      draw_image(uni_legend, scale = .45, vjust = 0.25, hjust = 0.25) 
+      draw_plot(p, scale = .85) 
     
   })
 
@@ -876,9 +875,8 @@ shinyServer(function(input, output, session) {
   data_for_plot_uni <- reactive({
     
     data_for_plot_uni <- census_analysis_quantile_WSG %>%
-      dplyr::select(social_distancing_capacity_pop_perc_2m_quant3)
-    
-    colnames(data_for_plot_uni) <- c("left_variable", "geometry")
+      dplyr::select(left_variable_full = social_distancing_capacity_pop_perc_2m,
+                    left_variable = social_distancing_capacity_pop_perc_2m_quant3)
     
     data_for_plot_uni <- data_for_plot_uni %>%
       mutate(
@@ -890,7 +888,9 @@ shinyServer(function(input, output, session) {
       mutate(prop_driving = round(census_analysis_quantile_WSG$prop_driving, 0),
              pop_density = log(round(census_analysis_quantile_WSG$`pop_density(sqkm)`, 0)),
              trip_scale = census_analysis_quantile_WSG$trip_scale,
-             social_distancing = census_analysis_quantile_WSG$social_distancing_capacity_pop_perc_2m)
+             social_distancing = census_analysis_quantile_WSG$social_distancing_capacity_pop_perc_2m,
+             ID = census_analysis_quantile_WSG$GeoUID,
+             population = census_analysis_quantile_WSG$population)
 
     
     if (input$variable_ped == 3) {
@@ -916,12 +916,11 @@ shinyServer(function(input, output, session) {
   ## Bivariate chloropleth map -------------------------------------------------
   bivariate_chloropleth <- reactive({
     data_for_plot_bi <- census_analysis_quantile_WSG %>%
-      dplyr::select(social_distancing_capacity_pop_perc_2m_quant3, 
-                    input$data_for_plot_ped)
-    if (length(colnames(data_for_plot_bi)) == 2){
-      data_for_plot_bi <- cbind(data_for_plot_bi[,1], data_for_plot_bi)[,1:3]}
-    #print(head(data_for_plot_bi))
-    colnames(data_for_plot_bi) <- c("left_variable", "right_variable",  "geometry")
+      dplyr::select(left_variable_full = social_distancing_capacity_pop_perc_2m, 
+                    right_variable_full = input$data_for_plot_ped,
+                    left_variable = social_distancing_capacity_pop_perc_2m_quant3,
+                    right_variable = paste0(input$data_for_plot_ped, "_quant3"))
+    
     data_for_plot_bivariate <- data_for_plot_bi %>%
       mutate(
         group = paste(
@@ -933,9 +932,8 @@ shinyServer(function(input, output, session) {
              pop_density = log(round(census_analysis_quantile_WSG$`pop_density(sqkm)`, 0)),
              trip_scale = census_analysis_quantile_WSG$trip_scale,
              social_distancing = census_analysis_quantile_WSG$social_distancing_capacity_pop_perc_2m,
-             net_median_income = census_analysis_quantile_WSG$net_median_income,
-             visible_minority_pop = census_analysis_quantile_WSG$visible_minority_pop,
-             immigrants_pop = census_analysis_quantile_WSG$immigrants) %>% 
+             ID = census_analysis_quantile_WSG$GeoUID,
+             population = census_analysis_quantile_WSG$population) %>% 
       left_join(bivariate_color_scale, by = "group") %>% 
       drop_na(right_variable) 
     
@@ -959,9 +957,7 @@ shinyServer(function(input, output, session) {
     colors <- as.character(colors)
     
     data_for_plot_ped <- census_analysis_quantile %>%
-      dplyr::select(input$data_for_plot_ped)
-    
-    colnames(data_for_plot_ped) <- c("right_variable",  "geometry")
+      dplyr::select(right_variable = paste0(input$data_for_plot_ped, "_quant3"))
     
     p <- ggplot(data_for_plot_ped) +
       geom_sf(data = census_circular, fill = "transparent", color = "black", size = 0.05) +
@@ -1016,7 +1012,6 @@ shinyServer(function(input, output, session) {
   
   # Update poly_selected on click
   observeEvent(input$PedestrianMap_polygon_click, {
-    print(rz_pedestrian$poly_selected)
     lst_ped <- jsonlite::fromJSON(input$PedestrianMap_polygon_click)
     rz_pedestrian$poly_selected <- lst_ped$object$properties$id
   })
@@ -1040,10 +1035,10 @@ shinyServer(function(input, output, session) {
   # Set title across zoom levels
   output$title_text_ped <- renderText({
     if( rz_pedestrian$zoom == "OUT"){
-      paste0("Pedestrian Capacity for Social Distancing, Census Tracts")
+      paste0("Pedestrian capacity for social distancing (census tracts)")
     } else if (rz_pedestrian$zoom == "IN") {
-      "Pedestrian Capacity for Social Distancing, Dissemination Area"  
-    } else {"Explore Sidewalks and Parks"}
+      "Pedestrian capacity for social distancing (dissemination areas)"  
+    } else {"Explore sidewalks and parks"}
   })
   
   # Hide extra text
@@ -1121,6 +1116,7 @@ shinyServer(function(input, output, session) {
               , fill_opacity = 1
               , update_view = FALSE
               , layer_id = "chloropleth_layer"
+              , id = "ID"
               , auto_highlight = TRUE
               , highlight_colour = '#FFFFFF90'
               , legend = FALSE
@@ -1205,6 +1201,7 @@ shinyServer(function(input, output, session) {
                 , fill_opacity = 1
                 , update_view = FALSE
                 , layer_id = "univariate_layer"
+                , id = "ID"
                 , auto_highlight = TRUE
                 , highlight_colour = '#FFFFFF90'
                 , legend = FALSE
@@ -1383,6 +1380,124 @@ shinyServer(function(input, output, session) {
                "while 85 of them have a capacity score below 50%. "))
     }
     
+    else if (rz_pedestrian$zoom == "IN" & input$switch_biv == FALSE) {
+      
+      vec_ped_uni <- 
+        data_for_plot_uni() %>% 
+        filter(social_distancing != Inf,
+               population >= 100) %>% 
+        pull(social_distancing)
+      
+      min_da_uni <- round(min(vec_ped_uni), 2)
+      max_da_uni <- round(max(vec_ped_uni), 2)
+      mean_da_uni <- round(mean(vec_ped_uni), 2)
+      median_da_uni <- round(median(vec_ped_uni), 2)
+      sd_da_uni <- sd(vec_ped_uni)
+      quant_low_da_uni <- round(quantile(vec_ped_uni, c(1/3, 2/3))[1], 2)
+      quant_high_da_uni <- round(quantile(vec_ped_uni, c(1/3, 2/3))[2], 2)
+      
+      # Case for no poly selected
+      if (is.na(rz_pedestrian$poly_selected)) {
+        
+        HTML(
+          glue("At the dissemination area scale, after removing outliers with a population below 100, the capacity for pedestrian social distancing varies from ",
+               "{min_da_uni}% to {max_da_uni}%, with an average value of {mean_da_uni}% ",
+               "and a median value of {median_da_uni}%. ",
+               "Two thirds of dissemination areas have a score between {quant_low_da_uni}% ",
+               "and {quant_high_da_uni}%."))  
+        
+        # Case for selected poly
+      } else {
+        
+        dat_ped_uni <- data_for_plot_uni() %>% filter(ID == rz_pedestrian$poly_selected)
+        
+        poly_value_ped_uni <- dat_ped_uni$social_distancing
+        
+        quintile_ped_uni <- quantile(vec_ped_uni, c(0.2, 0.4, 0.6, 0.8))
+        
+        larger_smaller_ped_uni <- case_when(
+          poly_value_ped_uni >= quintile_ped_uni[4] ~ "much larger than",
+          poly_value_ped_uni >= quintile_ped_uni[3] ~ "larger than",
+          poly_value_ped_uni >= quintile_ped_uni[2] ~ "almost the same as",
+          poly_value_ped_uni >= quintile_ped_uni[1] ~ "smaller than",
+          TRUE ~ "much smaller than"
+        )
+        
+        poor_strong_ped_uni <- case_when(
+          str_detect(larger_smaller_ped_uni, "larger") ~ "strong",
+          str_detect(larger_smaller_ped_uni, "smaller") ~ "poor",
+          TRUE ~ "moderate"
+        )
+        
+        HTML(glue("The dissemination area {dat_ped_uni$ID} has a population of ",
+                  "{prettyNum(dat_ped_uni$population, ',')} and a pedestrian social distancing capacity ",
+                  "of {round(poly_value_ped_uni, 2)}%, which is {larger_smaller_ped_uni} ",
+                  "the region-wide median of {median_da_uni}%.", 
+                  
+                  "<p>Dissemination area {dat_ped_uni$ID} offers a {poor_strong_ped_uni} capacity for its residents to practice social distancing in the local pedestrian realm."))
+      
+      }}
+    
+    else if (rz_pedestrian$zoom == "IN" & input$switch_biv == TRUE) {
+      
+      var_name_ped <- data_frame(code = c("agg_proximity_score", "net_median_income", "visible_minority_pop", "immigrants"),
+                                 name = c("Walkable Access to Key Amenities", "Net Median Income", "Visible Minority Population",
+                                          "Immigrant Population")) %>% 
+        as_tibble() %>% 
+        filter(code == input$data_for_plot_ped) %>%
+        pull(name)
+      
+      var_code_ped <- data_frame(code = c("agg_proximity_score", "net_median_income", "visible_minority_pop", "immigrants"),
+                                 name = c("Walkable Access to Key Amenities", "Net Median Income", "Visible Minority Population",
+                                          "Immigrant Population")) %>% 
+        as_tibble() %>% 
+        filter(code == input$data_for_plot_ped) %>%
+        pull(code)
+      
+      correlation_ped <-
+        cor.test(bivariate_chloropleth()$left_variable_full,
+            bivariate_chloropleth()$right_variable_full, method = "spearman", exact = FALSE) %>% 
+        pull(rho)
+      
+      pos_neg_ped <- if_else(correlation_ped > 0, "positive", "negative")
+      
+      strong_weak_ped <- case_when(
+        abs(correlation_ped) > 0.6 ~ "strong",
+        abs(correlation_ped) > 0.3 ~ "moderate",
+        TRUE ~ "weak")
+      
+      higher_lower_ped <- if_else(pos_neg_ped == "positive", "higher", "lower")
+      
+      high_low_disclaimer_ped <- case_when(
+        strong_weak_ped == "strong" ~ "with only a few exceptions",
+        strong_weak_ped == "moderate" ~ "although with some exceptions",
+        strong_weak_ped == "weak" ~ "although with many exceptions",
+      )
+      
+      # Case for no poly selected
+      if (is.na(rz_pedestrian$poly_selected)) {
+        
+        # If correlation is close to zero
+        if (correlation_ped < 0.05 && correlation_ped > -0.05) {
+          
+          HTML(glue(
+            "The capacity for pedestrian social distancing metric has effectively no correlation ",
+            "({correlation_ped}) with {var_name_ped} at the dissemination area scale. ",
+            "<p>This means that, at the dissemination area scale, ",
+            "there is no relationship between the two variables."))
+          
+        } else {
+          
+          HTML(glue(
+            "The capacity for pedestrian social distancing metric has a {strong_weak_ped} {pos_neg_ped} ",
+            "correlation ({correlation_ped}) with '{tolower(var_name_ped)}' at the dissemination area scale. ",
+            "<p>This means that, in general, dissemination areas with higher ",
+            "capacities to allow for pedestrian social distancing tend to have {higher_lower_ped} ",
+            "values for '{tolower(var_name_ped)}', {high_low_disclaimer_ped}."))
+          
+        }
+    }}
+    
     else if (rz_pedestrian$zoom == "FINAL") {
       min_sidewalk <- round(min(sidewalks_WSG$sidewalk_width), 2)
       max_sidewalk <- round(max(sidewalks_WSG$sidewalk_width), 2)
@@ -1428,6 +1543,58 @@ shinyServer(function(input, output, session) {
                 panel.grid.minor.y = element_blank())
     }
     
+    else if (rz_pedestrian$zoom == "IN" & input$switch_biv == FALSE) {
+        
+        # If no poly is selected
+        if (is.na(rz_pedestrian$poly_selected)) {
+          
+          data_for_plot_uni() %>%
+            filter(!is.na(left_variable)) %>%
+            ggplot(aes(left_variable_full)) +
+            geom_histogram(aes(fill = fill), bins = 25) +
+            scale_fill_manual(values = colors[c(1:3)],
+                              na.translate = FALSE) +
+            scale_x_continuous(name = "Capacity for pedestrian social distancing",
+                               limits = c(0, 500),
+                               expand = c(0,0),
+                               breaks = seq(0, 500, by = 100),
+                               labels = c("0%", "100 %", "200 %", "300 %", "400 %", "500 %"),
+                               oob = scales::squish) +
+            labs(y = NULL) +
+            theme_minimal() +
+            theme(legend.position = "none",
+                  panel.grid.minor.x = element_blank(),
+                  panel.grid.major.x = element_blank(),
+                  panel.grid.minor.y = element_blank())  
+        }
+          
+          # If there is an active selection
+
+           else {
+            
+             data_for_plot_uni() %>%
+               filter(!is.na(left_variable)) %>%
+              ggplot(aes(left_variable_full)) +
+              geom_histogram(aes(
+                fill = round(left_variable_full) == 
+                  round(left_variable_full[ID == rz_pedestrian$poly_selected])), 
+                bins = 25) +
+               scale_fill_manual(values = colors[c(3, 1)],
+                                 na.translate = FALSE) +
+               scale_x_continuous(name = "Capacity for pedestrian social distancing",
+                                  limits = c(0, 500),
+                                  expand = c(0,0),
+                                  breaks = seq(0, 500, by = 100),
+                                  labels = c("0%", "100 %", "200 %", "300 %", "400 %", "500 %"),
+                                  oob = scales::squish) +
+               labs(y = NULL) +
+               theme_minimal() +
+               theme(legend.position = "none",
+                     panel.grid.minor.x = element_blank(),
+                     panel.grid.major.x = element_blank(),
+                     panel.grid.minor.y = element_blank())
+             }}
+    
     else if (rz_pedestrian$zoom == "FINAL") {
       sidewalks_WSG %>%
         ggplot(aes(sidewalk_width)) +
@@ -1464,7 +1631,7 @@ shinyServer(function(input, output, session) {
     
     else if (rz_pedestrian$zoom == "IN" & input$switch_biv == TRUE) {
       did_you_know %>% 
-        filter(right_variable == input$data_for_plot_ped) %>% 
+        filter(right_variable == paste0(input$data_for_plot_ped, "_quant3")) %>% 
         pull(text) %>% 
         paste("<li> ", ., collapse = "") %>% 
         paste0("<ul>", ., "</ul>") %>%
@@ -1485,28 +1652,61 @@ shinyServer(function(input, output, session) {
   
   ### Commuter mode shift ######################################################
   
-  
   ## Draw map ------------------------------------------------------------------
   
   output$qzmyMap <- renderMapdeck({
     
-    mapdeck(token = paste0("pk.eyJ1Ijoiemhhb3FpYW8wMTIwIiwiYSI6ImNrYXBnbHB3d",
-                           "TFtbDIycWxvZ285cjNmcG0ifQ.fieGPt1pLEgHs1AI8NvjYg"),
-            style = "mapbox://styles/zhaoqiao0120/ckh1hkzwe02br19nvzt9bvxcg",
+    mapdeck(style = "mapbox://styles/dwachsmuth/ckh6cg4wg05nw19p5yrs9tib7",
+            token = paste0("pk.eyJ1IjoiZHdhY2hzbXV0aCIsImEiOiJja2g2Y2JpbDc",
+                           "wMDc5MnltbWpja2xpYTZhIn0.BXdU7bsQYWcSwmmBx8DNqQ"),
             zoom = 10, location = c(-73.611, 45.526))
     
-    })
+  })
+  
+  
+  ## Draw histogram ------------------------------------------------------------
+  
+  output$commute_histogram <- renderPlot({
+    
+    if (input$commute_variable == 1) {
+      data <- rename(cycling_access, var = cycling_ac)
+    } else if (input$commute_variable == 2) {
+      data <- rename(car_share, var = Car_per)
+    } else if (input$commute_variable == 3) {
+      data <- rename(trip_distance, var = avg_dist)
+    }
+    
+    data <- st_drop_geometry(data) %>% mutate(color = as.character(color))
+  
+    selection <- as.numeric(input$commute_variable)
+    
+    x_var_name <- c("Access to cycling inf. (km/sq.km)", 
+                    "Share of trips taken by car (%)", 
+                    "Average commuting distance (km)")[selection] 
+    
+    data %>%
+      ggplot() +
+      geom_histogram(aes(var, fill = color), bins = 25) +
+      scale_fill_manual(values = deframe(distinct(select(data, color, color_value)))) +
+      labs(x = x_var_name, y = NULL) +
+      theme_minimal() +
+      theme(legend.position = "none",
+            panel.grid.minor.x = element_blank(),
+            panel.grid.major.x = element_blank(),
+            panel.grid.minor.y = element_blank())    
+    
+  })
   
   
   ## Set zoom level ------------------------------------------------------------
   
   observeEvent(input$qzmyMap_view_change$zoom, {
     
-    if (input$qzmyMap_view_change$zoom > 10) {
-      qz$zoom_level <- 'OUT'} else {
-      qz$zoom_level <- 'ISO'}
+    if (input$qzmyMap_view_change$zoom > 10.2) {
+      qz$zoom_level <- 'IN'} else {
+        qz$zoom_level <- 'OUT'}
     
-    })
+  })
   
   output$zoom_level <- reactive(qz$zoom_level)
   outputOptions(output, "zoom_level", suspendWhenHidden = FALSE)
@@ -1526,9 +1726,11 @@ shinyServer(function(input, output, session) {
   })
   
   
+  ## Control the scenario sliders ----------------------------------------------
   
   observeEvent(input$radio1, {
-    if(input$radio1 == 1){
+    
+    if (input$radio1 == 1) {
       updateSliderTextInput(session = session,
                             inputId = "slider1",
                             selected = 4.4)
@@ -1538,9 +1740,8 @@ shinyServer(function(input, output, session) {
       updateSliderTextInput(session = session,
                             inputId = "slider3",
                             selected = 3)
-    }
-    
-    else if (input$radio1 == 2){
+      
+    } else if (input$radio1 == 2) {
       updateSliderTextInput(session = session,
                             inputId = "slider1",
                             selected = 4.4)
@@ -1550,177 +1751,208 @@ shinyServer(function(input, output, session) {
       updateSliderTextInput(session = session,
                             inputId = "slider3",
                             selected = 2.4)
-      # showNotification("A potentially cyclable trip:\n",
-      #                  "A car trip where the cycling distance between its ",
-      #                  "origin and destination is shorter than 4.4 kilometers",
-      #                  type = "message", duration = 3)
+      
+    } else if (input$radio1 == 3) {
+      updateSliderTextInput(session = session,
+                            inputId = "slider1",
+                            selected = 1)
+      updateSliderTextInput(session = session,
+                            inputId = "slider2",
+                            selected = 10)
+      updateSliderTextInput(session = session,
+                            inputId = "slider3",
+                            selected = 1)
     }
-    })
+  })
+  
   
   
   observeEvent(input$switch2, {
-    if(input$switch2 == TRUE){
-      mapdeck_update(map_id = "qzmyMap")  %>%
+    if (input$switch2 == TRUE) {
+      mapdeck_update(map_id = "qzmyMap") %>%
         add_path(data = cycling_network,
                  stroke_colour = "#EA3546",
-                 stroke_width = 150,
+                 stroke_width = 50,
                  layer_id = "network",
                  update_view = FALSE)
     } else {
-      mapdeck_update(map_id = "qzmyMap")  %>%
+      mapdeck_update(map_id = "qzmyMap") %>%
         clear_path(layer_id = "network")
     }
   })
   
-  observeEvent(input$variable,{
-    if(input$variable == 1){
-      updateKnobInput(session = session,
-                      inputId = "knob1",
-                      label = "Access to Cycling Infrastructure (km/sq.km):",
-                      options = list(
-                        step = 0.5,
-                        min = 4,
+  
+  ## Change Explore sliders when menu selection changes ------------------------
+  
+  observeEvent(input$commute_variable, {
+    
+    if (input$commute_variable == 1) {
+      
+      updateSliderInput(session = session,
+                        inputId = "commute_explore_slider",
+                        label = "Cycling infrastructure (km/sq.km) by census tract:",
+                        min = 0, 
                         max = 17,
-                        displayPrevious = TRUE,
-                        lineCap = "round",
-                        fgColor = "#B2D235",
-                        inputColor = "#B2D235"))
-      updateKnobInput(session = session,
-                      inputId = "knob1",
-                      value = 17
-      )
-    } else if(input$variable == 2){
-      updateKnobInput(session = session,
-                      inputId = "knob1",
-                      label = "Car Share by Origin Census Tract (%):",
-                      options = list(
-                        step = 1,
-                        max = 91,
-                        min = 4,
-                        lineCap = "round",
-                        fgColor = "#1983B0",
-                        inputColor = "#1983B0"
-                      ))
-      updateKnobInput(session = session,
-                      inputId = "knob1",
-                      value = 91
-      )
-    } else {
-      updateKnobInput(session = session,
-                      inputId = "knob1",
-                      label = "Average Commuting Distance (km):",
-                      options = list(
-                        step = 0.5,
-                        max = 23.0,
-                        min = 3.5,
-                        lineCap = "round",
-                        fgColor = "#C56F34",
-                        inputColor = "#C56F34"
-                      )
-      )
-      updateKnobInput(session = session,
-                      inputId = "knob1",
-                      value = 23.0
-      )
+                        value = c(0, 17))
+      
+    } else if (input$commute_variable == 2) {
+      
+      updateSliderInput(session = session,
+                        inputId = "commute_explore_slider",
+                        label = "% of trips taken by car, by census tract",
+                        min = 0,
+                        max = 100,
+                        value = c(0, 100))
+      
+    } else if (input$commute_variable == 3) {
+      
+      updateSliderInput(session = session,
+                        inputId = "commute_explore_slider",
+                        label = "Length of the average commute (km), by census tract:",
+                        min = 0,
+                        max = 23,
+                        value = c(0, 100))
     }
+    
   })
+  
+  
+  ## Change map in reponse to inputs -------------------------------------------
   
   observe({
     input$tabs
-    if( qz$zoom_level == "ISO"){
-      updateMaterialSwitch(session = session,
+    
+    if (qz$zoom_level == "OUT") {
+      
+      updateMaterialSwitch(session = session, 
                            inputId = "switch2",
                            value = FALSE)
-      if (input$variable == 1) {
-        cycling_access_select <- cycling_access[which(cycling_access$cycling_ac <= input$knob1),]
+      
+      if (input$commute_variable == 1) {
+        
         mapdeck_update(map_id = "qzmyMap")  %>%
-          #clear_polygon(layer_id = "choropleth")%>%
           clear_path(layer_id = "cyclable") %>%
-          add_polygon(data = cycling_access_select,
-                      fill_opacity = 150,
-                      fill_colour = "color_value",
-                      stroke_colour = "#868683",
-                      stroke_width = 100,
-                      layer_id = "choropleth",
-                      legend = legend1,
-                      highlight_colour  =  "#AAFFFFFF",
-                      auto_highlight = TRUE,
-                      update_view = FALSE)
-      } else if (input$variable == 2) {
-        car_share_select <- car_share[which(car_share$Car_per <= input$knob1),]
-        mapdeck_update(map_id = "qzmyMap")  %>%
-          #clear_polygon(layer_id = "choropleth")%>%
+          clear_path(layer_id = "baseline") %>%
+          add_polygon(data = {
+            cycling_access %>% 
+              filter(cycling_ac >= input$commute_explore_slider[1],
+                     cycling_ac <= input$commute_explore_slider[2])},
+            fill_opacity = 150,
+            fill_colour = "color_value",
+            stroke_colour = "#868683",
+            stroke_width = 50,
+            layer_id = "choropleth",
+            legend = FALSE,
+            highlight_colour  =  "#AAFFFFFF",
+            auto_highlight = TRUE,
+            update_view = FALSE)
+        
+      } else if (input$commute_variable == 2) {
+        
+        mapdeck_update(map_id = "qzmyMap") %>%
           clear_path(layer_id = "cyclable") %>%
-          add_polygon(data = car_share_select,
-                      fill_opacity = 150,
-                      fill_colour = "color_value",#car_share
-                      stroke_colour = "#CCD1D1",
-                      stroke_width = 100,
-                      layer_id = "choropleth",
-                      legend = legend2,
-                      highlight_colour  =  "#AAFFFFFF",
-                      auto_highlight = TRUE,
-                      update_view = FALSE)
+          clear_path(layer_id = "baseline") %>%
+          add_polygon(data = {
+            car_share %>% 
+              filter(Car_per >= input$commute_explore_slider[1],
+                     Car_per <= input$commute_explore_slider[2])},
+            fill_colour = "color_value",
+            stroke_colour = "#CCD1D1",
+            stroke_width = 50,
+            layer_id = "choropleth",
+            legend = FALSE,
+            highlight_colour = "#AAFFFFFF",
+            auto_highlight = TRUE,
+            update_view = FALSE)
+        
       } else {
-        trip_distance_select <- trip_distance[which(trip_distance$avg_dist <= input$knob1),]
+        
         mapdeck_update(map_id = "qzmyMap")  %>%
-          #clear_polygon(layer_id = "choropleth")%>%
           clear_path(layer_id = "cyclable") %>%
-          add_polygon(data = trip_distance_select,
-                      fill_opacity = 150,
-                      fill_colour = "color_value",#car_share
-                      stroke_colour = "#CCD1D1",
-                      stroke_width = 100,
-                      layer_id = "choropleth",
-                      legend = legend3,
-                      highlight_colour  =  "#AAFFFFFF",
-                      auto_highlight = TRUE,
-                      update_view = FALSE)
+          clear_path(layer_id = "baseline") %>%
+          add_polygon(data = {
+            trip_distance %>% 
+              filter(avg_dist >= input$commute_explore_slider[1],
+                     avg_dist <= input$commute_explore_slider[2])},
+            fill_colour = "color_value",
+            stroke_colour = "#CCD1D1",
+            stroke_width = 50,
+            layer_id = "choropleth",
+            legend = FALSE,
+            highlight_colour  =  "#AAFFFFFF",
+            auto_highlight = TRUE,
+            update_view = FALSE)
       }
       
-      
     }
-    if(qz$zoom_level == "OUT") {
+    
+    # Scenario maps
+    if (qz$zoom_level == "IN") {
       
-      # updateMaterialSwitch(session = session,
-      #                      inputId = "switch2",
-      #                      value = TRUE)
-      if(input$radio1 == 1){
+      if (input$radio1 == 3) updateMaterialSwitch(session, "baseline_switch", 
+                                                  value = TRUE)
+      
+      # Baseline scenario
+      if (input$baseline_switch) {
+        mapdeck_update(map_id = "qzmyMap")  %>%
+          clear_polygon(layer_id = "choropleth") %>%
+          add_path(data = cycling_final,
+                   stroke_width  = "total_cycling",
+                   stroke_colour = "#722AEE80",
+                   layer_id = "baseline",
+                   width_scale = 0.2,
+                   update_view = FALSE)
+        
+      } else if (!input$baseline_switch) {
+        mapdeck_update(map_id = "qzmyMap")  %>%
+          clear_polygon(layer_id = "choropleth") %>%
+          clear_path("baseline")
+      }
+      
+      # Distance scenario
+      if (input$radio1 == 1) {
+        
         mapdeck_update(map_id = "qzmyMap")  %>%
           clear_polygon(layer_id = "choropleth") %>%
           add_path(data = cycling1,
                    stroke_width  = "total_car",
                    stroke_colour = "#0061FF80",
                    layer_id = "cyclable",
+                   width_scale = 0.2,
                    update_view = FALSE)
         
         output$table <- renderDT({
+          
           DT::datatable(scenario1,
                         rownames = FALSE, colnames = c("",""), filter = "none",
                         style = "bootstrap",
-                        options = list(
-                          dom = 'b', ordering = FALSE
-                        )
-          )
+                        options = list(dom = 'b', ordering = FALSE))
+          
         })
-      } else if (input$radio1 == 2){
+        
+        # Elevation/time scenario
+      } else if (input$radio1 == 2) {
+        
         mapdeck_update(map_id = "qzmyMap")  %>%
           clear_polygon(layer_id = "choropleth") %>%
           add_path(data = cycling2,
                    stroke_width  = "total_car",
-                   stroke_colour = "#722AEE80",
+                   stroke_colour = "#0061FF80",
                    layer_id = "cyclable",
+                   width_scale = 0.2,
                    update_view = FALSE)
+        
         output$table <- renderDT({
+          
           DT::datatable(scenario2,
                         rownames = FALSE, colnames = c("",""), filter = "none",
                         style = "bootstrap",
-                        options = list(
-                          dom = 'b', ordering = FALSE
-                        )
-          )
+                        options = list(dom = 'b', ordering = FALSE))
+          
         })
-      } else {
+        
+      } else if (input$radio1 == 3) {
+        
         mapdeck_update(map_id = "qzmyMap")  %>%
           clear_polygon(layer_id = "choropleth") %>%
           clear_path(layer_id = "cyclable")
