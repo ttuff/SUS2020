@@ -1379,11 +1379,14 @@ shinyServer(function(input, output, session) {
       quant_high_ped_ct <- round(quantile(census_analysis_ct_plot$social_distancing, c(1/3, 2/3))[2], 2)
         
         HTML(
-          glue("At the census tract scale, after removing outliers with a population below 500, the capacity for pedestrian social distancing varies from ",
+          glue("At the census tract scale, after removing outliers with a ",
+               "population below 500, the capacity for pedestrian social distancing varies from ",
                "{min_ped_ct}% to {max_ped_ct}%, with an average value of {mean_ped_ct}% ",
                "and a median value of {median_ped_ct}%. ",
                "Two thirds of census tracts have a score between {quant_low_ped_ct}% ",
-               "and {quant_high_ped_ct}%. Out of the 532 census tracts, 227 of them have a capacity score below 100%, while 85 of them have a capacity score below 50%. "))
+               "and {quant_high_ped_ct}%. Out of the 532 census tracts, ",
+               "227 of them have a capacity score below 100%, ",
+               "while 85 of them have a capacity score below 50%. "))
     }
     
     else if (rz_pedestrian$zoom == "IN" & input$switch_biv == FALSE) {
@@ -1473,9 +1476,11 @@ shinyServer(function(input, output, session) {
       
       HTML(
         glue("Sidewalk width in Montreal varies from ",
-             "{min_sidewalk} meters to {max_sidewalk} meters, with an average value of {mean_sidewalk} meters ",
+             "{min_sidewalk} meters to {max_sidewalk} meters, ",
+             "with an average value of {mean_sidewalk} meters ",
              "and a median value of {median_sidewalk} meters. ",
-             "Two thirds of Montreal's sidewalks have widths between {quant_low_sidewalk} meters and {quant_high_sidewalk} meters. "))
+             "Two thirds of Montreal's sidewalks have widths ",
+             "between {quant_low_sidewalk} meters and {quant_high_sidewalk} meters. "))
     }
   })
   
@@ -1559,25 +1564,34 @@ shinyServer(function(input, output, session) {
     
   })
   
-  #####################
-  ## MODE
- 
-  ########Output#######
+  ##############################################################################
+  
+  ### Commuter mode shift ######################################################
+  
+  
+  ## Draw map ------------------------------------------------------------------
+  
   output$qzmyMap <- renderMapdeck({
-    mapdeck(token = 
-              "pk.eyJ1Ijoiemhhb3FpYW8wMTIwIiwiYSI6ImNrYXBnbHB3dTFtbDIycWxvZ285cjNmcG0ifQ.fieGPt1pLEgHs1AI8NvjYg",
+    
+    mapdeck(token = paste0("pk.eyJ1Ijoiemhhb3FpYW8wMTIwIiwiYSI6ImNrYXBnbHB3d",
+                           "TFtbDIycWxvZ285cjNmcG0ifQ.fieGPt1pLEgHs1AI8NvjYg"),
             style = "mapbox://styles/zhaoqiao0120/ckh1hkzwe02br19nvzt9bvxcg",
-            zoom=10,location=c(-73.611,45.526))
-  })
+            zoom = 10, location = c(-73.611, 45.526))
+    
+    })
+  
+  
+  ## Set zoom level ------------------------------------------------------------
   
   observeEvent(input$qzmyMap_view_change$zoom, {
-    if( input$qzmyMap_view_change$zoom > 10){qz$zoom_level <- 'OUT'} else {
-      qz$zoom_level <- 'ISO'}}
-  )
+    
+    if (input$qzmyMap_view_change$zoom > 10) {
+      qz$zoom_level <- 'OUT'} else {
+      qz$zoom_level <- 'ISO'}
+    
+    })
   
-  output$zoom_level <- reactive({
-    return(qz$zoom_level)
-  })
+  output$zoom_level <- reactive(qz$zoom_level)
   outputOptions(output, "zoom_level", suspendWhenHidden = FALSE)
   
   
@@ -1607,8 +1621,6 @@ shinyServer(function(input, output, session) {
       updateSliderTextInput(session = session,
                             inputId = "slider3",
                             selected = 3)
-      # showNotification("yayaya",
-      #                  type = "message", duration = 3)
     }
     
     else if (input$radio1 == 2){

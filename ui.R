@@ -222,8 +222,10 @@ shinyUI(
         tabItem(
           tabName = "active",
           
+          # Main map
           mapdeckOutput(outputId = 'active_map', height = "1200px"),
           
+          # Style tags
           tags$head(tags$style(HTML('
           #title_bar {border-width: 10px; border-color: rgb(255, 255, 255);}
           #input_control_overlay {border-width: 10px; 
@@ -235,6 +237,7 @@ shinyUI(
           #active_legend_container {background-color: rgba(0,0,255,0.0);
           border-width: 0px;}'))),
           
+          # Title bar
           absolutePanel(
             id = "title_bar", class = "panel panel-default", 
             draggable = FALSE, top = 70, left = 270, width = "40%",
@@ -249,6 +252,7 @@ shinyUI(
                      filter(tab == "active", type == "extra") %>% 
                      pull(text)))),
           
+          # 3D switch
           absolutePanel(
             id = "input_control_overlay", style = "z-index:500;",
             class = "panel panel-default", top = 70, right = 50, width = 300,
@@ -258,6 +262,8 @@ shinyUI(
               status = "danger",
               value = FALSE),
             hr(),
+            
+            # Compare panel
             fluidRow(
               column(width = 8, h4("Compare")),
               column(width = 4, align = "right",
@@ -271,6 +277,8 @@ shinyUI(
             conditionalPanel(
               condition = "input.active_extrude == 0",
               hr(),
+              
+              # Explore panel
               fluidRow(
                 column(width = 8,
                        h4("Explore")),
@@ -287,6 +295,8 @@ shinyUI(
                 plotOutput("bivariate_graph", height = 150)
               ),
               hr(),
+              
+              # DYK panel
               fluidRow(
                 column(width = 8,
                        h4("Did you know?")),
@@ -299,6 +309,7 @@ shinyUI(
               )
             ),
           
+          # Floating legend
           absolutePanel(
             id = "active_legend_container", class = "panel panel-default", 
             style = "z-index:500;", bottom = -200, left = 270, fixed = TRUE,
@@ -469,8 +480,10 @@ shinyUI(
           tags$head(tags$style(HTML('
           #title_bar_commute {border-width: 10px; border-color: rgb(255, 255, 255);}'))),
           
+          # Main map
           mapdeckOutput(outputId = "qzmyMap", height = "1200px"),
           
+          # Title bar
           absolutePanel(
             id = "title_bar_commute", class = "panel panel-default", 
             draggable = FALSE, top = 70, left = 270, width = "40%",
