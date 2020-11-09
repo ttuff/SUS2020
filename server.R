@@ -1088,6 +1088,34 @@ shinyServer(function(input, output, session) {
     
   })
   
+  # Hide second variable map status
+  output$pedestrian_hide_second_variable_status <- reactive({
+    input$pedestrian_hide_second_variable %% 2 == 0
+  })
+  
+  outputOptions(output, "pedestrian_hide_second_variable_status", suspendWhenHidden = FALSE)
+  
+  observeEvent(input$pedestrian_hide_second_variable, {
+    
+    if (input$pedestrian_hide_second_variable %% 2 == 0) txt <- "Hide" else txt <- "Show"
+    updateActionButton(session, "pedestrian_hide_second_variable", label = txt)
+    
+  })
+  
+  # vas_hide_explore status
+  output$vas_hide_explore_status <- reactive({
+    input$vas_hide_explore %% 2 == 0
+  })
+  
+  outputOptions(output, "vas_hide_explore_status", suspendWhenHidden = FALSE)
+  
+  observeEvent(input$vas_hide_explore, {
+    
+    if (input$vas_hide_explore %% 2 == 0) txt <- "Hide" else txt <- "Show"
+    updateActionButton(session, "vas_hide_explore", label = txt)
+    
+  })
+  
   ## Update map if there is a zoom / dataframe / tab / input change  -----------
   
   observeEvent({rz_pedestrian$zoom
@@ -1457,8 +1485,9 @@ shinyServer(function(input, output, session) {
       
       correlation_ped <-
         cor.test(bivariate_chloropleth()$left_variable_full,
-            bivariate_chloropleth()$right_variable_full, method = "spearman", exact = FALSE) %>% 
-        pull(rho)
+            bivariate_chloropleth()$right_variable_full, method = "spearman", exact = FALSE) 
+      
+      correlation_ped <- round(correlation_ped$estimate, 2) 
       
       pos_neg_ped <- if_else(correlation_ped > 0, "positive", "negative")
       
@@ -1638,14 +1667,14 @@ shinyServer(function(input, output, session) {
         paste0("<ul>", ., "</ul>") %>%
         HTML()
     }
-    else {
-      did_you_know %>% 
-        filter(right_variable == "sidewalk_ped") %>% 
-        pull(text) %>% 
-        paste("<li> ", ., collapse = "") %>% 
-        paste0("<ul>", ., "</ul>") %>%
-        HTML()
-    }
+    # else {
+    #   did_you_know %>% 
+    #     filter(right_variable == "sidewalk_ped") %>% 
+    #     pull(text) %>% 
+    #     paste("<li> ", ., collapse = "") %>% 
+    #     paste0("<ul>", ., "</ul>") %>%
+    #     HTML()
+    # }
     
   })
   
@@ -1962,3 +1991,117 @@ shinyServer(function(input, output, session) {
   })
   
 })
+
+########### Bivariate case
+
+# 
+# 
+#   # Case for poly selected
+# } else{
+# 
+#   dat <- data_bivar() %>% filter(ID == rz$poly_selected)
+# 
+#   vec_2 <-
+#     data_bivar() %>%
+#     filter(!is.na(right_variable), !is.na(right_variable_full)) %>%
+#     pull(right_variable_full)
+# 
+#   poly_value_1 <- dat$left_variable_full
+#   poly_value_2 <- dat$right_variable_full
+# 
+# 
+#   place_name <- case_when(
+#     scale_singular == "borough/city" ~
+#       glue("{dat$name}"),
+#     scale_singular == "census tract" ~
+#       glue("Census tract {dat$name}"),
+#     scale_singular == "dissemination area" ~
+#       glue("Dissemination area {dat$name}")
+#   )
+# 
+#   place_heading <-
+#     if_else(scale_singular == "borough/city",
+#             glue("{dat$name_2} of {place_name}"),
+#             glue("{place_name} ({dat$name_2})"))
+# 
+# 
+#   percentile_left <-
+#     {length(vec[vec <= dat$left_variable_full]) / length(vec) * 100} %>%
+#     round()
+# 
+#   percentile_right <-
+#     {length(vec_2[vec_2 <= dat$right_variable_full]) /
+#         length(vec_2) * 100} %>%
+#     round()
+# 
+#   relative_position <- case_when(
+#     abs(percentile_left - percentile_right) > 50 ~ "dramatically different",
+#     abs(percentile_left - percentile_right) > 30 ~ "substantially different",
+#     abs(percentile_left - percentile_right) > 10 ~ "considerably different",
+#     TRUE ~ "similar"
+#   )
+# 
+#   HTML(glue("<strong>{place_heading}</strong>",
+# 
+#             "<p>{place_name} has a population of ",
+#             "{prettyNum(dat$population, ',')}, a CanALE index score ",
+#             "of {round(poly_value_1, 2)}, and a '{tolower(var_name)}' ",
+#             "value of {round(poly_value_2, 2)}. ",
+# 
+#             "<p>These two scores are {relative_position}, in relative ",
+#             "terms. {place_name} has a CanALE index score higher ",
+#             "than {percentile_left}% of {scale_plural} and ",
+#             "a '{tolower(var_name)}' score higher than ",
+#             "{percentile_right}% of {scale_plural} in the ",
+#             "Montreal region."))
+# 
+# }
+
+############
+
+  
+#     # Scatterplot for two variables
+
+#     var_name <- 
+#       variable_explanations %>% 
+#       filter(var_code == input$data_for_plot_right) %>% 
+#       pull(var_name)
+#     
+#     
+#     if (nrow(filter(data_bivar(), ID == rz$poly_selected)) != 1) {
+#       
+#       data_bivar() %>% 
+#         drop_na() %>% 
+#         ggplot(aes(left_variable_full, right_variable_full)) +
+#         geom_point(aes(colour = group)) +
+#         geom_smooth(method = "lm", se = FALSE, colour = "grey50") +
+#         scale_colour_manual(values = deframe(bivariate_color_scale)) +
+#         labs(x = "CanALE index", y = var_name) +
+#         theme_minimal() +
+#         theme(legend.position = "none",
+#               panel.grid.minor.x = element_blank(),
+#               panel.grid.major.x = element_blank(),
+#               panel.grid.minor.y = element_blank())
+#       
+#     } else {
+#       
+#       data_bivar() %>% 
+#         drop_na() %>% 
+#         ggplot(aes(left_variable_full, right_variable_full)) +
+#         geom_point(colour = bivariate_color_scale$fill[9]) +
+#         geom_smooth(method = "lm", se = FALSE, colour = "grey50") +
+#         geom_point(data = filter(data_bivar(), ID == rz$poly_selected,
+#                                  !is.na(left_variable_full), 
+#                                  !is.na(right_variable_full)),
+#                    colour = bivariate_color_scale$fill[1],
+#                    size = 3) +
+#         labs(x = "CanALE index", y = var_name) +
+#         theme_minimal() +
+#         theme(legend.position = "none",
+#               panel.grid.minor.x = element_blank(),
+#               panel.grid.major.x = element_blank(),
+#               panel.grid.minor.y = element_blank())
+#       
+#     }
+#   }
+# })
