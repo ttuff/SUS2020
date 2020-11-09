@@ -1627,7 +1627,70 @@ shinyServer(function(input, output, session) {
                      panel.grid.minor.x = element_blank(),
                      panel.grid.major.x = element_blank(),
                      panel.grid.minor.y = element_blank())
-             }}
+           }}
+    
+    else if (rz_pedestrian$zoom == "IN" & input$switch_biv == TRUE) {
+      var_name_ped <- data_frame(code = c("agg_proximity_score", "net_median_income", "visible_minority_pop", "immigrants"),
+                                 name = c("Walkable Access to Key Amenities", "Net Median Income", "Visible Minority Population",
+                                          "Immigrant Population")) %>% 
+        as_tibble() %>% 
+        filter(code == input$data_for_plot_ped) %>%
+        pull(name)
+      
+      var_code_ped <- data_frame(code = c("agg_proximity_score", "net_median_income", "visible_minority_pop", "immigrants"),
+                                 name = c("Walkable Access to Key Amenities", "Net Median Income", "Visible Minority Population",
+                                          "Immigrant Population")) %>% 
+        as_tibble() %>% 
+        filter(code == input$data_for_plot_ped) %>%
+        pull(code)
+      
+      if (nrow(filter(bivariate_chloropleth(), ID == rz_pedestrian$poly_selected)) != 1) {
+        
+        bivariate_chloropleth() %>%
+          drop_na() %>%
+          ggplot(aes(left_variable_full, right_variable_full)) +
+          geom_point(aes(colour = group)) +
+          geom_smooth(method = "lm", se = FALSE, colour = "grey50") +
+          scale_colour_manual(values = deframe(bivariate_color_scale)) +
+          scale_x_continuous(name = "Capacity for pedestrian social distancing",
+                             limits = c(0, 500),
+                             expand = c(0,0),
+                             breaks = seq(0, 500, by = 100),
+                             labels = c("0%", "100 %", "200 %", "300 %", "400 %", "500 %"),
+                             oob = scales::squish) +
+          labs(y = var_name_ped) +
+          theme_minimal() +
+          theme(legend.position = "none",
+                panel.grid.minor.x = element_blank(),
+                panel.grid.major.x = element_blank(),
+                panel.grid.minor.y = element_blank())
+        
+      } else {
+        
+        bivariate_chloropleth() %>%
+          drop_na() %>%
+          ggplot(aes(left_variable_full, right_variable_full)) +
+          geom_point(colour = bivariate_color_scale$fill[9]) +
+          geom_smooth(method = "lm", se = FALSE, colour = "grey50") +
+          geom_point(data = filter(bivariate_chloropleth(), ID == rz_pedestrian$poly_selected,
+                                   !is.na(left_variable_full),
+                                   !is.na(right_variable_full)),
+                     colour = bivariate_color_scale$fill[1],
+                     size = 3) +
+          scale_x_continuous(name = "Capacity for pedestrian social distancing (%)",
+                             limits = c(0, 200),
+                             expand = c(0,0),
+                             breaks = seq(0, 200, by = 25),
+                             oob = scales::squish) +
+          labs(y = var_name_ped) +
+          theme_minimal() +
+          theme(legend.position = "none",
+                panel.grid.minor.x = element_blank(),
+                panel.grid.major.x = element_blank(),
+                panel.grid.minor.y = element_blank())
+        
+      }
+    }
     
     else if (rz_pedestrian$zoom == "FINAL") {
       sidewalks_WSG %>%
@@ -1995,117 +2058,3 @@ shinyServer(function(input, output, session) {
   })
   
 })
-
-########### Bivariate case
-
-# 
-# 
-#   # Case for poly selected
-# } else{
-# 
-#   dat <- data_bivar() %>% filter(ID == rz$poly_selected)
-# 
-#   vec_2 <-
-#     data_bivar() %>%
-#     filter(!is.na(right_variable), !is.na(right_variable_full)) %>%
-#     pull(right_variable_full)
-# 
-#   poly_value_1 <- dat$left_variable_full
-#   poly_value_2 <- dat$right_variable_full
-# 
-# 
-#   place_name <- case_when(
-#     scale_singular == "borough/city" ~
-#       glue("{dat$name}"),
-#     scale_singular == "census tract" ~
-#       glue("Census tract {dat$name}"),
-#     scale_singular == "dissemination area" ~
-#       glue("Dissemination area {dat$name}")
-#   )
-# 
-#   place_heading <-
-#     if_else(scale_singular == "borough/city",
-#             glue("{dat$name_2} of {place_name}"),
-#             glue("{place_name} ({dat$name_2})"))
-# 
-# 
-#   percentile_left <-
-#     {length(vec[vec <= dat$left_variable_full]) / length(vec) * 100} %>%
-#     round()
-# 
-#   percentile_right <-
-#     {length(vec_2[vec_2 <= dat$right_variable_full]) /
-#         length(vec_2) * 100} %>%
-#     round()
-# 
-#   relative_position <- case_when(
-#     abs(percentile_left - percentile_right) > 50 ~ "dramatically different",
-#     abs(percentile_left - percentile_right) > 30 ~ "substantially different",
-#     abs(percentile_left - percentile_right) > 10 ~ "considerably different",
-#     TRUE ~ "similar"
-#   )
-# 
-#   HTML(glue("<strong>{place_heading}</strong>",
-# 
-#             "<p>{place_name} has a population of ",
-#             "{prettyNum(dat$population, ',')}, a CanALE index score ",
-#             "of {round(poly_value_1, 2)}, and a '{tolower(var_name)}' ",
-#             "value of {round(poly_value_2, 2)}. ",
-# 
-#             "<p>These two scores are {relative_position}, in relative ",
-#             "terms. {place_name} has a CanALE index score higher ",
-#             "than {percentile_left}% of {scale_plural} and ",
-#             "a '{tolower(var_name)}' score higher than ",
-#             "{percentile_right}% of {scale_plural} in the ",
-#             "Montreal region."))
-# 
-# }
-
-############
-
-  
-#     # Scatterplot for two variables
-
-#     var_name <- 
-#       variable_explanations %>% 
-#       filter(var_code == input$data_for_plot_right) %>% 
-#       pull(var_name)
-#     
-#     
-#     if (nrow(filter(data_bivar(), ID == rz$poly_selected)) != 1) {
-#       
-#       data_bivar() %>% 
-#         drop_na() %>% 
-#         ggplot(aes(left_variable_full, right_variable_full)) +
-#         geom_point(aes(colour = group)) +
-#         geom_smooth(method = "lm", se = FALSE, colour = "grey50") +
-#         scale_colour_manual(values = deframe(bivariate_color_scale)) +
-#         labs(x = "CanALE index", y = var_name) +
-#         theme_minimal() +
-#         theme(legend.position = "none",
-#               panel.grid.minor.x = element_blank(),
-#               panel.grid.major.x = element_blank(),
-#               panel.grid.minor.y = element_blank())
-#       
-#     } else {
-#       
-#       data_bivar() %>% 
-#         drop_na() %>% 
-#         ggplot(aes(left_variable_full, right_variable_full)) +
-#         geom_point(colour = bivariate_color_scale$fill[9]) +
-#         geom_smooth(method = "lm", se = FALSE, colour = "grey50") +
-#         geom_point(data = filter(data_bivar(), ID == rz$poly_selected,
-#                                  !is.na(left_variable_full), 
-#                                  !is.na(right_variable_full)),
-#                    colour = bivariate_color_scale$fill[1],
-#                    size = 3) +
-#         labs(x = "CanALE index", y = var_name) +
-#         theme_minimal() +
-#         theme(legend.position = "none",
-#               panel.grid.minor.x = element_blank(),
-#               panel.grid.major.x = element_blank(),
-#               panel.grid.minor.y = element_blank())
-#       
-#     }
-#   }
-# })
