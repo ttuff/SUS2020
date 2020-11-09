@@ -102,13 +102,12 @@ shinyServer(function(input, output, session) {
     p <- ggplot(quant_car_share) +
       geom_sf(aes(fill = as.factor(quant3)), color = "white", 
               size = 0.05) +
-      scale_fill_manual(values = rev(colors[c(1:3)])) +
+      scale_fill_manual(values = rev(colors[c(4:6)])) +
       theme_map()
     
     ggdraw() + 
       draw_image(dropshadow2, scale = 1.59, vjust = 0.003, hjust = 0.003) +
-      draw_plot(p, scale = .85) +
-      draw_image(uni_legend, scale = .45, vjust = 0.25, hjust = 0.25) 
+      draw_plot(p, scale = .85) 
     
   })
 
@@ -1044,10 +1043,10 @@ shinyServer(function(input, output, session) {
   # Set title across zoom levels
   output$title_text_ped <- renderText({
     if( rz_pedestrian$zoom == "OUT"){
-      paste0("Pedestrian Capacity for Social Distancing, Census Tracts")
+      paste0("Pedestrian capacity for social distancing (census tracts)")
     } else if (rz_pedestrian$zoom == "IN") {
-      "Pedestrian Capacity for Social Distancing, Dissemination Area"  
-    } else {"Explore Sidewalks and Parks"}
+      "Pedestrian capacity for social distancing (dissemination areas)"  
+    } else {"Explore sidewalks and parks"}
   })
   
   # Hide extra text
@@ -1696,6 +1695,7 @@ shinyServer(function(input, output, session) {
         
         mapdeck_update(map_id = "qzmyMap")  %>%
           clear_path(layer_id = "cyclable") %>%
+          clear_path(layer_id = "baseline") %>%
           add_polygon(data = {
             cycling_access %>% 
               filter(cycling_ac >= input$commute_explore_slider[1],
@@ -1714,6 +1714,7 @@ shinyServer(function(input, output, session) {
         
         mapdeck_update(map_id = "qzmyMap") %>%
           clear_path(layer_id = "cyclable") %>%
+          clear_path(layer_id = "baseline") %>%
           add_polygon(data = {
             car_share %>% 
               filter(Car_per >= input$commute_explore_slider[1],
@@ -1731,6 +1732,7 @@ shinyServer(function(input, output, session) {
         
         mapdeck_update(map_id = "qzmyMap")  %>%
           clear_path(layer_id = "cyclable") %>%
+          clear_path(layer_id = "baseline") %>%
           add_polygon(data = {
             trip_distance %>% 
               filter(avg_dist >= input$commute_explore_slider[1],
@@ -1750,6 +1752,26 @@ shinyServer(function(input, output, session) {
     # Scenario maps
     if (qz$zoom_level == "IN") {
       
+      if (input$radio1 == 3) updateMaterialSwitch(session, "baseline_switch", 
+                                                  value = TRUE)
+      
+      # Baseline scenario
+      if (input$baseline_switch) {
+        mapdeck_update(map_id = "qzmyMap")  %>%
+          clear_polygon(layer_id = "choropleth") %>%
+          add_path(data = cycling_final,
+                   stroke_width  = "total_cycling",
+                   stroke_colour = "#722AEE80",
+                   layer_id = "baseline",
+                   width_scale = 0.2,
+                   update_view = FALSE)
+        
+      } else if (!input$baseline_switch) {
+        mapdeck_update(map_id = "qzmyMap")  %>%
+          clear_polygon(layer_id = "choropleth") %>%
+          clear_path("baseline")
+      }
+      
       # Distance scenario
       if (input$radio1 == 1) {
         
@@ -1759,6 +1781,7 @@ shinyServer(function(input, output, session) {
                    stroke_width  = "total_car",
                    stroke_colour = "#0061FF80",
                    layer_id = "cyclable",
+                   width_scale = 0.2,
                    update_view = FALSE)
         
         output$table <- renderDT({
@@ -1777,8 +1800,9 @@ shinyServer(function(input, output, session) {
           clear_polygon(layer_id = "choropleth") %>%
           add_path(data = cycling2,
                    stroke_width  = "total_car",
-                   stroke_colour = "#722AEE80",
+                   stroke_colour = "#0061FF80",
                    layer_id = "cyclable",
+                   width_scale = 0.2,
                    update_view = FALSE)
         
         output$table <- renderDT({
@@ -1790,18 +1814,7 @@ shinyServer(function(input, output, session) {
           
         })
         
-        # Baseline scenario
       } else if (input$radio1 == 3) {
-        
-        mapdeck_update(map_id = "qzmyMap")  %>%
-          clear_polygon(layer_id = "choropleth") %>%
-          add_path(data = cycling_final,
-                   stroke_width  = "total_cycling",
-                   stroke_colour = "#722AEE80",
-                   layer_id = "cyclable",
-                   update_view = FALSE)
-        
-      } else {
         
         mapdeck_update(map_id = "qzmyMap")  %>%
           clear_polygon(layer_id = "choropleth") %>%

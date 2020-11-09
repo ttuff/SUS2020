@@ -531,9 +531,16 @@ shinyUI(
                 "radio1",
                 label = "Modal shift scenarios",
                 choices = list("Baseline" = 3,
-                               "Modest" = 2,
-                               "Aggressive" = 1),
+                               "Distance" = 1,
+                               "Elevation/time" = 2),
                 selected = 3),
+              
+              conditionalPanel(
+                condition = "output.zoom_level == 'IN' && input.radio1 <3",
+                materialSwitch(inputId = "baseline_switch", 
+                               label = "Show baseline", 
+                               status = "primary", value = TRUE)
+                ),
               
               sliderTextInput(
                 inputId = "slider1",
@@ -571,7 +578,7 @@ shinyUI(
               hr(),
               materialSwitch(inputId = "switch2", 
                              label = "Cycling network", 
-                             status = "primary", value = TRUE)
+                             status = "primary", value = FALSE)
               )
             )
           )
