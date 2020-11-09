@@ -891,7 +891,9 @@ shinyServer(function(input, output, session) {
       mutate(prop_driving = round(census_analysis_quantile_WSG$prop_driving, 0),
              pop_density = log(round(census_analysis_quantile_WSG$`pop_density(sqkm)`, 0)),
              trip_scale = census_analysis_quantile_WSG$trip_scale,
-             social_distancing = census_analysis_quantile_WSG$social_distancing_capacity_pop_perc_2m)
+             social_distancing = census_analysis_quantile_WSG$social_distancing_capacity_pop_perc_2m,
+             ID = census_analysis_quantile_WSG$GeoUID,
+             population = census_analysis_quantile_WSG$population)
 
     
     if (input$variable_ped == 3) {
@@ -936,7 +938,9 @@ shinyServer(function(input, output, session) {
              social_distancing = census_analysis_quantile_WSG$social_distancing_capacity_pop_perc_2m,
              net_median_income = census_analysis_quantile_WSG$net_median_income,
              visible_minority_pop = census_analysis_quantile_WSG$visible_minority_pop,
-             immigrants_pop = census_analysis_quantile_WSG$immigrants) %>% 
+             immigrants_pop = census_analysis_quantile_WSG$immigrants,
+             ID = census_analysis_quantile_WSG$GeoUID,
+             population = census_analysis_quantile_WSG$population) %>% 
       left_join(bivariate_color_scale, by = "group") %>% 
       drop_na(right_variable) 
     
@@ -1017,7 +1021,6 @@ shinyServer(function(input, output, session) {
   
   # Update poly_selected on click
   observeEvent(input$PedestrianMap_polygon_click, {
-    print(rz_pedestrian$poly_selected)
     lst_ped <- jsonlite::fromJSON(input$PedestrianMap_polygon_click)
     rz_pedestrian$poly_selected <- lst_ped$object$properties$id
   })
@@ -1122,6 +1125,7 @@ shinyServer(function(input, output, session) {
               , fill_opacity = 1
               , update_view = FALSE
               , layer_id = "chloropleth_layer"
+              , id = "ID"
               , auto_highlight = TRUE
               , highlight_colour = '#FFFFFF90'
               , legend = FALSE
@@ -1206,6 +1210,7 @@ shinyServer(function(input, output, session) {
                 , fill_opacity = 1
                 , update_view = FALSE
                 , layer_id = "univariate_layer"
+                , id = "ID"
                 , auto_highlight = TRUE
                 , highlight_colour = '#FFFFFF90'
                 , legend = FALSE
@@ -1381,6 +1386,82 @@ shinyServer(function(input, output, session) {
                "and {quant_high_ped_ct}%. Out of the 532 census tracts, 227 of them have a capacity score below 100%, while 85 of them have a capacity score below 50%. "))
     }
     
+    else if (rz_pedestrian$zoom == "IN" & input$switch_biv == FALSE) {
+      
+      vec_ped_uni <- 
+        data_for_plot_uni() %>% 
+        filter(social_distancing != Inf,
+               population >= 100) %>% 
+        pull(social_distancing)
+      
+      min_da_uni <- round(min(vec_ped_uni), 2)
+      max_da_uni <- round(max(vec_ped_uni), 2)
+      mean_da_uni <- round(mean(vec_ped_uni), 2)
+      median_da_uni <- round(median(vec_ped_uni), 2)
+      sd_da_uni <- sd(vec_ped_uni)
+      quant_low_da_uni <- round(quantile(vec_ped_uni, c(1/3, 2/3))[1], 2)
+      quant_high_da_uni <- round(quantile(vec_ped_uni, c(1/3, 2/3))[2], 2)
+      
+      # Case for no poly selected
+      if (is.na(rz_pedestrian$poly_selected)) {
+        
+        HTML(
+          glue("At the dissemination area scale, after removing outliers with a population below 100, the capacity for pedestrian social distancing varies from ",
+               "{min_da_uni}% to {max_da_uni}%, with an average value of {mean_da_uni}% ",
+               "and a median value of {median_da_uni}%. ",
+               "Two thirds of dissemination areas have a score between {quant_low_da_uni}% ",
+               "and {quant_high_da_uni}%."))  
+        
+        # Case for selected poly
+      } else {
+        
+        dat_ped_uni <- data_for_plot_uni() %>% filter(ID == rz_pedestrian$poly_selected)
+        
+        # place_name <- case_when(
+        #   scale_singular == "borough/city" ~ 
+        #     glue("{dat_ped$ID}"),
+        #   scale_singular == "census tract" ~ 
+        #     glue("Census tract {dat$name}"),
+        #   scale_singular == "dissemination area" ~ 
+        #     glue("Dissemination area {dat$name}")
+        # )
+        # 
+        # place_heading <- 
+        #   if_else(scale_singular == "borough/city",
+        #           glue("{dat$name_2} of {place_name}"),
+        #           glue("{place_name} ({dat$name_2})"))
+        
+        poly_value_ped_uni <- dat_ped_uni$social_distancing
+        
+        quintile_ped_uni <- quantile(vec_ped_uni, c(0.2, 0.4, 0.6, 0.8))
+        
+        larger_smaller_ped_uni <- case_when(
+          poly_value_ped_uni >= quintile_ped_uni[4] ~ "much larger than",
+          poly_value_ped_uni >= quintile_ped_uni[3] ~ "larger than",
+          poly_value_ped_uni >= quintile_ped_uni[2] ~ "almost the same as",
+          poly_value_ped_uni >= quintile_ped_uni[1] ~ "smaller than",
+          TRUE ~ "much smaller than"
+        )
+        
+        poor_strong_ped_uni <- case_when(
+          str_detect(larger_smaller_ped_uni, "larger") ~ "strong",
+          str_detect(larger_smaller_ped_uni, "smaller") ~ "poor",
+          TRUE ~ "moderate"
+        )
+        
+        # percentile <- 
+        #   {length(vec[vec <= dat$left_variable_full]) / length(vec) * 100} %>% 
+        #   round()
+        
+        HTML(glue("The dissemination area {dat_ped_uni$ID} has a population of ",
+                  "{prettyNum(dat_ped_uni$population, ',')} and a pedestrian social distancing capacity ",
+                  "of {round(poly_value_ped_uni, 2)}%, which is {larger_smaller_ped_uni} ",
+                  "the region-wide median of {median_da_uni}%.", 
+                  
+                  "<p>Dissemination area {dat_ped_uni$ID} offers a {poor_strong_ped_uni} capacity for its residents to practice social distancing in the local pedestrian realm."))
+      
+    }}
+    
     else if (rz_pedestrian$zoom == "FINAL") {
       min_sidewalk <- round(min(sidewalks_WSG$sidewalk_width), 2)
       max_sidewalk <- round(max(sidewalks_WSG$sidewalk_width), 2)
@@ -1397,6 +1478,7 @@ shinyServer(function(input, output, session) {
              "Two thirds of Montreal's sidewalks have widths between {quant_low_sidewalk} meters and {quant_high_sidewalk} meters. "))
     }
   })
+  
   
   ## Render the histogram/scatterplot ------------------------------------------
   
@@ -1718,3 +1800,5 @@ shinyServer(function(input, output, session) {
   })
   
 })
+
+
