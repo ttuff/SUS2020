@@ -316,6 +316,7 @@ rz <- reactiveValues(zoom = 'OUT',
                      poly_selected = NA)
 
 
+
 # Commute mode change globals ---------------------------------------------
 
 # Set access token  

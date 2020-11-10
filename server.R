@@ -216,9 +216,9 @@ shinyServer(function(input, output, session) {
           fill_opacity = paste0(input$data_for_plot_right, 
                                 "_quant3_fill_opacity"))
     }
-    st_crs(data) = 4326
-    st_crs(data$geometry) = 4326
-   print(names(data))
+    st_crs(data) <- 4326
+    st_crs(data$geometry) <- 4326
+   print(st_crs(data))
     return(data)
   })
   
@@ -300,7 +300,7 @@ shinyServer(function(input, output, session) {
     
     # Univariate case
     if (input$data_for_plot_right == " ") {
-      
+      print("stats")
       min_val <- round(min(vec), 2)
       max_val <- round(max(vec), 2)
       mean_val <- round(mean(vec), 2)
@@ -419,7 +419,7 @@ shinyServer(function(input, output, session) {
   
       # Case for no poly selected
       if (is.na(rz$poly_selected)) {
-        
+        print("2nd order")
         # If correlation is close to zero
         if (correlation < 0.05 && correlation > -0.05) {
           
@@ -457,7 +457,7 @@ shinyServer(function(input, output, session) {
         poly_value_1 <- dat$left_variable_full
         poly_value_2 <- dat$right_variable_full
         
-        
+        print("polyselect")
         place_name <- case_when(
           scale_singular == "borough/city" ~ 
             glue("{dat$name}"),
@@ -599,7 +599,7 @@ shinyServer(function(input, output, session) {
           drop_na() %>% 
           ggplot(aes(left_variable_full, right_variable_full)) +
           geom_point(aes(colour = group)) +
-          geom_smooth(method = "lm", se = FALSE, colour = "grey50") +
+          #geom_smooth(method = "lm", se = FALSE, colour = "grey50") +
           scale_colour_manual(values = deframe(bivariate_color_scale)) +
           labs(x = "CanALE index", y = var_name) +
           theme_minimal() +
@@ -614,7 +614,7 @@ shinyServer(function(input, output, session) {
           drop_na() %>% 
           ggplot(aes(left_variable_full, right_variable_full)) +
           geom_point(colour = bivariate_color_scale$fill[9]) +
-          geom_smooth(method = "lm", se = FALSE, colour = "grey50") +
+          #geom_smooth(method = "lm", se = FALSE, colour = "grey50") +
           geom_point(data = filter(data_bivar(), ID == rz$poly_selected,
                                    !is.na(left_variable_full), 
                                    !is.na(right_variable_full)),
@@ -947,8 +947,10 @@ shinyServer(function(input, output, session) {
              population = census_analysis_quantile_WSG$population) %>% 
       left_join(bivariate_color_scale, by = "group") %>% 
       drop_na(right_variable) 
-    
+    print("made it here 1")
+    st_crs(data_for_plot_bivariate) <- 4326
     bivariate_chloropleth  <- st_cast(data_for_plot_bivariate, "MULTIPOLYGON")
+    print("made it here 2")
     
     if (input$variable_ped == 3) {
       bivariate_chloropleth <- bivariate_chloropleth %>% 
@@ -959,6 +961,7 @@ shinyServer(function(input, output, session) {
       filter(pop_density >= input$slider_ped[1] & pop_density <= input$slider_ped[2]) 
     } else {bivariate_chloropleth <- bivariate_chloropleth %>% 
       filter(trip_scale >= input$slider_ped[1] & trip_scale <= input$slider_ped[2])}
+    print("made it here 3")
   })
   
   ## Second variable plot -------------------------------------------------
@@ -1398,7 +1401,7 @@ shinyServer(function(input, output, session) {
   ## Render the info table -----------------------------------------------------
   
   output$pedestrian_info <- renderUI({
-    
+    #print("ped render UI")
     census_analysis_ct_plot <- census_analysis_ct_plot %>% 
       filter(social_distancing != Inf,
              population >= 500)
@@ -1560,12 +1563,13 @@ shinyServer(function(input, output, session) {
              "Two thirds of Montreal's sidewalks have widths ",
              "between {quant_low_sidewalk} meters and {quant_high_sidewalk} meters. "))
     }
+    #print("end ped render UI")
   })
   
   ## Render the histogram/scatterplot ------------------------------------------
   
   output$pedestrian_graph <- renderPlot({
-    
+    print("start ped graph")
     # Zoom out
     if (rz_pedestrian$zoom == "OUT") {
         
@@ -1661,7 +1665,7 @@ shinyServer(function(input, output, session) {
           drop_na() %>%
           ggplot(aes(left_variable_full, right_variable_full)) +
           geom_point(aes(colour = group)) +
-          geom_smooth(method = "lm", se = FALSE, colour = "grey50") +
+          #geom_smooth(method = "lm", se = FALSE, colour = "grey50") +
           scale_colour_manual(values = deframe(bivariate_color_scale)) +
           scale_x_continuous(name = "Capacity for pedestrian social distancing",
                              limits = c(0, 500),
@@ -1715,6 +1719,7 @@ shinyServer(function(input, output, session) {
               panel.grid.major.x = element_blank(),
               panel.grid.minor.y = element_blank())
     }
+    print("end ped graph")
   })
   
   ## Render the did-you-knows --------------------------------------------------
@@ -1775,7 +1780,7 @@ shinyServer(function(input, output, session) {
   ## Draw histogram ------------------------------------------------------------
   
   output$commute_histogram <- renderPlot({
-    
+    print("ped hist start")
     if (input$commute_variable == 1) {
       data <- rename(cycling_access, var = cycling_ac)
     } else if (input$commute_variable == 2) {
@@ -1802,7 +1807,7 @@ shinyServer(function(input, output, session) {
             panel.grid.minor.x = element_blank(),
             panel.grid.major.x = element_blank(),
             panel.grid.minor.y = element_blank())    
-    
+    print("ped hist end")
   })
   
   
