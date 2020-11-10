@@ -182,8 +182,7 @@ shinyServer(function(input, output, session) {
     } else if (rz$zoom == "IN") {data <- data_CT_large
     } else if (rz$zoom == "ISO") {data <- data_DA_1_large
     } else if (rz$zoom == "ISO_2") {data <- data_DA_2_large}
-    
-    # Starting case for no selection
+    st_crs(data) = 4326    # Starting case for no selection
     if (input$data_for_plot_right == " ") {
       
       data <- 
@@ -207,7 +206,9 @@ shinyServer(function(input, output, session) {
           fill_opacity = paste0(input$data_for_plot_right, 
                                 "_quant3_fill_opacity"))
     }
-    
+    st_crs(data) = 4326
+    st_crs(data$geometry) = 4326
+   print(names(data))
     return(data)
   })
   
@@ -986,15 +987,15 @@ shinyServer(function(input, output, session) {
   ## Creating problem on server. See: https://github.com/r-spatial/sf/issues/1419
     ## also: https://stackoverflow.com/questions/61286108/error-in-cpl-transformx-crs-aoi-pipeline-reverse-ogrcreatecoordinatetrans 
     
-  # May plan
-  #st_crs(original_plan_disaggregated) = 4326
-  may_vas_plan <- original_plan_disaggregated %>% 
-    st_transform(4326)
-  
-  # July plan
-  #st_crs(revised_plan) = 4326
-  july_vas_plan <- revised_plan %>% 
-    st_transform(4326)
+  # # May plan
+  # #st_crs(original_plan_disaggregated) = 4326
+  # may_vas_plan <- original_plan_disaggregated %>%
+  #   st_transform(4326)
+  # 
+  # # July plan
+  # #st_crs(revised_plan) = 4326
+  # july_vas_plan <- revised_plan %>%
+  #   st_transform(4326)
   
   ## Set zoom bins  -------------------------------------------------
   observeEvent(input$PedestrianMap_view_change$zoom, {

@@ -23,11 +23,11 @@ shinyUI(
       width = 250,
       sidebarMenu(id = "tabs",
                   
-                  menuItem("Home", tabName = "home", 
+                  menuItem("SUS Preview", tabName = "home", 
                            icon = icon("balance-scale")),
                   
-                  menuItem("Access to green space", icon = icon("envira"), 
-                           tabName = "green", badgeLabel = "new", 
+                  menuItem("Access to green space", icon = icon("envira"),
+                           tabName = "green", badgeLabel = "new",
                            badgeColor = "teal"),
                   
                   menuItem("Active living potential", icon = icon("child"), 
@@ -37,11 +37,11 @@ shinyUI(
                                    plotOutput("active_map_left", 
                                               height = 250)),
                   
-                  menuItem("Biodiversity", icon = icon("bug"), 
+                  menuItem("Biodiversity", icon = icon("bug"),
                            tabName = "Biodiversity"),
-                  
-                  menuItem("Climate-change risk", 
-                           icon = icon("globe-americas"), 
+
+                  menuItem("Climate-change risk",
+                           icon = icon("globe-americas"),
                            badgeColor = "yellow"),
                   
                   menuItem("Commuter mode switching", icon = icon("biking"), 
@@ -50,23 +50,23 @@ shinyUI(
                                    plotOutput("commuter_map_left", 
                                               height = 250)),
                   
-                  menuItem("Covid-19", icon = icon("head-side-mask"), 
-                           tabName = "Covid", badgeLabel = "health and safety", 
+                  menuItem("Covid-19", icon = icon("head-side-mask"),
+                           tabName = "Covid", badgeLabel = "health and safety",
                            badgeColor = "red"),
-                  
-                  menuItem("Economic health", icon = icon("dollar-sign"), 
+
+                  menuItem("Economic health", icon = icon("dollar-sign"),
                            tabName = "Economic"),
-                  
-                  menuItem("Energy consumption", icon = icon("fire-alt"), 
+
+                  menuItem("Energy consumption", icon = icon("fire-alt"),
                            tabName = "Energy"),
-                  
-                  menuItem("Food availability", icon = icon("cheese"), 
+
+                  menuItem("Food availability", icon = icon("cheese"),
                            tabName = "Food"),
-                  
-                  menuItem("Housing", icon = icon("home"), 
+
+                  menuItem("Housing", icon = icon("home"),
                            tabName = "rentals"),
-                  
-                  menuItem("Land use", icon = icon("warehouse"), 
+
+                  menuItem("Land use", icon = icon("warehouse"),
                            tabName = "Land"),
                   
                   menuItem("Pedestrian realm", icon = icon("walking"), 
@@ -74,14 +74,15 @@ shinyUI(
                            badgeColor = "aqua"),
                   conditionalPanel(condition = "input.tabs == 'Pedestrian'",
                                    plotOutput("pedestrian_map_left", 
-                                              height = 250)),
+                                              height = 250))
+                  ,
                   
-                  menuItem("Public transit", icon = icon("train"), 
-                           tabName = "transit", badgeLabel = "on the ballot", 
+                  menuItem("Public transit", icon = icon("train"),
+                           tabName = "transit", badgeLabel = "on the ballot",
                            badgeColor = "teal"),
-                  
+
                   br(),
-                  
+
                   menuItem("Why a dashboard?", tabName = "why_dashboard"),
                   menuItem("Meet the team", tabName = "meet_the_team")
                   
@@ -419,7 +420,8 @@ shinyUI(
                    actionLink(inputId = "vas_hide_explore",
                               label = "Hide"))),
           conditionalPanel(
-            condition = "output.vas_hide_explore_status == 1",
+            ## Adding impossible condition to turn off this box. restore to: "output.vas_hide_explore_status == 1"
+            condition = "output.vas_hide_explore_status == 100",
           materialSwitch(inputId = "vas_1", 
                          label = "Original Plan (May 15, 2020)", 
                          status = "info", value = FALSE),
