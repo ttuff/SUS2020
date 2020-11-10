@@ -1,4 +1,5 @@
 ##### SUS UI SCRIPT ############################################################
+
 dbHeader <- dashboardHeader(tags$li(class = "dropdown",
                                     tags$style(".main-header {max-height: 55px}"),
                                     tags$style(".main-header .logo {height: 50px}")),
@@ -143,8 +144,6 @@ shinyUI(
       background-color: #FFFFFF;
       }
                                 '))),
-      
-      #setShadow(id = "input_control_left2"),
       
       tabItems(
         
