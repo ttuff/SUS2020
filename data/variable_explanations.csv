@@ -1,19 +1,19 @@
 var_code,var_name,explanation
 tenant_prop,Tenant-occupied (%),Tenant-occupied (%) is the percentage of private dwellings which are occupied by tenants.
-avg_rent,Average rent,NA
-avg_property_value,Average property value,NA
-unaffordable_prop,Unaffordable housing (%),NA
-unsuitable_prop,Unsuitable housing (%),NA
-median_income,Median household income,NA
-income_50_prop,Income under $50k (%) rent,NA
-income_100_prop,Income between $50k-$100k (%),NA
-income_high_prop,Income above $100k (%),NA
-immigrant_prop,Immigrants (%),NA
-immigrant_new_prop,New immigrants (%),NA
-car_prop,Drive to work (%),NA
-walk_or_bike_prop,Walk or cycle to work (%),NA
-transit_prop,Public transit to work (%),NA
-time_15_prop,15 minutes to work (%),NA
-time_30_prop,15-30 minutes to work (%),NA
-time_45_prop,30-45 minutes to work (%),NA
-time_60_prop,45-60 minutes to work (%),NA
+avg_rent,Average rent,Average rent is the average rent paid by tenants per month.
+avg_property_value,Average property value,Average property value is the average value of dwellings.
+unaffordable_prop,Unaffordable housing (%),Unaffordable housing (%) is the percentage of dwellings for which residents pay more than 30% of income on housing costs.
+unsuitable_prop,Unsuitable housing (%),"Unsuitable housing (%) is the percentage of households living in unsuitable accommodations according to the National Occupancy Standard, whether the dwelling has enough bedrooms for the size and composition of the household."
+median_income,Median household income,Median household income is the median  household income (before tax).
+income_50_prop,Income under $50k (%) ,"Income under $50k (%) is the percentage of households with an income less then $50,000."
+income_100_prop,Income between $50k-$100k (%),"Income between $50k-$100k (%) is the percentage of households with an income between $50,000 and $100,000."
+income_high_prop,Income above $100k (%),"Income above $100k (%) is the percentage of households with an income more than $100,000."
+immigrant_prop,Immigrants (%),Immigrants (%) is the percentage of foreign-born residents.
+immigrant_new_prop,New immigrants (%),New immigrants (%) is the percentage of people who have immigrated in the last five years.
+car_prop,Drive to work (%),Drive to work (%) is the percentage of people who drive a privately owned car or truck to work.
+walk_or_bike_prop,Walk or cycle to work (%),Walk or cycle to work (%) is the percentage of people who walk or cycle to work.
+transit_prop,Public transit to work (%),Public transit to work (%) is the percentage of people who use public transit to get to work.
+time_15_prop,15 minutes to work (%),15 minutes to work (%) is the percentage of people whose commute time is less than 15 minutes.
+time_30_prop,15-30 minutes to work (%),15-30 minutes to work (%) is the percentage of people whose commute time is between 15 and 30 minutes.
+time_45_prop,30-45 minutes to work (%),30-45 minutes to work (%) is the percentage of people whose commute time is between 30 and 45 minutes.
+time_60_prop,45-60 minutes to work (%),45-60 minutes to work (%) is the percentage of people whose commute time is between 45 and 60 minutes.
