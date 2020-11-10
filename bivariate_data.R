@@ -235,119 +235,6 @@ data_borough <-
   rename(name_2 = type)
 
 
-# Build title text --------------------------------------------------------
-
-title_text <- 
-  tibble(
-    tab = c("active", "active", "commute", "commute", "pedestrian_ct", 
-            "pedestrian_ct", "pedestrian_da", "pedestrian_da", 
-            "pedestrian_sidewalk", "pedestrian_sidewalk"),
-    type = rep(c("main", "extra"), 5),
-    text = c(paste0("The CanALE dataset (developed by Prof. Nancy Ross ",
-                    "and her team) captures four key elements related ",
-                    "to active living environments: population density, ", 
-                    "points of interest, street grid, and proximity of ",
-                    "transit service."),
-             paste0("<p>A safe and inviting pedestrian ",
-                    "realm is not distributed equally across ",
-                    "socio-demographic factors. The risks of ", 
-                    "pedestrian injuries and fatalities are higher in ",
-                    "low-income and racialized communities where ", 
-                    "residents often rely on walking as a daily mode ",
-                    "of transport but where the local environment is ",
-                    "not necessarily inviting and safe.",
-                    "<p>In addition to ",
-                    "evidence pointing towards large discrepancies in ",
-                    "the provision of walkable urban space across ",
-                    "income and racial lines, concern has been ",
-                    "raised with regard to the possible ",
-                    "gentrification and displacement impacts of ",
-                    "improved pedestrian infrastructure. In other ",
-                    "words, who can afford to live in walkable ",
-                    "neighbourhoods?",
-                    "<br>",
-                    "<p>Further resources:",
-                    "<ul><li><a href= ''>Thomas Herrmann, William Gleckner, ", 
-                    "Rania A. Wasfi, Benoît Thierry, Yan Kestens ", 
-                    "and Nancy A. Ross. 2019. 'A pan-Canadian measure of ",
-                    "active living environments using open data. ",
-                    "Statistics Canada Health Reports, 82-003-X.</a>",
-                    "<li><a href = ''>Kevin Manaugh, Linnea Soli, Samuel Kohn, ",
-                    "Robin Basalaev-Binder, Ty Tuff, David Wachsmuth. 2020. ",
-                    "'Montreal’s response to COVID-19: An equity analysis of ",
-                    "new active transport infrastructure.' ",
-                    "Transportation Research Board working paper.</a> ",
-                    "<b>(MSSI research)</b></ul>",
-                    "<br>",
-                    "<p><i>Module lead authors: Robin Basalaev-Binder, ", 
-                    "Ty Tuff, David Wachsmuth</i>"
-                    ),
-             paste0("Based on 2016 commuting data, we quantify possible ",
-                    "reductions in VMT and GHG by identifying car trips that ",
-                    "could be shifted to cycling based on distance, ",
-                    "elevation change and other factors."), 
-             paste0("<p>The transportation sector is a major contributor ",
-                    "to Canada's greenhouse gas (GHG) emissions which are ", 
-                    "linked to global climate change. Reducing vehicle miles ",
-                    "traveled (VMT) over the long term is increasingly ", 
-                    "recognized as the key to reduce GHG emissions from the ",
-                    "transportation sector but has not received as much ", 
-                    "attention as needed.",
-                    "<p>The primary objective of this study is to ",
-                    "investigate the potential for reducing VMT and GHG ",
-                    "emissions by shifting short car trips to cycling ",
-                    "in Montreal. Based on commuting data from the 2016 ",
-                    "Canadian Census, commuting patterns were explored. ",
-                    "Two scenarios were introduced to model environmental ",
-                    "effects of a modal shift towards cycling based on ",
-                    "characteristics of current bicycle trips.", 
-                    "<p>The results showed that enhanced cycling commuting ",
-                    "can reduce VMT and GHG emissions from car travel. ", 
-                    "Other mitigation measures are necessary for achieving ",
-                    "GHG emissions reduction targets.",
-                    "<br>",
-                    "<p><i>Module lead authors: Qiao Zhao, Kevin Manaugh</i>"), 
-             paste0("The capacity for pedestrian social ",
-                    "distancing is a capacity measurement that determines ",
-                    "the percentage of a neighbourhood’s population that ",
-                    "can make local trips on foot at the same time while respecting ",
-                    "‘social distancing’ regulations."), 
-             paste0("<p>Using open data from Montreal's open data portal as well as OpenStreetMap, it was possible to ",
-                    "calculate the total surface area of sidewalks, neighbourhood parks, and pre-Covid ",
-                    "pedestrian streets. Summing these surface areas ",
-                    "gets us the neighbourhood's total walkable surface area. It is ",
-                    "then possible to calculate how many residents can ‘fit’ into the pedestrian realm ",
-                    "while respecting ‘social distancing’ regulations of 2 meters (total walkable surface ",
-                    "area divided by the surface area of a circle with a 2-meter radius, that is 12.54 ",
-                    "square meters). Finally, we normalize the value by representing it as a percentage of the residential population. ",
-                    "Neighbourhoods where less than 100% of the local population can make trips on foot at the same time ",
-                    "are above capacity and more at risk of overcrowding from local ",
-                    "pedestrian trips. ",
-                    "<p>While it is still important to take into account ",
-                    "pedestrian flows coming from external neighbourhoods (some data on pedestrian ",
-                    "flows obtained from 2016 TrajetMtl data is presented in this research), the measurement’s focus on local pedestrian ",
-                    "capacity is especially relevant during a pandemic situation where shelter ",
-                    "in place and travel restrictions have generally led to a rise in local trips ",
-                    "and a decline in trips from other neighbourhoods.",
-                    "<br>",
-                    "<p><i>Module lead author: Samuel Kohn</i>"),
-             paste0("Compare the pedestrian capacity for social distancing metric across a variety of other variables, such as walkable access ",
-             "to amenities, income level, immigration, visible minorities, population density, etc. "),
-             paste0("The data shows us that the ability to safely navigate pedestrian space tends to be much lower in DAs with lower incomes as ",
-                    "well as DAs with high proportions of visible minorities and immigrants compared to majority white regions of Montreal. While ",
-                    "the City’s plans to increase walkable urban space made some improvements to these discrepancies, there is room for improvement. ",
-                    "The interactive data within this platform has the potential to support policy-makers towards making strategic decisions with more ",
-                    "equitable outcomes. Below is a policy analysis exemplar using two variables: capacity for pedestrian social distancing and ",
-                    "walkable access to key amenities."),
-             "",
-             paste0("In order to calculate the width of sidewalks in Montreal, we used a spatial dataset published by Montréal Open Data Portal ",
-             "that includes polygons of all sidewalks within the Montreal agglomeration. Using the the object-oriented programming language R, ",
-             "we developed a function which first creates negative buffers inside each sidewalk segment, and then iteratively adjusts the distance ",
-             "of that buffer until the maximum distance is achieved which still produces valid buffer geometry (if the buffer boundaries overlap, ",
-             "the geometry becomes invalid). The outcome is the equivalent of a centreline inside each sidewalk polygon. The last step to determine ",
-             "sidewalk width is to sum the distances between the centreline and ",
-             "both edges of a given sidewalk polygon segment. This process is illustrated below."))
-  )
 
 
 # New large data files ----------------------------------------------------
@@ -445,6 +332,55 @@ data_DA_2_large <-
   mutate(fill_opacity = paste0(fill, opacity),
          fill = paste0(fill, "FF"))
 
+
+# Save data files ---------------------------------------------------------
+
 qsavem(data_DA, data_CT, data_borough, title_text, 
        data_borough_large, data_CT_large, data_DA_1_large, data_DA_2_large,
        file = "data/new_bivariate.qsm")
+
+
+# Produce static images ---------------------------------------------------
+
+var_names <- c("tenant_prop", "avg_rent", "avg_property_value", 
+               "unaffordable_prop", "unsuitable_prop", "median_income", 
+               "income_50_prop", "income_100_prop", "income_high_prop",
+               "immigrant_prop", "immigrant_new_prop", "car_prop", 
+               "walk_or_bike_prop", "transit_prop", "time_15_prop", 
+               "time_30_prop", "time_45_prop", "time_60_prop")
+
+walk(list(data_borough_large, data_CT_large, data_DA_1_large), function(df) {
+  
+  x_name <- case_when(
+    nrow(df) == 71 ~ "borough",
+    nrow(df) == 830 ~ "CT",
+    nrow(df) == 5404 ~ "DA"
+  )
+  
+  walk(var_names, ~{
+    
+    df <- 
+      df %>% 
+      select(right_variable = paste0(.x, "_quant3"))
+    
+    p <- 
+      df %>% 
+      ggplot() +
+      geom_sf(aes(fill = as.factor(right_variable)), color = "white", 
+              size = 0.01) +
+      scale_fill_manual(values = rev(colors[c(4:6)])) +
+      theme_map()
+    
+    ggdraw() + 
+      draw_image("www/dropshadow1.png", scale = 1.49, vjust = -0.003, hjust = -0.003) +
+      draw_plot(p) +
+      draw_image("www/Univariate_right.png", scale = .5, vjust = 0.25, hjust = -0.25)
+    
+    ggsave(paste0("www/sidebar_maps/", x_name, "_", .x, ".png"), width = 1, 
+           height = 1, units = "in", dpi = 250)
+    
+  })
+  
+  
+})
+

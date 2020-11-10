@@ -11,8 +11,8 @@ shinyServer(function(input, output, session) {
   
   output$mssipic <- renderImage({
     filename <- normalizePath(file.path("www/mssi_logo.png"))
-    return(list(src = filename, contentType = "image/png",  width = 100,
-                height = 100))
+    return(list(src = filename, contentType = "image/png",  width = 80,
+                height = 80))
   }, deleteFile = FALSE)
   
   output$glamour_shot <- renderImage({
@@ -73,7 +73,7 @@ shinyServer(function(input, output, session) {
   ### Plot output calls for all 'left' plots ###################################
   
   # Active living potential
-  output$active_map_left <- renderPlot({
+  output$active_map_left <- renderCachedPlot({
     
     data_for_plot_left <- 
       data_bivar()
@@ -91,10 +91,13 @@ shinyServer(function(input, output, session) {
       draw_plot(p) +
       draw_image(uni_legend, scale = .45, vjust = 0.25, hjust = 0.25) 
     
-    }, bg = "white")
+    }, 
+    cacheKeyExpr = paste(rz$zoom, "left", sep = "_"),
+    cache = diskCache("./app-cache"),
+    bg = "white")
   
   # Commuter mode shift
-  output$commuter_map_left <- renderPlot({
+  output$commuter_map_left <- renderCachedPlot({
     
     quant_car_share <- car_share %>% mutate(quant3 = ntile(car_share$Car_per, 3))
     
@@ -108,10 +111,13 @@ shinyServer(function(input, output, session) {
       draw_image(dropshadow2, scale = 1.59, vjust = 0.003, hjust = 0.003) +
       draw_plot(p, scale = .85) 
     
-  })
+  },
+  cacheKeyExpr = paste("commute_mode_left"),
+  cache = diskCache("./app-cache")
+  )
 
   # Pedestrian social distancing capacity map
-  output$pedestrian_map_left <- renderPlot({
+  output$pedestrian_map_left <- renderCachedPlot({
     
     p <- 
       ggplot() +
@@ -130,13 +136,16 @@ shinyServer(function(input, output, session) {
       draw_plot(p) +
       draw_image(uni_legend, scale = .45, vjust = 0.3, hjust = 0.3)
     
-    })
+    },
+    cacheKeyExpr = "pedestrian_left",
+    cache = diskCache("./app-cache")
+    )
   
   
   ### Plot output calls for all 'right' plots ##################################
   
   # Active living potential
-  output$active_map_right <- renderPlot({
+  output$active_map_right <- renderCachedPlot({
     
     if (input$data_for_plot_right == " ") {
       
@@ -166,9 +175,10 @@ shinyServer(function(input, output, session) {
         draw_image(uni_legend_right, scale = .5, vjust = 0.25, hjust = -0.25)
       
     }
-    
-    
-  }, bg = "transparent")
+    }, 
+    cacheKeyExpr = paste(rz$zoom, input$data_for_plot_right, sep = "_"),
+    cache = diskCache("./app-cache"),
+    bg = "transparent")
   
   
   ### Active living potential ##################################################

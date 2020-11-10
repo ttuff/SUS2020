@@ -1,4 +1,5 @@
 ##### SUS UI SCRIPT ############################################################
+
 dbHeader <- dashboardHeader(tags$li(class = "dropdown",
                                     tags$style(".main-header {max-height: 55px}"),
                                     tags$style(".main-header .logo {height: 50px}")),
@@ -145,24 +146,23 @@ shinyUI(
       }
                                 '))),
       
-      #setShadow(id = "input_control_left2"),
-      
       tabItems(
         
         ## Home page -----------------------------------------------------------
         
         tabItem(tabName = "home", 
-                fluidPage(
-                  fluidRow(imageOutput("homepic", height = 800), 
+                fluidPage(id = 'home',
+                          tags$style('#home {background-color: #FBFBFB;}'),
+                  fluidRow(imageOutput("homepic", height = 600), 
                            align = "center"),
                   fluidRow(hr()),
                   fluidRow(br()),
-                  fluidRow(imageOutput("mssipic", height = 100), 
+                  fluidRow(imageOutput("mssipic", height = 80), 
                            align = "center"),
                   fluidRow(HTML(paste0(
-                    "<h4>An initiative of the <a href = ", "
+                    "<h5>An initiative of the <a href = ", "
                     'https://www.mcgill.ca/mssi/'>McGill ",
-                    "Sustainability Systems Initiative</a></h4>" 
+                    "Sustainability Systems Initiative</a></h5>" 
                   )),
                     align = "center")
                   )),
@@ -229,7 +229,7 @@ shinyUI(
           tabName = "active",
           
           # Main map
-          mapdeckOutput(outputId = 'active_map', height = "1200px"),
+          mapdeckOutput(outputId = 'active_map', height = "1000px"),
           
           # Style tags
           tags$head(tags$style(HTML('
@@ -331,7 +331,7 @@ shinyUI(
         tabItem(
           tabName = "Pedestrian",
           
-          mapdeckOutput(outputId = 'PedestrianMap', height = "1200px"),
+          mapdeckOutput(outputId = 'PedestrianMap', height = "1000px"),
           
           tags$head(tags$style(HTML('
           #title_bar_ped {border-width: 10px; border-color: rgb(255, 255, 255);}
@@ -360,7 +360,7 @@ shinyUI(
             conditionalPanel(
               condition = "output.more_info_ped_status == 1 && output.zoom == 'OUT'",
               id = "plotContainer_ped",
-              p(title_text %>%
+              HTML(title_text %>%
                   filter(tab == "pedestrian_ct", type == "extra") %>%
                   pull(text))),
             conditionalPanel(
@@ -502,7 +502,7 @@ shinyUI(
           border-color: rgba(255,255,255,1);}'))),
           
           # Main map
-          mapdeckOutput(outputId = "qzmyMap", height = "1200px"),
+          mapdeckOutput(outputId = "qzmyMap", height = "1000px"),
           
           # Title bar
           absolutePanel(
