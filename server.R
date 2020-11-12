@@ -1002,14 +1002,14 @@ shinyServer(function(input, output, session) {
     ## also: https://stackoverflow.com/questions/61286108/error-in-cpl-transformx-crs-aoi-pipeline-reverse-ogrcreatecoordinatetrans 
     
   # # May plan
-  # #st_crs(original_plan_disaggregated) = 4326
-  # may_vas_plan <- original_plan_disaggregated %>%
-  #   st_transform(4326)
+  st_crs(original_plan_disaggregated) = 32620
+  may_vas_plan <- original_plan_disaggregated %>%
+     st_transform(4326)
   # 
   # # July plan
-  # #st_crs(revised_plan) = 4326
-  # july_vas_plan <- revised_plan %>%
-  #   st_transform(4326)
+  st_crs(revised_plan) = 32620
+   july_vas_plan <- revised_plan %>%
+     st_transform(4326)
   
   ## Set zoom bins  -------------------------------------------------
   observeEvent(input$PedestrianMap_view_change$zoom, {
@@ -2073,5 +2073,18 @@ shinyServer(function(input, output, session) {
       }
     }
   })
+  
+  ##############################################################################
+  
+  
+  ### Biodiversity #########################################################
+  
+  ## Load MapBox Base Map  -------------------------------------------------
+  output$BiodiversityMap <- renderMapdeck({
+    mapdeck(style = "mapbox://styles/ttuff/ckg1hclfr0az819plu73iomnn", 
+            token = 'pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ',
+            zoom = 9.2,location = c(-73.65, 45.4), pitch = 35) 
+  })
+  
   
 })

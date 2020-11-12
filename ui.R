@@ -77,7 +77,7 @@ shinyUI(
                                               height = 200))
                   ,
                   menuItem("Biodiversity", icon = icon("bug"),
-                           tabName = "Biodiversity", badgeLabel = "Nature-based solutions"),
+                           tabName = "biodiversity", badgeLabel = "Nature-based solutions"),
                   
                   # menuItem("Public transit", icon = icon("train"),
                   #          tabName = "transit", badgeLabel = "on the ballot",
@@ -605,6 +605,14 @@ shinyUI(
                              status = "primary", value = FALSE)
               )
             )
+          ),
+        
+        tabItem(
+          tabName = "biodiversity",
+          mapdeckOutput(outputId = "BiodiversityMap", height = "1000px")
+        
+        
+        
           )
         )
       )
