@@ -5,8 +5,8 @@ account: tuff
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3155391
-bundleId: 3844280
+bundleId: 3853169
 url: https://tuff.shinyapps.io/SUS2020/
-when: 1605037160.36583
+when: 1605204280.14758
 asMultiple: FALSE
 asStatic: FALSE
