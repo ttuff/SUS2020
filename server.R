@@ -5,8 +5,8 @@ shinyServer(function(input, output, session) {
   ### Render images from files #################################################
   
   output$homepic <- renderImage({
-    filename <- normalizePath(file.path("www/Sus_HOME.gif"))
-    return(list(src = filename, height = "100%",  contentType = "image/gif"))
+    filename <- normalizePath(file.path("www/SUSLOGO.png"))
+    return(list(src = filename, height = "100%",  contentType = "image/png"))
     }, deleteFile = FALSE)
   
   output$mssipic <- renderImage({
@@ -861,7 +861,7 @@ shinyServer(function(input, output, session) {
   output$PedestrianMap <- renderMapdeck({
     mapdeck(style = "mapbox://styles/skohn90/ckgjqwg1w00bv1bmorr5oad7q", 
             token = 'pk.eyJ1Ijoic2tvaG45MCIsImEiOiJja2JpNGZjMnUwYm9hMnFwN3Q2bmV5c3prIn0.M-AJKxYD1ETFiBB6swQmJw',
-            zoom = 9,location = c(-73.75, 45), pitch = 35) 
+            zoom = 9.2,location = c(-73.65, 45.4), pitch = 35) 
     })
   
   ## Univariate chloropleth info CT Level   ------------------------------------
@@ -962,6 +962,7 @@ shinyServer(function(input, output, session) {
     } else {bivariate_chloropleth <- bivariate_chloropleth %>% 
       filter(trip_scale >= input$slider_ped[1] & trip_scale <= input$slider_ped[2])}
     print("made it here 3")
+    return(bivariate_chloropleth)
   })
   
   ## Second variable plot -------------------------------------------------

@@ -21,67 +21,68 @@ shinyUI(
     ## Left sidebar ------------------------------------------------------------
     
     dashboardSidebar(
-      width = 250,
-      sidebarMenu(id = "tabs",
+      width = 200,
+      sidebarMenu(id = "tabs", 
                   
                   menuItem("SUS Preview", tabName = "home", 
                            icon = icon("balance-scale")),
                   
-                  menuItem("Access to green space", icon = icon("envira"),
-                           tabName = "green", badgeLabel = "new",
-                           badgeColor = "teal"),
+                  # menuItem("Access to green space", icon = icon("envira"),
+                  #          tabName = "green", badgeLabel = "new",
+                  #          badgeColor = "teal"),
                   
                   menuItem("Active living potential", icon = icon("child"), 
-                           tabName = "active", badgeLabel = "popular", 
+                           tabName = "active", badgeLabel = "Built environment", 
                            badgeColor = "purple"),
                   conditionalPanel(condition = "input.tabs == 'active'",
                                    plotOutput("active_map_left", 
-                                              height = 250)),
+                                              height = 200)),
                   
-                  menuItem("Biodiversity", icon = icon("bug"),
-                           tabName = "Biodiversity"),
-
-                  menuItem("Climate-change risk",
-                           icon = icon("globe-americas"),
-                           badgeColor = "yellow"),
+                  
+                  # 
+                  # menuItem("Climate-change risk",
+                  #          icon = icon("globe-americas"),
+                  #          badgeColor = "yellow"),
                   
                   menuItem("Commuter mode switching", icon = icon("biking"), 
-                           tabName = "mode"),
+                           tabName = "mode", badgeLabel = "Simulation", badgeColor = "aqua"),
                   conditionalPanel(condition = "input.tabs == 'mode'", 
                                    plotOutput("commuter_map_left", 
-                                              height = 250)),
+                                              height = 200)),
                   
-                  menuItem("Covid-19", icon = icon("head-side-mask"),
-                           tabName = "Covid", badgeLabel = "health and safety",
-                           badgeColor = "red"),
-
-                  menuItem("Economic health", icon = icon("dollar-sign"),
-                           tabName = "Economic"),
-
-                  menuItem("Energy consumption", icon = icon("fire-alt"),
-                           tabName = "Energy"),
-
-                  menuItem("Food availability", icon = icon("cheese"),
-                           tabName = "Food"),
-
-                  menuItem("Housing", icon = icon("home"),
-                           tabName = "rentals"),
-
-                  menuItem("Land use", icon = icon("warehouse"),
-                           tabName = "Land"),
+                  # menuItem("Covid-19", icon = icon("head-side-mask"),
+                  #          tabName = "Covid", badgeLabel = "health and safety",
+                  #          badgeColor = "red"),
+                  # 
+                  # menuItem("Economic health", icon = icon("dollar-sign"),
+                  #          tabName = "Economic"),
+                  # 
+                  # menuItem("Energy consumption", icon = icon("fire-alt"),
+                  #          tabName = "Energy"),
+                  # 
+                  # menuItem("Food availability", icon = icon("cheese"),
+                  #          tabName = "Food"),
+                  # 
+                  # menuItem("Housing", icon = icon("home"),
+                  #          tabName = "rentals"),
+                  # 
+                  # menuItem("Land use", icon = icon("warehouse"),
+                  #          tabName = "Land"),
                   
                   menuItem("Pedestrian realm", icon = icon("walking"), 
-                           tabName = "Pedestrian", badgeLabel = "suggested", 
-                           badgeColor = "aqua"),
+                           tabName = "Pedestrian", badgeLabel = "Covid-19", 
+                           badgeColor = "red"),
                   conditionalPanel(condition = "input.tabs == 'Pedestrian'",
                                    plotOutput("pedestrian_map_left", 
-                                              height = 250))
+                                              height = 200))
                   ,
+                  menuItem("Biodiversity", icon = icon("bug"),
+                           tabName = "Biodiversity", badgeLabel = "Nature-based solutions"),
                   
-                  menuItem("Public transit", icon = icon("train"),
-                           tabName = "transit", badgeLabel = "on the ballot",
-                           badgeColor = "teal"),
-
+                  # menuItem("Public transit", icon = icon("train"),
+                  #          tabName = "transit", badgeLabel = "on the ballot",
+                  #          badgeColor = "teal"),
+                  # 
                   br(),
 
                   menuItem("Why a dashboard?", tabName = "why_dashboard"),
@@ -116,18 +117,21 @@ shinyUI(
       /* main sidebar */
       .skin-black .main-sidebar {
       background-color: #FFFFFF;
+      
       }
       
       /* active selected tab in the sidebarmenu */
       .skin-black .main-sidebar .sidebar .sidebar-menu .active a{
       background-color: #0096C9;
       color: #FFFFFF;
+      
       }
       
       /* other links in the sidebarmenu */
       .skin-black .main-sidebar .sidebar .sidebar-menu a{
       background-color: #FFFFFF50;
       color: #3C3C3B;
+      height: 60px;
       }
       
       /* other links in the sidebarmenu when hovered */
@@ -421,7 +425,7 @@ shinyUI(
                               label = "Hide"))),
           conditionalPanel(
             ## Adding impossible condition to turn off this box. restore to: "output.vas_hide_explore_status == 1"
-            condition = "output.vas_hide_explore_status == 100",
+            condition = "output.vas_hide_explore_status == 1",
           materialSwitch(inputId = "vas_1", 
                          label = "Original Plan (May 15, 2020)", 
                          status = "info", value = FALSE),
