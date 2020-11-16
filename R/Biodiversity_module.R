@@ -1,21 +1,47 @@
 Biodiversity_module_UI <- function(id) {
+  
   ns <- NS(id)
   
-  mapdeckOutput(outputId = ns("BiodiversityMap"), height = "1000px")
+  tabItem(
+    tags$head(tags$style(HTML('
+          #title_bar_ped {border-width: 10px; border-color: rgb(255, 255, 255);}
+          #input_control_right {border-width: 10px;
+          border-color: rgba(255,255,255,1);}
+          #ped_legend_container {background-color: rgba(0,0,255,0.0);
+          border-width: 0px;}'))
+          ),
+    
+    mapdeckOutput(outputId = ns("BiodiversityMap"), height = "1000px"
+          ),
+
+    titletextSus_UI(id = ns("title"),
+          title = "Biodiversity",
+          textAboveSplit = "The whole of an ecosystem is more
+          than the sum of its parts. The health and resilience
+          of our urban green spaces are determined by the
+          quantity, quality, and composition of the species
+          with cohabitat with. ",
+          textBelowSplit = "Montreal's biodiversity is the
+          result of many competing factors..."
+          )
   
+  
+  
+  
+  )
 }
 
 Biodiversity_module_server <- function(id) {
   moduleServer(id,
                function(input, output, session) {
-                 
+                 ns <- NS(id)
                  output$BiodiversityMap <- renderMapdeck({
-                   mapdeck(style = "mapbox://styles/ttuff/ckg1hclfr0az819plu73iomnn", 
+                    mapdeck(style = "mapbox://styles/ttuff/ckg1hclfr0az819plu73iomnn", 
                            token = 'pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ',
                            zoom = 9.2,location = c(-73.65, 45.4), pitch = 35) 
-                   
                    #return(output$BiodiversityMap)
-                 })
+                    })
                  
+                 titletextSus_Server(id = "title")  
                }
   )}

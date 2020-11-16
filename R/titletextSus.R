@@ -1,0 +1,52 @@
+# Function titletextSus
+# Ty Tuff
+
+# This function adds a standard text box 
+# with the modules Title and text displayed 
+# within an expanding and contracting window.
+
+
+titletextSus_UI <- function(id, title = "Add title as titletextSus_UI(title = 'my title')", 
+                            textAboveSplit = "Add text as titletextSus_UI(textAboveSplit = 'short description')", 
+                            textBelowSplit = "Add text as titletextSus_UI(textBelowSplit = 'long description')"
+                            ){ 
+  
+  ns <- NS(id)
+  
+  tagList(
+    absolutePanel(
+      id = "title_bar", class = "panel panel-default",
+      draggable = FALSE, top = 70, left = 270, width = "40%",
+      h2(title),
+      p(textAboveSplit),
+      actionLink(ns("more_info"), "Learn more"),
+      conditionalPanel(
+        condition = "output.more_info_status == 1",ns = ns ,
+        HTML(textBelowSplit)
+        )
+    )
+  )
+}
+
+
+
+titletextSus_Server <- function(id) {
+  moduleServer(id,
+               function(input, output, session) {
+                 ns <- NS(id)
+                 
+                 ## Show/hide more info panel in title bar ------------------------------------
+                 
+                 # More info button
+                 output$more_info_status <- reactive(input$more_info %% 2 == 1)
+                 outputOptions(output, "more_info_status", suspendWhenHidden = FALSE)
+                 
+                 observeEvent(input$more_info, {
+
+                   if (input$more_info %% 2 == 1) txt <- "Hide" else txt <- "Learn more"
+                   updateActionButton(session, ns("more_info"), label = txt)
+                   
+                  })
+  })
+}
+ 

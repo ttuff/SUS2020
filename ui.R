@@ -224,17 +224,14 @@ shinyUI(
                   
                   )),
         
-        
-        
-        
         ## Active living potential ---------------------------------------------
         
         tabItem(
           tabName = "active",
-          CanALE_module_UI("CanALE_module")
           
-          ),
+          CanALE_module_UI("CanALE_module")
         
+          ),
         
         ## Pedestrian realm ----------------------------------------------------
         
@@ -245,20 +242,24 @@ shinyUI(
           
           ),
         
-            
         ## Commuting mode switch -----------------------------------------------
         
         tabItem(
           tabName = "mode",
+          
           Mode_switch_module_UI("Mode_switch_module")
+          
           ),
         
+        ## Biodiversity -----------------------------------------------
         tabItem(
           tabName = "biodiversity",
+          
           Biodiversity_module_UI("biodiversity_module")
         
-        
           )
+        
+        
         )
       )
     )

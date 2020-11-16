@@ -391,8 +391,8 @@ legend3 <- mapdeck_legend(legend_po3)
 
 
 #########
-source("R/Biodiversity_module.R")
-source("R/Mode_shift_module.R")
-source("R/Pedestrian_realm.R")
-source("R/CanALE_module.R")
+#source("R/Biodiversity_module.R")
+#source("R/Mode_shift_module.R")
+#source("R/Pedestrian_realm.R")
+#source("R/CanALE_module.R")
 
