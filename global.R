@@ -40,7 +40,19 @@ library(qs)
 library(glue)
 library(shinipsum)
 library(fakir)
+library(shiny.i18n)
+library(googleLanguageR)
 
+
+
+i18n <- Translator$new(translation_csvs_path = "translations/")
+#print(i18n$t("Hello Shiny!"))
+#i18n <- Translator$new(automatic = TRUE)
+
+# change this to the target language
+i18n$set_translation_language("fr")
+#i18n$set_translation_language("fr")
+print(i18n$t("Learn more"))
 
 # Functions ---------------------------------------------------------------
 

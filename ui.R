@@ -255,7 +255,7 @@ shinyUI(
         tabItem(
           tabName = "biodiversity",
           
-          Biodiversity_module_UI("biodiversity_module")
+          Biodiversity_module_UI("biodiversity_module", i18n = i18n)
         
           )
         

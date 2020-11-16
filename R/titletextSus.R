@@ -6,9 +6,9 @@
 # within an expanding and contracting window.
 
 
-titletextSus_UI <- function(id, title = "Add title as titletextSus_UI(title = 'my title')", 
-                            textAboveSplit = "Add text as titletextSus_UI(textAboveSplit = 'short description')", 
-                            textBelowSplit = "Add text as titletextSus_UI(textBelowSplit = 'long description')"
+titletextSus_UI <- function(id,i18n, title = i18n$t("Add title as titletextSus_UI(title = 'my title')"), 
+                            textAboveSplit = i18n$t("Add text as titletextSus_UI(textAboveSplit = 'short description')"), 
+                            textBelowSplit = i18n$t("Add text as titletextSus_UI(textBelowSplit = 'long description')")
                             ){ 
   
   ns <- NS(id)
@@ -19,7 +19,7 @@ titletextSus_UI <- function(id, title = "Add title as titletextSus_UI(title = 'm
       draggable = FALSE, top = 70, left = 270, width = "40%",
       h2(title),
       p(textAboveSplit),
-      actionLink(ns("more_info"), "Learn more"),
+      actionLink(ns("more_info"), i18n$t("Learn more")),
       conditionalPanel(
         condition = "output.more_info_status == 1",ns = ns ,
         HTML(textBelowSplit)

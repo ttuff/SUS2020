@@ -1,0 +1,6 @@
+﻿en,fr
+Biodiversity,la biodiversité
+Add title as titletextSus_UI(title = 'my title'),Ajouter le titre en tant que titletextSus_UI (title = 'mon titre')
+Add text as titletextSus_UI(textAboveSplit = 'short description'),Ajoutez du texte comme titletextSus_UI (textAboveSplit = 'short description')
+Add text as titletextSus_UI(textBelowSplit = 'long description'),Ajouter du texte comme titletextSus_UI (textBelowSplit = 'longue description')
+Learn more,Apprendre encore plus
