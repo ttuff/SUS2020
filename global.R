@@ -38,6 +38,8 @@ library(DT)
 library(gghighlight)
 library(qs)
 library(glue)
+library(shinipsum)
+library(fakir)
 
 
 # Functions ---------------------------------------------------------------
@@ -307,7 +309,7 @@ $(document).ready(function(){
 
 # Establish reactiveValues ------------------------------------------------
 
-qz <- reactiveValues(zoom_level = 'OUT')
+#qz <- reactiveValues(zoom_level = 'OUT')
 
 rz_pedestrian <- reactiveValues(zoom = 'OUT',
                                 poly_selected = NA)
@@ -385,3 +387,12 @@ legend_po3 <- legend_element(
 )
 
 legend3 <- mapdeck_legend(legend_po3)
+
+
+
+#########
+source("R/Biodiversity_module.R")
+source("R/Mode_shift_module.R")
+source("R/Pedestrian_realm.R")
+source("R/CanALE_module.R")
+
