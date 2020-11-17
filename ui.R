@@ -9,11 +9,11 @@ dbHeader <- dashboardHeader(tags$li(class = "dropdown",
 #dbHeader$children[[2]]$children <-  loadingLogo('http:www.drtuff.com', 'logo.png',
 #                                                'spinning_logo.gif', 50, 50, 50)
 
-dbHeader$children[[2]]$children <-  fluidPage(column(width = 4, loadingLogo('http:www.drtuff.com', 'logo.png',
+dbHeader$children[[2]]$children <-  fluidRow(column(width = 4, loadingLogo('http:www.drtuff.com', 'logo.png',
                                                                             'spinning_logo.gif', 50, 50, 50)),
-                                              column(width = 8, switchInput(inputId = "language_switch", onLabel = "english",
-                                                                            offLabel = "french", onStatus = "#FFFFFF", 
-                                                                            offStatus = "#000000")))
+                                             column(width = 2),
+                                              column(width = 6, switchInput(inputId = "language_switch", onLabel = "Français",
+                                                                            offLabel = "English", size="mini")))
 
 
 shinyUI(

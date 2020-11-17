@@ -14,12 +14,16 @@ Biodiversity_module_UI <- function(id, i18n) {
     mapdeckOutput(outputId = ns("BiodiversityMap"), height = "1000px"
           ),
 
-    titletextSus_UI(id = ns("title"), i18n  = i18n,
+    titletextSus_UI(id = ns("title"), i18n  = i18n
+                    ,
           title = i18n$t("Biodiversity"),
           textAboveSplit = i18n$t("The whole of an ecosystem is more than the sum of its parts. The health and resilience of our urban green spaces are determined by the quantity, quality, and composition of the species with cohabitat with."),
           textBelowSplit = i18n$t("Montreal's biodiversity is the result of many competing factors...")
-          )
+          ),
+    
+    rightPanelSus_UI(id = ns("Bio_right_panel"),i18n = i18n)
   
+    
   
   
   
@@ -36,7 +40,7 @@ Biodiversity_module_server <- function(id) {
                            zoom = 9.2,location = c(-73.65, 45.4), pitch = 35) 
                    #return(output$BiodiversityMap)
                     })
-                 
-                 titletextSus_Server(id = "title")  
+                 titletextSus_Server(id = "title")
+                 rightPanelSus_Server(id = "Bio_right_panel")  
                }
   )}
