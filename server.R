@@ -142,7 +142,22 @@ shinyServer(function(input, output, session) {
     )
   
   
+  observeEvent(input$language_switch,{
+    update_lang(session, "en") })
   
+  
+  # observeEvent(input$language_switch, {
+  #   print(input$language_switch)
+  #   if(input$language_switch == TRUE){
+  #     
+  #   i18n$set_translation_language("en")
+  #     update_lang(session = session, language = "en")
+  #   } else {
+  #   i18n$set_translation_language("fr")
+  #     update_lang( session = session, language = "fr")
+  #   }
+  #   return(i18n)
+  #   })
   
   ### Active living potential ##################################################
   

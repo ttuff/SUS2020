@@ -51,7 +51,8 @@ i18n <- Translator$new(translation_csvs_path = "translations/")
 
 # change this to the target language
 i18n$set_translation_language("fr")
-#i18n$set_translation_language("fr")
+#i18n$set_translation_language("en")
+
 print(i18n$t("Learn more"))
 
 # Functions ---------------------------------------------------------------

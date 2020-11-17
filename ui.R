@@ -1,12 +1,19 @@
 ##### SUS UI SCRIPT ############################################################
 
 dbHeader <- dashboardHeader(tags$li(class = "dropdown",
-                                    tags$style(".main-header {max-height: 55px}"),
+                                    tags$style(".main-header {max-height: 48px}"),
                                     tags$style(".main-header .logo {height: 50px}")),
-                            title = "SUS")
+                            title = "SUS",
+                            titleWidth = "30%")
 
-dbHeader$children[[2]]$children <-  loadingLogo('http:www.drtuff.com', 'logo.png',
-                                                'spinning_logo.gif', 50, 50, 50)
+#dbHeader$children[[2]]$children <-  loadingLogo('http:www.drtuff.com', 'logo.png',
+#                                                'spinning_logo.gif', 50, 50, 50)
+
+dbHeader$children[[2]]$children <-  fluidPage(column(width = 4, loadingLogo('http:www.drtuff.com', 'logo.png',
+                                                                            'spinning_logo.gif', 50, 50, 50)),
+                                              column(width = 8, switchInput(inputId = "language_switch", onLabel = "english",
+                                                                            offLabel = "french", onStatus = "#FFFFFF", 
+                                                                            offStatus = "#000000")))
 
 
 shinyUI(
@@ -24,7 +31,7 @@ shinyUI(
       width = 200,
       sidebarMenu(id = "tabs", 
                   
-                  menuItem("SUS Preview", tabName = "home", 
+                  menuItem(i18n$t("SUS Preview"), tabName = "home", 
                            icon = icon("balance-scale")),
                   
                   # menuItem("Access to green space", icon = icon("envira"),
