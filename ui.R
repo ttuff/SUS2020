@@ -32,7 +32,7 @@ shinyUI(
      # HTML(as.character(usei18n(i18n))),
       width = 200,
       sidebarMenu(id = "tabs", 
-                 
+                  shiny.i18n::usei18n(i18n),
                   menuItem(i18n$t("SUS Preview"), tabName = "home", 
                            icon = icon("balance-scale")),
                   
@@ -40,7 +40,7 @@ shinyUI(
                   #          tabName = "green", badgeLabel = "new",
                   #          badgeColor = "teal"),
                   
-                  menuItem("Active living potential", icon = icon("child"), 
+                  menuItem(i18n$t("Active living potential"), icon = icon("child"), 
                            tabName = "active", badgeLabel = "Built environment", 
                            badgeColor = "purple"),
                   conditionalPanel(condition = "input.tabs == 'active'",
@@ -53,7 +53,7 @@ shinyUI(
                   #          icon = icon("globe-americas"),
                   #          badgeColor = "yellow"),
                   
-                  menuItem("Commuter mode switching", icon = icon("biking"), 
+                  menuItem(i18n$t("Commuter mode switching"), icon = icon("biking"), 
                            tabName = "mode", badgeLabel = "Simulation", badgeColor = "aqua"),
                   conditionalPanel(condition = "input.tabs == 'mode'", 
                                    plotOutput("commuter_map_left", 
@@ -78,14 +78,14 @@ shinyUI(
                   # menuItem("Land use", icon = icon("warehouse"),
                   #          tabName = "Land"),
                   
-                  menuItem("Pedestrian realm", icon = icon("walking"), 
+                  menuItem(i18n$t("Pedestrian realm"), icon = icon("walking"), 
                            tabName = "Pedestrian", badgeLabel = "Covid-19", 
                            badgeColor = "red"),
                   conditionalPanel(condition = "input.tabs == 'Pedestrian'",
                                    plotOutput("pedestrian_map_left", 
                                               height = 200))
                   ,
-                  menuItem("Biodiversity", icon = icon("bug"),
+                  menuItem(i18n$t("Biodiversity"), icon = icon("bug"),
                            tabName = "biodiversity", badgeLabel = "Nature-based solutions"),
                   
                   # menuItem("Public transit", icon = icon("train"),
@@ -94,8 +94,8 @@ shinyUI(
                   # 
                   br(),
 
-                  menuItem("Why a dashboard?", tabName = "why_dashboard"),
-                  menuItem("Meet the team", tabName = "meet_the_team")
+                  menuItem(i18n$t("Why a dashboard?"), tabName = "why_dashboard"),
+                  menuItem(i18n$t("Meet the team"), tabName = "meet_the_team")
                   
       ), collapsed = FALSE),
     

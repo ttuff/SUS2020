@@ -24,7 +24,7 @@
       function(input, output, session) {
         ns <- NS(id)
         observeEvent(input$go,{
-          print(input$go[1])
+          #print(input$go[1])
           if((input$go[1] %% 2) != 0){
           #if(input$go != FALSE){
             updateActionButton(session, "go",
