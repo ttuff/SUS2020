@@ -162,6 +162,9 @@ shinyUI(
       }
                                 '))),
       languageButton_UI("language_button", i18n = i18n),
+      
+      
+      
       tabItems(
         
         ## Home page -----------------------------------------------------------
@@ -241,7 +244,7 @@ shinyUI(
         tabItem(
           tabName = "active",
           
-          CanALE_module_UI("CanALE_module")
+          #CanALE_module_UI("CanALE_module")
         
           ),
         

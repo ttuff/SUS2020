@@ -15,6 +15,7 @@ titletextSus_UI <- function(id,i18n
   ns <- NS(id)
   
   tagList(
+    
     absolutePanel(
       id = "title_bar", class = "panel panel-default",
       draggable = TRUE, top = 70, left = "270", width = "40%",
@@ -36,6 +37,7 @@ titletextSus_UI <- function(id,i18n
         condition = "output.title_more_info_status == 1",ns = ns ,
         p(textBelowSplit)
         )
+      
     )
   )
 }

@@ -146,7 +146,6 @@ shinyServer(function(input, output, session) {
   
   
   
-  
   # observeEvent(input$language_switch, {
   #   print(input$language_switch)
   #   if(input$language_switch == TRUE){
@@ -162,7 +161,7 @@ shinyServer(function(input, output, session) {
   
   ### Active living potential ##################################################
   
-  CanALE_module_server("CanALE_module")
+  #CanALE_module_server("CanALE_module")
   
   
   ##############################################################################
