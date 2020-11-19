@@ -103,21 +103,12 @@ shinyUI(
     ## Body --------------------------------------------------------------------
     
     dashboardBody(
+      
       absolutePanel(
-        id = "language_toggle", style = "z-index:10000;",
+        id = "language_button", style="z-index:10000;", 
         class = "panel panel-default", top = 10, right = 100, width = 0, height = 0,
-        switchInput(inputId = "language_switch", onLabel = "Français",
-                    offLabel = "English", size="mini")#,
-       # i18n =i18n,
-        #actionButton("go", "GO!"),
-       # HTML(i18n$t("Hello Shiny!"))
-      ),
-      
-      # fluidPage(
-      
-      # ),
-
-      
+      languageButton_UI("language_button", i18n = i18n)),
+       
       tags$head(tags$link(rel = "icon", type = "image/png", href = "logo.png")),
       tags$head(tags$script(HTML(js))),
       tags$head(tags$script(HTML(js2))),
@@ -206,12 +197,12 @@ shinyUI(
                   draggable = FALSE, top = 70, left = 270, width = "40%",
                   h2("Why a dashboard? The science behind Sus"),
                   imageOutput("glamour_shot", height = 300),
-                  p(paste0("Dashboards offer a tool for communicating ", 
+                  p(i18n$t(paste0("Dashboards offer a tool for communicating ", 
                            "sustainability data in a visually based digital ", 
                            "platform. We see a gap in current dashboards ",
                            "going beyond the visualization of pre-existing ",
                            "data at static scales, leaving room for a more ",
-                           "future-oriented, scalable, and interactive model.")),
+                           "future-oriented, scalable, and interactive model."))),
                   p(paste0("Existing data-driven approaches to urban ",
                            "sustainability are characterized by static data, ",
                            "limited user interaction, and the ",

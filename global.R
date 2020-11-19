@@ -44,8 +44,8 @@ library(shiny.i18n)
 library(googleLanguageR)
 
 
-i18n <- Translator$new(translation_json_path = "www/translation.json")
-#i18n <- Translator$new(translation_csvs_path = "translations/")
+#i18n <- Translator$new(translation_json_path = "www/translation.json")
+i18n <- Translator$new(translation_csvs_path = "translations/")
 #print(i18n$t("Hello Shiny!"))
 #i18n <- Translator$new(automatic = TRUE)
 #i18n <- init_i18n(translation_json_path = "www/translation.json")
