@@ -17,10 +17,21 @@ titletextSus_UI <- function(id,i18n
   tagList(
     absolutePanel(
       id = "title_bar", class = "panel panel-default",
-      draggable = FALSE, top = 70, left = "25%", width = "40%",
+      draggable = TRUE, top = 70, left = "270", width = "40%",
+      style="vertical-align: top;
+        color: #FFFFFF; 
+        background-color: #3C3C3B98; 
+        border-color: #0096C995; 
+        border-radius: 30px; 
+        border-width: 1px;  
+        padding:5px; 
+        font-size:100%",
       h2(title),
       p(textAboveSplit),
-      actionLink(ns("title_more_info"), i18n$t("Learn more")),
+      actionLink(ns("title_more_info"), i18n$t("Learn more"),
+                 style="vertical-align: top;
+        color: #B2D235;font-size:110%;" ),
+      h1(),
       conditionalPanel(
         condition = "output.title_more_info_status == 1",ns = ns ,
         p(textBelowSplit)

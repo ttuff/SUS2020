@@ -30,7 +30,7 @@ shinyUI(
     
     dashboardSidebar(
      # HTML(as.character(usei18n(i18n))),
-      width = 200,
+      width = 250,
       sidebarMenu(id = "tabs", 
                   shiny.i18n::usei18n(i18n),
                   menuItem(i18n$t("SUS Preview"), tabName = "home", 
@@ -41,7 +41,7 @@ shinyUI(
                   #          badgeColor = "teal"),
                   
                   menuItem(i18n$t("Active living potential"), icon = icon("child"), 
-                           tabName = "active", badgeLabel = "Built environment", 
+                           tabName = "active", badgeLabel = i18n$t("Built environment"), 
                            badgeColor = "purple"),
                   conditionalPanel(condition = "input.tabs == 'active'",
                                    plotOutput("active_map_left", 
@@ -54,7 +54,7 @@ shinyUI(
                   #          badgeColor = "yellow"),
                   
                   menuItem(i18n$t("Commuter mode switching"), icon = icon("biking"), 
-                           tabName = "mode", badgeLabel = "Simulation", badgeColor = "aqua"),
+                           tabName = "mode", badgeLabel = i18n$t("Simulation"), badgeColor = "aqua"),
                   conditionalPanel(condition = "input.tabs == 'mode'", 
                                    plotOutput("commuter_map_left", 
                                               height = 200)),
@@ -86,7 +86,7 @@ shinyUI(
                                               height = 200))
                   ,
                   menuItem(i18n$t("Biodiversity"), icon = icon("bug"),
-                           tabName = "biodiversity", badgeLabel = "Nature-based solutions"),
+                           tabName = "biodiversity", badgeLabel = i18n$t("Nature-based solutions")),
                   
                   # menuItem("Public transit", icon = icon("train"),
                   #          tabName = "transit", badgeLabel = "on the ballot",

@@ -19,9 +19,10 @@ Biodiversity_module_UI <- function(id, i18n) {
           title = i18n$t("Biodiversity"),
           textAboveSplit = i18n$t("The whole of an ecosystem is more than the sum of its parts. The health and resilience of our urban green spaces are determined by the quantity, quality, and composition of the species with cohabitat with."),
           textBelowSplit = i18n$t("Montreal's biodiversity is the result of many competing factors...")
-          ),
+          )
+    #,
 
-    rightPanelSus_UI(id = ns("Bio_right_panel"),i18n = i18n)
+   # rightPanelSus_UI(id = ns("Bio_right_panel"),i18n = i18n)
   
     
   
