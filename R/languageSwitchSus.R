@@ -7,7 +7,14 @@
 
   languageButton_UI <- function(id, i18n) {
     ns <- NS(id)
-    tagList( usei18n(i18n), actionButton(ns("go"), "English")
+    absolutePanel(
+      id = "language_button", style="z-index:10000;", 
+      class = "panel panel-default", top = 10, right = 70, width = 0.01, height = 0.01,
+      tagList( usei18n(i18n), 
+               actionButton(ns("go"), "English",style="color: #3C3C3B; background-color: #0096C950; border-color: #FFFFFF;border-radius: 100px; border-width: 1px;  padding:7px; font-size:100%")
+               
+      )
+    
     )
   }
   
@@ -19,6 +26,7 @@
         observeEvent(input$go,{
           print(input$go[1])
           if((input$go[1] %% 2) != 0){
+          #if(input$go != FALSE){
             updateActionButton(session, "go",
                                label = "Français")
             update_lang(global_session, "en")

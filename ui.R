@@ -104,10 +104,7 @@ shinyUI(
     
     dashboardBody(
       
-      absolutePanel(
-        id = "language_button", style="z-index:10000;", 
-        class = "panel panel-default", top = 10, right = 100, width = 0, height = 0,
-      languageButton_UI("language_button", i18n = i18n)),
+      
        
       tags$head(tags$link(rel = "icon", type = "image/png", href = "logo.png")),
       tags$head(tags$script(HTML(js))),
@@ -164,7 +161,7 @@ shinyUI(
       background-color: #FFFFFF;
       }
                                 '))),
-      
+      languageButton_UI("language_button", i18n = i18n),
       tabItems(
         
         ## Home page -----------------------------------------------------------
@@ -203,35 +200,35 @@ shinyUI(
                            "going beyond the visualization of pre-existing ",
                            "data at static scales, leaving room for a more ",
                            "future-oriented, scalable, and interactive model."))),
-                  p(paste0("Existing data-driven approaches to urban ",
+                  p(i18n$t(paste0("Existing data-driven approaches to urban ",
                            "sustainability are characterized by static data, ",
                            "limited user interaction, and the ",
                            "oversimplification of complex urban issues. ", 
                            "They provide little opportunity for user ", 
                            "engagement and exploration of questions ",
-                           "connecting different data and issues.")),
-                  p(paste0("Some of the limitations of existing dashboards ",
+                           "connecting different data and issues."))),
+                  p(i18n$t(paste0("Some of the limitations of existing dashboards ",
                            "include a bias towards quantifiable, measurable ",
                            "components of sustainability, and a reliance on ",
                            "data with potential bias. Furthermore, they often ",
                            "attempt to play the role of a neutral force to ",
-                           "communicate “objective” information on cities.")),
-                  p(paste0("Sustainability dashboards should build upon best ",
+                           "communicate “objective” information on cities."))),
+                  p(i18n$t(paste0("Sustainability dashboards should build upon best ",
                            "practices to provide useful tools for individuals ",
                            "and cities alike to examine the many facets of ", 
                            "urban sustainability and question existing ",
-                           "assumptions.")),
-                  p(paste0("Maintaining transparency with data and ", 
+                           "assumptions."))),
+                  p(i18n$t(paste0("Maintaining transparency with data and ", 
                            "methodologies, ensuring public participation and ",
                            "accurate representation of underprivileged ", 
                            "communities, and using engaging and accessible ", 
-                           "tools contribute to the success of a dashboard.")),
-                  p(paste0("Sus aims to more accurately represent and better ", 
+                           "tools contribute to the success of a dashboard."))),
+                  p(i18n$t(paste0("Sus aims to more accurately represent and better ", 
                            "engage urban residents in order to harness the ", 
                            "momentum surrounding technologically-based ", 
-                           "approaches to sustainability for public good.")),
+                           "approaches to sustainability for public good."))),
                   br(),
-                  p("Further resources:"),
+                  p(i18n$t("Further resources:")),
                   HTML(paste0("<ul><li><a href= ''>Robin Basalaev-Binder ",
                               "and David Wachsmuth. 2020. 'Progress in ",
                               "data-driven urban sustainability'. ",
