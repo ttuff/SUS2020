@@ -1,10 +1,10 @@
 ##### SUS UI SCRIPT ############################################################
 
 dbHeader <- dashboardHeader(tags$li(class = "dropdown",
-                                    tags$style(".main-header {max-height: 48px}"),
+                                    tags$style(".main-header {max-height: 50px}"),
                                     tags$style(".main-header .logo {height: 50px}")),
                             title = "SUS",
-                            titleWidth = "30%")
+                            titleWidth = "13%")
 
 #dbHeader$children[[2]]$children <-  loadingLogo('http:www.drtuff.com', 'logo.png',
 #                                                'spinning_logo.gif', 50, 50, 50)
@@ -12,8 +12,7 @@ dbHeader <- dashboardHeader(tags$li(class = "dropdown",
 dbHeader$children[[2]]$children <-  fluidRow(column(width = 4, loadingLogo('http:www.drtuff.com', 'logo.png',
                                                                             'spinning_logo.gif', 50, 50, 50)),
                                              column(width = 2),
-                                              column(width = 6, switchInput(inputId = "language_switch", onLabel = "Français",
-                                                                            offLabel = "English", size="mini")))
+                                              column(width = 6 ))
 
 
 shinyUI(
@@ -25,12 +24,15 @@ shinyUI(
     dbHeader,
     ### https://stackoverflow.com/questions/31440564/adding-a-company-logo-to-shinydashboard-header
     
+    
+    
     ## Left sidebar ------------------------------------------------------------
     
     dashboardSidebar(
+     # HTML(as.character(usei18n(i18n))),
       width = 200,
       sidebarMenu(id = "tabs", 
-                  
+                 
                   menuItem(i18n$t("SUS Preview"), tabName = "home", 
                            icon = icon("balance-scale")),
                   
@@ -101,6 +103,21 @@ shinyUI(
     ## Body --------------------------------------------------------------------
     
     dashboardBody(
+      absolutePanel(
+        id = "language_toggle", style = "z-index:10000;",
+        class = "panel panel-default", top = 10, right = 100, width = 0, height = 0,
+        switchInput(inputId = "language_switch", onLabel = "Français",
+                    offLabel = "English", size="mini")#,
+       # i18n =i18n,
+        #actionButton("go", "GO!"),
+       # HTML(i18n$t("Hello Shiny!"))
+      ),
+      
+      # fluidPage(
+      
+      # ),
+
+      
       tags$head(tags$link(rel = "icon", type = "image/png", href = "logo.png")),
       tags$head(tags$script(HTML(js))),
       tags$head(tags$script(HTML(js2))),

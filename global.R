@@ -44,16 +44,21 @@ library(shiny.i18n)
 library(googleLanguageR)
 
 
-
-i18n <- Translator$new(translation_csvs_path = "translations/")
+i18n <- Translator$new(translation_json_path = "www/translation.json")
+#i18n <- Translator$new(translation_csvs_path = "translations/")
 #print(i18n$t("Hello Shiny!"))
 #i18n <- Translator$new(automatic = TRUE)
-
+#i18n <- init_i18n(translation_json_path = "www/translation.json")
 # change this to the target language
 i18n$set_translation_language("fr")
 #i18n$set_translation_language("en")
-
 print(i18n$t("Learn more"))
+#HTML(as.character(usei18n(i18n)))
+
+
+#create_translation_file("/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/www/translation.json", type = "json", handle = "i18n", output = "/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/www/translation.json")
+
+
 
 # Functions ---------------------------------------------------------------
 
@@ -402,10 +407,4 @@ legend_po3 <- legend_element(
 legend3 <- mapdeck_legend(legend_po3)
 
 
-
-#########
-#source("R/Biodiversity_module.R")
-#source("R/Mode_shift_module.R")
-#source("R/Pedestrian_realm.R")
-#source("R/CanALE_module.R")
 

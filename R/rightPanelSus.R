@@ -35,9 +35,13 @@ rightPanelSus_UI <- function(id,i18n){
         #plotOutput(ns("active_map_right")), height = 250),
       conditionalPanel(
         condition = "input.active_extrude == 0",ns=ns,
-        hr())
+        hr(),
+        HTML(title_text %>% 
+               filter(tab == "active", type == "extra") %>% 
+               pull(text))))
+      )
     )
-  ))
+  
 }
 
 

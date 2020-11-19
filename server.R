@@ -143,7 +143,13 @@ shinyServer(function(input, output, session) {
   
   
   observeEvent(input$language_switch,{
-    update_lang(session, "en") })
+    
+    print("fired language switch")
+    
+    update_lang(session  ,"en") 
+    })
+  
+  
   
   
   # observeEvent(input$language_switch, {

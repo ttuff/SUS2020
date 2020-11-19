@@ -1,5 +1,5 @@
 Biodiversity_module_UI <- function(id, i18n) {
-  
+ # usei18n(i18n)
   ns <- NS(id)
   
   tabItem(

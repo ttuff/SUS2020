@@ -16,7 +16,7 @@ titletextSus_UI <- function(id,i18n, title = i18n$t("Add title as titletextSus_U
   tagList(
     absolutePanel(
       id = "title_bar", class = "panel panel-default",
-      draggable = FALSE, top = 70, left = 270, width = "40%",
+      draggable = FALSE, top = 70, left = "25%", width = "40%",
       h2(title),
       p(textAboveSplit),
       actionLink(ns("title_more_info"), i18n$t("Learn more")),
