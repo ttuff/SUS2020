@@ -10,8 +10,6 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
     
     mapdeckOutput(outputId = ns("PedestrianMap"), height = "1000px"),
     
-   
-    
     absolutePanel(
       id = ns("title_bar_ped"), class = "panel panel-default",
       draggable = FALSE, top = 70, left = 270, width = "40%",
@@ -746,13 +744,13 @@ Pedestrian_realm_module_server <- function(id) {
     observeEvent(input$variable_ped,{
       if(input$variable_ped == 3){
         updateSliderInput(session = session,
-                          inputId = ns("slider_ped"),
+                          inputId = "slider_ped",
                           label = "Work commutes by car (%)",
                           0, 100,
                           value = c(0, 100),
                           step = 1)
         updateSliderInput(session = session,
-                          inputId = ns("slider_ped"),
+                          inputId = "slider_ped",
                           value = c(0, 100),
                           step = 1
         )
@@ -760,14 +758,14 @@ Pedestrian_realm_module_server <- function(id) {
       
       else if (input$variable_ped == 2) {
         updateSliderInput(session = session,
-                          inputId = ns("slider_ped"),
+                          inputId = "slider_ped",
                           label = paste0("Capacity of local population to make ",
                                          "trips on foot while maintaining 2 meters distance (%)"),
                           0, 1000,
                           value = c(0, 1000),
                           step = 25)
         updateSliderInput(session = session,
-                          inputId = ns("slider_ped"),
+                          inputId = "slider_ped",
                           value = c(0, 1000),
                           step = 25
         )
@@ -775,26 +773,26 @@ Pedestrian_realm_module_server <- function(id) {
       
       else if (input$variable_ped == 1) {
         updateSliderInput(session = session,
-                          inputId = ns("slider_ped"),
+                          inputId = "slider_ped",
                           label = "Log of Population density / km2",
                           0, 12,
                           value = c(0, 12),
                           step = 1)
         updateSliderInput(session = session,
-                          inputId = ns("slider_ped"),
+                          inputId = "slider_ped",
                           value = c(0, 12),
                           step = 1
         )
       }
       
       else {updateSliderInput(session = session,
-                              inputId = ns("slider_ped"),
+                              inputId = "slider_ped",
                               label = "Pedestrian trips per sqm of walkable space index (0 = average)",
                               -1, 6.5,
                               value = c(-1, 6.5),
                               step = 0.5)
         updateSliderInput(session = session,
-                          inputId = ns("slider_ped"),
+                          inputId = "slider_ped",
                           value = c(-1, 6.5),
                           step = 0.5
         )}
@@ -947,7 +945,54 @@ Pedestrian_realm_module_server <- function(id) {
               "'{tolower(var_name_ped)}' values, {high_low_disclaimer_ped}."))
             
           }
-        }}
+        }
+        
+        # Case for selected poly
+       else {
+         
+        dat_ped_biv <- bivariate_chloropleth() %>% filter(ID == rz_pedestrian$poly_selected)
+        
+        vec <- 
+          bivariate_chloropleth() %>%
+          filter(!is.na(left_variable), !is.na(left_variable_full)) %>% 
+          pull(left_variable_full)
+        
+        vec_2 <-
+          bivariate_chloropleth() %>%
+          filter(!is.na(right_variable), !is.na(right_variable_full)) %>%
+          pull(right_variable_full)
+        
+        poly_value_1 <- dat_ped_biv$left_variable_full
+        poly_value_2 <- dat_ped_biv$right_variable_full
+        
+        percentile_left <- 
+          {length(vec[vec <= dat_ped_biv$left_variable_full]) / length(vec) * 100} %>% 
+          round()
+        
+        percentile_right <- 
+          {length(vec_2[vec_2 <= dat_ped_biv$right_variable_full]) / 
+              length(vec_2) * 100} %>% 
+          round()
+        
+        relative_position <- case_when(
+          abs(percentile_left - percentile_right) > 50 ~ "dramatically different",
+          abs(percentile_left - percentile_right) > 30 ~ "substantially different",
+          abs(percentile_left - percentile_right) > 10 ~ "considerably different",
+          TRUE ~ "similar"
+        )
+        
+        HTML(glue("Dissemination area {dat_ped_biv$ID} has a population of ",
+                  "{prettyNum(dat_ped_biv$population, ',')}, a capacity for pedestrian social distancing ",
+                  "of {round(poly_value_1, 2)}%, and a '{tolower(var_name_ped)}' ",
+                  "value of {round(poly_value_2, 2)}. ",
+                  
+                  "<p>These two scores are {relative_position}, in relative ",
+                  "terms. Dissemination area {dat_ped_biv$ID} has a capacity for pedestrian social distancing higher ",
+                  "than {percentile_left}% of dissemination areas and ",
+                  "a '{tolower(var_name_ped)}' score higher than ", 
+                  "{percentile_right}% of dissemination areas in the ",
+                  "Montreal region."))
+      }}
       
       else if (rz_pedestrian$zoom == "FINAL") {
         min_sidewalk <- round(min(sidewalks_WSG$sidewalk_width), 2)
