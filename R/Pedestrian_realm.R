@@ -542,7 +542,7 @@ Pedestrian_realm_module_server <- function(id) {
                 , fill_colour = "fill"
                 , fill_opacity = 1
                 , update_view = FALSE
-                , layer_id = ns("chloropleth_layer")
+                , layer_id = "chloropleth_layer"
                 , id = "ID"
                 , auto_highlight = TRUE
                 , highlight_colour = '#FFFFFF90'
