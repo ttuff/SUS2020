@@ -145,7 +145,7 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
     
     absolutePanel(
       id = ns("ped_legend_container"), class = "panel panel-default",
-      style = "z-index:500;", bottom = -200, left = 270, fixed = TRUE,
+      style="z-index:500; border-color: #FFFFFF00; background-color: #FFFFFF00;", bottom = -200, left = 270, fixed = TRUE,
       conditionalPanel(
         condition = 
           "input.switch_biv == true && output.zoom == 'IN' && output.more_info_ped_status == 0", ns = ns ,
