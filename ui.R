@@ -19,7 +19,7 @@ shinyUI(
   
   dashboardPage(
 
-    skin = "black", title="Sus",
+    skin = "black", title="Sus - Sustainable decisions tool",
 
     dbHeader,
     ### https://stackoverflow.com/questions/31440564/adding-a-company-logo-to-shinydashboard-header
