@@ -67,16 +67,16 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
                       label = h4(tags$span(
                         style = "color:#3C3C3B", 
                         "Select your second variable")), 
-                      selected = "agg_proximity_score_quant3", 
+                      selected = "agg_proximity_score", 
                       choices = list(
                         "Walkable Access to Key Amenities" = 
                           "agg_proximity_score",
                         "Net Median Income" = 
                           "net_median_income",
-                        "Visible Minority Population" = 
-                          "visible_minority_pop", 
-                        "Immigrant Population" = 
-                          "immigrants")),
+                        "Visible Minority Population Proportion" = 
+                          "minority_percent", 
+                        "Immigrant Population Proportion" = 
+                          "immigrant_percent")),
           fluidRow(
             column(width = 2, offset = 10, align = "right",
                    actionLink(inputId = ns("pedestrian_hide_second_variable"),
@@ -92,7 +92,6 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
                  actionLink(inputId = ns("vas_hide_explore"),
                             label = "Hide"))),
         conditionalPanel(
-          ## Adding impossible condition to turn off this box. restore to: "output.vas_hide_explore_status == 1"
           condition = "output.vas_hide_explore_status == 1", ns = ns ,
           materialSwitch(inputId = ns("vas_1"), 
                          label = "Original Plan (May 15, 2020)", 
@@ -891,16 +890,16 @@ Pedestrian_realm_module_server <- function(id) {
       
       else if (rz_pedestrian$zoom == "IN" & input$switch_biv == TRUE) {
         
-        var_name_ped <- data_frame(code = c("agg_proximity_score", "net_median_income", "visible_minority_pop", "immigrants"),
-                                   name = c("Walkable Access to Key Amenities", "Net Median Income", "Visible Minority Population",
-                                            "Immigrant Population")) %>% 
+        var_name_ped <- data_frame(code = c("agg_proximity_score", "net_median_income", "minority_percent", "immigrant_percent"),
+                                   name = c("Walkable Access to Key Amenities", "Net Median Income", "Visible Minority Population Proportion",
+                                            "Immigrant Population Proportion")) %>% 
           as_tibble() %>% 
           filter(code == input$data_for_plot_ped) %>%
           pull(name)
         
-        var_code_ped <- data_frame(code = c("agg_proximity_score", "net_median_income", "visible_minority_pop", "immigrants"),
-                                   name = c("Walkable Access to Key Amenities", "Net Median Income", "Visible Minority Population",
-                                            "Immigrant Population")) %>% 
+        var_code_ped <- data_frame(code = c("agg_proximity_score", "net_median_income", "minority_percent", "immigrant_percent"),
+                                   name = c("Walkable Access to Key Amenities", "Net Median Income", "Visible Minority Population Proportion",
+                                            "Immigrant Population Proportion")) %>% 
           as_tibble() %>% 
           filter(code == input$data_for_plot_ped) %>%
           pull(code)
@@ -945,7 +944,7 @@ Pedestrian_realm_module_server <- function(id) {
               "correlation ({correlation_ped}) with '{tolower(var_name_ped)}' at the dissemination area scale. ",
               "<p>This means that, in general, dissemination areas with higher ",
               "capacities to allow for pedestrian social distancing tend to have {higher_lower_ped} ",
-              "values for '{tolower(var_name_ped)}', {high_low_disclaimer_ped}."))
+              "'{tolower(var_name_ped)}' values, {high_low_disclaimer_ped}."))
             
           }
         }}
