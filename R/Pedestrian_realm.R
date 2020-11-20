@@ -320,10 +320,10 @@ Pedestrian_realm_module_server <- function(id) {
                population = census_analysis_quantile_WSG$population) %>% 
         left_join(bivariate_color_scale, by = "group") %>% 
         drop_na(right_variable) 
-      print("made it here 1")
+     # print("made it here 1")
       st_crs(data_for_plot_bivariate) <- 4326
       bivariate_chloropleth  <- st_cast(data_for_plot_bivariate, "MULTIPOLYGON")
-      print("made it here 2")
+     # print("made it here 2")
       
       if (input$variable_ped == 3) {
         bivariate_chloropleth <- bivariate_chloropleth %>% 
@@ -334,7 +334,7 @@ Pedestrian_realm_module_server <- function(id) {
         filter(pop_density >= input$slider_ped[1] & pop_density <= input$slider_ped[2]) 
       } else {bivariate_chloropleth <- bivariate_chloropleth %>% 
         filter(trip_scale >= input$slider_ped[1] & trip_scale <= input$slider_ped[2])}
-      print("made it here 3")
+     # print("made it here 3")
       return(bivariate_chloropleth)
     })
     
@@ -398,6 +398,7 @@ Pedestrian_realm_module_server <- function(id) {
     # Send reactive zoom variable back to the UI
     output$zoom <- reactive({
       return(rz_pedestrian$zoom)
+      
     })
     outputOptions(output, "zoom", suspendWhenHidden = FALSE)
     
@@ -510,7 +511,8 @@ Pedestrian_realm_module_server <- function(id) {
     
     ## Update map if there is a zoom / dataframe / tab / input change  -----------
     
-    observeEvent({rz_pedestrian$zoom
+    observeEvent({
+      rz_pedestrian$zoom
       bivariate_chloropleth()
       data_for_plot_uni()
       #bivariate_dotdensity()
@@ -519,10 +521,14 @@ Pedestrian_realm_module_server <- function(id) {
       input$variable_ped
       input$knob_ped
       input$switch_biv
-      input$tabs}, {
-        #print(bivariate_chloropleth())
-        if( rz_pedestrian$zoom == "IN"){
-          if (input$switch_biv == TRUE) {
+      #input$tabs
+      }, 
+      {
+        print("big print")
+        if( 1==1){
+        #if( rz_pedestrian$zoom == "IN"){
+          if( 1==1){
+         # if (input$switch_biv == TRUE) {
             mapdeck_update(map_id = ns("PedestrianMap"))  %>%
               #clear_scatterplot(layer_id = "dot_density") %>%
               clear_polygon(layer_id = "univariate_layer") %>% 
@@ -536,7 +542,7 @@ Pedestrian_realm_module_server <- function(id) {
                 , fill_colour = "fill"
                 , fill_opacity = 1
                 , update_view = FALSE
-                , layer_id = "chloropleth_layer"
+                , layer_id = ns("chloropleth_layer")
                 , id = "ID"
                 , auto_highlight = TRUE
                 , highlight_colour = '#FFFFFF90'
@@ -943,7 +949,7 @@ Pedestrian_realm_module_server <- function(id) {
     ## Render the histogram/scatterplot ------------------------------------------
     
     output$pedestrian_graph <- renderPlot({
-      print("start ped graph")
+     # print("start ped graph")
       # Zoom out
       if (rz_pedestrian$zoom == "OUT") {
         
@@ -1093,7 +1099,7 @@ Pedestrian_realm_module_server <- function(id) {
                 panel.grid.major.x = element_blank(),
                 panel.grid.minor.y = element_blank())
       }
-      print("end ped graph")
+     # print("end ped graph")
     })
     
     ## Render the did-you-knows --------------------------------------------------
