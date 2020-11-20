@@ -244,7 +244,7 @@ shinyUI(
         tabItem(
           tabName = "active",
           
-          #CanALE_module_UI("CanALE_module")
+          CanALE_module_UI("CanALE_module")
         
           ),
         
@@ -253,7 +253,7 @@ shinyUI(
         tabItem(
           tabName = "Pedestrian",
           
-          Pedestrian_realm_module_UI("Pedestrian_realm_module")
+          Pedestrian_realm_module_UI("Pedestrian_realm_module", i18n = i18n)
           
           ),
         

@@ -1,4 +1,4 @@
-Pedestrian_realm_module_UI <- function(id ) {
+Pedestrian_realm_module_UI <- function(id, i18n ) {
   ns <- NS(id)
   tabItem(
     tags$head(tags$style(HTML('
@@ -8,7 +8,7 @@ Pedestrian_realm_module_UI <- function(id ) {
           #ped_legend_container {background-color: rgba(0,0,255,0.0);
           border-width: 0px;}'))),
     
-    mapdeckOutput(outputId = ns('PedestrianMap'), height = "1000px"),
+    mapdeckOutput(outputId = ns("PedestrianMap"), height = "1000px"),
     
    
     
@@ -17,7 +17,7 @@ Pedestrian_realm_module_UI <- function(id ) {
       draggable = FALSE, top = 70, left = 270, width = "40%",
       h3(textOutput(ns("title_text_ped"))),
       conditionalPanel(
-        condition = "output.zoom == 'OUT'",
+        condition = "output.zoom == 'OUT'", ns = ns ,
         id = ns("plotContainer_ped"),
         p(title_text %>%
             filter(tab == "pedestrian_ct", type == "main") %>%
@@ -41,14 +41,14 @@ Pedestrian_realm_module_UI <- function(id ) {
         p(title_text %>%
             filter(tab == "pedestrian_da", type == "extra") %>%
             pull(text)),
-        imageOutput("exemplar_ped")),
+        imageOutput(ns("exemplar_ped"))),
       conditionalPanel(
         condition = "output.more_info_ped_status == 1 && output.zoom == 'FINAL'", ns = ns ,
         id = ns("plotContainer_ped"),
         p(title_text %>%
             filter(tab == "pedestrian_sidewalk", type == "extra") %>%
             pull(text)),
-        imageOutput("sidewalk_calculation"))),
+        imageOutput(ns("sidewalk_calculation")))),
     
     absolutePanel(
       id = ns("input_control_right"), style="z-index:501;", 
@@ -56,7 +56,7 @@ Pedestrian_realm_module_UI <- function(id ) {
       conditionalPanel(
         condition = "output.zoom == 'IN'", ns = ns ,
         id = ns("plotContainer_ped_control"),
-        materialSwitch(inputId = "switch_biv", 
+        materialSwitch(inputId = ns("switch_biv"), 
                        label = h3(strong("Perform a Bivariate Analysis", 
                                          style = "color:#B2D235")), 
                        status = "primary", value = FALSE),
@@ -140,7 +140,7 @@ Pedestrian_realm_module_UI <- function(id ) {
                           label = "Hide"))),
       conditionalPanel(
         condition = "output.pedestrian_hide_dyk_status == 1", ns = ns ,
-        htmlOutput("did_you_know_ped"))
+        htmlOutput(ns("did_you_know_ped")))
     ),
     
     absolutePanel(
@@ -504,7 +504,7 @@ Pedestrian_realm_module_server <- function(id) {
     observeEvent(input$vas_hide_explore, {
       
       if (input$vas_hide_explore %% 2 == 0) txt <- "Hide" else txt <- "Show"
-      updateActionButton(session, "vas_hide_explore", label = txt)
+      updateActionButton(session, ns("vas_hide_explore"), label = txt)
       
     })
     
@@ -695,7 +695,7 @@ Pedestrian_realm_module_server <- function(id) {
         }
         
         if( rz_pedestrian$zoom == "OUT") {
-          mapdeck_update(map_id = "PedestrianMap")  %>%  
+          mapdeck_update(map_id = ns("PedestrianMap"))  %>%  
             clear_polygon(layer_id = "chloropleth_layer") %>% 
             clear_polygon(layer_id = "univariate_layer") %>% 
             clear_path(layer_id = "may_plan") %>% 
@@ -717,13 +717,13 @@ Pedestrian_realm_module_server <- function(id) {
     observeEvent(input$variable_ped,{
       if(input$variable_ped == 3){
         updateSliderInput(session = session,
-                          inputId = "slider_ped",
+                          inputId = ns("slider_ped"),
                           label = "Work commutes by car (%)",
                           0, 100,
                           value = c(0, 100),
                           step = 1)
         updateSliderInput(session = session,
-                          inputId = "slider_ped",
+                          inputId = ns("slider_ped"),
                           value = c(0, 100),
                           step = 1
         )
@@ -731,14 +731,14 @@ Pedestrian_realm_module_server <- function(id) {
       
       else if (input$variable_ped == 2) {
         updateSliderInput(session = session,
-                          inputId = "slider_ped",
+                          inputId = ns("slider_ped"),
                           label = paste0("Capacity of local population to make ",
                                          "trips on foot while maintaining 2 meters distance (%)"),
                           0, 1000,
                           value = c(0, 1000),
                           step = 25)
         updateSliderInput(session = session,
-                          inputId = "slider_ped",
+                          inputId = ns("slider_ped"),
                           value = c(0, 1000),
                           step = 25
         )
@@ -746,26 +746,26 @@ Pedestrian_realm_module_server <- function(id) {
       
       else if (input$variable_ped == 1) {
         updateSliderInput(session = session,
-                          inputId = "slider_ped",
+                          inputId = ns("slider_ped"),
                           label = "Log of Population density / km2",
                           0, 12,
                           value = c(0, 12),
                           step = 1)
         updateSliderInput(session = session,
-                          inputId = "slider_ped",
+                          inputId = ns("slider_ped"),
                           value = c(0, 12),
                           step = 1
         )
       }
       
       else {updateSliderInput(session = session,
-                              inputId = "slider_ped",
+                              inputId = ns("slider_ped"),
                               label = "Pedestrian trips per sqm of walkable space index (0 = average)",
                               -1, 6.5,
                               value = c(-1, 6.5),
                               step = 0.5)
         updateSliderInput(session = session,
-                          inputId = "slider_ped",
+                          inputId = ns("slider_ped"),
                           value = c(-1, 6.5),
                           step = 0.5
         )}
@@ -1101,7 +1101,7 @@ Pedestrian_realm_module_server <- function(id) {
     output$did_you_know_ped <- renderUI({
       if (rz_pedestrian$zoom == "OUT") {
         did_you_know %>% 
-          filter(right_variable == "ct_ped") %>% 
+          filter(right_variable == ns("ct_ped")) %>% 
           pull(text) %>% 
           paste("<li> ", ., collapse = "") %>% 
           paste0("<ul>", ., "</ul>") %>%
@@ -1109,7 +1109,7 @@ Pedestrian_realm_module_server <- function(id) {
       }
       else if (rz_pedestrian$zoom == "IN" & input$switch_biv == FALSE) {
         did_you_know %>% 
-          filter(right_variable == "da_ped") %>% 
+          filter(right_variable == ns("da_ped")) %>% 
           pull(text) %>% 
           paste("<li> ", ., collapse = "") %>% 
           paste0("<ul>", ., "</ul>") %>%

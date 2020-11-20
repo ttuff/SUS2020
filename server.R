@@ -161,7 +161,7 @@ shinyServer(function(input, output, session) {
   
   ### Active living potential ##################################################
   
-  #CanALE_module_server("CanALE_module")
+  CanALE_module_server("CanALE_module")
   
   
   ##############################################################################
