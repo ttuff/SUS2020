@@ -281,6 +281,8 @@ Mode_switch_module_server <- function(id) {
 
                  ## Set zoom level ------------------------------------------------------------
 
+                 observe(print(input$qzmyMap_view_change$zoom))
+                 
                  observeEvent(input$qzmyMap_view_change$zoom, {
                   
                    if (input$qzmyMap_view_change$zoom > 10.2) {
@@ -471,7 +473,7 @@ Mode_switch_module_server <- function(id) {
                    # Scenario maps
                    if (qz$zoom_level == "IN") {
 
-                     if (input$radio1 == 3) updateMaterialSwitch(session, "baseline_switch",
+                     if (input$radio1 == 3) updateMaterialSwitch(session, ns("baseline_switch"),
                                                                  value = TRUE)
 
                      # Baseline scenario
