@@ -165,18 +165,92 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
   )}
 
 
+js_ped_1 <- "$(document).ready(function(){
+  $('#plotContainer').on('show', function(){
+    $(this).css('opacity', 0).animate({opacity: 1}, {duration: 1000});
+  }).on('hide', function(){
+    var $this = $(this);
+    setTimeout(function(){
+      $this.css('opacity', 0).animate({opacity: 1}, {duration: 1000});
+    })
+  });
+});
+"
 
+js_ped <- "$(document).ready(function(){
+  $('#plotContainer_ped').on('show', function(){
+    $(this).css('opacity', 0).animate({opacity: 1}, {duration: 1000});
+  }).on('hide', function(){
+    var $this = $(this);
+    setTimeout(function(){
+      $this.css('opacity', 0).animate({opacity: 1}, {duration: 1000});
+    })
+  });
+});
+"
+
+js_ped_control <- "$(document).ready(function(){
+  $('#plotContainer_ped_control').on('show', function(){
+    $(this).css('opacity', 0).animate({opacity: 1}, {duration: 1000});
+  }).on('hide', function(){
+    var $this = $(this);
+    setTimeout(function(){
+      $this.css('opacity', 0).animate({opacity: 1}, {duration: 1000});
+    })
+  });
+});
+"
 
 Pedestrian_realm_module_server <- function(id) {
   moduleServer(id,function(input, output, session) {
     ns <- NS(id)
     
-    # Load bivariate census data
-    qload("data/new_bivariate.qsm")
+    output$bivariate_legend_ped <- renderImage({
+      filename <- normalizePath(file.path("www/bivariate_legend_2.png"))
+      return(list(src = filename, contentType = "image/png",  width = 200,
+                  height = 177))
+    }, deleteFile = FALSE)
+    
+    output$Univariate_left_legend <- renderImage({
+      filename <- normalizePath(file.path("www/Univariate_left.png"))
+      return(list(src = filename, contentType = "image/png",  width = 200,
+                  height = 200))
+    }, deleteFile = FALSE)
+    
+    output$Univariate_right_legend <- renderImage({
+      filename <- normalizePath(file.path("www/Univariate_right.png"))
+      return(list(src = filename, contentType = "image/png",  width = 200,
+                  height = 200))
+    }, deleteFile = FALSE)
+    
+    output$exemplar_ped <- renderImage({
+      filename <- normalizePath(file.path("www/Exemplar.png"))
+      return(list(src = filename, contentType = "image/png",  width = 550,
+                  height = 600))
+    }, deleteFile = FALSE)
+    
+    output$sidewalk_calculation <- renderImage({
+      filename <- normalizePath(file.path("www/sidewalk_calc.png"))
+      return(list(src = filename, contentType = "image/png",  width = 400,
+                  height = 400))
+    }, deleteFile = FALSE)
+    
+    output$univariate_legend_ped <- renderImage({
+      filename <- normalizePath(file.path("www/legend_social_distancing_cap.png"))
+      return(list(src = filename, contentType = "image/png",  width = 180,
+                  height = 140))
+    }, deleteFile = FALSE)
+    
+    output$sidewalk_legend_ped <- renderImage({
+      filename <- normalizePath(file.path("www/legend_sidewalk.png"))
+      return(list(src = filename, contentType = "image/png",  width = 250,
+                  height = 140))
+    }, deleteFile = FALSE)
+    
     
     did_you_know <- 
-      read_csv("data/did_you_know.csv") %>% 
-      mutate(right_variable = if_else(is.na(right_variable), " ", right_variable))
+      read_csv("data/did_you_know.csv") 
+     # mutate(right_variable = if_else(is.na(right_variable), " ", right_variable))
     
     variable_explanations <- 
       read_csv("data/variable_explanations.csv")
@@ -190,41 +264,6 @@ Pedestrian_realm_module_server <- function(id) {
     uni_legend <- normalizePath(file.path("www/Univariate_left.png"))
     uni_legend_right <- normalizePath(file.path("www/Univariate_right.png"))
     
-    js_ped_1 <- "$(document).ready(function(){
-  $('#plotContainer').on('show', function(){
-    $(this).css('opacity', 0).animate({opacity: 1}, {duration: 1000});
-  }).on('hide', function(){
-    var $this = $(this);
-    setTimeout(function(){
-      $this.css('opacity', 0).animate({opacity: 1}, {duration: 1000});
-    })
-  });
-});
-"
-    
-    js_ped <- "$(document).ready(function(){
-  $('#plotContainer_ped').on('show', function(){
-    $(this).css('opacity', 0).animate({opacity: 1}, {duration: 1000});
-  }).on('hide', function(){
-    var $this = $(this);
-    setTimeout(function(){
-      $this.css('opacity', 0).animate({opacity: 1}, {duration: 1000});
-    })
-  });
-});
-"
-    
-    js_ped_control <- "$(document).ready(function(){
-  $('#plotContainer_ped_control').on('show', function(){
-    $(this).css('opacity', 0).animate({opacity: 1}, {duration: 1000});
-  }).on('hide', function(){
-    var $this = $(this);
-    setTimeout(function(){
-      $this.css('opacity', 0).animate({opacity: 1}, {duration: 1000});
-    })
-  });
-});
-"
     
     rz_pedestrian <- reactiveValues(zoom = 'OUT',
                                     poly_selected = NA)
@@ -524,11 +563,8 @@ Pedestrian_realm_module_server <- function(id) {
       #input$tabs
       }, 
       {
-        print("big print")
-        if( 1==1){
-        #if( rz_pedestrian$zoom == "IN"){
-          if( 1==1){
-         # if (input$switch_biv == TRUE) {
+        if( rz_pedestrian$zoom == "IN"){
+          if (input$switch_biv == TRUE) {
             mapdeck_update(map_id = ns("PedestrianMap"))  %>%
               #clear_scatterplot(layer_id = "dot_density") %>%
               clear_polygon(layer_id = "univariate_layer") %>% 
@@ -1107,7 +1143,7 @@ Pedestrian_realm_module_server <- function(id) {
     output$did_you_know_ped <- renderUI({
       if (rz_pedestrian$zoom == "OUT") {
         did_you_know %>% 
-          filter(right_variable == ns("ct_ped")) %>% 
+          filter(right_variable == "ct_ped") %>% 
           pull(text) %>% 
           paste("<li> ", ., collapse = "") %>% 
           paste0("<ul>", ., "</ul>") %>%
@@ -1115,7 +1151,7 @@ Pedestrian_realm_module_server <- function(id) {
       }
       else if (rz_pedestrian$zoom == "IN" & input$switch_biv == FALSE) {
         did_you_know %>% 
-          filter(right_variable == ns("da_ped")) %>% 
+          filter(right_variable == "da_ped") %>% 
           pull(text) %>% 
           paste("<li> ", ., collapse = "") %>% 
           paste0("<ul>", ., "</ul>") %>%
@@ -1131,10 +1167,10 @@ Pedestrian_realm_module_server <- function(id) {
           HTML()
       }
       # else {
-      #   did_you_know %>% 
-      #     filter(right_variable == "sidewalk_ped") %>% 
-      #     pull(text) %>% 
-      #     paste("<li> ", ., collapse = "") %>% 
+      #   did_you_know %>%
+      #     filter(right_variable == "sidewalk_ped") %>%
+      #     pull(text) %>%
+      #     paste("<li> ", ., collapse = "") %>%
       #     paste0("<ul>", ., "</ul>") %>%
       #     HTML()
       # }

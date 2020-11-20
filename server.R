@@ -26,49 +26,7 @@ shinyServer(function(input, output, session) {
     return(list(src = filename, contentType = "image/png",  width = 200,
                 height = 177))
   }, deleteFile = FALSE)
-  
-  output$bivariate_legend_ped <- renderImage({
-    filename <- normalizePath(file.path("www/bivariate_legend_2.png"))
-    return(list(src = filename, contentType = "image/png",  width = 200,
-                height = 177))
-  }, deleteFile = FALSE)
-  
-  output$Univariate_left_legend <- renderImage({
-    filename <- normalizePath(file.path("www/Univariate_left.png"))
-    return(list(src = filename, contentType = "image/png",  width = 200,
-                height = 200))
-  }, deleteFile = FALSE)
-  
-  output$Univariate_right_legend <- renderImage({
-    filename <- normalizePath(file.path("www/Univariate_right.png"))
-    return(list(src = filename, contentType = "image/png",  width = 200,
-                height = 200))
-  }, deleteFile = FALSE)
-  
-  output$exemplar_ped <- renderImage({
-    filename <- normalizePath(file.path("www/Exemplar.png"))
-    return(list(src = filename, contentType = "image/png",  width = 550,
-                height = 600))
-  }, deleteFile = FALSE)
-  
-  output$sidewalk_calculation <- renderImage({
-    filename <- normalizePath(file.path("www/sidewalk_calc.png"))
-    return(list(src = filename, contentType = "image/png",  width = 400,
-                height = 400))
-  }, deleteFile = FALSE)
-  
-  output$univariate_legend_ped <- renderImage({
-    filename <- normalizePath(file.path("www/legend_social_distancing_cap.png"))
-    return(list(src = filename, contentType = "image/png",  width = 180,
-                height = 140))
-  }, deleteFile = FALSE)
-  
-  output$sidewalk_legend_ped <- renderImage({
-    filename <- normalizePath(file.path("www/legend_sidewalk.png"))
-    return(list(src = filename, contentType = "image/png",  width = 250,
-                height = 140))
-  }, deleteFile = FALSE)
-  
+
   
   ### Plot output calls for all 'left' plots ###################################
   
