@@ -799,6 +799,35 @@ Pedestrian_realm_module_server <- function(id) {
       
     })
     
+    
+    ## Update map on click -------------------------------------------------------
+    observeEvent(rz_pedestrian$poly_selected, {
+        if (!is.na(rz_pedestrian$poly_selected)) {
+          print(paste0("Selecting polygon ", rz_pedestrian$poly_selected))
+          mapdeck_update(map_id = ns("PedestrianMap"))  %>%
+            add_polygon(
+              data = {
+                bivariate_chloropleth() %>% 
+                  filter(ID == rz_pedestrian$poly_selected)},
+              stroke_width = 10,
+              stroke_colour = "#000000",
+              fill_colour = "fill",
+              update_view = FALSE,
+              layer_id = "poly_highlight_ped",
+              auto_highlight = TRUE,
+              highlight_colour = '#FFFFFF90',
+              legend = FALSE,
+              light_settings = list(
+                lightsPosition = c(0,0, 5000),
+                numberOfLights = 1,
+                ambientRatio = 1))
+          }
+      else { 
+        mapdeck_update(map_id = ns("PedestrianMap"))  %>%
+          clear_polygon("poly_highlight_ped")
+        
+      }}) 
+    
     ## Render the info table -----------------------------------------------------
     
     output$pedestrian_info <- renderUI({
