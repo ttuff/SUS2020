@@ -1,0 +1,244 @@
+---
+title: "R Notebook"
+output:
+  output: md_document
+---
+
+
+# Vignette
+
+
+```{r, eval=TRUE, warnings=FALSE, messages=FALSE, collapse = TRUE}
+
+library(stplanr)
+library(dplyr) 
+library(leaflet)
+library(gbfs)
+library(sp)
+library(maptools)
+library(mapdeck)
+library(leaflet.extras)
+```
+
+```{r, eval=FALSE}
+possible_cities <- get_gbfs_cities()
+possible_cities
+```
+
+
+```{r, eval=FALSE}
+
+get_gbfs(city = "Montreal, QC", feeds = "all", directory = "BIKI_data")
+```
+
+
+```{r, eval=FALSE}
+list.files("BIKI_data")
+```
+
+
+```{r}
+station_status <- readRDS("data/BIKI_data/station_status.rds")
+head(station_status)
+```
+
+```{r}
+station_info <- readRDS("data/BIKI_data/station_information.rds")
+head(station_info)
+```
+
+```{r}
+system_info <- readRDS("data/BIKI_data/system_information.rds")
+head(system_info)
+```
+
+```{r}
+station_info <- read.csv("data/BIKI_data/Stations_2018.csv")
+#read.csv("BIKI_data/OD_2018-04.csv")
+#read.csv("BIKI_data/OD_2018-05.csv")
+flow <- read.csv("data/BIKI_data/OD_2018-06.csv")[,c(2, 4, 1, 3, 5, 6)]
+#read.csv("BIKI_data/OD_2018-07.csv")
+#read.csv("BIKI_data/OD_2018-08.csv")
+#read.csv("BIKI_data/OD_2018-09.csv")
+#read.csv("BIKI_data/OD_2018-10.csv")
+names(flow)
+```
+
+
+```{r}
+station_points <- SpatialPointsDataFrame(coords =cbind(station_info$lon, station_info$lat), data = station_info)
+plot(station_points, pch=19, cex=0.4)
+
+```
+
+time ... corpuscular .. track sunrise window  Solar()
+
+```{r, eval=TRUE}
+travel_network <- od2line(flow = flow[30000:31000,], zones = station_points)
+w <- flow$is_member / max(flow$is_member) *1
+
+```
+
+```{r, echo=FALSE, fig.cap = "A line connecting the pickup and dropoff locations of each individual bike and each individual trip. \\label{desire_lines}"}
+plot(travel_network, lwd = w)
+```
+
+
+```{r, eval=TRUE, echo=FALSE}
+load("data/BIKI_data/rates_t_routes.Rdata")
+```
+
+```{r, eval=FALSE, warnings=FALSE}
+intrazone <- travel_network$start_station_code == travel_network$end_station_code
+travel_network <- travel_network[!intrazone,]
+t_routes <- line2route(travel_network, route_fun = route_osrm ) 
+#route_graphhopper
+plot(t_routes)
+t_routes$All <- travel_network$All
+
+rates <- cbind(t_routes$id, t_routes$distance / t_routes$duration)
+rownames(rates) <- t_routes$id
+colnames(rates) <- c("id","rates")
+
+rates_t_routes <- merge(t_routes, rates, by.x="id")
+rates_t_routes@data$rates  <- as.numeric(rates_t_routes@data$rates )
+rates_t_routes@data$rates[which(rates_t_routes@data$rates == 0)] <- NA
+
+save(rates_t_routes, file="data/BIKI_data/rates_t_routes.Rdata")
+plot(rates_t_routes)
+```
+
+```{r}
+plot(rates_t_routes)
+```
+
+```{r, eval=FALSE}
+
+rnet <- overline(rates_t_routes, attrib = "rates", fun = sum, na.zero =FALSE)
+save(rnet, file="data/BIKI_data/rnet.Rdata")
+
+```
+
+```{r, echo=FALSE, fig.cap = "Average speed along each roadway. \\label{flow_network}"}
+load("data/BIKI_data/rnet.Rdata")
+plot(rnet, lwd=rnet@data$rates/6000)
+
+```
+
+
+BIXI average speed
+```{r}
+leaflet() %>% 
+  addProviderTiles("CartoDB.DarkMatterNoLabels")%>% addPolylines(data = rnet, col="firebrick",  
+  opacity=1, weight = rnet@data$rates/6000
+  )  %>% suspendScroll()
+```
+
+
+```{r, eval=FALSE}
+data(occ.landscape)
+data(param1)
+
+#Simulating the occupation in the next time step:
+
+landscape2 <- spom(sp=occ.landscape,
+			kern="op1",
+			conn="op1",
+			colnz="op1",
+			ext="op1",
+			param_df=param1,
+			beta1=NULL,
+			b=1,
+			c1=NULL,
+			c2=NULL,
+			z=NULL,
+			R=NULL,
+			succ="none"
+			)
+
+#The output has two new columns in the data frame nodes.characteristics: species2 
+#(occupation in the next time step) and turn (turnover - change of occupation status, 
+#1 if changed and 0 if not).:
+landscape2
+
+```
+
+
+```{r, eval=FALSE}
+library(leaflet)
+library(htmltools)
+library(htmlwidgets)
+
+# Convert the JS and CSS from
+# https://github.com/mapshakers/leaflet-icon-pulse/tree/master/src
+# to proper URLs using rawgit.com
+pluginDependency <- htmlDependency(
+  "leaflet-icon-pulse",version = "1.0",
+  src = c(href="https://rawgit.com/mapshakers/leaflet-icon-pulse/master/src/"),
+  script = "L.Icon.Pulse.js",stylesheet ="L.Icon.Pulse.css"
+)
+
+registerPlugin <- function(map, plugin) {
+  map$dependencies <- c(map$dependencies, list(plugin))
+  map
+}
+
+#station_points <- SpatialPointsDataFrame(coords =cbind(station_info$lon, station_info$lat), data = station_info)
+#plot(station_points, pch=19, cex=0.4)
+library(jsonlite)
+station_pts <- matrix(cbind(station_points$latitude, station_points$longitude), length(station_points$latitude), 2)
+colnames(station_pts)<- c("lat","lon")
+station_pts_json <- toJSON(station_pts[1,])
+
+leaflet() %>%
+  addProviderTiles("CartoDB.DarkMatter") %>%
+  setView(-73.5772, 45.5048, zoom = 12) %>%
+  registerPlugin(pluginDependency) %>%
+  onRender("function(el,x, data) {
+                   
+          var pulsingIcon =
+             L.icon.pulse({iconSize:[5,5],color:'red',heartbeat:0.5});
+           var pulsingIcon2 =
+             L.icon.pulse({iconSize:[10,10],color:'orange',heartbeat:2});
+           var marker =
+             L.marker(data,{icon: pulsingIcon}).bindPopup(
+               '<b>Hello world!</b><br>I am a popup.').openPopup().addTo(this);
+           var marker =
+             L.marker([45.5048,-73.5772],{icon: pulsingIcon2}).addTo(this);
+           }", data=station_pts_json)  %>% suspendScroll()
+```
+
+```{r, eval=FALSE}
+
+
+#icon.pop <- pulseIcons(color = ifelse(cities$Pop <500000,'blue','red'),
+ #                      heartbeat = ifelse(cities$Pop<500000,'0.8','0.4'))
+
+
+
+popIcons <- pulseIconList(
+  blue = makePulseIcon(color="blue", heartbeat = 1, iconSize = 12),
+  red = makePulseIcon(color="red", heartbeat = 1, iconSize = 15, animate =  FALSE)
+)
+
+
+
+leaflet() %>%
+  addProviderTiles("CartoDB.DarkMatter") %>%
+  setView(-73.5772, 45.5048, zoom = 12) %>%
+  addPulseMarkers(
+    lng=station_pts[,2], lat=station_pts[,1],
+    label='This is a label',
+    icon = popIcons
+ 
+    
+    ) %>% suspendScroll()
+
+```
+
+
+
+
+
+
+

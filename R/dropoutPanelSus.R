@@ -28,14 +28,15 @@ dropoutPanelSus_UI <- function(id,i18n
         border-width: 1px;  
         padding:5px; 
         font-size:100%",
+      
       dropdown(
-        
-        tags$h3("List of Input"),
-        
-        
-        
+        #includeMarkdown("02-Vignette.md"),
+        tags$iframe(src = './02-Vignette.html', # put myMarkdown.html to /www
+                    width = '100%', height = '800px', 
+                    frameborder = 0, scrolling = 'auto'
+        ),
         style = "unite", icon = icon("dot-circle"),
-        status = "primary", width = "300px",
+        status = "primary", width = "800px",
         animate = animateOptions(
           enter = animations$fading_entrances$fadeInLeftBig,
           exit = animations$fading_exits$fadeOutRightBig
@@ -47,14 +48,12 @@ dropoutPanelSus_UI <- function(id,i18n
   )
 }
 
-
-
-dropoutPanelSus_Server <- function(id, i18n) {
+#addResourcePath("www", getwd())
+dropoutPanelSus_Server <- function(id,i18n) {
   moduleServer(id,
                function(input, output, session) {
                  ns <- NS(id)
-                 
-                
+               
                })
 }
 
