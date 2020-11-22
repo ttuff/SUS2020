@@ -39,7 +39,7 @@ scrollingTimelineSus_UI <- function(id,i18n
 scrollingTimelineSus_Server <- function(input, output, session, zoom) {
   
                  observe(print(zoom()))
-                initial_position <- 10
+                initial_position <- 8
     
                  output$timelinePlot <- renderCachedPlot({
                    par(mar=c(0,0,0,0))
