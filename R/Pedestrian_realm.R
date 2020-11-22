@@ -1213,6 +1213,7 @@ Pedestrian_realm_module_server <- function(id) {
       else if (rz_pedestrian$zoom == "IN" & input$switch_biv == FALSE) {
         did_you_know %>% 
           filter(right_variable == "da_ped") %>% 
+          slice_sample(n = 2) %>% 
           pull(text) %>% 
           paste("<li> ", ., collapse = "") %>% 
           paste0("<ul>", ., "</ul>") %>%
@@ -1227,14 +1228,14 @@ Pedestrian_realm_module_server <- function(id) {
           paste0("<ul>", ., "</ul>") %>%
           HTML()
       }
-      # else {
-      #   did_you_know %>%
-      #     filter(right_variable == "sidewalk_ped") %>%
-      #     pull(text) %>%
-      #     paste("<li> ", ., collapse = "") %>%
-      #     paste0("<ul>", ., "</ul>") %>%
-      #     HTML()
-      # }
+      else {
+        did_you_know %>%
+          filter(right_variable == "sidewalk_ped") %>%
+          pull(text) %>%
+          paste("<li> ", ., collapse = "") %>%
+          paste0("<ul>", ., "</ul>") %>%
+          HTML()
+      }
       
     })
  })}
