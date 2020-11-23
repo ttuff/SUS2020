@@ -6,7 +6,11 @@
 # within an expanding and contracting window.
 
 
-zoomMenuItemSus_UI <- function(id,i18n
+zoomMenuItemSus_UI <- function(id,
+                               i18n, 
+                               from_the_top,
+                               provided_icon,
+                               provided_label
 ){ 
   
   ns <- NS(id)
@@ -15,8 +19,8 @@ zoomMenuItemSus_UI <- function(id,i18n
     
     absolutePanel(
       id = "timeline", class = "panel panel-default",
-      draggable = TRUE, top  = 150, right  = 200, 
-      width = 300, height = 100,
+      draggable = FALSE, top  = from_the_top, right = 10, 
+      width = 120, height = 34,
       style="
       z-index:600;
         color: #000000; 
@@ -26,27 +30,33 @@ zoomMenuItemSus_UI <- function(id,i18n
         border-width: 1px;  
         padding:5px; 
         font-size:100%;
-      vertical-align: top;
+      vertical-align: center;
       horizontal-align: left;",
       actionBttn(
-        inputId = "Id114",
-        label = "Global", 
+        inputId = ns("Id114"),
+        label = provided_label,
         style = "gradient",
         color = "default",
-        icon = icon("globe")
-      )),
-      tags$style(HTML("
-                  #dropPanel {
-                    height:600px;
-                    overflow-y:scroll
-                  }
-                  ")),
+        icon = provided_icon,
+        size = "xs"
+      )
+      ),
+      # tags$style(HTML("
+      #             #dropPanel {
+      #               height:600px;
+      #               overflow-y:scroll
+      #             }
+      #             ")),
+    conditionalPanel(
+      condition = "output.bttn", 
+      ns = ns ,
+      id = ns("bttn_panel"),
       absolutePanel(
         id = "dropPanel", class = "panel panel-default",
-        draggable = TRUE, top = 300, left = 270, 
-        width = "60%", height = "100%",
-        style="z-index:10000;
-        overflow-y:scroll:
+        draggable = TRUE, top = 240, left = 270, 
+        width = "40%", height = "50%",
+        style="z-index:600;
+       # overflow-y:scroll;
         color: #FFFFFF; 
         background-color: #3C3C3B95; 
         border-color: #0096C995; 
@@ -54,8 +64,21 @@ zoomMenuItemSus_UI <- function(id,i18n
         border-width: 1px;  
         padding:5px; 
         font-size:100%",
+        tags$iframe(src = './02-Vignette.html', # put myMarkdown.html to /www
+                    width = '100%', height = '100%',
+                    frameborder = 0, scrolling = 'auto',
+                    style="z-index:600;
+       # overflow-y:scroll;
+        color: #FFFFFF; 
+        background-color: #3C3C3B95; 
+        border-color: #0096C995; 
+        border-radius: 30px; 
+        border-width: 1px;  
+        padding:5px; 
+        font-size:100%"
+        )
         
-        includeMarkdown("02-Vignette.md")
+        )
           
         
         
@@ -68,11 +91,17 @@ zoomMenuItemSus_UI <- function(id,i18n
 
 zoomMenuItemSus_Server <- function(input, output, session, zoom) {
   
-  #observe(print(zoom()))
-  
-  
-  
-  
+ # observe(print(zoom()))
+  #observe(print(input$Id114[1]))
+  #observe(print(input$bttn1))
+  output$bttn <- reactive({
+    
+    even <- input$Id114[1] %% 2 != 0
+    print(even)
+    return(even)
+    
+  })
+  outputOptions(output, "bttn", suspendWhenHidden = FALSE)
   
 }
 

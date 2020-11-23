@@ -171,7 +171,7 @@ shinyUI(
         
         tabItem(tabName = "home", 
                 fluidPage(id = 'home',
-                          tags$style('#home {background-color: #FBFBFB;}'),
+                          tags$style('#home {background-color: #FFFFFF;}'),
                   fluidRow(imageOutput("homepic", height = 600), 
                            align = "center"),
                   fluidRow(hr()),

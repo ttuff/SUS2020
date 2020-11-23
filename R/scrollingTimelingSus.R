@@ -15,8 +15,8 @@ scrollingTimelineSus_UI <- function(id,i18n
     
     absolutePanel(
       id = "timeline", class = "panel panel-default",
-      draggable = TRUE, top  = 50, right  = 50, 
-      width = 30, height = 600,
+      draggable = FALSE, top  = 50, right  = 100, 
+      width = 35, height = 600,
       style="
       z-index:600;
         color: #000000; 
@@ -28,7 +28,7 @@ scrollingTimelineSus_UI <- function(id,i18n
         font-size:100%;
       vertical-align: top;
       horizontal-align: left;",
-      plotOutput(ns("timelinePlot"), width = 30, height = 600),
+      plotOutput(ns("timelinePlot"), width = 35, height = 600),
      
       
     )
