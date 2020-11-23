@@ -260,7 +260,7 @@ $(document).ready(function(){
                    }
                    st_crs(data) <- 4326
                    st_crs(data$geometry) <- 4326
-                   print(st_crs(data))
+                   #print(st_crs(data))
                    return(data)
                  })
                  
@@ -342,7 +342,7 @@ $(document).ready(function(){
                    
                    # Univariate case
                    if (input$data_for_plot_right == " ") {
-                     print("stats")
+                     #print("stats")
                      min_val <- round(min(vec), 2)
                      max_val <- round(max(vec), 2)
                      mean_val <- round(mean(vec), 2)
@@ -461,7 +461,7 @@ $(document).ready(function(){
                      
                      # Case for no poly selected
                      if (is.na(rz$poly_selected)) {
-                       print("2nd order")
+                       #print("2nd order")
                        # If correlation is close to zero
                        if (correlation < 0.05 && correlation > -0.05) {
                          
@@ -499,7 +499,7 @@ $(document).ready(function(){
                        poly_value_1 <- dat$left_variable_full
                        poly_value_2 <- dat$right_variable_full
                        
-                       print("polyselect")
+                       #print("polyselect")
                        place_name <- case_when(
                          scale_singular == "borough/city" ~ 
                            glue("{dat$name}"),
@@ -749,7 +749,7 @@ $(document).ready(function(){
                      
                      if (!is.na(rz$poly_selected)) {
                        
-                       print(paste0("Selecting polygon ", rz$poly_selected))
+                       #print(paste0("Selecting polygon ", rz$poly_selected))
                        
                        mapdeck_update(map_id = ns("active_map"))  %>%
                          add_polygon(
@@ -773,7 +773,7 @@ $(document).ready(function(){
                      
                      if (is.na(rz$poly_selected)) {
                        
-                       print("Removing selection")
+                       #print("Removing selection")
                        
                        mapdeck_update(map_id = ns("active_map"))  %>%
                          clear_polygon(layer_id = "poly_highlight")
@@ -785,7 +785,7 @@ $(document).ready(function(){
                      
                      if (!is.na(rz$poly_selected)) {
                        
-                       print(paste0("Selecting 3D polygon ", rz$poly_selected))
+                       #print(paste0("Selecting 3D polygon ", rz$poly_selected))
                        
                        mapdeck_update(map_id = ns("active_map"))  %>%
                          clear_polygon(layer_id = "polylayer") %>%
@@ -812,7 +812,7 @@ $(document).ready(function(){
                      
                      if (is.na(rz$poly_selected)) {
                        
-                       print("Removing 3D selection")
+                       #print("Removing 3D selection")
                        
                        mapdeck_update(map_id = ns("active_map"))  %>%
                          clear_polygon(layer_id = "poly_highlight") %>% 

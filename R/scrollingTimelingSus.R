@@ -38,7 +38,7 @@ scrollingTimelineSus_UI <- function(id,i18n
 #addResourcePath("www", getwd())
 scrollingTimelineSus_Server <- function(input, output, session, zoom) {
   
-                 observe(print(zoom()))
+                 #observe(print(zoom()))
                 initial_position <- 8
     
                  output$timelinePlot <- renderCachedPlot({

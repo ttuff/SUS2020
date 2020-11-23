@@ -313,7 +313,7 @@ Mode_switch_module_server <- function(id) {
                  ## Control the scenario sliders ----------------------------------------------
 
                  observeEvent(input$radio1, {
-                   print("radio input")
+                   #print("radio input")
                    if (input$radio1 == 1) {
                      updateSliderTextInput(session = session,
                                            inputId = "slider1",
