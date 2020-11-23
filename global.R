@@ -58,7 +58,7 @@ print(i18n$t("Learn more"))
 
 #create_translation_file("/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/www/translation.json", type = "json", handle = "i18n", output = "/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/www/translation.json")
 
-
+options(shiny.trace = FALSE)
 
 # Functions ---------------------------------------------------------------
 
