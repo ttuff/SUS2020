@@ -1,7 +1,7 @@
 ---
 title: "R Notebook"
-output:
-  output: md_document
+
+
 ---
 
 
@@ -131,111 +131,8 @@ BIXI average speed
 leaflet() %>% 
   addProviderTiles("CartoDB.DarkMatterNoLabels")%>% addPolylines(data = rnet, col="firebrick",  
   opacity=1, weight = rnet@data$rates/6000
-  )  %>% suspendScroll()
+  )  #%>% suspendScroll()
 ```
-
-
-```{r, eval=FALSE}
-data(occ.landscape)
-data(param1)
-
-#Simulating the occupation in the next time step:
-
-landscape2 <- spom(sp=occ.landscape,
-			kern="op1",
-			conn="op1",
-			colnz="op1",
-			ext="op1",
-			param_df=param1,
-			beta1=NULL,
-			b=1,
-			c1=NULL,
-			c2=NULL,
-			z=NULL,
-			R=NULL,
-			succ="none"
-			)
-
-#The output has two new columns in the data frame nodes.characteristics: species2 
-#(occupation in the next time step) and turn (turnover - change of occupation status, 
-#1 if changed and 0 if not).:
-landscape2
-
-```
-
-
-```{r, eval=FALSE}
-library(leaflet)
-library(htmltools)
-library(htmlwidgets)
-
-# Convert the JS and CSS from
-# https://github.com/mapshakers/leaflet-icon-pulse/tree/master/src
-# to proper URLs using rawgit.com
-pluginDependency <- htmlDependency(
-  "leaflet-icon-pulse",version = "1.0",
-  src = c(href="https://rawgit.com/mapshakers/leaflet-icon-pulse/master/src/"),
-  script = "L.Icon.Pulse.js",stylesheet ="L.Icon.Pulse.css"
-)
-
-registerPlugin <- function(map, plugin) {
-  map$dependencies <- c(map$dependencies, list(plugin))
-  map
-}
-
-#station_points <- SpatialPointsDataFrame(coords =cbind(station_info$lon, station_info$lat), data = station_info)
-#plot(station_points, pch=19, cex=0.4)
-library(jsonlite)
-station_pts <- matrix(cbind(station_points$latitude, station_points$longitude), length(station_points$latitude), 2)
-colnames(station_pts)<- c("lat","lon")
-station_pts_json <- toJSON(station_pts[1,])
-
-leaflet() %>%
-  addProviderTiles("CartoDB.DarkMatter") %>%
-  setView(-73.5772, 45.5048, zoom = 12) %>%
-  registerPlugin(pluginDependency) %>%
-  onRender("function(el,x, data) {
-                   
-          var pulsingIcon =
-             L.icon.pulse({iconSize:[5,5],color:'red',heartbeat:0.5});
-           var pulsingIcon2 =
-             L.icon.pulse({iconSize:[10,10],color:'orange',heartbeat:2});
-           var marker =
-             L.marker(data,{icon: pulsingIcon}).bindPopup(
-               '<b>Hello world!</b><br>I am a popup.').openPopup().addTo(this);
-           var marker =
-             L.marker([45.5048,-73.5772],{icon: pulsingIcon2}).addTo(this);
-           }", data=station_pts_json)  %>% suspendScroll()
-```
-
-```{r, eval=FALSE}
-
-
-#icon.pop <- pulseIcons(color = ifelse(cities$Pop <500000,'blue','red'),
- #                      heartbeat = ifelse(cities$Pop<500000,'0.8','0.4'))
-
-
-
-popIcons <- pulseIconList(
-  blue = makePulseIcon(color="blue", heartbeat = 1, iconSize = 12),
-  red = makePulseIcon(color="red", heartbeat = 1, iconSize = 15, animate =  FALSE)
-)
-
-
-
-leaflet() %>%
-  addProviderTiles("CartoDB.DarkMatter") %>%
-  setView(-73.5772, 45.5048, zoom = 12) %>%
-  addPulseMarkers(
-    lng=station_pts[,2], lat=station_pts[,1],
-    label='This is a label',
-    icon = popIcons
- 
-    
-    ) %>% suspendScroll()
-
-```
-
 
 
 

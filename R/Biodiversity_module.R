@@ -25,7 +25,7 @@ Biodiversity_module_UI <- function(id, i18n) {
    # rightPanelSus_UI(id = ns("Bio_right_panel"),i18n = i18n)
   
    #dropoutPanelSus_UI("dropPanel_1", i18n = i18n),
-   scrollingTimelineSus_UI(ns("timelinePanel"), i18n = i18n)
+   zoomMenuSus_UI(ns("zoom_menu"), i18n = i18n)
   
   
   )
@@ -45,7 +45,10 @@ Biodiversity_module_server <- function(id) {
                  dropoutPanelSus_Server("dropPanel_1", i18n = i18n)
                  #observe(print(input$BiodiversityMap_view_change$zoom))
                  zoomer <- reactive(input$BiodiversityMap_view_change$zoom)
-                 callModule(scrollingTimelineSus_Server, "timelinePanel", zoom = zoomer)
-                 #scrollingTimelineSus_Server("timelinePanel", zoom = zoomer)
+                 callModule(zoomMenuSus_Server, "zoom_menu", zoom = zoomer)
+                 
+                 
+                 
+                 
                }
   )}

@@ -30,11 +30,12 @@ dropoutPanelSus_UI <- function(id,i18n
         font-size:100%",
       
       dropdown(
-        #includeMarkdown("02-Vignette.md"),
-        tags$iframe(src = './02-Vignette.html', # put myMarkdown.html to /www
-                    width = '100%', height = '800px', 
-                    frameborder = 0, scrolling = 'auto'
-        ),
+        includeMarkdown("02-Vignette.md", width = '100%', height = '800px', 
+                                     frameborder = 0, scrolling = 'auto'),
+        # tags$iframe(src = './02-Vignette.html', # put myMarkdown.html to /www
+        #             width = '100%', height = '800px', 
+        #             frameborder = 0, scrolling = 'auto'
+        # ),
         style = "unite", icon = icon("dot-circle"),
         status = "primary", width = "800px",
         animate = animateOptions(
