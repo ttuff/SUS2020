@@ -17,10 +17,10 @@ zoomMenuSus_UI <- function(id,i18n
     zoomMenuItemSus_UI(ns("item2"), i18n =  i18n, from_the_top = 145, provided_icon = icon("globe"),provided_label="Continent"),
     zoomMenuItemSus_UI(ns("item3"), i18n =  i18n, from_the_top = 210, provided_icon = icon("globe"),provided_label="Region"),
     zoomMenuItemSus_UI(ns("item4"), i18n =  i18n, from_the_top = 275, provided_icon = icon("globe"),provided_label="Sub-region"),
-    zoomMenuItemSus_UI(ns("item5"), i18n =  i18n, from_the_top = 340, provided_icon = icon("globe"),provided_label="Community"),
-    zoomMenuItemSus_UI(ns("item6"), i18n =  i18n, from_the_top = 400, provided_icon = icon("globe"),provided_label="Population"),
-    zoomMenuItemSus_UI(ns("item7"), i18n =  i18n, from_the_top = 470, provided_icon = icon("globe"),provided_label="Park"),
-    zoomMenuItemSus_UI(ns("item8"), i18n =  i18n, from_the_top = 550, provided_icon = icon("globe"),provided_label="Individual")
+    zoomMenuItemSus_UI(ns("item5"), i18n =  i18n, from_the_top = 330, provided_icon = icon("globe"),provided_label="Community"),
+    zoomMenuItemSus_UI(ns("item6"), i18n =  i18n, from_the_top = 410, provided_icon = icon("globe"),provided_label="Population"),
+    zoomMenuItemSus_UI(ns("item7"), i18n =  i18n, from_the_top = 480, provided_icon = icon("globe"),provided_label="Park"),
+    zoomMenuItemSus_UI(ns("item8"), i18n =  i18n, from_the_top = 545, provided_icon = icon("globe"),provided_label="Individual")
     
       
     

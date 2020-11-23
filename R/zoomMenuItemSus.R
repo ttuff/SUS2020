@@ -16,7 +16,11 @@ zoomMenuItemSus_UI <- function(id,
   ns <- NS(id)
   
   tagList(
-    
+    tags$i(
+      class = "fa fa-globe", 
+      style = "color: #3C3C3B"
+    ),
+   # "www/logo.png"
     absolutePanel(
       id = "timeline", class = "panel panel-default",
       draggable = FALSE, top  = from_the_top, right = 10, 
@@ -37,7 +41,8 @@ zoomMenuItemSus_UI <- function(id,
         label = provided_label,
         style = "gradient",
         color = "default",
-        icon = provided_icon,
+        icon = icon("globe"),
+        block = FALSE,
         size = "xs"
       )
       ),
