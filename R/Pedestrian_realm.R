@@ -26,7 +26,7 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
         p(title_text %>%
             filter(tab == "pedestrian_da", type == "main") %>%
             pull(text))),
-      actionLink(ns("more_info_ped"), "Learn more"),
+      actionLink(ns("more_info_ped"), i18n$t("Learn more")),
       conditionalPanel(
         condition = "output.more_info_ped_status == 1 && output.zoom == 'OUT'", ns = ns ,
         id = ns("plotContainer_ped"),
@@ -453,10 +453,10 @@ Pedestrian_realm_module_server <- function(id) {
     # Set title across zoom levels
     output$title_text_ped <- renderText({
       if( rz_pedestrian$zoom == "OUT"){
-        paste0("Pedestrian capacity for social distancing (census tracts)")
+        paste0(i18n$t("Pedestrian capacity for social distancing (census tracts)"))
       } else if (rz_pedestrian$zoom == "IN") {
-        "Pedestrian capacity for social distancing (dissemination areas)"  
-      } else {"Explore sidewalks and parks"}
+        i18n$t("Pedestrian capacity for social distancing (dissemination areas)")  
+      } else {i18n$t("Explore sidewalks and parks")}
     })
     
     # Hide extra text
@@ -1213,6 +1213,7 @@ Pedestrian_realm_module_server <- function(id) {
       else if (rz_pedestrian$zoom == "IN" & input$switch_biv == FALSE) {
         did_you_know %>% 
           filter(right_variable == "da_ped") %>% 
+          slice_sample(n = 2) %>% 
           pull(text) %>% 
           paste("<li> ", ., collapse = "") %>% 
           paste0("<ul>", ., "</ul>") %>%
@@ -1227,14 +1228,14 @@ Pedestrian_realm_module_server <- function(id) {
           paste0("<ul>", ., "</ul>") %>%
           HTML()
       }
-      # else {
-      #   did_you_know %>%
-      #     filter(right_variable == "sidewalk_ped") %>%
-      #     pull(text) %>%
-      #     paste("<li> ", ., collapse = "") %>%
-      #     paste0("<ul>", ., "</ul>") %>%
-      #     HTML()
-      # }
+      else {
+        did_you_know %>%
+          filter(right_variable == "sidewalk_ped") %>%
+          pull(text) %>%
+          paste("<li> ", ., collapse = "") %>%
+          paste0("<ul>", ., "</ul>") %>%
+          HTML()
+      }
       
     })
  })}
