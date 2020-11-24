@@ -344,10 +344,8 @@ Pedestrian_realm_module_server <- function(id) {
                population = census_analysis_quantile_WSG$population) %>% 
         left_join(bivariate_color_scale, by = "group") %>% 
         drop_na(right_variable) 
-     # print("made it here 1")
       st_crs(data_for_plot_bivariate) <- 4326
       bivariate_chloropleth  <- st_cast(data_for_plot_bivariate, "MULTIPOLYGON")
-     # print("made it here 2")
       
       if (input$variable_ped == 3) {
         bivariate_chloropleth <- bivariate_chloropleth %>% 
@@ -358,7 +356,6 @@ Pedestrian_realm_module_server <- function(id) {
         filter(pop_density >= input$slider_ped[1] & pop_density <= input$slider_ped[2]) 
       } else {bivariate_chloropleth <- bivariate_chloropleth %>% 
         filter(trip_scale >= input$slider_ped[1] & trip_scale <= input$slider_ped[2])}
-      print("made it here 3")
       return(bivariate_chloropleth)
     })
     
@@ -410,7 +407,7 @@ Pedestrian_realm_module_server <- function(id) {
     
     ## Set zoom bins  -------------------------------------------------
     observeEvent(input$PedestrianMap_view_change$zoom, {
-      print(rz_pedestrian$zoom)
+      #print(rz_pedestrian$zoom)
       if (input$PedestrianMap_view_change$zoom >= 10.5 && 
           input$PedestrianMap_view_change$zoom <= 14) {
         rz_pedestrian$zoom <- 'IN'} else {
@@ -803,7 +800,7 @@ Pedestrian_realm_module_server <- function(id) {
     ## Update map on click -------------------------------------------------------
     observeEvent(rz_pedestrian$poly_selected, {
         if (!is.na(rz_pedestrian$poly_selected)) {
-          print(paste0("Selecting polygon ", rz_pedestrian$poly_selected))
+          #print(paste0("Selecting polygon ", rz_pedestrian$poly_selected))
           mapdeck_update(map_id = ns("PedestrianMap"))  %>%
             add_polygon(
               data = {
@@ -831,7 +828,7 @@ Pedestrian_realm_module_server <- function(id) {
     ## Render the info table -----------------------------------------------------
     
     output$pedestrian_info <- renderUI({
-      print("ped render UI")
+      #print("ped render UI")
       census_analysis_ct_plot <- census_analysis_ct_plot %>% 
         filter(social_distancing != Inf,
                population >= 500)
@@ -1206,7 +1203,7 @@ Pedestrian_realm_module_server <- function(id) {
         did_you_know %>% 
           filter(right_variable == "ct_ped") %>% 
           pull(text) %>% 
-          paste("<li> ", ., collapse = "") %>% 
+          paste("<li> ", ., collapse = "") %>%
           paste0("<ul>", ., "</ul>") %>%
           HTML()
       }
@@ -1229,12 +1226,12 @@ Pedestrian_realm_module_server <- function(id) {
           HTML()
       }
       else {
-        did_you_know %>%
-          filter(right_variable == "sidewalk_ped") %>%
-          pull(text) %>%
-          paste("<li> ", ., collapse = "") %>%
-          paste0("<ul>", ., "</ul>") %>%
-          HTML()
+        # did_you_know %>%
+        #   filter(right_variable == "sidewalk_ped") %>%
+        #   pull(text) %>%
+        #   paste("<li> ", ., collapse = "") %>%
+        #   paste0("<ul>", ., "</ul>") %>%
+        #   HTML()
       }
       
     })

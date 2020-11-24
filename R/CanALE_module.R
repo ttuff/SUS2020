@@ -681,8 +681,8 @@ $(document).ready(function(){
                    did_you_know %>% 
                      filter(right_variable == input$data_for_plot_right) %>% 
                      slice_sample(n = 2) %>% 
-                     pull(text) %>% 
-                     paste("<li> ", ., collapse = "") %>% 
+                     pull(text) %>%
+                     paste("<li> ", ., collapse = "") %>%
                      paste0("<ul>", ., "</ul>") %>%
                      HTML()
                  })
