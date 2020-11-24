@@ -4,7 +4,29 @@
 # This function adds a standard text box 
 # with the modules Title and text displayed 
 # within an expanding and contracting window.
-
+js <- "
+$(document).ready(function(){
+  $('#dropPanel').on('TRUE', function(){
+    var $this = $(this);
+    $this.css('opacity', 0).
+      animate({opacity: 1}, 500, function(){
+        $this.animateCSS('jello', {
+          delay: 0, 
+          duration: 2000
+        });
+      });
+  }).on('FALSE', function(){
+    var $this = $(this);
+    setTimeout(function(){
+      $this.show().animateCSS('heartBeat', {
+        delay: 0, 
+        duration: 2000,
+        callback: function(){$this.hide(500);}
+      });
+    }, 0);
+  });
+});
+"
 
 zoomMenuItemSus_UI <- function(id,
                                i18n, 
@@ -16,11 +38,11 @@ zoomMenuItemSus_UI <- function(id,
   ns <- NS(id)
   
   tagList(
-    tags$i(
-      class = "fa fa-globe", 
-      style = "color: #3C3C3B"
+    tags$head(
+      tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.0/animate.compat.min.css"),
+      tags$script(src = "https://cdnjs.cloudflare.com/ajax/libs/animateCSS/1.2.2/jquery.animatecss.min.js"),
+      tags$script(HTML(js))
     ),
-   # "www/logo.png"
     absolutePanel(
       id = "timeline", class = "panel panel-default",
       draggable = FALSE, top  = from_the_top, right = 10, 
@@ -36,6 +58,7 @@ zoomMenuItemSus_UI <- function(id,
         font-size:100%;
       vertical-align: center;
       horizontal-align: left;",
+      
       actionBttn(
         inputId = ns("Id114"),
         label = provided_label,
@@ -58,13 +81,13 @@ zoomMenuItemSus_UI <- function(id,
       id = ns("bttn_panel"),
       absolutePanel(
         id = "dropPanel", class = "panel panel-default",
-        draggable = TRUE, top = 240, left = 270, 
+        draggable = TRUE, top = 260, left = 270, 
         width = "40%", height = "50%",
         style="z-index:600;
        # overflow-y:scroll;
         color: #FFFFFF; 
-        background-color: #3C3C3B95; 
-        border-color: #0096C995; 
+        background-color: #3C3C3B00; 
+        border-color: #0096C900; 
         border-radius: 30px; 
         border-width: 1px;  
         padding:5px; 
@@ -102,11 +125,13 @@ zoomMenuItemSus_Server <- function(input, output, session, zoom) {
   output$bttn <- reactive({
     
     even <- input$Id114[1] %% 2 != 0
-    print(even)
+    #print(even)
     return(even)
     
   })
   outputOptions(output, "bttn", suspendWhenHidden = FALSE)
+  
+  
   
 }
 

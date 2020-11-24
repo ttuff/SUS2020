@@ -42,6 +42,8 @@ library(shinipsum)
 library(fakir)
 library(shiny.i18n)
 library(googleLanguageR)
+library(shinyanimate)
+library(aniview)
 
 
 #i18n <- Translator$new(translation_json_path = "www/translation.json")
@@ -158,6 +160,163 @@ colors <- as.character(color_scale$fill)
 default_background_color <- "transparent"
 default_font_color <- "black"
 default_font_family <- "Helvetica"
+
+#### Animation function
+
+animateCSS <- function(effect, delay = 0, duration = 500, then = NULL){
+  effect <- match.arg(effect, c(
+    "bounce",
+    "flash",
+    "pulse",
+    "rubberBand",
+    "shakeX",
+    "shakeY",
+    "headShake",
+    "swing",
+    "tada",
+    "wobble",
+    "jello",
+    "heartBeat",
+    "backInDown",
+    "backInLeft",
+    "backInRight",
+    "backInUp",
+    "backOutDown",
+    "backOutLeft",
+    "backOutRight",
+    "backOutUp",
+    "bounceIn",
+    "bounceInDown",
+    "bounceInLeft",
+    "bounceInRight",
+    "bounceInUp",
+    "bounceOut",
+    "bounceOutDown",
+    "bounceOutLeft",
+    "bounceOutRight",
+    "bounceOutUp",
+    "fadeIn",
+    "fadeInDown",
+    "fadeInDownBig",
+    "fadeInLeft",
+    "fadeInLeftBig",
+    "fadeInRight",
+    "fadeInRightBig",
+    "fadeInUp",
+    "fadeInUpBig",
+    "fadeInTopLeft",
+    "fadeInTopRight",
+    "fadeInBottomLeft",
+    "fadeInBottomRight",
+    "fadeOut",
+    "fadeOutDown",
+    "fadeOutDownBig",
+    "fadeOutLeft",
+    "fadeOutLeftBig",
+    "fadeOutRight",
+    "fadeOutRightBig",
+    "fadeOutUp",
+    "fadeOutUpBig",
+    "fadeOutTopLeft",
+    "fadeOutTopRight",
+    "fadeOutBottomRight",
+    "fadeOutBottomLeft",
+    "flip",
+    "flipInX",
+    "flipInY",
+    "flipOutX",
+    "flipOutY",
+    "lightSpeedInRight",
+    "lightSpeedInLeft",
+    "lightSpeedOutRight",
+    "lightSpeedOutLeft",
+    "rotateIn",
+    "rotateInDownLeft",
+    "rotateInDownRight",
+    "rotateInUpLeft",
+    "rotateInUpRight",
+    "rotateOut",
+    "rotateOutDownLeft",
+    "rotateOutDownRight",
+    "rotateOutUpLeft",
+    "rotateOutUpRight",
+    "hinge",
+    "jackInTheBox",
+    "rollIn",
+    "rollOut",
+    "zoomIn",
+    "zoomInDown",
+    "zoomInLeft",
+    "zoomInRight",
+    "zoomInUp",
+    "zoomOut",
+    "zoomOutDown",
+    "zoomOutLeft",
+    "zoomOutRight",
+    "zoomOutUp",
+    "slideInDown",
+    "slideInLeft",
+    "slideInRight",
+    "slideInUp",
+    "slideOutDown",
+    "slideOutLeft",
+    "slideOutRight",
+    "slideOutUp"
+  ))
+  js <- paste(
+    "    $this.animateCSS('%s', {",
+    "      delay: %d,",
+    "      duration: %d,",
+    "      callback: function(){",
+    "        %s",
+    "      }",
+    "    });",
+    sep = "\n"
+  )
+  sprintf(js, effect, delay, duration, ifelse(is.null(then), "", then))
+}
+
+onShowJS <- function(animation, fadeDuration){
+  sprintf(paste(
+    "$('#%%s>div').on('show', function(){",
+    "  var $this = $(this);",
+    "  $this.css('opacity', 0).animate({opacity: 1}, %d, function(){",
+    animation,
+    "  });",
+    "});",
+    sep = "\n"
+  ), fadeDuration)
+}
+
+onHideJS <- function(animation, fadeDuration){
+  paste(
+    "$('#%s>div').on('hide', function(){",
+    "  var $this = $(this);",
+    "  setTimeout(function(){",
+    sub(
+      "^(\\s.*?\\$this\\.animateCSS)",
+      "$this.show().animateCSS",
+      sub(
+        "\\{\n        \n      \\}",
+        sprintf("{$this.hide(%d);}", fadeDuration),
+        animation
+      )
+    ),
+    "  }, 0);",
+    "});",
+    sep = "\n"
+  )
+}
+
+animatedConditionalPanel <-
+  function(condition, ..., onShow = NULL, fadeIn = 600, onHide = NULL, fadeOut = 400){
+    id <- paste0("animateCSS-", stringi::stri_rand_strings(1, 15))
+    jsShow <- ifelse(!is.null(onShow), sprintf(onShowJS(onShow, fadeIn), id), "")
+    jsHide <- ifelse(!is.null(onHide), sprintf(onHideJS(onHide, fadeOut), id), "")
+    script <- tags$script(HTML(paste(jsShow,jsHide,sep="\n")))
+    condPanel <- conditionalPanel(condition, ...)
+    tags$div(id=id, tagList(condPanel, script))
+  }
 
 
 # Drop down list for variable selection -----------------------------------

@@ -27,7 +27,7 @@ titletextSus_UI <- function(id,i18n
         border-width: 1px;  
         padding:5px; 
         font-size:100%",
-      h2(title),
+      h1(title),
       p(textAboveSplit),
       actionLink(ns("title_more_info"), i18n$t("Learn more"),
                  style="vertical-align: top;
