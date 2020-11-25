@@ -53,7 +53,7 @@ i18n <- Translator$new(translation_csvs_path = "translations/")
 #i18n <- init_i18n(translation_json_path = "www/translation.json")
 # change this to the target language
 i18n$set_translation_language("fr")
-#i18n$set_translation_language("en")
+# i18n$set_translation_language("en")
 print(i18n$t("Learn more"))
 #HTML(as.character(usei18n(i18n)))
 

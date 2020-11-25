@@ -198,9 +198,18 @@ js_ped_control <- "$(document).ready(function(){
 });
 "
 
-Pedestrian_realm_module_server <- function(id) {
+Pedestrian_realm_module_server <- function(id, i18n) {
   moduleServer(id,function(input, output, session) {
     ns <- NS(id)
+    
+    i18n_reactive <- reactive({
+      selected <- input$selected_language
+      if (length(selected) > 0 && selected %in% i18n$get_languages()) {
+        i18n$set_translation_language(selected)
+        update_lang(global_session, selected)
+      }
+      i18n
+    })
     
     output$bivariate_legend_ped <- renderImage({
       filename <- normalizePath(file.path("www/bivariate_legend_2.png"))
@@ -450,10 +459,10 @@ Pedestrian_realm_module_server <- function(id) {
     # Set title across zoom levels
     output$title_text_ped <- renderText({
       if( rz_pedestrian$zoom == "OUT"){
-        paste0(i18n$t("Pedestrian capacity for social distancing (census tracts)"))
+        paste0(i18n_reactive()$t("Pedestrian capacity for social distancing (census tracts)"))
       } else if (rz_pedestrian$zoom == "IN") {
-        i18n$t("Pedestrian capacity for social distancing (dissemination areas)")  
-      } else {i18n$t("Explore sidewalks and parks")}
+        i18n_reactive()$t("Pedestrian capacity for social distancing (dissemination areas)")  
+      } else {i18n_reactive()$t("Explore sidewalks and parks")}
     })
     
     # Hide extra text
@@ -1200,21 +1209,23 @@ Pedestrian_realm_module_server <- function(id) {
     
     output$did_you_know_ped <- renderUI({
       if (rz_pedestrian$zoom == "OUT") {
-        did_you_know %>% 
+        d <- did_you_know %>% 
           filter(right_variable == "ct_ped") %>% 
           pull(text) %>% 
           paste("<li> ", ., collapse = "") %>%
-          paste0("<ul>", ., "</ul>") %>%
+          paste0("<ul>", ., "</ul>") 
+        
+        i18n_reactive()$t(d) %>% 
           HTML()
       }
       else if (rz_pedestrian$zoom == "IN" & input$switch_biv == FALSE) {
-        did_you_know %>%
-          filter(right_variable == "da_ped") %>%
-          slice_sample(n = 2) %>%
-          pull(text) %>%
-          paste("<li> ", ., collapse = "") %>%
-          paste0("<ul>", ., "</ul>") %>%
-          HTML()
+      #   did_you_know %>%
+      #     filter(right_variable == "da_ped") %>%
+      #     slice_sample(n = 2) %>%
+      #     pull(text) %>%
+      #     paste("<li> ", ., collapse = "") %>%
+      #     paste0("<ul>", ., "</ul>") %>%
+      #     HTML()
       }
       
       else if (rz_pedestrian$zoom == "IN" & input$switch_biv == TRUE) {
