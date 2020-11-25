@@ -55,7 +55,7 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
         condition = "output.zoom == 'IN'", ns = ns ,
         id = ns("plotContainer_ped_control"),
         materialSwitch(inputId = ns("switch_biv"), 
-                       label = h3(strong("Perform a Bivariate Analysis", 
+                       label = h3(strong(i18n$t("Perform a Bivariate Analysis"), 
                                          style = "color:#B2D235")), 
                        status = "primary", value = FALSE),
         conditionalPanel(
@@ -64,7 +64,7 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
           selectInput(ns("data_for_plot_ped"), 
                       label = h4(tags$span(
                         style = "color:#3C3C3B", 
-                        "Select your second variable")), 
+                        i18n$t("Select your second variable"))), 
                       selected = "agg_proximity_score", 
                       choices = list(
                         "Walkable Access to Key Amenities" = 
@@ -85,29 +85,29 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
         hr(),
         fluidRow(
           column(width = 8,
-                 h4("Montreal Covid-19 Expanded Active Transit Corridors")),
+                 h4(i18n$t("Montreal Covid-19 Expanded Active Transit Corridors"))),
           column(width = 4, align = "right",
                  actionLink(inputId = ns("vas_hide_explore"),
                             label = "Hide"))),
         conditionalPanel(
           condition = "output.vas_hide_explore_status == 1", ns = ns ,
           materialSwitch(inputId = ns("vas_1"), 
-                         label = "Original Plan (May 15, 2020)", 
+                         label = i18n$t("Original Plan (May 15, 2020)"), 
                          status = "info", value = FALSE),
           materialSwitch(inputId = ns("vas_2"), 
-                         label = "Revised Plan (July 25, 2020)", 
+                         label = i18n$t("Revised Plan (July 25, 2020)"), 
                          status = "info", value = FALSE)),
         hr(),
         selectInput(
           inputId = ns("variable_ped"),
-          label = h4("Choose more variables and explore further"), 
+          label = h4(i18n$t("Choose more variables and explore further")), 
           choices = list("Population density per square km" = 1, 
                          "Pedestrian social distancing capacity" = 2, 
                          "Work commutes by car (%)" = 3, 
                          "Trajet MTL 2016 data on pedestrian flows" = 4),
           selected = 1),
         h5(tags$em(tags$span(style = "color:#3C3C3B", 
-                             "Play with the slider to filter the map"))), 
+                             i18n$t("Play with the slider to filter the map")))), 
         h5(chooseSliderSkin(skin = "Flat",
                             #c("Shiny", "Flat", "Modern", "Nice", "Simple", "HTML5", "Round", "Square"),
                             color = "#B2D235"),
@@ -116,7 +116,7 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
       hr(),
       fluidRow(
         column(width = 8,
-               h4("Explore")),
+               h4(i18n$t("Explore"))),
         column(width = 4, align = "right",
                actionLink(inputId = ns("pedestrian_hide_explore"),
                           label = "Hide"))),
@@ -131,7 +131,7 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
       hr(),
       fluidRow(
         column(width = 8,
-               h4("Did you know?")),
+               h4(i18n$t("Did you know?"))),
         column(width = 4, align = "right",
                actionLink(inputId = ns("pedestrian_hide_dyk"),
                           label = "Hide"))),
@@ -475,11 +475,11 @@ Pedestrian_realm_module_server <- function(id, i18n) {
     observeEvent(input$more_info_ped, {
       
       if (input$more_info_ped %% 2 == 1) {
-        txt <- "Hide"
+        txt <- i18n_reactive()$t("Hide")
       } else {
-        txt <- "Learn more"
+        txt <- i18n_reactive()$t("Learn more")
       }
-      updateActionButton(session, ns("more_info_ped"), label = txt)
+      updateActionButton(session, "more_info_ped", label = txt)
       
     })
     
@@ -488,12 +488,13 @@ Pedestrian_realm_module_server <- function(id, i18n) {
       input$pedestrian_hide_explore %% 2 == 0
     })
     
+    
     outputOptions(output, "pedestrian_hide_explore_status", suspendWhenHidden = FALSE)
     
     observeEvent(input$pedestrian_hide_explore, {
       
-      if (input$pedestrian_hide_explore %% 2 == 0) txt <- "Hide" else txt <- "Show"
-      updateActionButton(session, ns("pedestrian_hide_explore"), label = txt)
+      if (input$pedestrian_hide_explore %% 2 == 0) txt <- i18n_reactive()$t("Hide") else txt <- i18n_reactive()$t("Show")
+      updateActionButton(session, "pedestrian_hide_explore", label = txt)
       
     })
     
