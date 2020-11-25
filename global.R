@@ -17,7 +17,7 @@ library(geojsonsf)
 library(tidyverse)
 library(raster)
 library(mapboxapi)
-library(mapdeck)
+
 library(markdown)
 library(shinyjqui)
 library(plotly)

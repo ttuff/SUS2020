@@ -1,6 +1,12 @@
 ---
-output: html_document
-geometry: "left=0,right=0,top=0,bottom=0"
+output:
+  html_document:
+    pandoc_args: --number-offset=1,0
+    fig_caption: yes
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
+geometry: left=0,right=0,top=0,bottom=0
 ---
 
 ```{css, echo=FALSE}
@@ -18,7 +24,7 @@ knitr::knit_hooks$set(webgl = hook_webgl)
 ```
 
 
-```{r, webgl=TRUE,  echo = FALSE, fig.height = 4, fig.width = 4}
+```{r, webgl=TRUE,  echo = FALSE, fig.height = 4, fig.width = 6}
 library(rgl)
 #invisible(open3d())
 lat <- matrix(seq(90,-90, len=50)*pi/180, 50, 50, byrow=TRUE)
@@ -37,7 +43,7 @@ obj <- c(persp3d(x, y, z, col="white",
          spheres3d(matrix(0, 9, 3), col = cols, radius = rs))
 
 rgl.viewpoint( theta = 24, phi = 90,  zoom = .55, interactive = TRUE )
- par3d(windowRect = c(0, 0, 400, 400))
+ par3d(windowRect = c(0, 0, 600, 400))
 #rglwidget(elementId = "earth")
 ```
 
