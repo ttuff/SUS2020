@@ -60,14 +60,14 @@ zoomMenuSus_UI <- function(id,i18n, zoom
 
 zoomMenuSus_Server <- function(input, output, session, zoom) {
   observe(print(zoom()))
-  zoom_menu_zoom <- reactiveValues(zoom = 'a')
+  zoom_menu_zoom <- reactiveValues(zoom = 'h')
   
   output$zoomBreak <- reactive({
     #break_data
     
     even <- break_data[which(break_data[,1] %in% round(zoom(), digits=1) == TRUE),2]
-    #print(even)
-    if(even != 'factor(0)'){
+    print(length(even))
+    if(length(even) != 0){
     zoom_menu_zoom$zoom <- even
     }
     return(even)

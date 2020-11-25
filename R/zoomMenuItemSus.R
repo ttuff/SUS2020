@@ -92,7 +92,7 @@ zoomMenuItemSus_UI <- function(id,
         border-width: 1px;  
         padding:5px; 
         font-size:100%",
-        tags$iframe(src = './02-Vignette.html', # put myMarkdown.html to /www
+        tags$iframe(src = './Rmarkdown_Knits/globe/3d-stuff.html', # put myMarkdown.html to /www
                     width = '100%', height = '100%',
                     frameborder = 0, scrolling = 'auto',
                     style="z-index:600;
@@ -124,7 +124,7 @@ zoomMenuItemSus_Server <- function(input, output, session, zoom) {
   #observe(print(input$bttn1))
   output$bttn <- reactive({
     
-    even <- input$Id114[1] %% 2 != 0
+    even <- input$Id114[1] %% 2 == 0
     #print(even)
     return(even)
     
