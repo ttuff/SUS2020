@@ -48,7 +48,7 @@ library(aniview)
 
 #i18n <- Translator$new(translation_json_path = "www/translation.json")
 i18n <- Translator$new(translation_csvs_path = "translations/")
-#print(i18n$t("Hello Shiny!"))
+# print(i18n$t("Hello Shiny!"))
 #i18n <- Translator$new(automatic = TRUE)
 #i18n <- init_i18n(translation_json_path = "www/translation.json")
 # change this to the target language

@@ -3,7 +3,7 @@ Biodiversity,la biodiversité
 Add title as titletextSus_UI(title = 'my title'),Ajouter le titre en tant que titletextSus_UI (title = 'mon titre')
 Add text as titletextSus_UI(textAboveSplit = 'short description'),Ajoutez du texte comme titletextSus_UI (textAboveSplit = 'short description')
 Add text as titletextSus_UI(textBelowSplit = 'long description'),Ajouter du texte comme titletextSus_UI (textBelowSplit = 'longue description')
-Learn more,Apprendre encore plus
+Learn more,En savoir plus
 SUS Preview,Sus Aperçu
 "The whole of an ecosystem is more than the sum of its parts. The health and resilience of our urban green spaces are determined by the quantity, quality, and composition of the species with cohabitat with.","L'ensemble d'un écosystème est plus que la somme de ses parties. La santé et la résilience de nos espaces verts urbains sont déterminées par la quantité, la qualité et la composition des espèces avec lesquelles cohabitent."
 Montreal's biodiversity is the result of many competing factors...,La biodiversité de Montréal est le résultat de nombreux facteurs concurrents …
@@ -17,13 +17,28 @@ Sus aims to more accurately represent and better engage urban residents in order
 Further resources:,Autres ressources:
 Active living potential,Potentiel de vie actif
 Commuter mode switching,Changement de mode de banlieue
-Pedestrian realm,Royaume des piétons
+Pedestrian realm,La voie piétonne
 Why a dashboard?,Pourquoi un tableau de bord?
 Meet the team,Rencontrer l'équipe
 Nature-based solutions,Solutions basées sur la nature
 Simulation,Simulation
 Built environment,Environnement construit
-Pedestrian capacity for social distancing (census tracts),Pedestrian capacity for social distancing (census tracts)
-Pedestrian capacity for social distancing (dissemination areas),Pedestrian capacity for social distancing (dissemination areas)
+Pedestrian capacity for social distancing (census tracts),Capacité de distanciation sociale dans la voie piétonne (secteur de recensement) 
+Pedestrian capacity for social distancing (dissemination areas),Capacité de distanciation sociale dans la voie piétonne (aire de dissémination)
 Explore sidewalks and parks,Explorez les trottoirs et les parcs
 "<ul><li>  The top 3 boroughs that have the highest proportion of people living in census tracts with a low capacity for pedestrian physical distancing were 1) Le Plateau-Mont-Royal (74%), 2) Villeray-Saint-Michel-Parc-Extension (65%) and 3) Montréal Nord (60%).</ul>",<ul><li>  Test </ul>
+Perform a Bivariate Analysis,Effectuez une analyse à deux variables
+Select your second variable,Choisissez votre deuxième variable
+Walkable Access to Key Amenities,Accessibilité piétonne à des services clefs   
+Net Median Income,Revenu médian net 
+Visible Minority Population Proportion,Minorité Visible (proportion de la population)
+Immigrant Population Proportion,Immigrant (proportion de la population)
+Hide,Cacher
+Montreal Covid-19 Expanded Active Transit Corridors,Voies actives et sécuritaires de la Ville de Montréal (Covid-19)
+"Original Plan (May 15, 2020)","Plan Initial (15 Mai, 2020)"
+"Revised Plan (July 25, 2020)","Plan Révisé (25 Juillet, 2020)"
+Choose more variables and explore further,Ajoutez d’autres variables à votre analyse afin d’explorer davantage 
+Play with the slider to filter the map,Jouez avec le curseur afin de filtrer et modifier la carte
+Explore,Explorez
+Did you know?,Saviez-vous?
+Show,Montrer
