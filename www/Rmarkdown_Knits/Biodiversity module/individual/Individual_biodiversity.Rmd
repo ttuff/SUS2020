@@ -1,0 +1,47 @@
+---
+title: 
+output:
+  html_document:
+    fig_caption: yes
+    number_sections: yes
+geometry: left=0,right=0,top=0,bottom=0
+---
+
+```{css, echo=FALSE}
+ body {
+  background-color: transparent;
+   color: #FFFFFF;
+}
+```
+
+```{r, setup, echo = FALSE, warning=FALSE, error=FALSE}
+library(rgl)
+library(readobj)
+knitr::knit_hooks$set(webgl = hook_webgl)
+ bg3d( alpha=0)
+
+```
+
+
+
+```{r, webgl=TRUE, echo=FALSE, warning=FALSE, error=FALSE, fig.pos = "t", fig.height=4, fig.width=6}
+#invisible(open3d())
+cuber=read.obj(f="/Users/Ty/Downloads/cgaxis_models_76_22_obj/cgaxis_models_76_22_obj.obj",
+        convert.rgl=FALSE)
+    cubesl=tinyobj2shapelist3d(cuber)
+      shade3d(cubesl[[1]], material = list(color = "brown", shininess = 1, texture="/Users/Ty/Downloads/cgaxis_models_76_22_obj/maps/cgaxis_models_76_22_01_bump.png"))
+      shade3d(cubesl[[2]], material = list(color = "green", shininess = 1))
+      rgl.viewpoint(theta = 0, phi = 15, zoom=0.65, interactive = FALSE)
+       par3d(windowRect = c(0, 0, 600, 400))
+       #play3d( spin3d( axis = c(0, 1, 0), rpm = 2), duration = 10 )
+```
+
+# Behavioral interactions
+
+The individual scale is dominated by behavioral interactions between individuals of the same species and individiuals of different species. 
+
+## Text-A-TREE 
+
+The city of Melbourne, Australia implemented a project where they gave each tree an E-mail address where people could send letters to individuals trees and most of those letters ended up being love letters and Thanks you letters for the services the tree had provided those people. 
+
+

@@ -32,7 +32,8 @@ zoomMenuItemSus_UI <- function(id,
                                i18n, 
                                from_the_top,
                                provided_icon,
-                               provided_label
+                               provided_label,
+                               link = "./Rmarkdown_Knits/globe/3d-stuff.html"
 ){ 
   
   ns <- NS(id)
@@ -92,7 +93,7 @@ zoomMenuItemSus_UI <- function(id,
         border-width: 1px;  
         padding:5px; 
         font-size:100%",
-        tags$iframe(src = './Rmarkdown_Knits/globe/3d-stuff.html', # put myMarkdown.html to /www
+        tags$iframe(src = link, # put myMarkdown.html to /www
                     width = '100%', height = '100%',
                     frameborder = 0, scrolling = 'auto',
                     style="z-index:600;

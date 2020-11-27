@@ -1,0 +1,74 @@
+---
+output:
+  html_document:
+    pandoc_args: --number-offset=1,0
+    fig_caption: yes
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
+geometry: left=0,right=0,top=0,bottom=0
+---
+
+```{css, echo=FALSE}
+ body {
+  background-color: transparent;
+   color: #FFFFFF;
+}
+```
+
+```{r, setup, echo = FALSE}
+library(rgl)
+knitr::knit_hooks$set(webgl = hook_webgl)
+ bg3d( alpha=0)
+
+```
+
+
+```{r, webgl=TRUE,  echo = FALSE, fig.height = 4, fig.width = 6}
+library(rgl)
+#invisible(open3d())
+lat <- matrix(seq(90,-90, len=50)*pi/180, 50, 50, byrow=TRUE)
+long <- matrix(seq(-180, 180, len=50)*pi/180, 50, 50)
+r <- 6378.1 # radius of Earth in km
+x <- r*cos(lat)*cos(long); y <- r*cos(lat)*sin(long)
+z <- r*sin(lat)
+cols <- c(rep("chocolate4",4), rep("burlywood1", 4), "darkgoldenrod1")
+rs <- c(6350, 5639, 4928.5, 4207, 3486, 
+                         (3486+2351)/2, 2351, (2351+1216)/2, 1216)
+obj <- c(persp3d(x, y, z, col="white", 
+          texture=system.file("textures/world.png",package="rgl"), 
+          specular="white", axes=FALSE, box=FALSE, 
+          xlab="", ylab="", zlab="",
+          normal_x=x, normal_y=y, normal_z=z, lit=FALSE),
+         spheres3d(matrix(0, 9, 3), col = cols, radius = rs))
+
+rgl.viewpoint( theta = 24, phi = 90,  zoom = .55, interactive = TRUE )
+ par3d(windowRect = c(0, 0, 600, 400))
+#rglwidget(elementId = "earth")
+```
+
+
+
+```{r, webgl=TRUE}
+open3d()
+shade3d(readOBJ("/Users/Ty/Downloads/cgaxis_models_76_22_obj/cgaxis_models_76_22_obj.obj", material = list(color = "green", shininess = 1)))
+```
+
+```{r, eval=-FALSE}
+library(readobj)
+cube=read.obj(f="/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/www/Rmarkdown_Knits/globe/gull_obj/CaliforniaGull_obj.obj", materialspath = "/Users/Ty/Downloads/cgaxis_models_76_22_obj/cgaxis_models_76_22_obj.mtl",
+        convert.rgl=TRUE)
+   str(cube, max.level = 3)
+    
+cubes=tinyobj2shapelist3d(cube)
+      shade3d(cubes)
+```
+
+
+```{r, eval=FALSE}
+cuber=read.obj(f="/Users/Ty/Downloads/cgaxis_models_76_22_obj/cgaxis_models_76_22_obj.obj", materialspath = "/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/www/Rmarkdown_Knits/globe/gull_obj/",
+        convert.rgl=FALSE)
+    cubesl=tinyobj2shapelist3d(cuber)
+      shade3d(cubesl)
+```
+

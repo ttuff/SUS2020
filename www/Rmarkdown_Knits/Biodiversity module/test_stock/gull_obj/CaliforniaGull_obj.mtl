@@ -1,0 +1,35 @@
+newmtl bodyShaderSG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd body_diffuse.jpg
+bump body_bump.jpg -bm 0.1
+Ni 1.00
+Ks 0.00 0.00 0.00
+map_Ks body_specular.jpg
+newmtl feathers:shaders:shaders:featherShaderSG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd feathers_diffuse.jpg
+bump feathers_bump.jpg -bm 0.1
+Ni 1.00
+Ks 0.00 0.00 0.00
+map_Ks feathers_specular.jpg
+newmtl shaders:shaders:eyeShaderSG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 0.03 0.03 0.03
+Ni 1.00
+Ks 1.00 1.00 1.00
+newmtl shaders:shaders:irisShaderSG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd body_diffuse.jpg
+bump body_bump.jpg -bm 0.1
+Ni 1.00
