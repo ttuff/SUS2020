@@ -51,13 +51,13 @@ rgl.viewpoint( theta = 24, phi = 90,  zoom = .55, interactive = TRUE )
 
 ```{r, webgl=TRUE}
 open3d()
-shade3d(readOBJ("/Users/Ty/Downloads/cgaxis_models_76_22_obj/cgaxis_models_76_22_obj.obj", material = list(color = "green", shininess = 1)))
+#shade3d(readOBJ("/Users/Ty/Downloads/cgaxis_models_76_22_obj/cgaxis_models_76_22_obj.obj", material = list(color = "green", shininess = 1)))
 ```
 
 ```{r, eval=-FALSE}
 library(readobj)
-cube=read.obj(f="/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/www/Rmarkdown_Knits/globe/gull_obj/CaliforniaGull_obj.obj", materialspath = "/Users/Ty/Downloads/cgaxis_models_76_22_obj/cgaxis_models_76_22_obj.mtl",
-        convert.rgl=TRUE)
+#cube=read.obj(f="/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/www/Rmarkdown_Knits/globe/gull_obj/CaliforniaGull_obj.obj", materialspath = "/Users/Ty/Downloads/cgaxis_models_76_22_obj/cgaxis_models_76_22_obj.mtl",
+#        convert.rgl=TRUE)
    str(cube, max.level = 3)
     
 cubes=tinyobj2shapelist3d(cube)
@@ -66,8 +66,8 @@ cubes=tinyobj2shapelist3d(cube)
 
 
 ```{r, eval=FALSE}
-cuber=read.obj(f="/Users/Ty/Downloads/cgaxis_models_76_22_obj/cgaxis_models_76_22_obj.obj", materialspath = "/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/www/Rmarkdown_Knits/globe/gull_obj/",
-        convert.rgl=FALSE)
+#cuber=read.obj(f="/Users/Ty/Downloads/cgaxis_models_76_22_obj/cgaxis_models_76_22_obj.obj", materialspath = "/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/www/Rmarkdown_Knits/globe/gull_obj/",
+#        convert.rgl=FALSE)
     cubesl=tinyobj2shapelist3d(cuber)
       shade3d(cubesl)
 ```

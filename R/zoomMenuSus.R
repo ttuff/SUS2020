@@ -23,7 +23,7 @@ zoomMenuSus_UI <- function(id,i18n, zoom
       condition = "output.zoom_back == 'a'", ns = ns ,
       id = ns("bttn1"),
     zoomMenuItemSus_UI(ns("item1"), i18n =  i18n, from_the_top = 105, 
-                       link = "./Rmarkdown_Knits/Biodiversity module/individual/Individual_biodiversity.html",
+                       link = "./Rmarkdown_Knits/Biodiversity module/global/global_biodiversity.html",
                        provided_icon = icon("globe"),provided_label="Globe")),
     conditionalPanel(
       condition = "output.zoom_back == 'b'", ns = ns ,
@@ -59,7 +59,7 @@ zoomMenuSus_UI <- function(id,i18n, zoom
       condition = "output.zoom_back == 'g'", ns = ns ,
       id = ns("bttn7"),
     zoomMenuItemSus_UI(ns("item7"), i18n =  i18n, from_the_top = 480, 
-                       link = "./Rmarkdown_Knits/Biodiversity module/individual/Individual_biodiversity.html",
+                       link = "./Rmarkdown_Knits/Biodiversity module/park/park_biodiversity.html",
                        provided_icon = icon("globe"),provided_label="Park")),
     conditionalPanel(
       condition = "output.zoom_back == 'h'", ns = ns ,

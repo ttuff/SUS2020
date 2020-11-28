@@ -14,27 +14,38 @@ geometry: left=0,right=0,top=0,bottom=0
 }
 ```
 
-```{r, setup, echo = FALSE, warning=FALSE, error=FALSE}
+```{r, setup, include=FALSE}
 library(rgl)
 library(readobj)
+library(here)
 knitr::knit_hooks$set(webgl = hook_webgl)
  bg3d( alpha=0)
 
 ```
 
 
-
 ```{r, webgl=TRUE, echo=FALSE, warning=FALSE, error=FALSE, fig.pos = "t", fig.height=4, fig.width=6}
 #invisible(open3d())
-cuber=read.obj(f="/Users/Ty/Downloads/cgaxis_models_76_22_obj/cgaxis_models_76_22_obj.obj",
+rgl.clear()
+cuber=read.obj(f=here("www/Rmarkdown_Knits/Biodiversity module/individual/treeOBJ/cgaxis_models_76_22_obj.obj"),
         convert.rgl=FALSE)
     cubesl=tinyobj2shapelist3d(cuber)
-      shade3d(cubesl[[1]], material = list(color = "brown", shininess = 1, texture="/Users/Ty/Downloads/cgaxis_models_76_22_obj/maps/cgaxis_models_76_22_01_bump.png"))
+      shade3d(cubesl[[1]])
       shade3d(cubesl[[2]], material = list(color = "green", shininess = 1))
-      rgl.viewpoint(theta = 0, phi = 15, zoom=0.65, interactive = FALSE)
-       par3d(windowRect = c(0, 0, 600, 400))
-       #play3d( spin3d( axis = c(0, 1, 0), rpm = 2), duration = 10 )
+      
+       
+       
+  bench_set=read.obj(f=here("www/Rmarkdown_Knits/Biodiversity module/individual/benchOBJ/bench_v01.obj"),
+        convert.rgl=FALSE)
+    bench_setTiny=tinyobj2shapelist3d(bench_set)
+    #bench_setTiny
+    bench_setTiny %>% translate3d( x=100, y=0, z=0) %>%
+      shade3d(material = list(color = "white", shininess = 1))
+    par3d(windowRect = c(0, 0, 600, 400))
+    rgl.viewpoint(theta = 60, phi = -15, zoom=0.65, interactive = FALSE)
+       
 ```
+
 
 # Behavioral interactions
 
