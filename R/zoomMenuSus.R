@@ -23,49 +23,49 @@ zoomMenuSus_UI <- function(id,i18n, zoom
       condition = "output.zoom_back == 'a'", ns = ns ,
       id = ns("bttn1"),
     zoomMenuItemSus_UI(ns("item1"), i18n =  i18n, from_the_top = 105, 
-                       link = "./Rmarkdown_Knits/Biodiversity module/global/global_biodiversity.html",
+                       link = "./Rmarkdown_Knits/Biodiversity_module/global/global_biodiversity.html",
                        provided_icon = icon("globe"),provided_label="Globe")),
     conditionalPanel(
       condition = "output.zoom_back == 'b'", ns = ns ,
       id = ns("bttn2"),
     zoomMenuItemSus_UI(ns("item2"), i18n =  i18n, from_the_top = 145, 
-                       link = "./Rmarkdown_Knits/Biodiversity module/individual/continental_biodiversity.html",
+                       link = "./Rmarkdown_Knits/Biodiversity_module/individual/continental_biodiversity.html",
                        provided_icon = icon("globe"),provided_label="Continent")),
     conditionalPanel(
       condition = "output.zoom_back == 'c'", ns = ns ,
       id = ns("bttn3"),
     zoomMenuItemSus_UI(ns("item3"), i18n =  i18n, from_the_top = 210, 
-                       link = "./Rmarkdown_Knits/Biodiversity module/individual/Individual_biodiversity.html",
+                       link = "./Rmarkdown_Knits/Biodiversity_module/individual/Individual_biodiversity.html",
                        provided_icon = icon("globe"),provided_label="Region")),
     conditionalPanel(
       condition = "output.zoom_back == 'd'", ns = ns ,
       id = ns("bttn4"),
     zoomMenuItemSus_UI(ns("item4"), i18n =  i18n, from_the_top = 275, 
-                       link = "./Rmarkdown_Knits/Biodiversity module/individual/Individual_biodiversity.html",
+                       link = "./Rmarkdown_Knits/Biodiversity_module/individual/Individual_biodiversity.html",
                        provided_icon = icon("globe"),provided_label="Sub-region")),
     conditionalPanel(
       condition = "output.zoom_back == 'e'", ns = ns ,
       id = ns("bttn5"),
     zoomMenuItemSus_UI(ns("item5"), i18n =  i18n, from_the_top = 330, 
-                       link = "./Rmarkdown_Knits/Biodiversity module/individual/Individual_biodiversity.html",
+                       link = "./Rmarkdown_Knits/Biodiversity_module/individual/Individual_biodiversity.html",
                        provided_icon = icon("globe"),provided_label="Community")),
     conditionalPanel(
       condition = "output.zoom_back == 'f'", ns = ns ,
       id = ns("bttn6"),
     zoomMenuItemSus_UI(ns("item6"), i18n =  i18n, from_the_top = 410, 
-                       link = "./Rmarkdown_Knits/Biodiversity module/individual/Individual_biodiversity.html",
+                       link = "./Rmarkdown_Knits/Biodiversity_module/individual/Individual_biodiversity.html",
                        provided_icon = icon("globe"),provided_label="Population")),
     conditionalPanel(
       condition = "output.zoom_back == 'g'", ns = ns ,
       id = ns("bttn7"),
     zoomMenuItemSus_UI(ns("item7"), i18n =  i18n, from_the_top = 480, 
-                       link = "./Rmarkdown_Knits/Biodiversity module/park/park_biodiversity.html",
+                       link = "./Rmarkdown_Knits/Biodiversity_module/park/park_biodiversity.html",
                        provided_icon = icon("globe"),provided_label="Park")),
     conditionalPanel(
       condition = "output.zoom_back == 'h'", ns = ns ,
       id = ns("bttn8"),
     zoomMenuItemSus_UI(ns("item8"), i18n =  i18n, from_the_top = 545, 
-                       link = "./Rmarkdown_Knits/Biodiversity module/individual/Individual_biodiversity.html",
+                       link = "./Rmarkdown_Knits/Biodiversity_module/individual/Individual_biodiversity.html",
                        provided_icon = icon("globe"),provided_label="Individual"))
     
       
