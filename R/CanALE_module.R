@@ -106,6 +106,7 @@ CanALE_module_server <- function(id) {
                function(input, output, session) {
                  ns <- NS(id)
                  ## save colors
+                 
                  bivariate_color_scale <- tibble(
                    "3 - 3" = "#2A5A5B",
                    "2 - 3" = "#567994",
