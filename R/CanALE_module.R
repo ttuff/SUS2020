@@ -65,7 +65,7 @@ CanALE_module_UI <- function(id) {
                h4(i18n$t("Explore"))),
         column(width = 4, align = "right",
                actionLink(inputId = ns("active_hide_explore"),
-                          label = "Hide"))),
+                          label = i18n$t("Hide")))),
       conditionalPanel(
         condition = "output.active_hide_explore_status == 1",ns=ns,
         htmlOutput(ns("active_info")),
@@ -83,7 +83,7 @@ CanALE_module_UI <- function(id) {
                h4(i18n$t("Did you know?"))),
         column(width = 4, align = "right",
                actionLink(inputId = ns("active_hide_dyk"),
-                          label = "Hide"))),
+                          label = i18n$t("Hide")))),
       conditionalPanel(
         condition = "output.active_hide_dyk_status == 1",
         htmlOutput(ns("did_you_know")))
@@ -858,7 +858,7 @@ $(document).ready(function(){
                  
                  observeEvent(input$more_info, {
                    
-                   if (input$more_info %% 2 == 1) txt <- "Hide" else txt <- sus_translate("Learn more")
+                   if (input$more_info %% 2 == 1) txt <- sus_translate("Hide") else txt <- sus_translate("Learn more")
                    updateActionButton(session, "more_info", label = txt)
                    
                  })
@@ -870,7 +870,7 @@ $(document).ready(function(){
                  
                  observeEvent(input$active_hide_compare, {
                    
-                   if (input$active_hide_compare %% 2 == 0) txt <- "Hide" else txt <- sus_translate("Show")
+                   if (input$active_hide_compare %% 2 == 0) txt <- sus_translate("Hide") else txt <- sus_translate("Show")
                    updateActionButton(session, "active_hide_compare", label = txt)
                    
                  })
@@ -882,7 +882,7 @@ $(document).ready(function(){
                  
                  observeEvent(input$active_hide_explore, {
                    
-                   if (input$active_hide_explore %% 2 == 0) txt <- "Hide" else txt <- sus_translate("Show")
+                   if (input$active_hide_explore %% 2 == 0) txt <- sus_translate("Hide") else txt <- sus_translate("Show")
                    updateActionButton(session, "active_hide_explore", label = txt)
                    
                  })
@@ -893,7 +893,7 @@ $(document).ready(function(){
                  
                  observeEvent(input$active_hide_dyk, {
                    
-                   if (input$active_hide_dyk %% 2 == 0) txt <- "Hide" else txt <- sus_translate("Show")
+                   if (input$active_hide_dyk %% 2 == 0) txt <- sus_translate("Hide") else txt <- sus_translate("Show")
                    updateActionButton(session, "active_hide_dyk", label = txt)
                    
                  })
