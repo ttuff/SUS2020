@@ -39,7 +39,7 @@ library(gghighlight)
 library(qs)
 library(glue)
 library(shinipsum)
-library(fakir)
+# library(fakir)
 library(shiny.i18n)
 library(googleLanguageR)
 library(shinyanimate)
@@ -56,6 +56,14 @@ i18n$set_translation_language("fr")
 # i18n$set_translation_language("en")
 print(i18n$t("Learn more"))
 #HTML(as.character(usei18n(i18n)))
+
+
+# load translations
+translation_fr <- read_csv("translations/translation_fr.csv")
+
+# creation o r to store all our reactive values like active_language which will
+# be called with r$active_language()
+r <- reactiveValues() # r to store all our reactive values
 
 
 #create_translation_file("/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/www/translation.json", type = "json", handle = "i18n", output = "/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/www/translation.json")
