@@ -161,7 +161,17 @@ shinyUI(
       background-color: #FFFFFF;
       }
                                 '))),
-      languageButton_UI("language_button", i18n = i18n),
+      absolutePanel(
+        id = "language_button", style="z-index:10000; border-color: #FFFFFF00; background-color: #FFFFFF00;", 
+        class = "panel panel-default", top = 10, right = 70, width = 0, height = 0,
+        tagList(usei18n(i18n),
+                actionButton("language_button", label = "English",
+                             style="color: #3C3C3B; background-color: #0096C950; 
+                       border-color: #FFFFFF;border-radius: 50px; 
+                       border-width: 1px;  padding:7px; font-size:100%")
+                
+        )
+      ),
       
       
       
