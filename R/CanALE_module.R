@@ -101,10 +101,8 @@ CanALE_module_UI <- function(id) {
   )
 }
 
-CanALE_module_server <- function(id) {
-  moduleServer(id,
-               function(input, output, session) {
-                 ns <- NS(id)
+CanALE_module_server <- function(input, output, session, r) {
+  ns <- session$ns
                  ## save colors
                  
                  bivariate_color_scale <- tibble(
@@ -325,15 +323,15 @@ $(document).ready(function(){
                  output$active_info <- renderUI({
                    
                    scale_singular <- case_when(
-                     rz$zoom == "OUT" ~ "borough/city",
-                     rz$zoom == "IN" ~ "census tract",
-                     TRUE ~ "dissemination area"
+                     rz$zoom == "OUT" ~ sus_translate("borough/city"),
+                     rz$zoom == "IN" ~ sus_translate("census tract"),
+                     TRUE ~ sus_translate("dissemination area")
                    )
                    
                    scale_plural <- case_when(
-                     scale_singular == "borough/city" ~ "boroughs or cities",
-                     scale_singular == "census tract" ~ "census tracts",
-                     scale_singular == "dissemination area" ~ "dissemination areas"
+                     scale_singular == sus_translate("borough/city") ~ sus_translate("boroughs or cities"),
+                     scale_singular == sus_translate("census tract") ~ sus_translate("census tracts"),
+                     scale_singular == sus_translate("dissemination area") ~ sus_translate("dissemination areas")
                    )
                    
                    vec <- 
@@ -938,4 +936,3 @@ $(document).ready(function(){
                  
                  
     }
-  )}
