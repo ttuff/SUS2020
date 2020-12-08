@@ -103,7 +103,6 @@ shinyServer(function(input, output, session) {
   languageButton_Server("language_button", global_session = session)
   
   
-  
   # observeEvent(input$language_switch, {
   #   print(input$language_switch)
   #   if(input$language_switch == TRUE){
