@@ -367,7 +367,7 @@ $(document).ready(function(){
                        
                        place_name <- case_when(
                          scale_singular ==  sus_translate("borough/city") ~ 
-                           glue(sus_translate(paste0("{dat$name}"))),
+                           glue("{dat$name}"),
                          scale_singular ==  sus_translate("census tract") ~ 
                            glue(sus_translate(paste0("Census tract {dat$name}"))),
                          scale_singular ==  sus_translate("dissemination area") ~ 
@@ -377,7 +377,7 @@ $(document).ready(function(){
                        place_heading <- 
                          if_else(scale_singular == sus_translate("borough/city"),
                                  glue(sus_translate(paste0("{dat$name_2} of {place_name}"))),
-                                 glue(sus_translate(paste0("{place_name} ({dat$name_2})"))))
+                                 glue("{place_name} ({dat$name_2})"))
                        
                        poly_value <- dat$left_variable_full
                        
@@ -505,7 +505,7 @@ $(document).ready(function(){
                        #print("polyselect")
                        place_name <- case_when(
                          scale_singular == sus_translate("borough/city") ~ 
-                           glue(sus_translate(paste0("{dat$name}"))),
+                           glue("{dat$name}"),
                          scale_singular == sus_translate("census tract") ~ 
                            glue(sus_translate(paste0("Census tract {dat$name}"))),
                          scale_singular == sus_translate("dissemination area") ~ 
@@ -515,7 +515,7 @@ $(document).ready(function(){
                        place_heading <- 
                          if_else(scale_singular == sus_translate("borough/city"),
                                  glue(sus_translate(paste0("{dat$name_2} of {place_name}"))),
-                                 glue(sus_translate(paste0("{place_name} ({dat$name_2})"))))
+                                 glue("{place_name} ({dat$name_2})"))
                        
                        
                        percentile_left <- 
