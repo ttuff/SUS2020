@@ -22,11 +22,11 @@ CanALE_module_UI <- function(id) {
   absolutePanel(
     id = "title_bar", class = "panel panel-default", 
     draggable = FALSE, top = 70, left = 270, width = "40%",
-    h2("Active living potential: the CanALE index"),
-    p(title_text %>% 
+    h2(i18n$t("Active living potential: the CanALE index")),
+    p(i18n$t(title_text %>% 
         filter(tab == "active", type == "main") %>% 
-        pull(text)),
-    actionLink(ns("more_info"), "Learn more"),
+        pull(text))),
+    actionLink(ns("more_info"), i18n$t("Learn more")),
     conditionalPanel(
       condition = "output.more_info_status == 1", ns=ns,
       HTML(title_text %>% 
@@ -46,10 +46,10 @@ CanALE_module_UI <- function(id) {
     
     # Compare panel
     fluidRow(
-      column(width = 8, h4("Compare")),
+      column(width = 8, h4(i18n$t("Compare"))),
       column(width = 4, align = "right",
              actionLink(inputId = ns("active_hide_compare"), 
-                        label = "Hide"))),
+                        label = i18n$t("Hide")))),
     conditionalPanel(
       condition = "output.active_hide_compare_status == 1", ns=ns,
       selectInput(ns("data_for_plot_right"), label = NULL, 
@@ -62,7 +62,7 @@ CanALE_module_UI <- function(id) {
       # Explore panel
       fluidRow(
         column(width = 8,
-               h4("Explore")),
+               h4(i18n$t("Explore"))),
         column(width = 4, align = "right",
                actionLink(inputId = ns("active_hide_explore"),
                           label = "Hide"))),
@@ -80,7 +80,7 @@ CanALE_module_UI <- function(id) {
       # DYK panel
       fluidRow(
         column(width = 8,
-               h4("Did you know?")),
+               h4(i18n$t("Did you know?"))),
         column(width = 4, align = "right",
                actionLink(inputId = ns("active_hide_dyk"),
                           label = "Hide"))),
@@ -354,11 +354,11 @@ $(document).ready(function(){
                      if (is.na(rz$poly_selected)) {
                        
                        HTML(
-                         glue("At the {scale_singular} scale, the CanALE index varies from ",
+                         glue(sus_translate(paste0("At the {scale_singular} scale, the CanALE index varies from ",
                               "{min_val} to {max_val}, with an average value of {mean_val} ",
                               "and a median value of {median_val}. ",
                               "Two thirds of {scale_plural} have a score between {quant_low} ",
-                              "and {quant_high}."))  
+                              "and {quant_high}."))))  
                        
                        # Case for selected poly
                      } else {
@@ -366,35 +366,35 @@ $(document).ready(function(){
                        dat <- data_bivar() %>% filter(ID == rz$poly_selected)
                        
                        place_name <- case_when(
-                         scale_singular == "borough/city" ~ 
-                           glue("{dat$name}"),
-                         scale_singular == "census tract" ~ 
-                           glue("Census tract {dat$name}"),
-                         scale_singular == "dissemination area" ~ 
-                           glue("Dissemination area {dat$name}")
+                         scale_singular ==  sus_translate("borough/city") ~ 
+                           glue(sus_translate(paste0("{dat$name}"))),
+                         scale_singular ==  sus_translate("census tract") ~ 
+                           glue(sus_translate(paste0("Census tract {dat$name}"))),
+                         scale_singular ==  sus_translate("dissemination area") ~ 
+                           glue(sus_translate(paste0("Dissemination area {dat$name}")))
                        )
                        
                        place_heading <- 
-                         if_else(scale_singular == "borough/city",
-                                 glue("{dat$name_2} of {place_name}"),
-                                 glue("{place_name} ({dat$name_2})"))
+                         if_else(scale_singular == sus_translate("borough/city"),
+                                 glue(sus_translate(paste0("{dat$name_2} of {place_name}"))),
+                                 glue(sus_translate(paste0("{place_name} ({dat$name_2})"))))
                        
                        poly_value <- dat$left_variable_full
                        
                        quintile <- quantile(vec, c(0.2, 0.4, 0.6, 0.8))
                        
                        larger_smaller <- case_when(
-                         poly_value >= quintile[4] ~ "much larger than",
-                         poly_value >= quintile[3] ~ "larger than",
-                         poly_value >= quintile[2] ~ "almost the same as",
-                         poly_value >= quintile[1] ~ "smaller than",
-                         TRUE ~ "much smaller than"
+                         poly_value >= quintile[4] ~ sus_translate("much larger than"),
+                         poly_value >= quintile[3] ~ sus_translate("larger than"),
+                         poly_value >= quintile[2] ~ sus_translate("almost the same as"),
+                         poly_value >= quintile[1] ~ sus_translate("smaller than"),
+                         TRUE ~ sus_translate("much smaller than")
                        )
                        
                        poor_strong <- case_when(
-                         str_detect(larger_smaller, "larger") ~ "strong",
-                         str_detect(larger_smaller, "smaller") ~ "poor",
-                         TRUE ~ "moderate"
+                         str_detect(larger_smaller, sus_translate("larger")) ~ sus_translate("strong"),
+                         str_detect(larger_smaller, sus_translate("smaller")) ~ sus_translate("poor"),
+                         TRUE ~ sus_translate("moderate")
                        )
                        
                        percentile <- 
@@ -403,14 +403,16 @@ $(document).ready(function(){
                        
                        # Special case for Kahnawake
                        if (dat$ID %in% c(56, "4620832.00", 24670285)) {
-                         HTML(paste0("<strong>Kahnawake Mohawk Territory</strong>",
+                         HTML(
+                           glue(sus_translate(paste0("<strong>Kahnawake Mohawk Territory</strong>",
                                      "<p>Statistics Canada does not gather the same ",
                                      "data for indigenous reserves in the Census as it does ",
                                      "for other jurisdictions, so we cannot display findings ",
-                                     "here."))
+                                     "here."))))
                        } else {
                          
-                         HTML(glue("<strong>{place_heading}</strong>", 
+                         HTML(
+                           glue(sus_translate(paste0("<strong>{place_heading}</strong>", 
                                    
                                    "<p>{place_name} has a population of ",
                                    "{prettyNum(dat$population, ',')} and a CanALE index ",
@@ -419,7 +421,7 @@ $(document).ready(function(){
                                    
                                    "<p>{place_name} has {poor_strong} potential for active ", 
                                    "living, with a CanALE index score higher than {percentile}% ",
-                                   "of {scale_plural} in the Montreal region."))
+                                   "of {scale_plural} in the Montreal region."))))
                          
                        }
                        
@@ -443,19 +445,19 @@ $(document).ready(function(){
                            data_bivar()$right_variable_full) %>% 
                        round(2)
                      
-                     pos_neg <- if_else(correlation > 0, "positive", "negative")
+                     pos_neg <- if_else(correlation > 0, sus_translate("positive"), sus_translate("negative"))
                      
                      strong_weak <- case_when(
-                       abs(correlation) > 0.6 ~ "strong",
-                       abs(correlation) > 0.3 ~ "moderate",
+                       abs(correlation) > 0.6 ~ sus_translate("strong"),
+                       abs(correlation) > 0.3 ~ sus_translate("moderate"),
                        TRUE ~ "weak")
                      
-                     higher_lower <- if_else(pos_neg == "positive", "higher", "lower")
+                     higher_lower <- if_else(pos_neg == sus_translate("positive"), sus_translate("higher"), sus_translate("lower"))
                      
                      high_low_disclaimer <- case_when(
-                       strong_weak == "strong" ~ "with only a few exceptions",
-                       strong_weak == "moderate" ~ "although with some exceptions",
-                       strong_weak == "weak" ~ "although with many exceptions",
+                       strong_weak == sus_translate("strong") ~ sus_translate("with only a few exceptions"),
+                       strong_weak == sus_translate("moderate") ~ sus_translate("although with some exceptions"),
+                       strong_weak == sus_translate("weak") ~ sus_translate("although with many exceptions"),
                      )
                      
                      # Case for no poly selected
@@ -464,24 +466,26 @@ $(document).ready(function(){
                        # If correlation is close to zero
                        if (correlation < 0.05 && correlation > -0.05) {
                          
-                         HTML(glue(
+                         HTML(
+                           glue(sus_translate(paste0(
                            "<p>{var_explanation}", 
                            "<p>The CanALE index has effectively no correlation ",
                            "({correlation}) with {var_name} at the ",
                            "{scale_singular} scale.",
                            "<p>This means that, at the {scale_singular} scale, ", 
-                           "there is no relationship between the two variables."))
+                           "there is no relationship between the two variables."))))
                          
                        } else {
                          
-                         HTML(glue(
+                         HTML(
+                           glue(sus_translate(paste0(
                            "<p>{var_explanation}", 
                            "<p>The CanALE index has a {strong_weak} {pos_neg} ",
                            "correlation ({correlation}) with '{tolower(var_name)}' at the ",
                            "{scale_singular} scale.",
                            "<p>This means that, in general, {scale_plural} with higher ",
                            "potential for active living tend to have {higher_lower} ",
-                           "values for '{tolower(var_name)}', {high_low_disclaimer}."))
+                           "values for '{tolower(var_name)}', {high_low_disclaimer}."))))
                          
                        }
                        
@@ -500,18 +504,18 @@ $(document).ready(function(){
                        
                        #print("polyselect")
                        place_name <- case_when(
-                         scale_singular == "borough/city" ~ 
-                           glue("{dat$name}"),
-                         scale_singular == "census tract" ~ 
-                           glue("Census tract {dat$name}"),
-                         scale_singular == "dissemination area" ~ 
-                           glue("Dissemination area {dat$name}")
+                         scale_singular == sus_translate("borough/city") ~ 
+                           glue(sus_translate(paste0("{dat$name}"))),
+                         scale_singular == sus_translate("census tract") ~ 
+                           glue(sus_translate(paste0("Census tract {dat$name}"))),
+                         scale_singular == sus_translate("dissemination area") ~ 
+                           glue(sus_translate(paste0("Dissemination area {dat$name}")))
                        )
                        
                        place_heading <- 
-                         if_else(scale_singular == "borough/city",
-                                 glue("{dat$name_2} of {place_name}"),
-                                 glue("{place_name} ({dat$name_2})"))
+                         if_else(scale_singular == sus_translate("borough/city"),
+                                 glue(sus_translate(paste0("{dat$name_2} of {place_name}"))),
+                                 glue(sus_translate(paste0("{place_name} ({dat$name_2})"))))
                        
                        
                        percentile_left <- 
@@ -524,22 +528,24 @@ $(document).ready(function(){
                          round()
                        
                        relative_position <- case_when(
-                         abs(percentile_left - percentile_right) > 50 ~ "dramatically different",
-                         abs(percentile_left - percentile_right) > 30 ~ "substantially different",
-                         abs(percentile_left - percentile_right) > 10 ~ "considerably different",
+                         abs(percentile_left - percentile_right) > 50 ~ sus_translate("dramatically different"),
+                         abs(percentile_left - percentile_right) > 30 ~ sus_translate("substantially different"),
+                         abs(percentile_left - percentile_right) > 10 ~ sus_translate("considerably different"),
                          TRUE ~ "similar"
                        )
                        
                        # Special case for Kahnawake
                        if (dat$ID %in% c(56, "4620832.00", 24670285)) {
-                         HTML(paste0("<strong>Kahnawake Mohawk Territory</strong>",
+                         HTML(
+                           glue(sus_translate(paste0("<strong>Kahnawake Mohawk Territory</strong>",
                                      "<p>Statistics Canada does not gather the same ",
                                      "data for indigenous reserves in the Census as it does ",
                                      "for other jurisdictions, so we cannot display findings ",
-                                     "here."))
+                                     "here."))))
                        } else {
                          
-                         HTML(glue("<strong>{place_heading}</strong>", 
+                         HTML(
+                           glue(sus_translate(paste0("<strong>{place_heading}</strong>", 
                                    
                                    "<p>{place_name} has a population of ",
                                    "{prettyNum(dat$population, ',')}, a CanALE index score ",
@@ -551,7 +557,7 @@ $(document).ready(function(){
                                    "than {percentile_left}% of {scale_plural} and ",
                                    "a '{tolower(var_name)}' score higher than ", 
                                    "{percentile_right}% of {scale_plural} in the ",
-                                   "Montreal region."))
+                                   "Montreal region."))))
                          
                        }
                        
@@ -852,7 +858,7 @@ $(document).ready(function(){
                  
                  observeEvent(input$more_info, {
                    
-                   if (input$more_info %% 2 == 1) txt <- "Hide" else txt <- "Learn more"
+                   if (input$more_info %% 2 == 1) txt <- "Hide" else txt <- sus_translate("Learn more")
                    updateActionButton(session, "more_info", label = txt)
                    
                  })
@@ -864,7 +870,7 @@ $(document).ready(function(){
                  
                  observeEvent(input$active_hide_compare, {
                    
-                   if (input$active_hide_compare %% 2 == 0) txt <- "Hide" else txt <- "Show"
+                   if (input$active_hide_compare %% 2 == 0) txt <- "Hide" else txt <- sus_translate("Show")
                    updateActionButton(session, "active_hide_compare", label = txt)
                    
                  })
@@ -876,7 +882,7 @@ $(document).ready(function(){
                  
                  observeEvent(input$active_hide_explore, {
                    
-                   if (input$active_hide_explore %% 2 == 0) txt <- "Hide" else txt <- "Show"
+                   if (input$active_hide_explore %% 2 == 0) txt <- "Hide" else txt <- sus_translate("Show")
                    updateActionButton(session, "active_hide_explore", label = txt)
                    
                  })
@@ -887,7 +893,7 @@ $(document).ready(function(){
                  
                  observeEvent(input$active_hide_dyk, {
                    
-                   if (input$active_hide_dyk %% 2 == 0) txt <- "Hide" else txt <- "Show"
+                   if (input$active_hide_dyk %% 2 == 0) txt <- "Hide" else txt <- sus_translate("Show")
                    updateActionButton(session, "active_hide_dyk", label = txt)
                    
                  })

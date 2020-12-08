@@ -176,7 +176,7 @@ translation_fr <-
                       "and a median value of {median_val}. ",
                       "Two thirds of {scale_plural} have a score between {quant_low} ",
                       "and {quant_high}."),
-          fr = paste0("À l'échelle {scale_singular}, l'index CanALE varie de ",
+          fr = paste0("À l'échelle {scale_singular}, l'index AVA-Can varie de ",
                       "{min_val} à {max_val}, avec une valeur moyenne de {mean_val} ",
                       "et une valeur médianne de {median_val}. ",
                       "Deux tiers {scale_plural} ont un score se situant entre {quant_low} ",
@@ -193,6 +193,8 @@ translation_fr <-
                       "autochtones que dans les autres juridictions, nous ne ",
                       "pouvons donc pas afficher de résultats ici.")) %>%
   # CanALE active living potential
+  add_row(en = "Active living potential: the CanALE index",
+          fr = "Potentiel de vie active: l'index AVA-Can") %>% 
   add_row(en = paste0("<strong>{place_heading}</strong>", 
                       
                       "<p>{place_name} has a population of ",

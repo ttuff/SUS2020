@@ -64,13 +64,13 @@ sus_translate <- function(to_translate) {
       
       # if it's in french
     } else if (r$active_language() == "fr") {
-      if (is.character(to_translate)) {
+      # if ((is.character(to_translate)) == T) {
         translation_fr %>%
           filter(en == to_translate) %>%
           pull()
-      } else if (is.list(to_translate)) {
-        sus_translation_list
-      }
+      # } else if (is.list(to_translate)) {
+      #   sus_translation_list
+      # }
       
     }
 }
