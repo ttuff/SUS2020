@@ -100,8 +100,27 @@ shinyServer(function(input, output, session) {
     )
   
   
-  languageButton_Server("language_button", global_session = session)
+  # Language button
+  r$active_language <- eventReactive(input$language_button, {
+    if((input$language_button[1] %% 2) != 0){
+      c("en")
+    } else {
+      c("fr")
+    }
+  }, ignoreNULL = FALSE)
   
+  observeEvent(input$language_button,{
+    if((input$language_button[1] %% 2) != 0){
+      updateActionButton(session, "language_button",
+                         label = "Français")
+      update_lang(session, "en")
+      
+    } else {
+      updateActionButton(session, "language_button",
+                         label = "English")
+      update_lang(session, "fr")
+    }
+  })
   
   
   # observeEvent(input$language_switch, {
@@ -119,8 +138,7 @@ shinyServer(function(input, output, session) {
   
   ### Active living potential ##################################################
   
-  CanALE_module_server("CanALE_module")
-  
+  callModule(CanALE_module_server, id = "CanALE_module", session = session, r = r)    
   
   ##############################################################################
   

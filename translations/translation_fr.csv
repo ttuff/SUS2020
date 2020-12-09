@@ -1,44 +1,150 @@
-﻿en,fr
-Biodiversity,la biodiversité
+en,fr
+Biodiversity,Biodiversité
 Add title as titletextSus_UI(title = 'my title'),Ajouter le titre en tant que titletextSus_UI (title = 'mon titre')
-Add text as titletextSus_UI(textAboveSplit = 'short description'),Ajoutez du texte comme titletextSus_UI (textAboveSplit = 'short description')
+Add text as titletextSus_UI(textAboveSplit = 'short description'),Ajoutez du texte comme titletextSus_UI (textAboveSplit = 'short description'
 Add text as titletextSus_UI(textBelowSplit = 'long description'),Ajouter du texte comme titletextSus_UI (textBelowSplit = 'longue description')
 Learn more,En savoir plus
-SUS Preview,Sus Aperçu
-"The whole of an ecosystem is more than the sum of its parts. The health and resilience of our urban green spaces are determined by the quantity, quality, and composition of the species with cohabitat with.","L'ensemble d'un écosystème est plus que la somme de ses parties. La santé et la résilience de nos espaces verts urbains sont déterminées par la quantité, la qualité et la composition des espèces avec lesquelles cohabitent."
-Montreal's biodiversity is the result of many competing factors...,La biodiversité de Montréal est le résultat de nombreux facteurs concurrents …
+Compare,Comparez
+SUS Preview,Aperçu du SUS
+"The whole of an ecosystem is more than the sum of its parts. The health and resilience of our urban green spaces are determined by the quantity, quality, and composition of the species with cohabitat with.","L'ensemble d'un écosystème est plus que la somme de ses parties. La santé et la résilience de nos espaces verts urbains sont déterminées par la quantité, la qualité et la composition des espèces avec lesquelles nous cohabitons."
+Montreal's biodiversity is the result of many competing factors...,La biodiversité de Montréal est le résultat de nombreux facteurs concurrents...
 Hello Shiny!,French
-"Dashboards offer a tool for communicating sustainability data in a visually based digital platform. We see a gap in current dashboards going beyond the visualization of pre-existing data at static scales, leaving room for a more future-oriented, scalable, and interactive model.","Les tableaux de bord offrent un outil pour communiquer les données de durabilité dans une plate-forme numérique visuelle. Nous constatons une lacune dans les tableaux de bord actuels allant au-delà de la visualisation de données préexistantes à des échelles statiques, laissant la place à un modèle plus orienté vers l'avenir, évolutif et interactif."
-"Existing data-driven approaches to urban sustainability are characterized by static data, limited user interaction, and the oversimplification of complex urban issues. They provide little opportunity for user engagement and exploration of questions connecting different data and issues.","Les approches existantes de la durabilité urbaine fondées sur les données se caractérisent par des données statiques, une interaction limitée des utilisateurs et la simplification excessive de problèmes urbains complexes. Elles offrent peu d’opportunités pour l’engagement des utilisateurs et l’exploration de questions reliant différentes données et problèmes."
-"Some of the limitations of existing dashboards include a bias towards quantifiable, measurable components of sustainability, and a reliance on data with potential bias. Furthermore, they often attempt to play the role of a neutral force to communicate “objective” information on cities.","Certaines des limites des tableaux de bord existants incluent un biais en faveur de composants quantifiables et mesurables de durabilité et une dépendance à l'égard des données avec un biais potentiel. De plus, ils tentent souvent de jouer le rôle d'une force neutre pour communiquer des informations «objectives» sur les villes."
-Sustainability dashboards should build upon best practices to provide useful tools for individuals and cities alike to examine the many facets of urban sustainability and question existing assumptions.,Les tableaux de bord de durabilité devraient s'appuyer sur les meilleures pratiques pour fournir des outils utiles aux particuliers et aux villes pour examiner les nombreuses facettes de la durabilité urbaine et remettre en question les hypothèses existantes.
-"Maintaining transparency with data and methodologies, ensuring public participation and accurate representation of underprivileged communities, and using engaging and accessible tools contribute to the success of a dashboard.","Le maintien de la transparence des données et des méthodologies, la garantie de la participation du public et une représentation précise des communautés défavorisées, et l'utilisation d'outils attrayants et accessibles contribuent au succès d'un tableau de bord."
-Sus aims to more accurately represent and better engage urban residents in order to harness the momentum surrounding technologically-based approaches to sustainability for public good.,Sus vise à représenter plus précisément et à mieux impliquer les résidents urbains afin d'exploiter l'élan entourant les approches technologiques de la durabilité pour le bien public.
-Further resources:,Autres ressources:
-Active living potential,Potentiel de vie actif
-Commuter mode switching,Changement de mode de banlieue
-Pedestrian realm,La voie piétonne
+"Dashboards offer a tool for communicating sustainability data in a visually based digital platform. We see a gap in current dashboards going beyond the visualization of pre-existing data at static scales, leaving room for a more future-oriented, scalable, and interactive model.","Les tableaux de bord offrent un outil pour communiquer des données sur le développment durable dans une plate-forme numérique visuelle. Nous constatons une lacune dans les tableaux de bord actuels allant au-delà de la visualisation de données préexistantes à des échelles statiques, laissant la place à un modèle plus orienté vers l'avenir, modulable et interactif."
+"Existing data-driven approaches to urban sustainability are characterized by static data, limited user interaction, and the oversimplification of complex urban issues. They provide little opportunity for user engagement and exploration of questions connecting different data and issues.","Les approches actuelles fondées sur les données étudiant la durabilité urbaine se caractérisent par des données statiques, une interaction limitée pour les utilisateurs et une simplification excessive de problèmes urbains complexes. Elles offrent peu d’opportunités pour l’engagement des utilisateurs et l’exploration de questions reliant différentes données et problèmes."
+"Some of the limitations of existing dashboards include a bias towards quantifiable, measurable components of sustainability, and a reliance on data with potential bias. Furthermore, they often attempt to play the role of a neutral force to communicate “objective” information on cities.","Parmi les limites des tableaux de bord existants, on peut citer la préférence accordée aux éléments quantifiables et mesurables de la durabilité, et la dépendance à l'égard de données potentiellement biaisées. En outre, ils tentent souvent de jouer le rôle d'une force neutre pour communiquer des informations “objectives” sur les villes."
+Sustainability dashboards should build upon best practices to provide useful tools for individuals and cities alike to examine the many facets of urban sustainability and question existing assumptions.,Les tableaux de bord sur la durabilité devraient s'appuyer sur les meilleures pratiques afin de fournir des outils utiles aux individus comme aux villes pour examiner les nombreuses facettes de la durabilité urbaine et remettre en question les hypothèses existantes.
+"Maintaining transparency with data and methodologies, ensuring public participation and accurate representation of underprivileged communities, and using engaging and accessible tools contribute to the success of a dashboard.","Maintenir la transparence des données et des méthodologies, s'assurer de la participation du public et de la représentation exacte des communautés défavorisées, ainsi qu'utiliser des outils attrayants et accessibles contribuent au succès d'un tableau de bord."
+Sus aims to more accurately represent and better engage urban residents in order to harness the momentum surrounding technologically-based approaches to sustainability for public good.,Sus vise à représenter plus justement et à mieux impliquer les résidents urbains afin d'exploiter le momentum entourant les approches technologiques de la durabilité pour le bien public.
+Further resources:,Ressources additionnelles
+Active living potential,Potentiel de vie active
+Commuter mode switching,Changement de mode de transport
+Pedestrian realm,La sphère piétonne
 Why a dashboard?,Pourquoi un tableau de bord?
-Meet the team,Rencontrer l'équipe
+Meet the team,Rencontrez l'équipe
 Nature-based solutions,Solutions basées sur la nature
 Simulation,Simulation
-Built environment,Environnement construit
-Pedestrian capacity for social distancing (census tracts),Capacité de distanciation sociale dans la voie piétonne (secteur de recensement) 
-Pedestrian capacity for social distancing (dissemination areas),Capacité de distanciation sociale dans la voie piétonne (aire de dissémination)
+Built environment,Le cadre bâti
+Pedestrian capacity for social distancing (census tracts),Capacité de distanciation sociale dans la voie piétonne (secteur de recensement)
+Pedestrian capacity for social distancing (dissemination areas),Capacité de distanciation sociale dans la voie piétonne (aire de diffusion)
 Explore sidewalks and parks,Explorez les trottoirs et les parcs
-"<ul><li>  The top 3 boroughs that have the highest proportion of people living in census tracts with a low capacity for pedestrian physical distancing were 1) Le Plateau-Mont-Royal (74%), 2) Villeray-Saint-Michel-Parc-Extension (65%) and 3) Montréal Nord (60%).</ul>",<ul><li>  Test </ul>
-Perform a Bivariate Analysis,Effectuez une analyse à deux variables
+"<ul><li>  The top 3 boroughs that have the highest proportion of people living in census tracts with a low capacity for pedestrian physical distancing were 1) Le Plateau-Mont-Royal (74%), 2) Villeray-Saint-Michel-Parc-Extension (65%) and 3) Montréal Nord (60%).</ul>","<ul><li>  Les trois arrondissements ayant la plus grande proportion de personnes vivant dans des secteurs de recensement avec une faible capacité pour une distanciation physique piétonne sont 1) Le Plateau-Mont-Royal (74%), 2) Villeray-Saint-Michel-Parc-Extension (65%) and 3) Montréal Nord (60%).</ul>"
 Select your second variable,Choisissez votre deuxième variable
-Walkable Access to Key Amenities,Accessibilité piétonne à des services clefs   
-Net Median Income,Revenu médian net 
-Visible Minority Population Proportion,Minorité Visible (proportion de la population)
+Net Median Income,Revenu médian net
+Visible Minority Population Proportion,Minorité visible (proportion de la population)
 Immigrant Population Proportion,Immigrant (proportion de la population)
-Hide,Cacher
 Montreal Covid-19 Expanded Active Transit Corridors,Voies actives et sécuritaires de la Ville de Montréal (Covid-19)
-"Original Plan (May 15, 2020)","Plan Initial (15 Mai, 2020)"
-"Revised Plan (July 25, 2020)","Plan Révisé (25 Juillet, 2020)"
-Choose more variables and explore further,Ajoutez d’autres variables à votre analyse afin d’explorer davantage 
 Play with the slider to filter the map,Jouez avec le curseur afin de filtrer et modifier la carte
 Explore,Explorez
 Did you know?,Saviez-vous?
-Show,Montrer
+Housing,Logement
+Income,Revenu
+Immigration,Immigration
+Transportation,Déplacement domicile-travail
+borough/city,de l'arrondissement/de la ville
+boroughs or cities,des arrondissements ou des villes
+census tract,du secteur de recensement
+census tracts,des secteurs de recensement
+dissemination area,de l'aire de diffusion
+dissemination areas,des aires de diffusion
+Census tract {dat$name},Secteur de recensement {dat$name}
+Dissemination area {dat$name},Aire de diffusion {dat$name}
+{dat$name_2} of {place_name},{dat$name_2} de {place_name}
+Tenant-occupied (%),Occupé par locataire (%)
+Average rent,Loyer moyen
+Average property value,Value foncière moyenne
+Unaffordable housing (%),Logement inabordable (%)
+Unsuitable housing (%),Logement inadéquat (%)
+Median household income,Revenu médian des ménages
+Income under $50k (%),Revenu inférieur à 50k (%)
+Income between $50k-$100k (%),Revenu entre 50k-100k (%)
+Income above $100k (%),Revenu supérieur à 100k (%)
+Immigrants (%),Immigrants (%)
+New immigrants (%),Nouveaux immigrants (%)
+Drive to work (%),Conducteur ou passager (%)
+Walk or cycle to work (%),À pied ou à vélo (%)
+Public transit to work (%),Transport en commun (%)
+15 minutes to work (%),Trajet de 15 minutes (%)
+15-30 minutes to work (%),Trajet de 15-30 minutes (%)
+30-45 minutes to work (%),Trajet de 30-45 minutes (%)
+45-60 minutes to work (%),Trajet de 45-60 minutes (%)
+----,----
+much larger than,beaucoup plus grand que
+larger than,plus grand que
+almost the same as,presque le même que
+smaller than,plus petit que
+much smaller than,beaucoup plus petit que
+larger,plus grand
+smaller,plus petit
+strong,fort
+poor,faible
+moderate,modéré
+positive,positive
+negative,négative
+weak,faible
+higher,plus grandes
+lower,plus petites
+with only a few exceptions,à quelques exceptions près
+although with some exceptions,bien qu'avec des exceptions
+although with many exceptions,bien qu'avec beaucoup d'exceptions
+dramatically different,radicalement différents
+substantially different,sensiblement différents
+considerably different,modérément différents
+"At the {scale_singular} scale, the CanALE index varies from {min_val} to {max_val}, with an average value of {mean_val} and a median value of {median_val}. Two thirds of {scale_plural} have a score between {quant_low} and {quant_high}.","À l'échelle {scale_singular}, l'index AVA-Can varie de {min_val} à {max_val}, avec une valeur moyenne de {mean_val} et une valeur médianne de {median_val}. Deux tiers {scale_plural} ont un score se situant entre {quant_low} et {quant_high}."
+"<strong>Kahnawake Mohawk Territory</strong><p>Statistics Canada does not gather the same data for indigenous reserves in the Census as it does for other jurisdictions, so we cannot display findings here.","<strong>Kahnawake (Réserve indienne)</strong><p>Dans le cadre du recensement, Statistique Canada ne recueille pas les mêmes données pour les réservesautochtones que dans les autres juridictions, nous ne pouvons donc pas afficher de résultats ici."
+Active living potential: the CanALE index,Potentiel de vie active: l'index AVA-Can
+"<strong>{place_heading}</strong><p>{place_name} has a population of {prettyNum(dat$population, ',')} and a CanALE index score of {round(poly_value, 2)}, which is {larger_smaller} the region-wide median of {median_val}.<p>{place_name} has {poor_strong} potential for active living, with a CanALE index score higher than {percentile}% of {scale_plural} in the Montreal region.","<strong>{place_heading}</strong><p>{place_name} a une population de {prettyNum(dat$population, ',')} et un score d'index AVA-Can de {round(poly_value, 2)}, ce qui est {larger_smaller} la médiane régionale de {median_val}.<p>{place_name} a un potentiel {poor_strong} de vie active, avec un score d'index AVA-Can plus grand que {percentile}% des {scale_plural} dans la région de Montréal."
+"<p>{var_explanation}<p>The CanALE index has effectively no correlation ({correlation}) with {var_name} at the {scale_singular} scale.<p>This means that, at the {scale_singular} scale, there is no relationship between the two variables.","<p>{var_explanation}<p>L'index AVA-Can n'a en fait aucune corrélation ({correlation}) avec {var_name} à l'échelle '{scale_singular}'.<p>Cela signifie que, à l'échelle '{scale_singular}', il n'y a pas de relation entre ces deux variables."
+"<p>{var_explanation}<p>The CanALE index has a {strong_weak} {pos_neg} correlation ({correlation}) with '{tolower(var_name)}' at the {scale_singular} scale.<p>This means that, in general, {scale_plural} with higher potential for active living tend to have {higher_lower} values for '{tolower(var_name)}', {high_low_disclaimer}.","<p>{var_explanation}<p>L'index AVA-Can a un index de corrélation {strong_weak} et {pos_neg} ({correlation}) avec '{tolower(var_name)}' à l'échelle '{scale_singular}'.<p>Cela signifie qu'en général, les {scale_plural} avec un haut potentiel de vie active tendent à avoir des {higher_lower} valeurs pour '{tolower(var_name)}', {high_low_disclaimer}."
+"<strong>{place_heading}</strong><p>{place_name} has a population of {prettyNum(dat$population, ',')}, a CanALE index score of {round(poly_value_1, 2)}, and a '{tolower(var_name)}' value of {round(poly_value_2, 2)}. <p>These two scores are {relative_position}, in relative terms. {place_name} has a CanALE index score higher than {percentile_left}% of {scale_plural} and a '{tolower(var_name)}' score higher than {percentile_right}% of {scale_plural} in the Montreal region.","<strong>{place_heading}</strong><p>{place_name} a une population de {prettyNum(dat$population, ',')}, un score d'index AVA-Can de {round(poly_value_1, 2)}, et une '{tolower(var_name)}' valeur de {round(poly_value_2, 2)}. <p>Ces deux scores sont {relative_position}, en termes relatifs. {place_name} a un score d'index AVA-Can plus grand que {percentile_left}% des {scale_plural} et un score '{tolower(var_name)}' plus grand que {percentile_right}% des {scale_plural} dans la région de Montréal."
+Hide,En voir moins
+Show,Afficher
+Perform a Bivariate Analysis,Effectuez une analyse bivariée
+Walkable Access to Key Amenities,Accès à pied aux services de base
+"Original Plan (May 15, 2020)",Plan initial (15 mai 2020
+"Revised Plan (July 25, 2020)",Plan révisé (25 juillet 2020
+Choose more variables and explore further,Choisissez d'autres variables et explorez davantage
+Population density per square km,Densité de population par kilomètre carré
+Pedestrian social distancing capacity,Capacité de distanciation sociale des piétons
+Work commutes by car (%),Trajets domicile-travail en voiture (%)
+Trajet MTL 2016 data on pedestrian flows,Données Trajet MTL 2016 sur les déplacements des piétons
+Capacity for pedestrian social distancing,Capacité de distanciation sociale des piétons
+Capacity for pedestrian social distancing (%),Capacité de distanciation sociale des piétons (%)
+Capacity of local population to make trips on foot while maintaining 2 meters distance (%),Capacité de la population locale à effectuer des déplacements à pied tout en conservant une distance de 2 mètres (%)
+Log of Population density / km2,Log de la densité de population / km2
+Pedestrian trips per sqm of walkable space index (0 = average),Indice des déplacements à pied par m² d'espace piétonnier (0 = moyenne)
+Clear selection,Effacez sélection
+"At the census tract scale, after removing outliers with a population below 500, the capacity for pedestrian social distancing varies from {min_ped_ct}% to {max_ped_ct}%, with an average value of {mean_ped_ct}% and a median value of {median_ped_ct}%. Two thirds of census tracts have a score between {quant_low_ped_ct}% and {quant_high_ped_ct}%. Out of the 532 census tracts, 227 of them have a capacity score below 100%, while 85 of them have a capacity score below 50%. ","À l'échelle du secteur de recensement, après avoir éliminé les données aberrantes avec une population en dessous de 500 personnes, la capacité pour la distanciation sociale des piétons varie de {min_ped_ct}% à {max_ped_ct}%, avec une valeur moyenne de {mean_ped_ct} et une valeur médiane de {median_ped_ct}%. Deux tiers des secteurs de recensement ont un score entre {quant_low_ped_ct}% et {quant_high_ped_ct}%. Sur les 532 secteurs de recensement, 227 d'entre eux ont un score de capacité en dessous de 100%, alors que 85 d'entre eux ont un score de capacité en dessous de 50%. "
+"At the dissemination area scale, after removing outliers with a population below 100, the capacity for pedestrian social distancing varies from {min_da_uni}% to {max_da_uni}%, with an average value of {mean_da_uni}% and a median value of {median_da_uni}%. Two thirds of dissemination areas have a score between {quant_low_da_uni}% and {quant_high_da_uni}%.","À l'échelle de l'aire de diffusion, après avoir éliminé les valeurs aberrantes avec une population en dessous de 100 personnes, la capacité pour la distanciation sociale des piétons varie de {min_da_uni}% à {max_da_uni}%, avec une valeur moyenne de {mean_da_uni}% et une valeur médiane de {median_da_uni}%. Deux tiers des aires de diffusion ont un score entre {quant_low_da_uni}% et {quant_high_da_uni}%."
+"The dissemination area {dat_ped_uni$ID} has a population of {prettyNum(dat_ped_uni$population, ',')} and a pedestrian social distancing capacity of {round(poly_value_ped_uni, 2)}%, which is {larger_smaller_ped_uni} the region-wide median of {median_da_uni}%.<p>Dissemination area {dat_ped_uni$ID} offers a {poor_strong_ped_uni} capacity for its residents to practice social distancing in the local pedestrian realm.","L'aire de diffusion {dat_ped_uni$ID} a une population de {prettyNum(dat_ped_uni$population, ',')} et une capacité de distanciation sociale des piétons de {round(poly_value_ped_uni, 2)}%, ce qui est {larger_smaller_ped_uni} que la médiane régionale de {median_da_uni}%.<p>L'aire de diffusion {dat_ped_uni$ID} offre un potentiel {poor_strong_ped_uni} pour ses résidents de pratiquer la distanciation sociale dans les voies piétonnes locales."
+"The capacity for pedestrian social distancing metric has effectively no correlation ({correlation_ped}) with {var_name_ped} at the dissemination area scale. <p>This means that, at the dissemination area scale, there is no relationship between the two variables.","La mesure de la capacité pour la distanciation sociale des piétons n'a en fait aucune corrélation ({correlation_ped}) avec '{var_name_ped}' à l'échelle de l'aire de diffusion. <p>Cela signifie que, à l'échelle de l'aire de diffusion, il n'y a pas de relation entre ces deux variables."
+"The capacity for pedestrian social distancing metric has a {strong_weak_ped} {pos_neg_ped} correlation ({correlation_ped}) with '{tolower(var_name_ped)}' at the dissemination area scale. <p>This means that, in general, dissemination areas with higher capacities to allow for pedestrian social distancing tend to have {higher_lower_ped} '{tolower(var_name_ped)}' values, {high_low_disclaimer_ped}.","La mesure de la capacité de distanciation sociale des pétions a un coefficient de corrélation {strong_weak_ped} {pos_neg_ped} ({correlation_ped}) avec '{tolower(var_name_ped)}', à l'échelle de l'aire de diffusion. <p>Cela signifie que, en général, les aires de diffusion avec de plus grandes capacités de distanciation sociale des piétons tendent à avoir de {higher_lower_ped} valeurs de '{tolower(var_name_ped)}', {high_low_disclaimer_ped}."
+"Dissemination area {dat_ped_biv$ID} has a population of {prettyNum(dat_ped_biv$population, ',')}, a capacity for pedestrian social distancing of {round(poly_value_1, 2)}%, and a '{tolower(var_name_ped)}' value of {round(poly_value_2, 2)}. <p>These two scores are {relative_position}, in relative terms. Dissemination area {dat_ped_biv$ID} has a capacity for pedestrian social distancing higher than {percentile_left}% of dissemination areas and a '{tolower(var_name_ped)}' score higher than {percentile_right}% of dissemination areas in the Montreal region.","L'aire de diffusion {dat_ped_biv$ID} a une population de {prettyNum(dat_ped_biv$population, ',')}, une capacité de distanciation sociale des piétons de {round(poly_value_1, 2)}%, et une valeur '{tolower(var_name_ped)}' de{round(poly_value_2, 2)}. <p>Ces deux scores sont {relative_position}, en termes relatifs. L'aire de diffusion {dat_ped_biv$ID} a une capacité de distanciation sociale des piétons plus grande que {percentile_left}% des aires de diffusion et une valeur '{tolower(var_name_ped)}' plus grand que {percentile_right}% des aires de diffusion de la région de Montréal."
+"Sidewalk width in Montreal varies from {min_sidewalk} meters to {max_sidewalk} meters, with an average value of {mean_sidewalk} meters and a median value of {median_sidewalk} meters. Two thirds of Montreal's sidewalks have widths between {quant_low_sidewalk} meters and {quant_high_sidewalk} meters. ","La largeur des trottoirs de Montréal varie de {min_sidewalk} mètres à {max_sidewalk} mètres, avec une valeur moyenne de {mean_sidewalk} mètres et une valeur médiane de {median_sidewalk} mètres. Deux tiers des trottoirs montréalais ont une largeur entre {quant_low_sidewalk} mètres et {quant_high_sidewalk} mètres."
+Shifting car trips to cycling,Transférez les trajets de voiture en vélo
+Share of trips taken by car,Part des trajets effectués en voiture
+Average commuting distance,Distance moyenne pour du trajet domicile-travail
+Access to cycling infrastructure,Accès aux infrastructures cyclables
+"% of trips taken by car, by census tract","% des trajets effectués en voiture, par secteur de recensement"
+Modal shift scenarios,Scénarios de transfert modal
+Baseline,Base de référence
+Distance,Distance
+Elevation/time,Élévation/temps
+Show baseline,Afficher la base de référence
+Cycling distance (km):,Distance parcourue à vélo (km):
+Elevation gain (m):,Gain d'élévation (m):
+Time ratio:,Ratio de temps:
+VKT Reduction,Réduction de KPV
+Cycling network,Réseau cycliste
+Criteria: Cycling Distance (km),Critère: Distance parcourue à vélo (km)
+Potential Cyclable Trips (per day),Trajets cyclistes potentiels (par jour)
+VKT Savings (per day),Économies de KPV (par jour)
+Criteria: Elevation Gain (m),Critère: Gain d'élévation (m)
+Criteria: Time Ratio,Critère: Ratio de temps
+Access to Cycling Infrastructure (km/sq.km),Accès aux infrastructures cyclables (km/km2)
+Share of Car Trips by Origin (%),Part des trajets en voiture par origine (%)
+Average Commuting Distance (km),Distance moyenne du trajet domicile-travail (km)
+Access to cycling inf. (km/sq.km),Accès aux infr. cyclables (km/km2)
+Share of trips taken by car (%),Part des trajets effectués en voiture (%)
+Average commuting distance (km),Distance moyenne du trajet domicile-travail (km)
+Cycling infrastructure (km/sq.km) by census tract:,Infrastructure cyclable (km/km2) par secteur de recensement:
+"Length of the average commute (km), by census tract:","Distance moyenne du trajet domicile-travail (km), par secteur de recensement :"
