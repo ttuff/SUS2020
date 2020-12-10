@@ -50,28 +50,55 @@ sus_translation_list <- function(to_translate){
 }
 
 sus_translate <- function(to_translate) {
-    # if it's in english
-    if (r$active_language() == "en") {
-      # # if it's a string
-      # if (is.character(to_translate)) {
-      # (translation_fr %>%
-      #    filter(en == to_translate))[,1] %>%
-      #   pull()
-      #   # if it's a list
-      # } else if (is.list(to_translate)) {
-      #   to_translate
-      to_translate
+  # if it's in english
+  if (r$active_language() == "en") {
+    # # if it's a string
+    # if (is.character(to_translate)) {
+    # (translation_fr %>%
+    #    filter(en == to_translate))[,1] %>%
+    #   pull()
+    #   # if it's a list
+    # } else if (is.list(to_translate)) {
+    #   to_translate
+    to_translate
+    
+    # if it's in french
+  } else if (r$active_language() == "fr") {
+    if (str_detect(to_translate, "_en.png") == T) {
       
-      # if it's in french
-    } else if (r$active_language() == "fr") {
-      # if ((is.character(to_translate)) == T) {
-        translation_fr %>%
-          filter(en == to_translate) %>%
-          pull()
-      # } else if (is.list(to_translate)) {
-      #   sus_translation_list
-      # }
+      str_replace(to_translate, "_en.png", "_fr.png")
+      
+    } else if ((is.character(to_translate)) == T) {
+      
+      translation_fr %>%
+        filter(en == to_translate) %>%
+        pull()
       
     }
+    # } else if (is.list(to_translate)) {
+    #   sus_translation_list
+  }
+  
 }
 
+
+
+# # 
+# if (str_detect(to_translate, "_en.png")) {
+#   str_replace(to_translate, "_en.png", "_fr.png")
+# }
+# 
+# to_translate <- "www/legend_social_distancing_cap_en.png"
+# 
+# if (str_detect(to_translate, "_en.png") == T) {
+#   
+#   str_replace(to_translate, "_en.png", "_fr.png")
+#   
+# } else if ((is.character(to_translate)) == T) {
+#   
+#   translation_fr %>%
+#     filter(en == to_translate) %>%
+#     pull()
+#   
+# }
+# 

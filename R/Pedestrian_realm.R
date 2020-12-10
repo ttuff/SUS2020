@@ -221,7 +221,7 @@ Pedestrian_realm_module_server <- function(input, output, session, r) {
     }, deleteFile = FALSE)
     
     output$univariate_legend_ped <- renderImage({
-      filename <- normalizePath(file.path("www/legend_social_distancing_cap.png"))
+      filename <- normalizePath(file.path(sus_translate("www/legend_social_distancing_cap_en.png")))
       return(list(src = filename, contentType = "image/png",  width = 180,
                   height = 140))
     }, deleteFile = FALSE)
