@@ -78,7 +78,7 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
           fluidRow(
             column(width = 2, offset = 10, align = "right",
                    actionLink(inputId = ns("pedestrian_hide_second_variable"),
-                              label = "Hide"))),
+                              label = i18n$t("Hide")))),
           conditionalPanel(
             condition = "output.pedestrian_hide_second_variable_status == 1", ns = ns ,
             plotOutput(ns("second_variable"), width = 250, height = 250))),
@@ -88,7 +88,7 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
                  h4(i18n$t("Montreal Covid-19 Expanded Active Transit Corridors"))),
           column(width = 4, align = "right",
                  actionLink(inputId = ns("vas_hide_explore"),
-                            label = "Hide"))),
+                            label = i18n$t("Hide")))),
         conditionalPanel(
           condition = "output.vas_hide_explore_status == 1", ns = ns ,
           materialSwitch(inputId = ns("vas_1"), 
@@ -119,7 +119,7 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
                h4(i18n$t("Explore"))),
         column(width = 4, align = "right",
                actionLink(inputId = ns("pedestrian_hide_explore"),
-                          label = "Hide"))),
+                          label = i18n$t("Hide")))),
       conditionalPanel(
         condition = "output.pedestrian_hide_explore_status == 1", ns = ns ,
         htmlOutput(ns("pedestrian_info")),
@@ -134,7 +134,7 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
                h4(i18n$t("Did you know?"))),
         column(width = 4, align = "right",
                actionLink(inputId = ns("pedestrian_hide_dyk"),
-                          label = "Hide"))),
+                          label = i18n$t("Hide")))),
       conditionalPanel(
         condition = "output.pedestrian_hide_dyk_status == 1", ns = ns ,
         htmlOutput(ns("did_you_know_ped")))
@@ -198,18 +198,9 @@ js_ped_control <- "$(document).ready(function(){
 });
 "
 
-Pedestrian_realm_module_server <- function(id, i18n) {
-  moduleServer(id,function(input, output, session) {
-    ns <- NS(id)
+Pedestrian_realm_module_server <- function(input, output, session, r) {
+  ns <- session$ns
     
-    i18n_reactive <- reactive({
-      selected <- input$selected_language
-      if (length(selected) > 0 && selected %in% i18n$get_languages()) {
-        i18n$set_translation_language(selected)
-        update_lang(global_session, selected)
-      }
-      i18n
-    })
     
     output$bivariate_legend_ped <- renderImage({
       filename <- normalizePath(file.path("www/bivariate_legend_2.png"))
@@ -459,10 +450,10 @@ Pedestrian_realm_module_server <- function(id, i18n) {
     # Set title across zoom levels
     output$title_text_ped <- renderText({
       if( rz_pedestrian$zoom == "OUT"){
-        paste0(i18n_reactive()$t("Pedestrian capacity for social distancing (census tracts)"))
+        paste0(sus_translate("Pedestrian capacity for social distancing (census tracts)"))
       } else if (rz_pedestrian$zoom == "IN") {
-        i18n_reactive()$t("Pedestrian capacity for social distancing (dissemination areas)")  
-      } else {i18n_reactive()$t("Explore sidewalks and parks")}
+        sus_translate("Pedestrian capacity for social distancing (dissemination areas)")  
+      } else {sus_translate("Explore sidewalks and parks")}
     })
     
     # Hide extra text
@@ -475,9 +466,9 @@ Pedestrian_realm_module_server <- function(id, i18n) {
     observeEvent(input$more_info_ped, {
       
       if (input$more_info_ped %% 2 == 1) {
-        txt <- i18n_reactive()$t("Hide")
+        txt <- sus_translate("Hide")
       } else {
-        txt <- i18n_reactive()$t("Learn more")
+        txt <- sus_translate("Learn more")
       }
       updateActionButton(session, "more_info_ped", label = txt)
       
@@ -493,7 +484,7 @@ Pedestrian_realm_module_server <- function(id, i18n) {
     
     observeEvent(input$pedestrian_hide_explore, {
       
-      if (input$pedestrian_hide_explore %% 2 == 0) txt <- i18n_reactive()$t("Hide") else txt <- i18n_reactive()$t("Show")
+      if (input$pedestrian_hide_explore %% 2 == 0) txt <- sus_translate("Hide") else txt <- sus_translate("Show")
       updateActionButton(session, "pedestrian_hide_explore", label = txt)
       
     })
@@ -507,7 +498,7 @@ Pedestrian_realm_module_server <- function(id, i18n) {
     
     observeEvent(input$pedestrian_hide_dyk, {
       
-      if (input$pedestrian_hide_dyk %% 2 == 0) txt <- "Hide" else txt <- "Show"
+      if (input$pedestrian_hide_dyk %% 2 == 0) txt <- sus_translate("Hide") else txt <- sus_translate("Show")
       updateActionButton(session, ns("pedestrian_hide_dyk"), label = txt)
       
     })
@@ -521,7 +512,7 @@ Pedestrian_realm_module_server <- function(id, i18n) {
     
     observeEvent(input$pedestrian_hide_second_variable, {
       
-      if (input$pedestrian_hide_second_variable %% 2 == 0) txt <- "Hide" else txt <- "Show"
+      if (input$pedestrian_hide_second_variable %% 2 == 0) txt <- sus_translate("Hide") else txt <- sus_translate("Show")
       updateActionButton(session, ns("pedestrian_hide_second_variable"), label = txt)
       
     })
@@ -535,7 +526,7 @@ Pedestrian_realm_module_server <- function(id, i18n) {
     
     observeEvent(input$vas_hide_explore, {
       
-      if (input$vas_hide_explore %% 2 == 0) txt <- "Hide" else txt <- "Show"
+      if (input$vas_hide_explore %% 2 == 0) txt <- sus_translate("Hide") else txt <- sus_translate("Show")
       updateActionButton(session, ns("vas_hide_explore"), label = txt)
       
     })
@@ -752,7 +743,7 @@ Pedestrian_realm_module_server <- function(id, i18n) {
       if(input$variable_ped == 3){
         updateSliderInput(session = session,
                           inputId = "slider_ped",
-                          label = "Work commutes by car (%)",
+                          label = sus_translate("Work commutes by car (%)"),
                           0, 100,
                           value = c(0, 100),
                           step = 1)
@@ -766,8 +757,8 @@ Pedestrian_realm_module_server <- function(id, i18n) {
       else if (input$variable_ped == 2) {
         updateSliderInput(session = session,
                           inputId = "slider_ped",
-                          label = paste0("Capacity of local population to make ",
-                                         "trips on foot while maintaining 2 meters distance (%)"),
+                          label = sus_translate(paste0("Capacity of local population to make ",
+                                         "trips on foot while maintaining 2 meters distance (%)")),
                           0, 1000,
                           value = c(0, 1000),
                           step = 25)
@@ -781,7 +772,7 @@ Pedestrian_realm_module_server <- function(id, i18n) {
       else if (input$variable_ped == 1) {
         updateSliderInput(session = session,
                           inputId = "slider_ped",
-                          label = "Log of Population density / km2",
+                          label = sus_translate("Log of Population density / km2"),
                           0, 12,
                           value = c(0, 12),
                           step = 1)
@@ -794,7 +785,7 @@ Pedestrian_realm_module_server <- function(id, i18n) {
       
       else {updateSliderInput(session = session,
                               inputId = "slider_ped",
-                              label = "Pedestrian trips per sqm of walkable space index (0 = average)",
+                              label = sus_translate("Pedestrian trips per sqm of walkable space index (0 = average)"),
                               -1, 6.5,
                               value = c(-1, 6.5),
                               step = 0.5)
@@ -854,14 +845,14 @@ Pedestrian_realm_module_server <- function(id, i18n) {
         quant_high_ped_ct <- round(quantile(census_analysis_ct_plot$social_distancing, c(1/3, 2/3))[2], 2)
         
         HTML(
-          glue("At the census tract scale, after removing outliers with a ",
+          glue(sus_translate(paste0("At the census tract scale, after removing outliers with a ",
                "population below 500, the capacity for pedestrian social distancing varies from ",
                "{min_ped_ct}% to {max_ped_ct}%, with an average value of {mean_ped_ct}% ",
                "and a median value of {median_ped_ct}%. ",
                "Two thirds of census tracts have a score between {quant_low_ped_ct}% ",
                "and {quant_high_ped_ct}%. Out of the 532 census tracts, ",
                "227 of them have a capacity score below 100%, ",
-               "while 85 of them have a capacity score below 50%. "))
+               "while 85 of them have a capacity score below 50%."))))
       }
       
       else if (rz_pedestrian$zoom == "IN" & input$switch_biv == FALSE) {
@@ -884,11 +875,11 @@ Pedestrian_realm_module_server <- function(id, i18n) {
         if (is.na(rz_pedestrian$poly_selected)) {
           
           HTML(
-            glue("At the dissemination area scale, after removing outliers with a population below 100, the capacity for pedestrian social distancing varies from ",
+            glue(sus_translate(paste0("At the dissemination area scale, after removing outliers with a population below 100, the capacity for pedestrian social distancing varies from ",
                  "{min_da_uni}% to {max_da_uni}%, with an average value of {mean_da_uni}% ",
                  "and a median value of {median_da_uni}%. ",
                  "Two thirds of dissemination areas have a score between {quant_low_da_uni}% ",
-                 "and {quant_high_da_uni}%."))  
+                 "and {quant_high_da_uni}%."))))  
           
           # Case for selected poly
         } else {
@@ -900,40 +891,41 @@ Pedestrian_realm_module_server <- function(id, i18n) {
           quintile_ped_uni <- quantile(vec_ped_uni, c(0.2, 0.4, 0.6, 0.8))
           
           larger_smaller_ped_uni <- case_when(
-            poly_value_ped_uni >= quintile_ped_uni[4] ~ "much larger than",
-            poly_value_ped_uni >= quintile_ped_uni[3] ~ "larger than",
-            poly_value_ped_uni >= quintile_ped_uni[2] ~ "almost the same as",
-            poly_value_ped_uni >= quintile_ped_uni[1] ~ "smaller than",
+            poly_value_ped_uni >= quintile_ped_uni[4] ~ sus_translate("much larger than"),
+            poly_value_ped_uni >= quintile_ped_uni[3] ~ sus_translate("larger than"),
+            poly_value_ped_uni >= quintile_ped_uni[2] ~ sus_translate("almost the same as"),
+            poly_value_ped_uni >= quintile_ped_uni[1] ~ sus_translate("smaller than"),
             TRUE ~ "much smaller than"
           )
           
           poor_strong_ped_uni <- case_when(
-            str_detect(larger_smaller_ped_uni, "larger") ~ "strong",
-            str_detect(larger_smaller_ped_uni, "smaller") ~ "poor",
-            TRUE ~ "moderate"
+            str_detect(larger_smaller_ped_uni, sus_translate("larger")) ~ sus_translate("strong"),
+            str_detect(larger_smaller_ped_uni, sus_translate("smaller")) ~ sus_translate("poor"),
+            TRUE ~ sus_translate("moderate")
           )
           
-          HTML(glue("The dissemination area {dat_ped_uni$ID} has a population of ",
+          HTML(
+            glue(sus_translate(paste0("The dissemination area {dat_ped_uni$ID} has a population of ",
                     "{prettyNum(dat_ped_uni$population, ',')} and a pedestrian social distancing capacity ",
                     "of {round(poly_value_ped_uni, 2)}%, which is {larger_smaller_ped_uni} ",
                     "the region-wide median of {median_da_uni}%.", 
                     
-                    "<p>Dissemination area {dat_ped_uni$ID} offers a {poor_strong_ped_uni} capacity for its residents to practice social distancing in the local pedestrian realm."))
+                    "<p>Dissemination area {dat_ped_uni$ID} offers a {poor_strong_ped_uni} capacity for its residents to practice social distancing in the local pedestrian realm."))))
           
         }}
       
       else if (rz_pedestrian$zoom == "IN" & input$switch_biv == TRUE) {
         
         var_name_ped <- data_frame(code = c("agg_proximity_score", "net_median_income", "minority_percent", "immigrant_percent"),
-                                   name = c("Walkable Access to Key Amenities", "Net Median Income", "Visible Minority Population Proportion",
-                                            "Immigrant Population Proportion")) %>% 
+                                   name = c(sus_translate("Walkable Access to Key Amenities"), sus_translate("Net Median Income"), sus_translate("Visible Minority Population Proportion"),
+                                            sus_translate("Immigrant Population Proportion"))) %>% 
           as_tibble() %>% 
           filter(code == input$data_for_plot_ped) %>%
           pull(name)
         
         var_code_ped <- data_frame(code = c("agg_proximity_score", "net_median_income", "minority_percent", "immigrant_percent"),
-                                   name = c("Walkable Access to Key Amenities", "Net Median Income", "Visible Minority Population Proportion",
-                                            "Immigrant Population Proportion")) %>% 
+                                   name = c(sus_translate("Walkable Access to Key Amenities"), sus_translate("Net Median Income"), sus_translate("Visible Minority Population Proportion"),
+                                            sus_translate("Immigrant Population Proportion"))) %>% 
           as_tibble() %>% 
           filter(code == input$data_for_plot_ped) %>%
           pull(code)
@@ -944,19 +936,19 @@ Pedestrian_realm_module_server <- function(id, i18n) {
         
         correlation_ped <- round(correlation_ped$estimate, 2) 
         
-        pos_neg_ped <- if_else(correlation_ped > 0, "positive", "negative")
+        pos_neg_ped <- if_else(correlation_ped > 0, sus_translate("positive"), sus_translate("negative"))
         
         strong_weak_ped <- case_when(
-          abs(correlation_ped) > 0.6 ~ "strong",
-          abs(correlation_ped) > 0.3 ~ "moderate",
+          abs(correlation_ped) > 0.6 ~ sus_translate("strong"),
+          abs(correlation_ped) > 0.3 ~ sus_translate("moderate"),
           TRUE ~ "weak")
         
-        higher_lower_ped <- if_else(pos_neg_ped == "positive", "higher", "lower")
+        higher_lower_ped <- if_else(pos_neg_ped == sus_translate("positive"), sus_translate("higher"), sus_translate("lower"))
         
         high_low_disclaimer_ped <- case_when(
-          strong_weak_ped == "strong" ~ "with only a few exceptions",
-          strong_weak_ped == "moderate" ~ "although with some exceptions",
-          strong_weak_ped == "weak" ~ "although with many exceptions",
+          strong_weak_ped == sus_translate("strong") ~ sus_translate("with only a few exceptions"),
+          strong_weak_ped == sus_translate("moderate") ~ sus_translate("although with some exceptions"),
+          strong_weak_ped == sus_translate("weak") ~ sus_translate("although with many exceptions")
         )
         
         # Case for no poly selected
@@ -965,20 +957,22 @@ Pedestrian_realm_module_server <- function(id, i18n) {
           # If correlation is close to zero
           if (correlation_ped < 0.05 && correlation_ped > -0.05) {
             
-            HTML(glue(
+            HTML(
+              glue(sus_translate(paste0(
               "The capacity for pedestrian social distancing metric has effectively no correlation ",
               "({correlation_ped}) with {var_name_ped} at the dissemination area scale. ",
               "<p>This means that, at the dissemination area scale, ",
-              "there is no relationship between the two variables."))
+              "there is no relationship between the two variables."))))
             
           } else {
             
-            HTML(glue(
+            HTML(
+              glue(sus_translate(paste0(
               "The capacity for pedestrian social distancing metric has a {strong_weak_ped} {pos_neg_ped} ",
               "correlation ({correlation_ped}) with '{tolower(var_name_ped)}' at the dissemination area scale. ",
               "<p>This means that, in general, dissemination areas with higher ",
               "capacities to allow for pedestrian social distancing tend to have {higher_lower_ped} ",
-              "'{tolower(var_name_ped)}' values, {high_low_disclaimer_ped}."))
+              "'{tolower(var_name_ped)}' values, {high_low_disclaimer_ped}."))))
             
           }
         }
@@ -1011,13 +1005,14 @@ Pedestrian_realm_module_server <- function(id, i18n) {
           round()
         
         relative_position <- case_when(
-          abs(percentile_left - percentile_right) > 50 ~ "dramatically different",
-          abs(percentile_left - percentile_right) > 30 ~ "substantially different",
-          abs(percentile_left - percentile_right) > 10 ~ "considerably different",
+          abs(percentile_left - percentile_right) > 50 ~ sus_translate("dramatically different"),
+          abs(percentile_left - percentile_right) > 30 ~ sus_translate("substantially different"),
+          abs(percentile_left - percentile_right) > 10 ~ sus_translate("considerably different"),
           TRUE ~ "similar"
         )
         
-        HTML(glue("Dissemination area {dat_ped_biv$ID} has a population of ",
+        HTML(
+          glue(sus_translate(paste0("Dissemination area {dat_ped_biv$ID} has a population of ",
                   "{prettyNum(dat_ped_biv$population, ',')}, a capacity for pedestrian social distancing ",
                   "of {round(poly_value_1, 2)}%, and a '{tolower(var_name_ped)}' ",
                   "value of {round(poly_value_2, 2)}. ",
@@ -1027,7 +1022,7 @@ Pedestrian_realm_module_server <- function(id, i18n) {
                   "than {percentile_left}% of dissemination areas and ",
                   "a '{tolower(var_name_ped)}' score higher than ", 
                   "{percentile_right}% of dissemination areas in the ",
-                  "Montreal region."))
+                  "Montreal region."))))
       }}
       
       else if (rz_pedestrian$zoom == "FINAL") {
@@ -1040,12 +1035,12 @@ Pedestrian_realm_module_server <- function(id, i18n) {
         quant_high_sidewalk <- round(quantile(sidewalks_WSG$sidewalk_width, c(1/3, 2/3))[2], 2)
         
         HTML(
-          glue("Sidewalk width in Montreal varies from ",
+          glue(sus_translate(paste0("Sidewalk width in Montreal varies from ",
                "{min_sidewalk} meters to {max_sidewalk} meters, ",
                "with an average value of {mean_sidewalk} meters ",
                "and a median value of {median_sidewalk} meters. ",
                "Two thirds of Montreal's sidewalks have widths ",
-               "between {quant_low_sidewalk} meters and {quant_high_sidewalk} meters. "))
+               "between {quant_low_sidewalk} meters and {quant_high_sidewalk} meters."))))
       }
       #print("end ped render UI")
     })
@@ -1062,7 +1057,7 @@ Pedestrian_realm_module_server <- function(id, i18n) {
           geom_histogram(aes(fill = fill), bins = 25) +
           scale_fill_manual(values = colors[c(1:3)],
                             na.translate = FALSE) +
-          scale_x_continuous(name = "Capacity for pedestrian social distancing",
+          scale_x_continuous(name = sus_translate("Capacity for pedestrian social distancing"),
                              limits = c(0, 500),
                              expand = c(0,0),
                              breaks = seq(0, 500, by = 100),
@@ -1087,7 +1082,7 @@ Pedestrian_realm_module_server <- function(id, i18n) {
             geom_histogram(aes(fill = fill), bins = 25) +
             scale_fill_manual(values = colors[c(1:3)],
                               na.translate = FALSE) +
-            scale_x_continuous(name = "Capacity for pedestrian social distancing",
+            scale_x_continuous(name = sus_translate("Capacity for pedestrian social distancing"),
                                limits = c(0, 500),
                                expand = c(0,0),
                                breaks = seq(0, 500, by = 100),
@@ -1114,7 +1109,7 @@ Pedestrian_realm_module_server <- function(id, i18n) {
               bins = 25) +
             scale_fill_manual(values = colors[c(3, 1)],
                               na.translate = FALSE) +
-            scale_x_continuous(name = "Capacity for pedestrian social distancing",
+            scale_x_continuous(name = sus_translate("Capacity for pedestrian social distancing"),
                                limits = c(0, 500),
                                expand = c(0,0),
                                breaks = seq(0, 500, by = 100),
@@ -1130,15 +1125,15 @@ Pedestrian_realm_module_server <- function(id, i18n) {
       
       else if (rz_pedestrian$zoom == "IN" & input$switch_biv == TRUE) {
         var_name_ped <- data_frame(code = c("agg_proximity_score", "net_median_income", "visible_minority_pop", "immigrants"),
-                                   name = c("Walkable Access to Key Amenities", "Net Median Income", "Visible Minority Population",
-                                            "Immigrant Population")) %>% 
+                                   name = c(sus_translate("Walkable Access to Key Amenities"), sus_translate("Net Median Income"), sus_translate("Visible Minority Population"),
+                                            sus_translate("Immigrant Population"))) %>% 
           as_tibble() %>% 
           filter(code == input$data_for_plot_ped) %>%
           pull(name)
         
         var_code_ped <- data_frame(code = c("agg_proximity_score", "net_median_income", "visible_minority_pop", "immigrants"),
-                                   name = c("Walkable Access to Key Amenities", "Net Median Income", "Visible Minority Population",
-                                            "Immigrant Population")) %>% 
+                                   name = c(sus_translate("Walkable Access to Key Amenities"), sus_translate("Net Median Income"), sus_translate("Visible Minority Population"),
+                                            sus_translate("Immigrant Population"))) %>% 
           as_tibble() %>% 
           filter(code == input$data_for_plot_ped) %>%
           pull(code)
@@ -1151,7 +1146,7 @@ Pedestrian_realm_module_server <- function(id, i18n) {
             geom_point(aes(colour = group)) +
             #geom_smooth(method = "lm", se = FALSE, colour = "grey50") +
             scale_colour_manual(values = deframe(bivariate_color_scale)) +
-            scale_x_continuous(name = "Capacity for pedestrian social distancing",
+            scale_x_continuous(name = sus_translate("Capacity for pedestrian social distancing"),
                                limits = c(0, 500),
                                expand = c(0,0),
                                breaks = seq(0, 500, by = 100),
@@ -1176,7 +1171,7 @@ Pedestrian_realm_module_server <- function(id, i18n) {
                                      !is.na(right_variable_full)),
                        colour = bivariate_color_scale$fill[1],
                        size = 3) +
-            scale_x_continuous(name = "Capacity for pedestrian social distancing (%)",
+            scale_x_continuous(name = sus_translate("Capacity for pedestrian social distancing (%)"),
                                limits = c(0, 200),
                                expand = c(0,0),
                                breaks = seq(0, 200, by = 25),
@@ -1196,7 +1191,7 @@ Pedestrian_realm_module_server <- function(id, i18n) {
           ggplot(aes(sidewalk_width)) +
           geom_histogram(aes(fill = rounded_sidewalk_width), bins = 25) +
           scale_fill_manual(values = c('#feebe2', '#fcc5c0', '#fa9fb5', '#f768a1', '#c51b8a', '#7a0177')) +
-          labs(x = "Sidewalk width (meters)", y = NULL) +
+          labs(x = sus_translate("Sidewalk width (meters)"), y = NULL) +
           theme_minimal() +
           theme(legend.position = "none",
                 panel.grid.minor.x = element_blank(),
@@ -1216,7 +1211,7 @@ Pedestrian_realm_module_server <- function(id, i18n) {
           paste("<li> ", ., collapse = "") %>%
           paste0("<ul>", ., "</ul>") 
         
-        i18n_reactive()$t(d) %>% 
+        sus_translate(d) %>% 
           HTML()
       }
       else if (rz_pedestrian$zoom == "IN" & input$switch_biv == FALSE) {
@@ -1247,4 +1242,4 @@ Pedestrian_realm_module_server <- function(id, i18n) {
       }
       
     })
- })}
+ }

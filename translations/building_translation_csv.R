@@ -302,7 +302,7 @@ translation_fr <-
                       "Two thirds of census tracts have a score between {quant_low_ped_ct}% ",
                       "and {quant_high_ped_ct}%. Out of the 532 census tracts, ",
                       "227 of them have a capacity score below 100%, ",
-                      "while 85 of them have a capacity score below 50%. "),
+                      "while 85 of them have a capacity score below 50%."),
           fr = paste0("À l'échelle du secteur de recensement, après avoir éliminé les données aberrantes avec une ", 
                       "population en dessous de 500 personnes, la capacité pour la distanciation sociale des piétons varie de ",
                       "{min_ped_ct}% à {max_ped_ct}%, avec une valeur moyenne de {mean_ped_ct} ",
@@ -310,7 +310,7 @@ translation_fr <-
                       "Deux tiers des secteurs de recensement ont un score entre {quant_low_ped_ct}% ",
                       "et {quant_high_ped_ct}%. Sur les 532 secteurs de recensement, ",
                       "227 d'entre eux ont un score de capacité en dessous de 100%, ",
-                      "alors que 85 d'entre eux ont un score de capacité en dessous de 50%. ")) %>% 
+                      "alors que 85 d'entre eux ont un score de capacité en dessous de 50%.")) %>% 
   add_row(en = paste0("At the dissemination area scale, after removing outliers with a population below 100, the capacity for pedestrian social distancing varies from ",
                       "{min_da_uni}% to {max_da_uni}%, with an average value of {mean_da_uni}% ",
                       "and a median value of {median_da_uni}%. ",
@@ -381,7 +381,7 @@ translation_fr <-
                       "with an average value of {mean_sidewalk} meters ",
                       "and a median value of {median_sidewalk} meters. ",
                       "Two thirds of Montreal's sidewalks have widths ",
-                      "between {quant_low_sidewalk} meters and {quant_high_sidewalk} meters. "),
+                      "between {quant_low_sidewalk} meters and {quant_high_sidewalk} meters."),
           fr = paste0("La largeur des trottoirs de Montréal varie de ",
                       "{min_sidewalk} mètres à {max_sidewalk} mètres, ",
                       "avec une valeur moyenne de {mean_sidewalk} mètres ",
