@@ -52,7 +52,7 @@ CanALE_module_UI <- function(id) {
                         label = i18n$t("Hide")))),
     conditionalPanel(
       condition = "output.active_hide_compare_status == 1", ns=ns,
-      selectInput(ns("data_for_plot_right"), label = NULL, 
+      selectInput(ns("data_for_plot_right"), label = NULL,
                   choices = var_list),
       plotOutput(ns("active_map_right")), height = 250),
     conditionalPanel(
@@ -144,26 +144,13 @@ CanALE_module_server <- function(input, output, session, r) {
                  
                  # Drop down list for variable selection -----------------------------------
                  
-                 var_list <- 
-                   list("----" = " ", 
-                        "Housing" = list("Tenant-occupied (%)" = "tenant_prop",
-                                         "Average rent" = "avg_rent",
-                                         "Average property value" = "avg_property_value",
-                                         "Unaffordable housing (%)" = "unaffordable_prop",
-                                         "Unsuitable housing (%)" = "unsuitable_prop"),
-                        "Income" = list("Median household income" = "median_income",
-                                        "Income under $50k (%)" = "income_50_prop",
-                                        "Income between $50k-$100k (%)" = "income_100_prop",
-                                        "Income above $100k (%)" = "income_high_prop"),
-                        "Immigration" = list("Immigrants (%)" =  "immigrant_prop",
-                                             "New immigrants (%)" = "immigrant_new_prop"),
-                        "Transportation" = list("Drive to work (%)" = "car_prop",
-                                                "Walk or cycle to work (%)" = "walk_or_bike_prop",
-                                                "Public transit to work (%)" = "transit_prop",
-                                                "15 minutes to work (%)" = "time_15_prop",
-                                                "15-30 minutes to work (%)" = "time_30_prop",
-                                                "30-45 minutes to work (%)" = "time_45_prop",
-                                                "45-60 minutes to work (%)" = "time_60_prop"))
+                 
+                 # List reactive translation
+                 observe({
+                   updateSelectInput(session,"data_for_plot_right",
+                                     choices = sus_translate(var_list))
+                 })
+                 
                  
                  
                  # Load bivariate census data
