@@ -147,6 +147,61 @@ translation_fr <-
                       "d'une ligne centrale à l'intérieur de chaque polygone de trottoir. La dernière étape pour déterminer ",
                       "la largeur du trottoir consiste à additionner les distances entre la ligne centrale et les deux bords ",
                       "d'un segment donné de polygone de trottoir. Ce processus est illustré ci-dessous.")) %>%
+  # variable_explanations.csv
+  add_row(en = "Tenant-occupied (%)", fr = "Locataire occupant (%)") %>%
+  add_row(en = "Tenant-occupied (%) is the percentage of private dwellings which are occupied by tenants.", 
+          fr = "Locataire occupant (%) est le pourcentage de logements privés qui sont occupés par des locataires") %>%
+  add_row(en = "Average rent", fr = "Frais de logement mensuels moyens") %>%
+  add_row(en = "Tenant-occupied (%) is the percentage of private dwellings which are occupied by tenants.", 
+          fr = "Locataire occupant (%) est le pourcentage de logements privés qui sont occupés par des locataires") %>%
+  add_row(en = "Average property value", fr = "Valeur foncière moyenne") %>%
+  add_row(en = "Average property value is the average value of dwellings.", 
+          fr = "Valeur foncièr moyenne est la valeur moyenne des propriétés.") %>%
+  add_row(en = "Unaffordable housing (%)", fr = "Logement inabordable (%)") %>%
+  add_row(en = "Unaffordable housing (%) is the percentage of dwellings for which residents pay more than 30% of income on housing costs.", 
+          fr = "Logement inabordable (%) est le pourcentage de logements pour lesquels les résidents paient plus de 30 % de leur revenu sur les frais de logement.") %>%
+  add_row(en = "Unsuitable housing (%)", fr = "Logement inadéquat (%)") %>%
+  add_row(en = paste0("Unsuitable housing (%) is the percentage of households living in unsuitable accommodations according ",
+                      "to the National Occupancy Standard, whether the dwelling has enough bedrooms for the size and ",
+                      "composition of the household."), 
+          fr = paste0("Logement inadéquat (%) est le pourcentage de ménages vivant dans un logement inadéquat ",
+                      "selon la Norme nationale d'occupation, si le logement a suffisamment de chambres à coucher pour ",
+                      "la taille et la composition du ménage.")) %>%
+  add_row(en = "Median household income", fr = "Revenu médian des ménages") %>%
+  add_row(en = "Median household income is the median  household income (before tax).", 
+          fr = "Le revenu médian des ménages est le revenu médian des ménages (avant impôt).") %>%
+  add_row(en = "Income under $50k (%)", fr = "Revenu inférieur à 50 000 $ (%)") %>%
+  add_row(en = "Income under $50k (%) is the percentage of households with an income less then $50,000.", 
+          fr = "Le revenu inférieur à 50 000 $ (%) est le pourcentage de ménages ayant un revenu inférieur à 50 000 $.") %>%
+  add_row(en = "Income between $50k-$100k (%)", fr = "Revenu entre 50 000 et 100 000 $ (%)") %>%
+  add_row(en = "Income between $50k-$100k (%) is the percentage of households with an income between $50,000 and $100,000.", 
+          fr = "Le revenu entre 50 000 et 100 000 $ (%) est le pourcentage de ménages ayant un revenu compris entre 50 000 et 100 000 $.") %>%
+  add_row(en = "Income above $100k (%)", fr = "Revenu supérieur à 100 000 $ (%)") %>%
+  add_row(en = "Income above $100k (%) is the percentage of households with an income more than $100,000.", 
+          fr = "Revenu supérieur à 100 000 $ (%) est le pourcentage de ménages ayant un revenu supérieur à 100 000 $.") %>%
+  add_row(en = "Immigrants (%)", fr = "Immigrants (%)") %>%
+  add_row(en = "Immigrants (%) is the percentage of foreign-born residents.", 
+          fr = "Immigrants (%) est le pourcentage de résidents nés à l'étranger.") %>%
+  add_row(en = "New immigrants (%)", fr = "Nouveaux immigrants (%)") %>%
+  add_row(en = "New immigrants (%) is the percentage of people who have immigrated in the last five years.", 
+          fr = "Nouveaux immigrants (%) est le pourcentage de personnes qui ont immigré au cours des cinq dernières années.") %>%
+  add_row(en = "Drive to work (%)", fr = "Conducteur (%)") %>%
+  add_row(en = "Drive to work (%) is the percentage of people who drive a privately owned car or truck to work.", 
+          fr = "Conducteur (%) est le pourcentage de personnes qui conduisent une voiture ou un camion privé pour se rendre au travail.") %>%
+  add_row(en = "Walk or cycle to work (%) is the percentage of people who walk or cycle to work.", 
+          fr = "À pied ou à vélo (%) correspond au pourcentage de personnes qui marchent ou se rendent au travail à vélo.") %>%
+  add_row(en = "Public transit to work (%) is the percentage of people who use public transit to get to work.", 
+          fr = "Transport en commun (%) est le pourcentage de personnes qui utilisent le transport en commun pour se rendre au travail.") %>%
+  add_row(en = "Public transit to work (%) is the percentage of people who use public transit to get to work.", 
+          fr = "Transport en commun (%) est le pourcentage de personnes qui utilisent le transport en commun pour se rendre au travail.") %>%
+  add_row(en = "15 minutes to work (%) is the percentage of people whose commute time is less than 15 minutes.", 
+          fr = "Trajet de 15 minutes (%) est le pourcentage de personnes dont le temps de trajet domicile-travail est inférieur à 15 minutes.") %>%
+  add_row(en = "15-30 minutes to work (%) is the percentage of people whose commute time is between 15 and 30 minutes.", 
+          fr = "Trajet de 15-30 minutes (%) est le pourcentage de personnes dont le temps de trajet domicile-travail se situe entre 15 et 30 minutes.") %>%
+  add_row(en = "30-45 minutes to work (%) is the percentage of people whose commute time is between 30 and 45 minutes.", 
+          fr = "Trajet de 30-45 minutes (%) est le pourcentage de personnes dont le temps de trajet domicile-travail se situe entre 30 et 45 minutes.") %>%
+  add_row(en = "45-60 minutes to work (%) is the percentage of people whose commute time is between 45 and 60 minutes.", 
+          fr = "Trajet de 45-60 minutes (%) est le pourcentage de personnes dont le temps de trajet domicile-travail se situe entre 45 et 60 minutes.") %>%
   # Description
   add_row(en = paste0("The whole of an ecosystem is more than the sum of its parts. ",
                       "The health and resilience of our urban green spaces are determined ",
@@ -258,8 +313,8 @@ translation_fr <-
   add_row(en = paste0("{dat$name_2} of {place_name}"), 
           fr = paste0("{dat$name_2} de {place_name}")) %>% 
   # Housing
-  add_row(en = "Tenant-occupied (%)", fr = "Occupé par locataire (%)") %>% 
-  add_row(en = "Average rent", fr = "Loyer moyen") %>% 
+  add_row(en = "Tenant-occupied (%)", fr = "Locataire occupant (%)") %>% 
+  add_row(en = "Average rent", fr = "Frais de logement mensuels moyens") %>% 
   add_row(en = "Average property value", fr = "Value foncière moyenne") %>% 
   add_row(en = "Unaffordable housing (%)", fr = "Logement inabordable (%)") %>% 
   add_row(en = "Unsuitable housing (%)", fr = "Logement inadéquat (%)") %>% 
@@ -271,8 +326,8 @@ translation_fr <-
   # Immigration
   add_row(en = "Immigrants (%)", fr = "Immigrants (%)") %>% 
   add_row(en = "New immigrants (%)", fr = "Nouveaux immigrants (%)") %>% 
-  # Transportation / Déplacement domicile-travail
-  add_row(en = "Drive to work (%)", fr = "Conducteur ou passager (%)") %>% 
+  # Transportation / Trajet domicile-travail
+  add_row(en = "Drive to work (%)", fr = "Conducteur (%)") %>% 
   add_row(en = "Walk or cycle to work (%)", fr = "À pied ou à vélo (%)") %>% 
   add_row(en = "Public transit to work (%)", fr = "Transport en commun (%)") %>% 
   add_row(en = "15 minutes to work (%)", fr = "Trajet de 15 minutes (%)") %>% 
