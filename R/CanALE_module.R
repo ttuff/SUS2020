@@ -147,7 +147,8 @@ CanALE_module_server <- function(input, output, session, r) {
                  
                  # List reactive translation
                  observe({
-                   updateSelectInput(session,"data_for_plot_right",
+                   updateSelectInput(session = session,
+                                     inputId = "data_for_plot_right",
                                      choices = sus_translate(var_list))
                  })
                  

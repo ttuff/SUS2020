@@ -329,7 +329,7 @@ animatedConditionalPanel <-
 
 # Drop down list for variable selection -----------------------------------
 
-r$var_list <- 
+var_list <- 
   list("----" = " ", 
        "Housing" = list("Tenant-occupied (%)" = "tenant_prop",
                         "Average rent" = "avg_rent",
