@@ -11,6 +11,142 @@ translation_fr <-
   add_row(en = "Learn more", fr = "En savoir plus") %>%
   add_row(en = "Compare", fr = "Comparez") %>%
   add_row(en = "SUS Preview", fr = "Aperçu du SUS") %>%
+  # title_text.csv
+  add_row(en = paste0("The CanALE dataset (developed by Prof. Nancy Ross and her team) captures ", 
+                      "four key elements related to active living environments: population density, ",
+                      "points of interest, street grid, and proximity of transit service."), 
+          fr = paste0("La base de données AVA-Can (développée par la professeure Nancy Ross et son équipe) ",
+                      "saisit quatre éléments clés liés aux milieux de vie actifs: la densité de population, ",
+                      "les points d'intérêt, la grille de rues et la proximité du service de transport en commun.")) %>%
+  add_row(en = paste0("<p>A safe and inviting pedestrian realm is not distributed equally across socio-demographic ",
+                      "factors. The risks of pedestrian injuries and fatalities are higher in low-income and ",
+                      "racialized communities where residents often rely on walking as a daily mode of transport but ",
+                      "where the local environment is not necessarily inviting and safe.<p>In addition to evidence ",
+                      "pointing towards large discrepancies in the provision of walkable urban space across income ",
+                      "and racial lines, concern has been raised with regard to the possible gentrification and displacement ",
+                      "impacts of improved pedestrian infrastructure. In other words, who can afford to live in walkable ",
+                      "neighbourhoods?<br><p>Further resources:<ul><li><a href= ''>Thomas Herrmann, William Gleckner, ",
+                      "Rania A. Wasfi, Benoît Thierry, Yan Kestens and Nancy A. Ross. 2019. 'A pan-Canadian measure of ",
+                      "active living environments using open data. Statistics Canada Health Reports, ",
+                      "82-003-X.</a><li><a href = ''>Kevin Manaugh, Linnea Soli, Samuel Kohn, Robin Basalaev-Binder, ",
+                      "Ty Tuff, David Wachsmuth. 2020. 'Montreal’s response to COVID-19: An equity analysis of new active ",
+                      "transport infrastructure.' Transportation Research Board working paper.</a> <b>(MSSI research)</b></ul><br><p><i>",
+                      "Module lead authors: Robin Basalaev-Binder, Ty Tuff, David Wachsmuth</i>"), 
+          fr = paste0("<p>Une voie piétonne sécuritaire et accueillante n'est pas répartie de manière égale entre les ",
+                      "facteurs sociodémographiques. Les risques de blessures et de décès de piétons sont plus élevés ",
+                      "dans les communautés racialisées et à faible revenu, où les résidents comptent souvent sur la ",
+                      "marche comme mode de transport quotidien, mais où l'environnement local n'est pas nécessairement ",
+                      "accueillant et sécuritaire.<p> Outre les éléments indiquant de grandes disparités dans la provision ",
+                      "d'un espace piétonnier urbain selon le revenu et le pourcentage de minorités visibles, des préoccupations ont été soulevées ",
+                      "concernant les éventuels impacts de l'amélioration des infrastructures piétonnes sur la gentrification ",
+                      "et le déplacement. En d'autres termes, qui peut se permettre de vivre dans des quartiers piétonniers? ",
+                      "<br><p>Ressources supplémentaires:<ul><li><a href= ''>Thomas Herrmann, William Gleckner, Rania A. Wasfi, ",
+                      "Benoît Thierry, Yan Kestens et Nancy A. Ross. 2019. Une mesure pancanadienne fondées sur les données ouvertes de ",
+                      "l'accessibilité à la vie active dans les milieux de vie. Rapports sur la santé de Statistique Canada, 82-003-X.</a><li><a ",
+                      "href = ''>Kevin Manaugh, Linnea Soli, Samuel Kohn, Robin Basalaev-Binder, Ty Tuff, David Wachsmuth. ",
+                      "2020. «Réponse de Montréal à COVID-19 : Une analyse de l'équité des nouvelles infrastructures de ",
+                      "transport actif». Document de travail pour le Transportation Research Board.</a> <b>(MSSI research)</b></ul><br><<p><<i>Auteur(e)s ",
+                      "principaux du module: Robin Basalaev-Binder, Ty Tuff, David Wachsmuth</i>")) %>%
+  add_row(en = paste0("Based on 2016 commuting data, we quantify possible reductions in VMT and GHG by identifying car ",
+                      "trips that could be shifted to cycling based on distance, elevation change and other factors."), 
+          fr = paste0("Basé sur les données relatives aux déplacements domicile-travail en 2016, nous quantifions ",
+                      "les réductions possibles de KPV et de GES en identifiant les déplacements en voiture qui pourraient ",
+                      "être remplacés par des déplacement en vélo en fonction de la distance, du changement ",
+                      "d'altitude et d'autres facteurs.")) %>%
+  add_row(en = paste0("<p>The transportation sector is a major contributor to Canada's greenhouse gas (GHG) emissions which ",
+                      "are linked to global climate change. Reducing vehicle miles traveled (VMT) over the long term is ",
+                      "increasingly recognized as the key to reduce GHG emissions from the transportation sector but has not ",
+                      "received as much attention as needed.<p>The primary objective of this study is to investigate the ",
+                      "potential for reducing VMT and GHG emissions by shifting short car trips to cycling in Montreal. ",
+                      "Based on commuting data from the 2016 Canadian Census, commuting patterns were explored. Two scenarios ",
+                      "were introduced to model environmental effects of a modal shift towards cycling based on characteristics ",
+                      "of current bicycle trips.<p>The results showed that enhanced cycling commuting can reduce VMT and GHG ",
+                      "emissions from car travel. Other mitigation measures are necessary for achieving GHG emissions reduction ",
+                      "targets.<br><p><i>Module lead authors: Qiao Zhao, Kevin Manaugh</i>"), 
+          fr = paste0("<p>Le secteur des transports est un contributeur majeur aux émissions de gaz à effet de serre (GES) ",
+                      "du Canada, qui sont liées au changement climatique mondial. La réduction des kilomètres parcourus ",
+                      "par les véhicules (KPV) sur le long terme est de plus en plus reconnue comme la clé de la réduction ",
+                      "des émissions de GES du secteur des transports, mais n'a pas reçu autant d'attention que nécessaire.<p>Le ",
+                      "principal objectif de cette étude est d'étudier le potentiel de réduction des KPV et des émissions de ",
+                      "GES en déplaçant les courts trajets en voiture par le vélo à Montréal. Deux scénarios ont été introduits pour modéliser ",
+                      "les effets environnementaux d'un transfert modal vers le vélo en fonction des caractéristiques des ",
+                      "déplacements actuels à vélo.<p>Les résultats ont montré que l'augmentation des déplacements à vélo peut ",
+                      "réduire les KPV et les émissions de GES des déplacements en voiture. D'autres mesures de réduction ",
+                      "sont nécessaires pour atteindre les objectifs de diminution des émissions de GES.<br><p><i>Auteurs ",
+                      "principaux du module: Qiao Zhao, Kevin Manaugh</i>")) %>%
+  add_row(en = paste0("The capacity for pedestrian social distancing is a capacity measurement that determines the percentage ",
+                      "of a neighbourhood’s population that can make local trips on foot at the same time while respecting ",
+                      "‘social distancing’ regulations."), # I don't believe we need to put social distancing in quotes
+          fr = paste0("La capacité de distanciation sociale des piétons est une mesure de capacité qui détermine le pourcentage ",
+                      "de la population d'un quartier qui peut faire des trajets locaux à pied en même temps, tout en respectant ",
+                      "les règles de «distanciation sociale».")) %>%
+  add_row(en = paste0("<p>Using open data from Montreal's open data portal as well as OpenStreetMap, it was possible to calculate ",
+                      "the total surface area of sidewalks, neighbourhood parks, and pre-Covid pedestrian streets. Summing these ",
+                      "surface areas gets us the neighbourhood's total walkable surface area. It is then possible to calculate how ",
+                      "many residents can ‘fit’ into the pedestrian realm while respecting ‘social distancing’ regulations of 2 meters ",
+                      "(total walkable surface area divided by the surface area of a circle with a 2-meter radius, that is 12.54 ",
+                      "square meters). Finally, we normalize the value by representing it as a percentage of the residential population. ",
+                      "Neighbourhoods where less than 100% of the local population can make trips on foot at the same time are above ",
+                      "capacity and more at risk of overcrowding from local pedestrian trips. <p>While it is still important to ",
+                      "take into account pedestrian flows coming from external neighbourhoods (some data on pedestrian flows obtained ",
+                      "from 2016 TrajetMtl data is presented in this research), the measurement’s focus on local pedestrian capacity ",
+                      "is especially relevant during a pandemic situation where shelter in place and travel restrictions have ",
+                      "generally led to a rise in local trips and a decline in trips from other neighbourhoods.<br><p><i>Module ",
+                      "lead author: Samuel Kohn</i>"), 
+          fr = paste0("<p>En utilisant les données du portail de données ouvertes de Montréal ainsi que OpenStreetMap, il a été ",
+                      "possible de calculer la surface totale des trottoirs, des parcs de quartier et des rues piétonnes pré-Covid-19. ",
+                      "En additionnant ces surfaces, on obtient la surface totale du quartier où l'on peut marcher. Il est alors ",
+                      "possible de calculer combien d'habitants peuvent «s'intégrer» dans la zone piétonne tout en respectant ",
+                      "les règles de «distanciation sociale» de 2 mètres (surface totale piétonne divisée par la surface d'un ",
+                      "cercle de 2 mètres de rayon, soit 12,54 mètres carrés). Enfin, nous normalisons la valeur en la représentant ",
+                      "en pourcentage de la population résidentielle. Les quartiers où moins de 100 % de la population locale peut ",
+                      "effectuer des trajets à pied en même temps sont au-dessus de leur capacité et sont plus exposés au risque de ",
+                      "surpeuplement des trajets locaux à pied. <p>Même s'il est toujours important de prendre en compte les flux ",
+                      "de piétons provenant des quartiers extérieurs (certaines données sur les flux de piétons obtenues à partir ",
+                      "des données de 2016 de TrajetMtl sont présentées dans cette recherche), l'accent mis par la mesure sur la ",
+                      "capacité piétonne locale est particulièrement pertinent en situation de pandémie, où les protections en place ",
+                      "et les restrictions de déplacement ont généralement conduit à une augmentation des déplacements locaux et à ",
+                      "une diminution des déplacements provenant d'autres quartiers.<br><p><i>Auteur principal du module: ",
+                      "Samuel Kohn</i>")) %>%
+  add_row(en = paste0("Compare the pedestrian capacity for social distancing metric across a variety of other variables, such ",
+                      "as walkable access to amenities, income level, immigration, visible minorities, population density, etc."),
+          fr = paste0("Comparez la mesure de la capacité des piétons à pratiquer la distance sociale en fonction de diverses ",
+                      "autres variables, telles que l'accès à pid aux services de base, le revenu, l'immigration, les ",
+                      "minorités visibles, la densité de population, etc.")) %>%
+  add_row(en = paste0("The data shows us that the ability to safely navigate pedestrian space tends to be much lower in ",
+                      "DAs with lower incomes as well as DAs with high proportions of visible minorities and immigrants ",
+                      "compared to majority white regions of Montreal. While the City’s plans to increase walkable urban ",
+                      "space made some improvements to these discrepancies, there is room for improvement. The interactive ",
+                      "data within this platform has the potential to support policy-makers towards making strategic decisions ",
+                      "with more equitable outcomes. Below is a policy analysis exemplar using two variables: capacity for pedestrian ",
+                      "social distancing and walkable access to key amenities."),
+          fr = paste0("Les données nous montrent que la capacité à se déplacer en toute sécurité dans l'espace piétonnier ",
+                      "tend à être beaucoup plus faible dans les AD à faible revenu ainsi que dans les AD ayant une forte ",
+                      "proportion de minorités visibles et d'immigrants par rapport aux régions de Montréal où la majorité ",
+                      "des habitants sont blancs. Bien que les plans de la Ville visant à augmenter l'espace urbain piétonnier ",
+                      "aient permis d'améliorer ces écarts, il y a place à amélioration. Les données interactives de cette ",
+                      "plateforme peuvent aider les décideurs politiques à prendre des décisions stratégiques avec des résultats ",
+                      "plus équitables. Vous trouverez ci-dessous un exemple d'analyse de politique utilisant deux variables: ",
+                      "la capacité de distanciation sociale des piétons et l'accès à pied aux services de base.")) %>%
+  add_row(en = paste0("In order to calculate the width of sidewalks in Montreal, we used a spatial dataset published by ",
+                      "Montréal Open Data Portal that includes polygons of all sidewalks within the Montreal agglomeration. ",
+                      "Using the the object-oriented programming language R, we developed a function which first creates ",
+                      "negative buffers inside each sidewalk segment, and then iteratively adjusts the distance of that buffer ",
+                      "until the maximum distance is achieved which still produces valid buffer geometry (if the buffer ",
+                      "boundaries overlap, the geometry becomes invalid). The outcome is the equivalent of a centreline ",
+                      "inside each sidewalk polygon. The last step to determine sidewalk width is to sum the distances ",
+                      "between the centreline and both edges of a given sidewalk polygon segment. This process is ",
+                      "illustrated below."),
+          fr = paste0("Afin de calculer la largeur des trottoirs à Montréal, nous avons utilisé un ensemble de données ",
+                      "spatiales publié par le Portail de données ouvertes de Montréal, qui comprend les polygones de ",
+                      "tous les trottoirs de l'agglomération de Montréal. En utilisant le langage de programmation orienté ",
+                      "objet R, nous avons développé une fonction qui crée d'abord des tampons négatifs à l'intérieur de ",
+                      "chaque segment de trottoir, puis ajuste itérativement la distance de ce tampon jusqu'à ce que la ",
+                      "distance maximale soit atteinte, ce qui produit encore une géométrie de tampon valide (si les ",
+                      "limites du tampon se chevauchent, la géométrie devient invalide). Le résultat est l'équivalent ",
+                      "d'une ligne centrale à l'intérieur de chaque polygone de trottoir. La dernière étape pour déterminer ",
+                      "la largeur du trottoir consiste à additionner les distances entre la ligne centrale et les deux bords ",
+                      "d'un segment donné de polygone de trottoir. Ce processus est illustré ci-dessous.")) %>%
   # Description
   add_row(en = paste0("The whole of an ecosystem is more than the sum of its parts. ",
                       "The health and resilience of our urban green spaces are determined ",
@@ -71,7 +207,7 @@ translation_fr <-
   # Sidebar menu
   add_row(en = "Active living potential", fr = "Potentiel de vie active") %>%
   add_row(en = "Commuter mode switching", fr = "Changement de mode de transport") %>%
-  add_row(en = "Pedestrian realm", fr = "La sphère piétonne") %>%
+  add_row(en = "Pedestrian realm", fr = "La voie piétonne") %>%
   # General info
   add_row(en = "Why a dashboard?", fr = "Pourquoi un tableau de bord?") %>%
   add_row(en = "Meet the team", fr = "Rencontrez l'équipe") %>%
@@ -420,6 +556,7 @@ translation_fr <-
   add_row(en = "Average commuting distance (km)" , fr = "Distance moyenne du trajet domicile-travail (km)") %>%
   add_row(en = "Cycling infrastructure (km/sq.km) by census tract:" , fr = "Infrastructure cyclable (km/km2) par secteur de recensement:") %>%
   add_row(en = "Length of the average commute (km), by census tract:" , fr = "Distance moyenne du trajet domicile-travail (km), par secteur de recensement :") %>%
+  add_row(en = "Access to cycling inf. (km/sq.km)" , fr = "Accès aux infr. cyclables (km/km2)") %>%
   distinct(en, .keep_all = T)
 
 write_csv(translation_fr, "translations/translation_fr.csv")
