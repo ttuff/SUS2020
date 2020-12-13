@@ -5,7 +5,7 @@ avg_property_value,Average property value,Average property value is the average 
 unaffordable_prop,Unaffordable housing (%),Unaffordable housing (%) is the percentage of dwellings for which residents pay more than 30% of income on housing costs.
 unsuitable_prop,Unsuitable housing (%),"Unsuitable housing (%) is the percentage of households living in unsuitable accommodations according to the National Occupancy Standard, whether the dwelling has enough bedrooms for the size and composition of the household."
 median_income,Median household income,Median household income is the median  household income (before tax).
-income_50_prop,Income under $50k (%) ,"Income under $50k (%) is the percentage of households with an income less then $50,000."
+income_50_prop,Income under $50k (%),"Income under $50k (%) is the percentage of households with an income less then $50,000."
 income_100_prop,Income between $50k-$100k (%),"Income between $50k-$100k (%) is the percentage of households with an income between $50,000 and $100,000."
 income_high_prop,Income above $100k (%),"Income above $100k (%) is the percentage of households with an income more than $100,000."
 immigrant_prop,Immigrants (%),Immigrants (%) is the percentage of foreign-born residents.
