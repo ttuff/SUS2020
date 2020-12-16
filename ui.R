@@ -103,8 +103,10 @@ shinyUI(
     ## Body --------------------------------------------------------------------
     
     dashboardBody(
-      
-      #add_busy_bar(color = "red", height = "8px"),
+      use_waiter(), 
+      use_steward(colors = c("#0096C9", "#D8F5FF",  "#3DCEFF",  "#007095", "#002532"),speed = 15),
+     # waiter_show_on_load(html = spin_fading_circles()),
+     waiter_show_on_load(html = spin_6(), logo = "SUSLOGO_LoadPage.png"),
        
       tags$head(tags$link(rel = "icon", type = "image/png", href = "logo.png")),
       tags$head(tags$script(HTML(js))),

@@ -49,7 +49,7 @@ library(data.table)
 # 
 # # Options for Spinner
 # options(spinner.color="#0275D8", spinner.color.background="#ffffff", spinner.size=2)
-
+library(waiter)
 
 #i18n <- Translator$new(translation_json_path = "www/translation.json")
 i18n <- Translator$new(translation_csvs_path = "translations/")

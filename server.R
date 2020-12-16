@@ -5,6 +5,7 @@ shinyServer(function(input, output, session) {
   # show_modal_spinner() # show the modal window
   # remove_modal_spinner()
   
+  waiter_hide()
   ### Render images from files #################################################
   
   output$homepic <- renderImage({
