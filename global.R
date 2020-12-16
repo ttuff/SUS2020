@@ -20,31 +20,31 @@ library(mapboxapi)
 library(shinybusy)
 library(markdown)
 library(shinyjqui)
-library(plotly)
+#library(plotly)
 library(png)
 library(shinyWidgets)
 library(cowplot)
 library(RColorBrewer)
 library(classInt)
 library(scales)
-library(leaflet)
+#library(leaflet)
 library(shinythemes)
 library(ggthemes)
 library(extrafont)
 library(shinydashboard)
 library(shinyWidgets)
-library(leaflet)
+
 library(DT)
 library(gghighlight)
 library(qs)
 library(glue)
-library(shinipsum)
+#library(shinipsum)
 # library(fakir)
 library(shiny.i18n)
-library(googleLanguageR)
-library(shinyanimate)
+#library(googleLanguageR)
+#library(shinyanimate)
 library(aniview)
-
+library(data.table)
 # library(shinycssloaders)
 # 
 # # Options for Spinner
@@ -390,7 +390,7 @@ did_you_know <-
   mutate(right_variable = if_else(is.na(right_variable), " ", right_variable))
 
 variable_explanations <- 
-  read_csv("data/variable_explanations.csv")
+  fread("data/variable_explanations.csv")
 
 # Load data for pedestrian realm 
 load(file = "data/sidewalks_WSG.Rdata")

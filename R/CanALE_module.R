@@ -155,15 +155,15 @@ CanALE_module_server <- function(input, output, session, r) {
                  
                  
                  # Load bivariate census data
-                 qload("data/new_bivariate.qsm")
+                 #qload("data/new_bivariate.qsm")
                  
-                 did_you_know <- 
-                   read_csv("data/did_you_know.csv") %>% 
-                   mutate(right_variable = if_else(is.na(right_variable), " ", right_variable))
-                 
-                 variable_explanations <- 
-                   read_csv("data/variable_explanations.csv")
-                 
+                 # did_you_know <- 
+                 #   read_csv("data/did_you_know.csv") %>% 
+                 #   mutate(right_variable = if_else(is.na(right_variable), " ", right_variable))
+                 # 
+                 # variable_explanations <- 
+                 #   read_csv("data/variable_explanations.csv")
+                 # 
                  
                  js <- "
   $(document).ready(function(){
@@ -226,7 +226,7 @@ $(document).ready(function(){
                      
                      data <- 
                        data %>% 
-                       select(ID, name, name_2, population, left_variable_full = ale_index,
+                       dplyr::select(ID, name, name_2, population, left_variable_full = ale_index,
                               left_variable = ale_index_quant3, ale_class, width,
                               group, fill, elevation, fill_opacity)
                      

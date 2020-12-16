@@ -233,12 +233,12 @@ Pedestrian_realm_module_server <- function(input, output, session, r) {
     }, deleteFile = FALSE)
     
     
-    did_you_know <- 
-      read_csv("data/did_you_know.csv") 
+   # did_you_know <- 
+    #  read_csv("data/did_you_know.csv") 
      # mutate(right_variable = if_else(is.na(right_variable), " ", right_variable))
     
-    variable_explanations <- 
-      read_csv("data/variable_explanations.csv")
+   # variable_explanations <- 
+   #   read_csv("data/variable_explanations.csv")
     
     census_analysis_quantile_WSG <- census_analysis_quantile %>% 
       st_transform(4326)

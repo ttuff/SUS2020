@@ -80,7 +80,7 @@ zoomMenuSus_Server <- function(input, output, session, zoom) {
   
   output$zoomBreak <- reactive({
     #break_data
-    
+    req(zoom())
     even <- break_data[which(break_data[,1] %in% round(zoom(), digits=1) == TRUE),2]
     print(length(even))
     if(length(even) != 0){
