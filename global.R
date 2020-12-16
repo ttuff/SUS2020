@@ -17,7 +17,7 @@ library(geojsonsf)
 library(tidyverse)
 library(raster)
 library(mapboxapi)
-
+library(shinybusy)
 library(markdown)
 library(shinyjqui)
 library(plotly)
@@ -44,6 +44,11 @@ library(shiny.i18n)
 library(googleLanguageR)
 library(shinyanimate)
 library(aniview)
+
+# library(shinycssloaders)
+# 
+# # Options for Spinner
+# options(spinner.color="#0275D8", spinner.color.background="#ffffff", spinner.size=2)
 
 
 #i18n <- Translator$new(translation_json_path = "www/translation.json")

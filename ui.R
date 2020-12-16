@@ -104,7 +104,7 @@ shinyUI(
     
     dashboardBody(
       
-      
+      #add_busy_bar(color = "red", height = "8px"),
        
       tags$head(tags$link(rel = "icon", type = "image/png", href = "logo.png")),
       tags$head(tags$script(HTML(js))),
