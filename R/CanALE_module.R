@@ -101,7 +101,7 @@ CanALE_module_UI <- function(id) {
   )
 }
 
-CanALE_module_server <- function(input, output, session, r) {
+CanALE_module_server <- function(input, output, session, sus_reactive_variables) {
   ns <- session$ns
                  ## save colors
                  

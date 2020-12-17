@@ -198,7 +198,7 @@ js_ped_control <- "$(document).ready(function(){
 });
 "
 
-Pedestrian_realm_module_server <- function(input, output, session, r) {
+Pedestrian_realm_module_server <- function(input, output, session, sus_reactive_variables) {
   ns <- session$ns
     
     

@@ -105,7 +105,7 @@ shinyServer(function(input, output, session) {
   
   
   # Language button
-  r$active_language <- eventReactive(input$language_button, {
+  sus_reactive_variables$active_language <- eventReactive(input$language_button, {
     if((input$language_button[1] %% 2) != 0){
       c("en")
     } else {
@@ -142,13 +142,13 @@ shinyServer(function(input, output, session) {
   
   ### Active living potential ##################################################
   
-  callModule(CanALE_module_server, id = "CanALE_module", session = session, r = r)    
+  callModule(CanALE_module_server, id = "CanALE_module", session = session, sus_reactive_variables = sus_reactive_variables)    
   
   ##############################################################################
   
   
   ### Pedestrian realm #########################################################
-  callModule(Pedestrian_realm_module_server, id = "Pedestrian_realm_module", session = session, r = r)
+  callModule(Pedestrian_realm_module_server, id = "Pedestrian_realm_module", session = session, sus_reactive_variables = sus_reactive_variables)
   
   
   ##############################################################################

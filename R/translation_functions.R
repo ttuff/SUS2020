@@ -26,11 +26,11 @@ sus_translation_list <- function(to_translate){
 
 sus_translate <- function(to_translate) {
   # if it's in english
-  if (r$active_language() == "en") {
+  if (sus_reactive_variables$active_language() == "en") {
     to_translate
     
   # if it's in french
-  } else if (r$active_language() == "fr") {
+  } else if (sus_reactive_variables$active_language() == "fr") {
     
     # if it's a list
     if (is.list(to_translate)) {

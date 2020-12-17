@@ -67,8 +67,8 @@ print(i18n$t("Learn more"))
 translation_fr <- read_csv("translations/translation_fr.csv")
 
 # creation o r to store all our reactive values like active_language which will
-# be called with r$active_language()
-r <- reactiveValues() # r to store all our reactive values
+# be called with sus_reactive_variables$active_language()
+sus_reactive_variables <- reactiveValues() # r to store all our reactive values
 
 
 #create_translation_file("/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/www/translation.json", type = "json", handle = "i18n", output = "/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/www/translation.json")
