@@ -198,8 +198,10 @@ js_ped_control <- "$(document).ready(function(){
 });
 "
 
-Pedestrian_realm_module_server <- function(input, output, session, sus_reactive_variables) {
-  ns <- session$ns
+Pedestrian_realm_module_server <- function(id) {
+  moduleServer(id,
+               function(input, output, session) {
+                 ns <- NS(id)
     
     
     output$bivariate_legend_ped <- renderImage({
@@ -1242,4 +1244,6 @@ Pedestrian_realm_module_server <- function(input, output, session, sus_reactive_
       }
       
     })
- }
+               }
+  )
+}

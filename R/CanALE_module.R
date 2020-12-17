@@ -101,8 +101,10 @@ CanALE_module_UI <- function(id) {
   )
 }
 
-CanALE_module_server <- function(input, output, session, sus_reactive_variables) {
-  ns <- session$ns
+CanALE_module_server <- function(id) {
+  moduleServer(id,
+               function(input, output, session) {
+                 ns <- NS(id)
                  ## save colors
                  
                  bivariate_color_scale <- tibble(
@@ -929,4 +931,6 @@ $(document).ready(function(){
                  
                  
                  
-    }
+               }
+)
+  }

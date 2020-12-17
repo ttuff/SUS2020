@@ -142,13 +142,13 @@ shinyServer(function(input, output, session) {
   
   ### Active living potential ##################################################
   
-  callModule(CanALE_module_server, id = "CanALE_module", session = session, sus_reactive_variables = sus_reactive_variables)    
+  CanALE_module_server("CanALE_module")    
   
   ##############################################################################
   
   
   ### Pedestrian realm #########################################################
-  callModule(Pedestrian_realm_module_server, id = "Pedestrian_realm_module", session = session, sus_reactive_variables = sus_reactive_variables)
+  Pedestrian_realm_module_server("Pedestrian_realm_module")
   
   
   ##############################################################################
