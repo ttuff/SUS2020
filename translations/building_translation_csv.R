@@ -8,6 +8,13 @@ translation_fr <-
           fr = "Ajoutez du texte comme titletextSus_UI (textAboveSplit = 'short description'") %>%
   add_row(en = "Add text as titletextSus_UI(textBelowSplit = 'long description')", 
           fr = "Ajouter du texte comme titletextSus_UI (textBelowSplit = 'longue description')") %>%
+  add_row(en = paste0("The CanALE dataset (developed by Prof. Nancy Ross and her team) captures ",
+                      "four key elements related to active living environments: population density, points ",
+                      "of interest, street grid, and proximity of transit service."), 
+          fr = paste0("La base de données AVA-Can (développée par la professeure Nancy Ross et son ",
+                      "équipe) saisit quatre éléments clés liés aux environnements de vie active: ",
+                      "la densité de population, les points d'intérêt, la grille des rues et la proximité ",
+                      "du service de transport en commun.")) %>%
   add_row(en = "Learn more", fr = "En savoir plus") %>%
   add_row(en = "Compare", fr = "Comparez") %>%
   add_row(en = "SUS Preview", fr = "Aperçu du SUS") %>%
@@ -427,7 +434,7 @@ translation_fr <-
                       "potential for active living tend to have {higher_lower} ",
                       "values for '{tolower(var_name)}', {high_low_disclaimer}."),
           fr = paste0("<p>{var_explanation}", 
-                      "<p>L'index AVA-Can a un index de corrélation {strong_weak} et {pos_neg} ",
+                      "<p>L'index AVA-Can a un indice de corrélation {strong_weak} et {pos_neg} ",
                       "({correlation}) avec '{tolower(var_name)}' à l'échelle ",
                       "'{scale_singular}'.",
                       "<p>Cela signifie qu'en général, les {scale_plural} avec un haut ",
@@ -612,6 +619,386 @@ translation_fr <-
   add_row(en = "Cycling infrastructure (km/sq.km) by census tract:" , fr = "Infrastructure cyclable (km/km2) par secteur de recensement:") %>%
   add_row(en = "Length of the average commute (km), by census tract:" , fr = "Distance moyenne du trajet domicile-travail (km), par secteur de recensement :") %>%
   add_row(en = "Access to cycling inf. (km/sq.km)" , fr = "Accès aux infr. cyclables (km/km2)") %>%
+  # Did you know csv
+  add_row(en = paste0("21.3% of people walk or cycle to work in areas in the highest class of active living ",
+                      "potential. In areas with the lowest active living potential, only 2.5% do, compared to a ",
+                      "regional average of 6%."),
+          fr = paste0("21,3 % des personnes se rendent au travail à pied ou à vélo dans des zones où le potentiel ",
+                      "de vie active est le plus élevé. Dans les zones où le potentiel de vie active est le plus ",
+                      "faible, seuls 2,5 % le font, contre une moyenne régionale de 6 %.")) %>% 
+  add_row(en = paste0("Two thirds of new immigrants (67.4%) live in areas with the best access to active living ",
+                      "potential (ALE class 5)."),
+          fr = paste0("Deux tiers des nouveaux immigrants (67,4 %) vivent dans des zones où le potentiel de vie ",
+                      "active est le plus grand (Indice AVA classe 5).")) %>% 
+  add_row(en = paste0("Two thirds of new immigrants (67.4%) live in areas with the best access to active living ",
+                      "potential (ALE class 5)."),
+          fr = paste0("Deux tiers des nouveaux immigrants (67,4 %) vivent dans des zones où le potentiel de vie ",
+                      "active est le plus élevé (Indice AVA classe 5).")) %>% 
+  add_row(en = paste0("11% of new immigrants live in areas with the worst access to active living potential ",
+                      "(ALE class 1)."),
+          fr = paste0("11 % des nouveaux immigrants vivent dans des zones où l'accès au potentiel de vie active ",
+                      "est le plus faible (Indice AVA classe 1).")) %>% 
+  add_row(en = paste0("While, overall, there is a trend towards lower income DAs being in high ALE class, roughly ",
+                      "340,000 people are in CanALE class 3 or lower AND have median household income less than $50,000."),
+          fr = paste0("Alors que, généralement, on observe une tendance à ce que les AD à faible revenu fassent partie ",
+                      "de la classe AVA élevée, environ 340 000 personnes font partie de la classe CanALE 3 ou moins et ",
+                      "ont un revenu par ménage médian inférieur à 50 000 $.")) %>% 
+  add_row(en = paste0("Areas in class 4 of active living potential have the highest average dwelling values, but nearly ",
+                      "10% fewer renters than areas with active living class 5."),
+          fr = paste0("Les zones de classe 4 de potentiel de vie active ont les valeurs propriétés moyennes les plus ",
+                      "élevées, mais comptent près de 10 % de locataires de moins que les zones avec un potentiel de ",
+                      "de vie active de classe 5.")) %>% 
+  add_row(en = paste0("Roughly 90% of the region’s population live within a 1km walk of a transit station. The vast ",
+                      "majority of areas which lack access are located off the island of Montreal."),
+          fr = paste0("Environ 90 % de la population de la région vit à moins d'un kilomètre à pied d'une station de ",
+                      "transport en commun. La grande majorité des zones qui ne sont pas accessibles sont situées à ",
+                      "l'extérieur de l'Île de Montréal.")) %>% 
+  add_row(en = paste0("The Plateau-Mont-Royal has the highest active mode share to work (36% walking or biking), ",
+                      "followed by Ville Marie with 32.5%."),
+          fr = paste0("Le Plateau-Mont-Royal a la part la plus élevée de modes de transport actifs pour travailler (36% à pied ",
+                      "ou à vélo), suivi de Ville Marie avec 32,5%.")) %>% 
+  add_row(en = paste0("Saint-Isidore, Sainte-Marthe-sur-le-Lac, Pointe-Calumet, Mascouche, Saint-Joseph-du-Lac, and Léry all ",
+                      "have active mode shares of less than 2% to work."),
+          fr = paste0("Saint-Isidore, Sainte-Marthe-sur-le-Lac, Pointe-Calumet, Mascouche, Saint-Joseph-du-Lac et Léry ont tous ",
+                      "des pourcentages de modes de transport actifs inférieurs à 2% pour les déplacements domicile-travail.")) %>% 
+  add_row(en = paste0("Pierrefonds-Roxboro and L’Île-Bizard-Sainte-Geneviève are the two Montreal boroughs with the lowest ",
+                      "active mode share to work (less than 3% walk or bike)."),
+          fr = paste0("Pierrefonds-Roxboro et L'Île-Bizard-Sainte-Geneviève sont les deux arrondissements de Montréal où le ",
+                      "pourcentage de modes de transport actifs pour les déplacements domicile-travail est le plus faible ",
+                      "(moins de 3 % à pied ou à vélo).")) %>% 
+  add_row(en = paste0("Hampstead, Côte-des-Neiges-Notre-Dame-de-Grâce, and Villeray-Saint-Michel-Parc-Extension all have ",
+                      "high active living potential (ALE class 4 or higher) and active mode shares of less than 15%."),
+          fr = paste0("Hampstead, Côte-des-Neiges-Notre-Dame-de-Grâce et Villeray-Saint-Michel-Parc-Extension ont ",
+                      "tous un potentiel de vie active élevé (Indice AVA classe 4 ou plus) et des pourcentages de modes de transport ",
+                      "actifs inférieurs à 15 %.")) %>%
+  add_row(en = paste0("Sainte-Julie has the highest active mode share (9.1%) of any borough or municipality with low active ",
+                      "living potential, followed by Senneville (5.8%) and Montréal-Est (5.8%)."),
+          fr = paste0("Sainte-Julie a la plus grande proportion de mode de transport actif (9,1 %) de tous les arrondissements ",
+                      "ou municipalités à faible potentiel de vie active, suivie de Senneville (5,8 %) et de Montréal-Est (5,8 %).")) %>%
+  add_row(en = paste0("Montréal-Est has the highest proportion (22.2%) of people who take public transit to work of any ",
+                      "area with low walkability."),
+          fr = paste0("De tous les secteurs où le potentiel piétonnier est faible, c'est à Montréal-Est que l'on trouve ",
+                      "la plus forte proportion (22,2 %) de personnes qui prennent le transport en commun pour se rendre ",
+                      "au travail.")) %>%
+  add_row(en = paste0("Hampstead has the lowest proportion (15.6%) of people who take public transit to work of any area ",
+                      "with high walkability, and Côte-des-Neiges-Notre-Dame-de-Grâce has the highest (46.7%)."),
+          fr = paste0("Hampstead a la plus faible proportion (15,6 %) de personnes qui prennent le transport en commun ",
+                      "pour les déplacements domicile-travail parmi tous les secteurs à fort potentiel piétonnier, et ",
+                      "Côte-des-Neiges-Notre-Dame-de-Grâce a la plus forte proportion (46,7 %).")) %>%
+  add_row(en = paste0("The proportion of people who drive to work in areas with low walkability ranges from 71.2% to ",
+                      "95.7%. Montréal-Est has the lowest proportion with 71.2%."),
+          fr = paste0("La proportion de personnes qui se rendent au travail en voiture dans des zones où le potentiel ",
+                      "piétonnier est faible varie entre 71,2 % et 95,7 %. C'est à Montréal-Est que la proportion est la plus ",
+                      "petite, soit 71,2 %.")) %>%
+  add_row(en = paste0("The proportion of people who drive to work in areas with high walkability ranges from 24.9% in ",
+                      "Le Plateau-Mont-Royal to 78.9% in Hampstead."),
+          fr = paste0("La proportion de personnes qui se rendent au travail en voiture dans des zones à fort potentiel ",
+                      "piétonnier varie de 24,9 % pour le Plateau-Mont-Royal à 78,9 % à Hampstead.")) %>%
+  add_row(en = paste0("Sainte-Julie has the highest proportion of people who commute less than 15 minutes to work, and ",
+                      "has low active living potential (ALE class 1)."),
+          fr = paste0("Sainte-Julie compte la plus forte proportion de personnes qui se rendent au travail en moins de ",
+                      "15 minutes dans les arrondissements ou municipalités ayant un faible potentiel de vie active ",
+                      "(Indice AVA classe 1).")) %>%
+  add_row(en = paste0("Villeray-Saint-Michel-Parc-Extension and Rosemont-La Petite-Patrie have the lowest proportions ",
+                      "of people who commute less than 15 minutes to work (11.2% and 11.9%, respectively) of areas ",
+                      "with high walkability."),
+          fr = paste0("Villeray-Saint-Michel-Parc-Extension et Rosemont-La Petite-Patrie affichent les plus petites ",
+                      "proportions de personnes qui se rendent au travail en moins de 15 minutes (respectivement ",
+                      "11,2 % et 11,9 %) parmi les régions où le potentiel piétonnier est élevé.")) %>%
+  add_row(en = paste0("Mont-Royal (medium active living potential) has the highest proportion (49.1%) of commutes ",
+                      "to work between 15-30 minutes, while Mercier (low active living potential) has the lowest ",
+                      "proportion for the same time (19.7%)."),
+          fr = paste0("Le Mont-Royal (potentiel de vie active moyen) présente la plus grande proportion (49,1 %) ",
+                      "de trajets domicile-travail de 15 à 30 minutes, tandis que le Mercier (faible potentiel de ",
+                      "vie active) présente la plus faible proportion pour la même durée (19,7 %).")) %>%
+  add_row(en = paste0("Rosemont-La Petite-Patrie (high active living potential) has the highest proportion (35.1%) ",
+                      "of commutes to work between 30-45 minutes, while Sainte-Julie (low active living potential) ",
+                      "has the lowest proportion for the same time (9.1%)."),
+          fr = paste0("Rosemont-La Petite-Patrie (fort potentiel de vie active) a la plus grande proportion (35,1 %) ",
+                      "de trajets domicile-travail de 30 à 45 minutes, tandis que Sainte-Julie (faible potentiel ",
+                      "de vie active) a la plus petite proportion pour la même durée (9,1 %).")) %>%
+  add_row(en = paste0("Léry (low active living potential) has the highest proportion (19.2%) of commutes to work ",
+                      "between of up to 60 minutes, while Westmount (high active living potential) has the lowest ",
+                      "proportion for the same time (5.5%)."),
+          fr = paste0("Léry (faible potentiel de vie active) présente la plus grande proportion (19,2 %) de trajets ",
+                      "domicile-travail d'une durée maximale de 60 minutes, tandis que Westmount (fort potentiel ",
+                      "de vie active) présente la plus petite proportion pour la même durée (5,5 %).")) %>%
+  add_row(en = paste0("Hampstead has the highest proportion of people with income greater than $100,000 (55.0%) ",
+                      "of high walkable boroughs or municipalities, closely followed by Westmount (50.1%)."),
+          fr = paste0("Hampstead a la plus grande proportion de personnes ayant un revenu supérieur à 100 000 $ ",
+                      "(55,0 %) parmi les arrondissements ou municipalités avec un fort potentiel piétonnier, ",
+                      "suivie de près par Westmount (50,1 %).")) %>%
+  add_row(en = paste0("Sainte-Anne-de-Bellevue has the highest proportion of people with income greater than ",
+                      "$100,000 (55.0%) of less walkable boroughs or municipalities, closely followed by ",
+                      "Beaconsfield (59.7%)."),
+          fr = paste0("Sainte-Anne-de-Bellevue compte la plus forte proportion de personnes ayant un revenu ",
+                      "supérieur à 100 000 $ (55,0 %) parmi les arrondissements ou municipalités avec un faible ",
+                      "potentiel piétonnier, suivie de près par Beaconsfield (59,7 %).")) %>%
+  add_row(en = paste0("Montréal-Est has the highest proportion of people with income less than $50,000 (49.1%) ",
+                      "of all boroughs or municipalities with low active living potential."),
+          fr = paste0("Montréal-Est compte la plus grande proportion de personnes ayant un revenu inférieur à ",
+                      "50 000 $ (49,1 %) de tous les arrondissements ou municipalités à faible potentiel de ",
+                      "vie active.")) %>%
+  add_row(en = paste0("Villeray-Saint-Michel-Parc-Extension has the highest proportion of people with income ",
+                      "less than $50,000 (57.7%) of all boroughs or municipalities with high active living potential."),
+          fr = paste0("Villeray-Saint-Michel-Parc-Extension compte la plus grande proportion de personnes ",
+                      "ayant un revenu inférieur à 50 000 $ (57,7 %) de tous les arrondissements ou municipalités ",
+                      "à fort potentiel de vie active.")) %>%
+  add_row(en = paste0("Sainte-Anne-de-Bellevue has the highest overall median income ($130,553) of any area with ",
+                      "low active living potential, and Montréal-Est has the lowest ($50,413)."),
+          fr = paste0("Sainte-Anne-de-Bellevue a le revenu médian global le plus élevé (130 553 $) de toutes ",
+                      "les régions à faible potentiel de vie active, et Montréal-Est a le plus bas (50 413 $).")) %>%
+  add_row(en = paste0("Côte-des-Neiges-Notre-Dame-de-Grâce has the highest proportion of new immigrants (12%) ",
+                      "of any borough with high active living potential (average ALE class >4 across the ",
+                      "entire borough). It also has the highest proportion of immigrants in general (46.7%) ",
+                      "for the same conditions."),
+          fr = paste0("Côte-des-Neiges-Notre-Dame-de-Grâce a la plus grande proportion de nouveaux immigrants ",
+                      "(12 %) de tous les arrondissements à fort potentiel de vie active (classe AVA moyenne > 4 ",
+                      "sur l'ensemble de l'arrondissement). Elle a également la plus forte proportion d'immigrants ",
+                      "en général (46,7 %) pour les mêmes conditions.")) %>%
+  add_row(en = paste0("Senneville has the highest proportion of new immigrants (4.4%) of any borough or municipality ",
+                      "with low active living potential, followed by L’Île-Bizard-Sainte-Geneviève (3.6%)."),
+          fr = paste0("Senneville compte la plus forte proportion de nouveaux immigrants (4,4 %) de tous les ",
+                      "arrondissements ou municipalités à faible potentiel de vie active, suivie de ",
+                      "L'Île-Bizard-Sainte-Geneviève (3,6 %).")) %>%
+  add_row(en = paste0("9910 (20%) of immigrants living in areas with low walkability live in Terrebonne. 1040 ",
+                      "of those people are new immigrants."),
+          fr = paste0("9910 (20 %) des immigrants vivant dans des zones à faible potentiel piétonnier vivent à ",
+                      "Terrebonne. 1040 de ces personnes sont de nouveaux immigrants.")) %>%
+  add_row(en = paste0("25 percent of immigrants (76,190 people) living in areas with high walkability live in ",
+                      "Côte-des-Neiges-Notre-Dame-de-Grâce. 19,605 of those people (25.7%) are new immigrants."),
+          fr = paste0("25 % des immigrants (76 190 personnes) vivant dans des secteurs à fort potentiel piétonnier ",
+                      "habitent Côte-des-Neiges-Notre-Dame-de-Grâce. 19 605 de ces personnes (25,7 %) sont de nouveaux ",
+                      "immigrants.")) %>%
+  add_row(en = paste0("302,195 immigrants live in areas with on average high walkability, while 48,635 immigrants ",
+                      "live in areas with on average low walkability."),
+          fr = paste0("302 195 immigrants vivent dans des zones où le potentiel piétonnier est, en moyenne, élevé tandis ",
+                      "que 48 635 immigrés vivent dans des zones où le potentiel piétionnier est, en moyenne, faible.")) %>%
+  add_row(en = paste0("Hampstead has the lowest proportion of renters (31.7%) of all areas with high active living ",
+                      "potential, and Côte-des-Neiges-Notre-Dame-de-Grâce has the highest proportion (73.7%)."),
+          fr = paste0("Hampstead a la plus petite proportion de locataires (31,7 %) de tous les secteurs à fort ",
+                      "potentiel de vie active, et Côte-des-Neiges-Notre-Dame-de-Grâce a la plus grande proportion (73,7 %).")) %>%
+  add_row(en = paste0("Montréal-Est has the highest proportion of tenants (56.1%) of all areas with low active living ",
+                      "potential, followed by Mirabel with 29.3%."),
+          fr = paste0("Montréal-Est compte la plus grande proportion de locataires (56,1 %) de tous les secteurs à faible ",
+                      "potentiel de vie active, suivie de Mirabel avec 29,3 %.")) %>%
+  add_row(en = paste0("Kirkland has the lowest average rent ($125) of all areas with low walkability."),
+          fr = paste0("Kirkland a le loyer moyen le plus bas (125 $) de toutes les zones à faible potentiel piétonnier.")) %>%
+  add_row(en = paste0("Mercier has the highest average rent of almost $900 per month of all areas with low walkability, ",
+                      "followed by Sainte-Julie with average rent of $875."),
+          fr = paste0("De tous les quartiers à faible potentiel piétionnier, Mercier a le loyer moyen le plus élevé, ",
+                      "soit près de 900 $ par mois, suivi de Sainte-Julie avec un loyer moyen de 875 $.")) %>%
+  add_row(en = paste0("Villeray-Saint-Michel-Parc-Extension has the lowest average rent ($747) of all areas with high ",
+                      "walkability, followed by Mercier-Hochelage-Maisonneuve ($761)."),
+          fr = paste0("Villeray-Saint-Michel-Parc-Extension a le loyer moyen le plus bas (747 $) de tous les secteurs ",
+                      "à forte potentiel piétonnier, suivi de Mercier-Hochelage-Maisonneuve (761 $).")) %>%
+  add_row(en = paste0("Senneville has by far the highest average property value ($994,294.4) of all areas with low ",
+                      "walkability, and Point-Calumet has the lowest average property value ($223,573.2)."),
+          fr = paste0("Senneville a de loin la valeur moyenne des propriétés la plus élevée (994 294,4 $) de toutes ",
+                      "les zones à faible potentiel piétonnier, et Point-Calumet a la valeur moyenne de propriété ",
+                      "la plus basse (223 573,2 $).")) %>%
+  add_row(en = paste0("Mercier-Hochelage-Maisonneuve has the lowest average property value ($337,844.8) of all areas ",
+                      "with high active living potential, and Westmount has the highest value ($1,242,703.7)."),
+          fr = paste0("Mercier-Hochelage-Maisonneuve a la plus basse valeur moyenne des propriétés (337 844,8 $) ",
+                      "de tous les secteurs à fort potentiel de vie active, et Westmount a la valeur la plus élevée ",
+                      "(1 242 703,7 $).")) %>%
+  add_row(en = paste0("Montréal-Est has the highest proportion of unaffordable housing (29.4%) of all areas with ",
+                      "low active living potential, and Sainte-Anne-de-Bellevue has the lowest proportion (10.1%)."),
+          fr = paste0("Montréal-Est a la plus forte proportion de logements inabordables (29,4 %) de tous les ",
+                      "secteurs à faible potentiel de vie active, et Sainte-Anne-de-Bellevue a la plus faible ",
+                      "proportion (10,1 %).")) %>%
+  add_row(en = paste0("Ville-Marie has the highest proportion of unaffordable housing (43.3%) of all areas with ",
+                      "high active living potential, and Hampstead has the lowest (24.0%)."),
+          fr = paste0("Ville-Marie a la plus grande proportion de logements inabordables (43,3 %) de tous les secteurs ",
+                      "à fort potentiel de vie active, et Hampstead a la plus petite (24,0 %).")) %>%
+  add_row(en = paste0("Côte-des-Neiges-Notre-Dame-de-Grâce has the highest proportion of unsuitable housing (14.2%) ",
+                      "of any area with high active living potential, and Westmount has the lowest (4.4%)."),
+          fr = paste0("Côte-des-Neiges-Notre-Dame-de-Grâce a la plus grande proportion de logements inadéquats ",
+                      "(14,2 %) de tous les secteurs à fort potentiel de vie active, et Westmount a la plus petite (4,4 %).")) %>%
+  add_row(en = paste0("The top 3 boroughs that have the highest proportion of people living in census tracts with a ",
+                      "low capacity for pedestrian social distancing were 1) Le Plateau-Mont-Royal (74%), 2) ",
+                      "Villeray-Saint-Michel-Parc-Extension (65%) and 3) Montréal Nord (60%)."),
+          fr = paste0("Les trois arrondissements ayant la plus grande proportion de personnes vivant dans des ",
+                      "secteurs de recensement ayant une faible capacité de distanciation sociale des piétons sont 1) ",
+                      "Le Plateau-Mont-Royal (74 %), 2) Villeray-Saint-Michel-Parc-Extension (65 %) et 3) Montréal Nord (60 %).")) %>%
+  add_row(en = paste0("14.8% of Montreal Agglomeration's total population live in DAs with a pedestrian social ",
+                      "distancing capacity below 25%. Of those, 76.31% were not directly serviced by the original May ",
+                      "15th expanded active transit plan, and 79.85% were not directly serviced by the revised July 25th plan."),
+          fr = paste0("14,8 % de la population totale de l'agglomération de Montréal vit dans des AD dont la capacité de ",
+                      "distanciation sociale des piétons est inférieure à 25 %. De ce nombre, 76,31 % n'étaient pas directement ",
+                      "desservis par le plan des Voies actives sécuritaires du 15 mai, et 79,85 % n'étaient pas directement desservis ",
+                      "par le plan révisé du 25 juillet.")) %>%
+  add_row(en = paste0("The top 3 boroughs with the lowest proportion of its population commuting to work by car are Le ",
+                      "Plateau-Mont-Royal (24.4%), Ville-Marie (26%) and Côte-des-Neiges-Notre-Dame-de-Grâce (40.6%)."),
+          fr = paste0("Les trois arrondissements ayant la plus petite proportion de leur population se rendant ",
+                      "au travail en voiture sont Le Plateau-Mont-Royal (24,4 %), Ville-Marie (26 %) et ",
+                      "Côte-des-Neiges-Notre-Dame-de-Grâce (40,6 %).")) %>%
+  add_row(en = paste0("Montreal’s borough with the highest population density per square meter of walkable space is ",
+                      "Côte-des-Neiges-Notre-Dame-de-Grâce (0.28 people / square meters of walkable space)."),
+          fr = paste0("L'arrondissement de Montréal ayant la plus forte densité de population par mètre carré de surface ",
+                      "marchable est Côte-des-Neiges-Notre-Dame-de-Grâce (0,28 personne / mètre carré de surface marchable).")) %>%
+  add_row(en = paste0("DAs with a capacity for pedestrian social distancing less than 25% contain, on average, a net median ",
+                      "income of $44,773 compared to $54,930 for the city as a whole and $61,651 for DAs with over 100% capacity."),
+          fr = paste0("Les AD ayant une capacité de distanciation sociale des piétons inférieure à 25 % ont, en moyenne, ",
+                      "un revenu net médian de 44 773 $, contre 54 930 $ pour l'ensemble de la ville et 61 651 $ pour les AD ",
+                      "ayant une capacité supérieure à 100 %.")) %>%
+  add_row(en = paste0("DAs with a capacity for pedestrian social distancing less than 25% contain, on average, a 50.4% ",
+                      "visible minority population compared to 32% for the city as a whole and 28% for DAs with over ",
+                      "100% capacity."),
+          fr = paste0("Les AD ayant une capacité de distanciation sociale des piétons inférieure à 25 % contiennent en ",
+                      "moyenne 50,4 % de minorités visibles, contre 32 % pour l'ensemble de la ville et 28 % pour les ",
+                      "AD ayant une capacité supérieure à 100 %.")) %>%
+  add_row(en = paste0("DAs with a capacity for pedestrian social distancing less than 25% contain, on average, a 45.25% ",
+                      "immigrant population compared to 33% for the city as a whole and 30% for DAs with over 100% capacity."),
+          fr = paste0("Les AD ayant une capacité de distanciation sociale des piétons inférieure à 25% contiennent en ",
+                      "moyenne 45,25% de population immigrante contre 33% pour l'ensemble de la ville et 30% pour les ",
+                      "AD ayant une capacité supérieure à 100%.")) %>%
+  add_row(en = paste0("The top 3 boroughs or independent municipalities in the Montreal agglomeration with the lowest ",
+                      "average sidewalk widths are 1) L’Île-Bizard-Sainte-Geneviève (0.48 meters), 2) Pierrefonds-Roxboro ",
+                      "(0.67 meters) and 3) Dollard-des-Ormeaux (0.68 meters). More than 75% of trips to work in these ",
+                      "three boroughs are done by car."),
+          fr = paste0("Les 3 arrondissements ou municipalités indépendantes de l'agglomération de Montréal ayant la ",
+                      "plus petite largeur moyenne de trottoir sont 1) L'Île-Bizard-Sainte-Geneviève (0,48 mètre), ",
+                      "2) Pierrefonds-Roxboro (0,67 mètre) et 3) Dollard-des-Ormeaux (0,68 mètre). Plus de 75 % des ",
+                      "déplacements domicile-travail dans ces trois arrondissements se font en voiture.")) %>%
+  add_row(en = paste0("Le Plateau-Mont-Royal is the borough with the highest average sidewalk width at 3.05 meters. ",
+                      "However, 35% of boroughs or independent municipalities in Montreal’s agglomeration have ",
+                      "lower population densities per square meter of sidewalk space than the Plateau-Mont-Royal. ",
+                      "Further, 62% of boroughs or independent municipalities in Montreal's agglomeration have ",
+                      "lower population densities per square meter of total walkable space than the ",
+                      "Plateau-Mont-Royal. Only 24% of residents in the Plateau-Mont-Royal commute to work by car."),
+          fr = paste0("Le Plateau-Mont-Royal est l'arrondissement où la largeur moyenne des trottoirs est la plus ",
+                      "élevée, soit 3,05 mètres. Toutefois, 35 % des arrondissements ou des municipalités indépendantes ",
+                      "de l'agglomération de Montréal ont une densité de population par mètre carré de trottoir ",
+                      "inférieure à celle du Plateau-Mont-Royal. De plus, 62 % des arrondissements ou des municipalités ",
+                      "indépendantes de l'agglomération de Montréal ont une densité de population par mètre carré de ",
+                      "surface marchable totale inférieure à celle du Plateau-Mont-Royal. Seulement 24 % des résidents ",
+                      "du Plateau-Mont-Royal se rendent au travail en voiture.")) %>%
+  add_row(en = paste0("The highest average rent in Montreal is in Westmount, at $1269.1 per month, followed by ",
+                      "Outremont at $1137.1 per month."),
+          fr = paste0("Le loyer moyen le plus élevé à Montréal se trouve à Westmount, à 1269,1 $ par mois, suivi ",
+                      "d'Outremont, à 1177,1 $ par mois.")) %>%
+  add_row(en = paste0("The lowest average rent in Montreal is in Kirkland, at $124.7 per month."),
+          fr = paste0("Le loyer moyen le plus bas à Montréal se trouve à Kirkland, à 124,7 $ par mois.")) %>%
+  add_row(en = paste0("Westmount has the highest average property value ($1,242,703.7), followed by Hampstead ",
+                      "($1,125,655.9)."),
+          fr = paste0("Westmount a la valeur moyenne des propriétés la plus élevée (1 242 703,7 $), suivie de ",
+                      "Hampstead (1 125 655,9 $).")) %>%
+  add_row(en = paste0("The lowest average property value in Montreal ($223,573.2) can be found in Pointe-Calumet."),
+          fr = paste0("La valeur moyenne des propriétés la plus basse à Montréal (223 573,2 $) se trouve à Point-Calumet.")) %>%
+  add_row(en = paste0("Baie-d'Urfé has the lowest proportion of tenants, at 2.6%, followed by Lorraine with 2.7%."),
+          fr = paste0("Baie-d'Urfé a la plus petite proportion de locataires, avec 2,6%, suivie par la Lorraine avec 2,7%.")) %>%
+  add_row(en = paste0("Côte-des-Neiges-Notre-Dame-de-Grâce has the highest proportion of tenants (73.7%), closely ",
+                      "followed by Ville-Marie (73.0%) and Le Plateau-Mont-Royal (72.8%)."),
+          fr = paste0("Côte-des-Neiges-Notre-Dame-de-Grâce a la plus grande proportion de locataires (73,7 %), suivie ",
+                      "de près par Ville-Marie (73,0 %) et Le Plateau-Mont-Royal (72,8 %).")) %>%
+  add_row(en = paste0("The top 10th percentile of tenant proportion in Montreal falls above 64.7%."),
+          fr = paste0("Le 90e percentile de la proportion de locataires à Montréal se situe au-dessus de 64,7 %.")) %>%
+  add_row(en = paste0("Sainte-Anne-de-Bellevue has the lowest proportion of unaffordable housing at 10.1%, followed ",
+                      "by Mercier with 10.3% unaffordable housing."),
+          fr = paste0("Sainte-Anne-de-Bellevue a la plus petite proportion de logements inabordables avec ",
+                      "10,1%, suivie de Mercier avec 10,3% de logements inabordables.")) %>%
+  add_row(en = paste0("Ville-Marie has the highest proportion of unaffordable housing at 43.3%. Le Plateau-Mont-Royal ",
+                      "falls just behind with 38.1% unaffordable housing."),
+          fr = paste0("C'est à Ville-Marie que l'on trouve la plus forte proportion de logements inabordables, ",
+                      "soit 43,3 %. Le Plateau-Mont-Royal se situe juste derrière avec 38,1 % de logements inabordables.")) %>%
+  add_row(en = paste0("The top 10 percentile of Montreal has more than 31.2% unaffordable housing."),
+          fr = paste0("Le 90e percentile de Montréal compte plus de 31,2 % de logements inabordables.")) %>%
+  add_row(en = paste0("Sainte-Anne-de-Bellevue, Saint-Bruno-de-Montarville, Sainte-Julie, and Léry ",
+                      "have 0% unsuitable housing."),
+          fr = paste0("Sainte-Anne-de-Bellevue, Saint-Bruno-de-Montarville, Sainte-Julie et Léry ont 0% de ",
+                      "logements de taille non convenable.")) %>%
+  add_row(en = paste0("Saint-Laurent has the highest proportion of unsuitable housing at 15.0%, followed by ",
+                      "Côte-des-Neiges-Notre-Dame-de-Grâce at 14.2%."),
+          fr = paste0("Saint-Laurent présente la plus forte proportion de logements de taille non convenable avec ",
+                      "15,0 %, suivi de Côte-des-Neiges-Notre-Dame-de-Grâce avec 14,2 %.")) %>%
+  add_row(en = paste0("Half of areas in Montreal have more than 2.9% unsuitable housing, 30% have more than 5.2% ",
+                      "unsuitable housing, and 10% have more than 8.2% unsuitable housing."),
+          fr = paste0("La moitié des quartiers de Montréal ont plus de 2,9 % de logements de taille non convenable, ",
+                      "30 % ont plus de 5,2 % de logements de taille non convenable et 10 % en ont plus de 8,2 %.")) %>%
+  add_row(en = paste0("Montréal-Nord has the highest proportion of people with an annual income of less than $50,000 ",
+                      "at 59.5%, closely followed by Villeray-Saint-Michel-Parc-Extension (57.7%) and Ville-Marie (57.6%)."),
+          fr = paste0("Montréal-Nord compte la plus grande proportion de personnes ayant un revenu annuel inférieur ",
+                      "à 50 000 $, soit 59,5 %, suivie de près par Villeray-Saint-Michel-Parc-Extension (57,7 %) ",
+                      "et Ville-Marie (57,6 %).")) %>%
+  add_row(en = paste0("Sainte-Anne-de-Bellevue has the lowest proportion of people with an annual income of less than ",
+                      "$50,000 at 7.4%."),
+          fr = paste0("Sainte-Anne-de-Bellevue a la plus petite proportion de personnes ayant un revenu annuel ",
+                      "inférieur à 50 000 $, soit 7,4 %.")) %>%
+  add_row(en = paste0("Sainte-Anne-de-Bellevue has the highest proportion of people with an annual income of ",
+                      "more than $100,000 at 65.4%, and Montreal-Nord has the lowest (9.7%)."),
+          fr = paste0("Sainte-Anne-de-Bellevue a la plus grande proportion de personnes ayant un revenu annuel ",
+                      "supérieur à 100 000 $, soit 65,4 %, et Montréal-Nord a la plus petite (9,7 %).")) %>%
+  add_row(en = paste0("Sainte-Anne-des-Plaines has the highest proportion of people (43.7%) with an annual income ",
+                      "of up to $100,000."),
+          fr = paste0("Sainte-Anne-des-Plaines compte la plus grande proportion de personnes (43,7 %) ayant un revenu ",
+                      "annuel allant jusqu'à 100 000 $.")) %>%
+  add_row(en = paste0("Half of Montreal has a proportion of 29.0% or less people with an annual income below $50,000, ",
+                      "and 10% of Montreal has a proportion of 49.2% or higher with an annual income below $50,000."),
+          fr = paste0("La moitié de Montréal a une proportion de 29,0 % ou moins de personnes ayant un revenu annuel ",
+                      "inférieur à 50 000 $, et 10 % de Montréal a une proportion de 49,2 % ou plus de personnes ",
+                      "ayant un revenu annuel inférieur à 50 000 $.")) %>%
+  add_row(en = paste0("Montreal-Nord has the lowest median income in Montreal ($43,240.1), followed by Villeray-",
+                      "Saint-Michel-Parc-Extension ($43,910.8)."),
+          fr = paste0("Montréal-Nord a le revenu médian le plus bas de Montréal (43 240,1 $), suivi de ",
+                      "Villeray-Saint-Michel-Parc-Extension (43 910,8 $).")) %>%
+  add_row(en = paste0("Hampstead has the highest median income in Montreal ($134,155.3), followed by Westmount ",
+                      "($1,333,333.9), Sainte-Anne-de-Bellevue ($130,552.9), Mont-Royal ($130,019.4), and Beaconsfield ",
+                      "($129,911.4)."),
+          fr = paste0("Hampstead a le revenu médian le plus élevé à Montréal (134 155,3 $), suivi de Westmount ",
+                      "(1 333 333,9 $), Sainte-Anne-de-Bellevue (130 552,9 $), Mont-Royal (130 019,4 $) et Beaconsfield ",
+                      "(129 911,4 $).")) %>%
+  add_row(en = paste0("Sainte-Julie, Notre-Dame-de-l'Île-Perrot, Oka, Pointe-Calumet, and Charlemagne have less than ",
+                      "0.2% new immigrants."),
+          fr = paste0("Sainte-Julie, Notre-Dame-de-l'Île-Perrot, Oka, Pointe-Calumet, et Charlemagne ont moins de 0.2% ",
+                      "de nouveaux immigrants.")) %>%
+  add_row(en = paste0("Sainte-Julie has 0.0% immigrants, and Pointe-Calumet has the next lowest proportion at 2.1%."),
+          fr = paste0("Sainte-Julie compte 0,0 % d'immigrants, et Pointe-Calumet a la deuxième plus basse proportion ",
+                      "avec 2,1 %.")) %>%
+  add_row(en = paste0("Saint-Laurent has the highest proportion of new immigrants (12.1%), followed by ",
+                      "Côte-des-Neiges-Notre-Dame-de-Grâce (12.0%)."),
+          fr = paste0("Saint-Laurent a la plus grande proportion de nouveaux immigrants (12,1 %), suivie de ",
+                      "Côte-des-Neiges-Notre-Dame-de-Grâce (12,0 %).")) %>%
+  add_row(en = paste0("Saint-Laurent has the highest proportion of immigrants (53.6%) and also the highest proportion ",
+                      "of new immigrants (12.1%)."),
+          fr = paste0("Saint-Laurent a la plus grande proportion d'immigrants (53,6 %) et aussi la plus grande proportion ",
+                      "de nouveaux immigrants (12,1 %).")) %>%
+  add_row(en = paste0("Half of areas in Montreal has a proportion of immigrants 22.6% of higher (50th percentile)."),
+          fr = paste0("La moitié des quartiers de Montréal ont une proportion d'immigrants de 22,6 % ou plus (50e percentile).")) %>%
+  add_row(en = paste0("50% of areas in Montreal have new immigrant proportions of 2.8% or lower, and 10% have ",
+                      "proportions above 8.3%."),
+          fr = paste0("50 % des quartiers de Montréal ont une proportion de nouveaux immigrants de 2,8 % ou moins, ",
+                      "et 10 % ont une proportion supérieure à 8,3 %.")) %>%
+  add_row(en = paste0("The proportion of people who walk or bike to work in Montreal ranges between 0.0% (Saint-Isidore) ",
+                      "and 36.0% (Le Plateau-Mont-Royal)."),
+          fr = paste0("La proportion de personnes qui se rendent au travail à Montréal à pied ou à vélo varie entre ",
+                      "0,0 % (Saint-Isidore) et 36,0 % (Le Plateau-Mont-Royal).")) %>%
+  add_row(en = paste0("50% of areas in Montreal have proportions of people who walk or bike to work lower than 4.4%, ",
+                      "and 10% of areas have proportions higher than 11.7%."),
+          fr = paste0("50 % des quartiers de Montréal ont des proportions de personnes qui se rendent au travail à ",
+                      "pied ou à vélo inférieures à 4,4 %, et 10 % des quartiers ont des proportions supérieures à 11,7 %.")) %>%
+  add_row(en = paste0("The proportion of people who take public tansit to work in Montreal ranges between 3.0% ",
+                      "(Mirabel) and 46.7% (Côte-des-Neiges-Notre-Dame-de-Grâce)."),
+          fr = paste0("La proportion de personnes qui prennent le transport en commun pour aller travailler à Montréal ",
+                      "varie entre 3,0 % (Mirabel) et 46,7 % (Côte-des-Neiges-Notre-Dame-de-Grâce).")) %>%
+  add_row(en = paste0("Côte-des-Neiges-Notre-Dame-de-Grâce has the highest proportion of people who take public ",
+                      "transit to work (46.7%), followed by Villeray-Saint-Michel-Parc-Extension (45.2%)."),
+          fr = paste0("Côte-des-Neiges-Notre-Dame-de-Grâce compte la plus grande proportion de personnes ",
+                      "qui prennent le transport en commun pour se rendre au travail (46,7 %), suivi de ",
+                      "Villeray-Saint-Michel-Parc-Extension (45,2 %).")) %>%
+  add_row(en = paste0("50% of areas in Montreal have proportions of people who take transit to work lower than 16.8%."),
+          fr = paste0("Dans 50 % des quartiers de Montréal, la proportion de personnes qui prennent le transport en ",
+                      "commun pour se rendre au travail est inférieure à 16,8 %.")) %>%
+  add_row(en = paste0("10% of areas in Montreal have proportions of people taking transit to work higher than 36.0%."),
+          fr = paste0("Dans 10 % des quartiers de Montréal, la proportion de personnes qui prennent le transport ",
+                      "en commun pour se rendre au travail est supérieure à 36,0 %.")) %>%
+  add_row(en = paste0("The proportion of people who drive to work ranges from 24.9% (Le Plateau-Mont-Royal) and ",
+                      "95.7% (Saint-Isidore)."),
+          fr = paste0("La proportion de personnes qui se rendent au travail en voiture varie entre 24,9% ",
+                      "(Le Plateau-Mont-Royal) et 95,7% (Saint-Isidore).")) %>%
+  add_row(en = paste0("90% of areas in Montreal have proportions higher than 48.0% of people who drive to work."),
+          fr = paste0("90 % des quartiers de Montréal ont des proportions supérieures à 48,0 % de personnes ",
+                      "qui se rendent au travail en voiture.")) %>%
   distinct(en, .keep_all = T)
 
 write_csv(translation_fr, "translations/translation_fr.csv")
