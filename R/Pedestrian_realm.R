@@ -211,7 +211,7 @@ Pedestrian_realm_module_server <- function(id) {
     }, deleteFile = FALSE)
     
     output$exemplar_ped <- renderImage({
-      filename <- normalizePath(file.path("www/Exemplar.png"))
+      filename <- normalizePath(file.path(sus_translate("www/Exemplar_en.png")))
       return(list(src = filename, contentType = "image/png",  width = 550,
                   height = 600))
     }, deleteFile = FALSE)
