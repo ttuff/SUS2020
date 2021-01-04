@@ -17,15 +17,15 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
       conditionalPanel(
         condition = "output.zoom == 'OUT'", ns = ns ,
         id = ns("plotContainer_ped"),
-        p(title_text %>%
+        p(i18n$t(title_text %>%
             filter(tab == "pedestrian_ct", type == "main") %>%
-            pull(text))),
+            pull(text)))),
       conditionalPanel(
         condition = "output.zoom == 'IN'", ns = ns ,
         id = ns("plotContainer_ped"),
-        p(title_text %>%
+        p(i18n$t(title_text %>%
             filter(tab == "pedestrian_da", type == "main") %>%
-            pull(text))),
+            pull(text)))),
       actionLink(ns("more_info_ped"), i18n$t("Learn more")),
       conditionalPanel(
         condition = "output.more_info_ped_status == 1 && output.zoom == 'OUT'", ns = ns ,
@@ -323,14 +323,14 @@ Pedestrian_realm_module_server <- function(id) {
     # )
     # legend_uni_chloro <- mapdeck_legend(legend_uni_chloro)
     
-    legend_uni_chloro <- legend_element(
-      variables = c("0-1 m", "1-2 m", "2-4 m", "4-6 m", "6-10 m", "10-20 m"),
-      colours = c('#feebe2', '#fcc5c0', '#fa9fb5', '#f768a1', '#c51b8a', '#7a0177'),
-      colour_type = "stroke",
-      variable_type = "gradient",
-      title = "Largeur du Trottoir"
-    )
-    legend_uni_chloro <- mapdeck_legend(legend_uni_chloro)
+    # legend_uni_chloro <- legend_element(
+    #   variables = c("Faible capacité", "Moyenne capacité", "Haute capacité"),
+    #   colours = c('#e8e8e8', '#b8d6be', '#73ae80'),
+    #   colour_type = "fill",
+    #   variable_type = "category",
+    #   title = "Capacité de distanciation sociale dans la voie piétonne (2 mètres)"
+    # )
+    # legend_uni_chloro <- mapdeck_legend(legend_uni_chloro)
     
     ## Bivariate chloropleth map -------------------------------------------------
     bivariate_chloropleth <- reactive({
