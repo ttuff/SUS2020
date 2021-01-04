@@ -262,7 +262,7 @@ Mode_switch_module_server <- function(id) {
                   print(x_var_name)
                   ggplot(data ) +
                     geom_histogram(aes( var, fill = color), bins = 25) +
-                    scale_fill_manual(values = deframe(distinct(select(data, color, color_value)))) +
+                    scale_fill_manual(values = deframe(distinct(dplyr::select(data, color, color_value)))) +
                     labs(x = x_var_name, y = NULL) +
                     theme_minimal() +
                     theme(legend.position = "none",
