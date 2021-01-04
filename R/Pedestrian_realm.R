@@ -313,7 +313,7 @@ Pedestrian_realm_module_server <- function(id) {
       } else {data_for_plot_uni <- data_for_plot_uni %>% 
         filter(trip_scale >= input$slider_ped[1] & trip_scale <= input$slider_ped[2])}
     })
-    
+
     # legend_uni_chloro <- legend_element(
     #   variables = c("0-1 m", "1-2 m", "2-4 m", "4-6 m", "6-10 m", "10-20 m"),
     #   colours = c('#feebe2', '#fcc5c0', '#fa9fb5', '#f768a1', '#c51b8a', '#7a0177'),
@@ -322,6 +322,15 @@ Pedestrian_realm_module_server <- function(id) {
     #   title = "Sidewalk Width"
     # )
     # legend_uni_chloro <- mapdeck_legend(legend_uni_chloro)
+    
+    legend_uni_chloro <- legend_element(
+      variables = c("0-1 m", "1-2 m", "2-4 m", "4-6 m", "6-10 m", "10-20 m"),
+      colours = c('#feebe2', '#fcc5c0', '#fa9fb5', '#f768a1', '#c51b8a', '#7a0177'),
+      colour_type = "stroke",
+      variable_type = "gradient",
+      title = "Largeur du Trottoir"
+    )
+    legend_uni_chloro <- mapdeck_legend(legend_uni_chloro)
     
     ## Bivariate chloropleth map -------------------------------------------------
     bivariate_chloropleth <- reactive({
