@@ -79,6 +79,8 @@ Housing,Logement
 Income,Revenu
 Immigration,Immigration
 Transportation,Déplacement domicile-travail
+Borough,Arrondissement
+City,Ville
 borough/city,de l'arrondissement/de la ville
 boroughs or cities,arrondissements ou villes
 census tract,du secteur de recensement
