@@ -95,6 +95,7 @@ Public transit to work (%),Transport en commun (%)
 30-45 minutes to work (%),Trajet de 30-45 minutes (%)
 45-60 minutes to work (%),Trajet de 45-60 minutes (%)
 ----,----
+ , 
 much larger than,beaucoup plus grand que
 larger than,plus grand que
 almost the same as,presque le même que
@@ -149,7 +150,7 @@ Clear selection,Effacez sélection
 "Dissemination area {dat_ped_biv$ID} has a population of {prettyNum(dat_ped_biv$population, ',')}, a capacity for pedestrian social distancing of {round(poly_value_1, 2)}%, and a '{tolower(var_name_ped)}' value of {round(poly_value_2, 2)}. <p>These two scores are {relative_position}, in relative terms. Dissemination area {dat_ped_biv$ID} has a capacity for pedestrian social distancing higher than {percentile_left}% of dissemination areas and a '{tolower(var_name_ped)}' score higher than {percentile_right}% of dissemination areas in the Montreal region.","L'aire de diffusion {dat_ped_biv$ID} a une population de {prettyNum(dat_ped_biv$population, ',')}, une capacité de distanciation sociale des piétons de {round(poly_value_1, 2)}%, et une valeur '{tolower(var_name_ped)}' de{round(poly_value_2, 2)}. <p>Ces deux scores sont {relative_position}, en termes relatifs. L'aire de diffusion {dat_ped_biv$ID} a une capacité de distanciation sociale des piétons plus grande que {percentile_left}% des aires de diffusion et une valeur '{tolower(var_name_ped)}' plus grand que {percentile_right}% des aires de diffusion de la région de Montréal."
 Sidewalk width (meters),Largeur des trottoirs (mètres)
 "Sidewalk width in Montreal varies from {min_sidewalk} meters to {max_sidewalk} meters, with an average value of {mean_sidewalk} meters and a median value of {median_sidewalk} meters. Two thirds of Montreal's sidewalks have widths between {quant_low_sidewalk} meters and {quant_high_sidewalk} meters.","La largeur des trottoirs de Montréal varie de {min_sidewalk} mètres à {max_sidewalk} mètres, avec une valeur moyenne de {mean_sidewalk} mètres et une valeur médiane de {median_sidewalk} mètres. Deux tiers des trottoirs montréalais ont une largeur entre {quant_low_sidewalk} mètres et {quant_high_sidewalk} mètres."
-Shifting car trips to cycling,Transférez les trajets de voiture en vélo
+Shifting car trips to cycling,Transférer les trajets de voiture en vélo
 Share of trips taken by car,Part des trajets effectués en voiture
 Average commuting distance,Distance moyenne pour du trajet domicile-travail
 Access to cycling infrastructure,Accès aux infrastructures cyclables

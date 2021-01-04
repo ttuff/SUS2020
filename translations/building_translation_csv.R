@@ -337,6 +337,7 @@ translation_fr <-
   add_row(en = "45-60 minutes to work (%)" , fr = "Trajet de 45-60 minutes (%)") %>% 
   # For my life to be easier
   add_row(en = "----" , fr = "----") %>% 
+  add_row(en = " " , fr = " ") %>% 
   # Quintiles and quantitative terms
   add_row(en = "much larger than" , fr = "beaucoup plus grand que") %>%
   add_row(en = "larger than" , fr = "plus grand que") %>%
@@ -583,7 +584,7 @@ translation_fr <-
                       "Deux tiers des trottoirs montréalais ont une largeur ",
                       "entre {quant_low_sidewalk} mètres et {quant_high_sidewalk} mètres.")) %>% 
   # Mode shift module
-  add_row(en = "Shifting car trips to cycling" , fr = "Transférez les trajets de voiture en vélo") %>% 
+  add_row(en = "Shifting car trips to cycling" , fr = "Transférer les trajets de voiture en vélo") %>% 
   add_row(en = "Share of trips taken by car" , fr = "Part des trajets effectués en voiture") %>% 
   add_row(en = "Average commuting distance" , fr = "Distance moyenne pour du trajet domicile-travail") %>% 
   add_row(en = "Access to cycling infrastructure" , fr = "Accès aux infrastructures cyclables") %>% 
