@@ -29,10 +29,11 @@ CanALE_module_UI <- function(id) {
     actionLink(ns("more_info"), i18n$t("Learn more")),
     conditionalPanel(
       condition = "output.more_info_status == 1", ns=ns,
-      HTML(title_text %>% 
-             filter(tab == "active", type == "extra") %>% 
-             pull(text)))),
-  
+      uiOutput(outputId = ns("active_extra_html")))),
+      # HTML(title_text %>%
+      #        filter(tab == "active", type == "extra") %>%
+      #        pull(text)))),
+    
   # 3D switch
   absolutePanel(
     id = ns("input_control_overlay"), style = "z-index:500;",
@@ -142,6 +143,13 @@ CanALE_module_server <- function(id) {
                  default_background_color <- "transparent"
                  default_font_color <- "black"
                  default_font_family <- "Helvetica"
+                 
+                 
+                 # Active extra html translation -------------------------------------------
+                 
+                 output$active_extra_html <- renderUI(HTML(sus_translate(title_text %>%
+                                                                      filter(tab == "active", type == "extra") %>%
+                                                                      pull(text))))
                  
                  
                  # Drop down list for variable selection -----------------------------------
@@ -364,6 +372,9 @@ $(document).ready(function(){
                            glue(sus_translate(paste0("Dissemination area {dat$name}")))
                        )
                        
+                       if (dat$name_2 == "Borough" | dat$name_2 == "City"){
+                         dat$name_2 <-  sus_translate(glue("{dat$name_2}"))}
+                       
                        place_heading <- 
                          if_else(scale_singular == sus_translate("borough/city"),
                                  glue(sus_translate(paste0("{dat$name_2} of {place_name}"))),
@@ -421,14 +432,14 @@ $(document).ready(function(){
                    } else {
                      
                      var_name <- 
-                       variable_explanations %>% 
+                       sus_translate(variable_explanations %>% 
                        filter(var_code == input$data_for_plot_right) %>% 
-                       pull(var_name)
+                       pull(var_name))
                      
                      var_explanation <- 
-                       variable_explanations %>% 
+                       sus_translate(variable_explanations %>% 
                        filter(var_code == input$data_for_plot_right) %>% 
-                       pull(explanation)
+                       pull(explanation))
                      
                      correlation <- 
                        cor(data_bivar()$left_variable_full, 
@@ -502,6 +513,9 @@ $(document).ready(function(){
                            glue(sus_translate(paste0("Dissemination area {dat$name}")))
                        )
                        
+                       if (dat$name_2 == "Borough" | dat$name_2 == "City"){
+                       dat$name_2 <-  sus_translate(glue("{dat$name_2}"))}
+                       
                        place_heading <- 
                          if_else(scale_singular == sus_translate("borough/city"),
                                  glue(sus_translate(paste0("{dat$name_2} of {place_name}"))),
@@ -521,7 +535,7 @@ $(document).ready(function(){
                          abs(percentile_left - percentile_right) > 50 ~ sus_translate("dramatically different"),
                          abs(percentile_left - percentile_right) > 30 ~ sus_translate("substantially different"),
                          abs(percentile_left - percentile_right) > 10 ~ sus_translate("considerably different"),
-                         TRUE ~ "similar"
+                         TRUE ~ sus_translate("similar")
                        )
                        
                        # Special case for Kahnawake
@@ -625,9 +639,9 @@ $(document).ready(function(){
                    } else {
                      
                      var_name <- 
-                       variable_explanations %>% 
+                       sus_translate(variable_explanations %>% 
                        filter(var_code == input$data_for_plot_right) %>% 
-                       pull(var_name)
+                       pull(var_name))
                      
                      
                      if (nrow(filter(data_bivar(), ID == rz$poly_selected)) != 1) {
@@ -673,10 +687,10 @@ $(document).ready(function(){
                  
                  output$did_you_know <- renderUI({
                    
-                   did_you_know %>% 
+                   sus_translate(did_you_know %>% 
                      filter(right_variable == input$data_for_plot_right) %>% 
                      slice_sample(n = 2) %>% 
-                     pull(text) %>%
+                     pull(text)) %>%
                      paste("<li> ", ., collapse = "") %>%
                      paste0("<ul>", ., "</ul>") %>%
                      HTML()

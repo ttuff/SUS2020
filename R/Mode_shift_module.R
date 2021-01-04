@@ -1,10 +1,3 @@
-
-
-
-
-
-
-
 Mode_switch_module_UI <- function(id ) {
   ns <- NS(id)
   tabItem(
@@ -21,16 +14,17 @@ Mode_switch_module_UI <- function(id ) {
   absolutePanel(
     id = "title_bar_commute", class = "panel panel-default",
     draggable = FALSE, top = 70, left = 270, width = "40%",
-    h2("Shifting car trips to cycling"),
-    p(title_text %>%
+    h2(i18n$t("Shifting car trips to cycling")),
+    p(i18n$t(title_text %>%
         filter(tab == "commute", type == "main") %>%
-        pull(text)),
-    actionLink(ns("commute_more_info"), "Learn more"),
+        pull(text))),
+    actionLink(ns("commute_more_info"), i18n$t("Learn more")),
     conditionalPanel(
-      condition = "output.commute_more_info_status == 1",ns = ns ,
-      HTML(title_text %>%
-             filter(tab == "commute", type == "extra") %>%
-             pull(text)))),
+      condition = "output.commute_more_info_status == 1", ns = ns,
+      uiOutput(outputId = ns("commute_extra_html")))),
+      # HTML(title_text %>%
+      #        filter(tab == "commute", type == "extra") %>%
+      #        pull(text)))),
 
   # Explore panel
   absolutePanel(
@@ -38,7 +32,7 @@ Mode_switch_module_UI <- function(id ) {
     class = "panel panel-default", top = 70, right = 50, width = 300,
     conditionalPanel(
       condition = "output.zoom_level == 'OUT'",ns = ns ,
-      h4("Explore"),
+      h4(i18n$t("Explore")),
       selectInput(
         ns("commute_variable"), label = NULL,
         choices = list("Share of trips taken by car" = 2,
@@ -47,7 +41,7 @@ Mode_switch_module_UI <- function(id ) {
         selected = 2),
       sliderInput(
         inputId = ns("commute_explore_slider"),
-        label = "% of trips taken by car, by census tract",
+        label = i18n$t("% of trips taken by car, by census tract"),
         min = 0,
         max = 100,
         value = c(0, 100)),
@@ -71,13 +65,13 @@ Mode_switch_module_UI <- function(id ) {
       conditionalPanel(
         condition = "output.zoom_level == 'IN' && input.radio1 <3",ns = ns ,
         materialSwitch(inputId = ns("baseline_switch"),
-                       label = "Show baseline",
+                       label = i18n$t("Show baseline"),
                        status = "primary", value = TRUE)
       ),
 
       sliderTextInput(
         inputId = ns("slider1"),
-        label = "Cycling distance (km):",
+        label =i18n$t( "Cycling distance (km):"),
         choices = seq(from = 1,
                       to = 10,
                       by = 0.1),
@@ -85,7 +79,7 @@ Mode_switch_module_UI <- function(id ) {
 
       sliderTextInput(
         inputId = ns("slider2"),
-        label = "Elevation gain (m):",
+        label = i18n$t("Elevation gain (m):"),
         choices = seq(from = 10,
                       to = 55,
                       by = 5),
@@ -94,7 +88,7 @@ Mode_switch_module_UI <- function(id ) {
 
       sliderTextInput(
         inputId = ns("slider3"),
-        label = "Time ratio:",
+        label = i18n$t("Time ratio:"),
         choices = seq(from = 1.0,
                       to = 3.0,
                       by = 0.2),
@@ -105,12 +99,12 @@ Mode_switch_module_UI <- function(id ) {
 
       conditionalPanel(
         condition = "output.zoom_level == 'IN' && input.radio1 <3",ns = ns ,
-        h5(strong("VMT Reduction")),
+        h5(strong(i18n$t("VKT Reduction"))),
         DT::DTOutput(ns("table"))),
 
       hr(),
       materialSwitch(inputId = ns("switch2"),
-                     label = "Cycling network",
+                     label = i18n$t("Cycling network"),
                      status = "primary", value = FALSE)
     )
    )
@@ -140,6 +134,13 @@ Mode_switch_module_server <- function(id) {
                  # 
                  # load("data/cycling_total_final.Rdata")
                  # 
+                 
+
+                 # Commute extra html translation ------------------------------------------
+                 output$commute_extra_html <- renderUI(HTML(sus_translate(title_text %>%
+                                                                           filter(tab == "commute", type == "extra") %>%
+                                                                           pull(text))))
+                 
                  
                  # Commute mode change globals ---------------------------------------------
                  
@@ -254,14 +255,14 @@ Mode_switch_module_server <- function(id) {
                   #selection <- 1
                   selection <- as.numeric(inputer)
                   
-                  x_var_name <- c("Access to cycling inf. (km/sq.km)",
-                                  "Share of trips taken by car (%)",
-                                  "Average commuting distance (km)")[selection]
+                  x_var_name <- c(sus_translate("Access to cycling inf. (km/sq.km)"),
+                                  sus_translate("Share of trips taken by car (%)"),
+                                  sus_translate("Average commuting distance (km)"))[selection]
                   
                   print(x_var_name)
                   ggplot(data ) +
                     geom_histogram(aes( var, fill = color), bins = 25) +
-                    scale_fill_manual(values = deframe(distinct(select(data, color, color_value)))) +
+                    scale_fill_manual(values = deframe(distinct(dplyr::select(data, color, color_value)))) +
                     labs(x = x_var_name, y = NULL) +
                     theme_minimal() +
                     theme(legend.position = "none",
@@ -372,7 +373,7 @@ Mode_switch_module_server <- function(id) {
 
                      updateSliderInput(session = session,
                                        inputId = "commute_explore_slider",
-                                       label = "Cycling infrastructure (km/sq.km) by census tract:",
+                                       label = sus_translate("Cycling infrastructure (km/sq.km) by census tract:"),
                                        min = 0,
                                        max = 17,
                                        value = c(0, 17))
@@ -381,7 +382,7 @@ Mode_switch_module_server <- function(id) {
 
                      updateSliderInput(session = session,
                                        inputId = "commute_explore_slider",
-                                       label = "% of trips taken by car, by census tract",
+                                       label = sus_translate("% of trips taken by car, by census tract"),
                                        min = 0,
                                        max = 100,
                                        value = c(0, 100))
@@ -390,7 +391,7 @@ Mode_switch_module_server <- function(id) {
 
                      updateSliderInput(session = session,
                                        inputId = "commute_explore_slider",
-                                       label = "Length of the average commute (km), by census tract:",
+                                       label = sus_translate("Length of the average commute (km), by census tract:"),
                                        min = 0,
                                        max = 23,
                                        value = c(0, 100))

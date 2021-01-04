@@ -30,22 +30,23 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
       conditionalPanel(
         condition = "output.more_info_ped_status == 1 && output.zoom == 'OUT'", ns = ns ,
         id = ns("plotContainer_ped"),
-        HTML(title_text %>%
-               filter(tab == "pedestrian_ct", type == "extra") %>%
-               pull(text))),
+        uiOutput(outputId = ns("pedestrian_ct_extra_html"))),
+        # HTML(title_text %>%
+        #        filter(tab == "pedestrian_ct", type == "extra") %>%
+        #        pull(text))),
       conditionalPanel(
         condition = "output.more_info_ped_status == 1 && output.zoom == 'IN'", ns = ns ,
         id = ns("plotContainer_ped"),
-        p(title_text %>%
+        p(i18n$t(title_text %>%
             filter(tab == "pedestrian_da", type == "extra") %>%
-            pull(text)),
+            pull(text))),
         imageOutput(ns("exemplar_ped"))),
       conditionalPanel(
         condition = "output.more_info_ped_status == 1 && output.zoom == 'FINAL'", ns = ns ,
         id = ns("plotContainer_ped"),
-        p(title_text %>%
+        p(i18n$t(title_text %>%
             filter(tab == "pedestrian_sidewalk", type == "extra") %>%
-            pull(text)),
+            pull(text))),
         imageOutput(ns("sidewalk_calculation")))),
     
     absolutePanel(
@@ -202,7 +203,13 @@ Pedestrian_realm_module_server <- function(id) {
   moduleServer(id,
                function(input, output, session) {
                  ns <- NS(id)
-    
+                 
+                 
+    # Pedestrian extra html translation -------------------------------------------
+    output$pedestrian_ct_extra_html <- renderUI(HTML(sus_translate(title_text %>%
+                                                                   filter(tab == "pedestrian_ct", type == "extra") %>%
+                                                                   pull(text))))
+                 
     
     output$bivariate_legend_ped <- renderImage({
       filename <- normalizePath(file.path("www/bivariate_legend_2.png"))

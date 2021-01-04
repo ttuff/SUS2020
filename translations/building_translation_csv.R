@@ -110,7 +110,7 @@ translation_fr <-
                       "une diminution des déplacements provenant d'autres quartiers.<br><p><i>Auteur principal du module: ",
                       "Samuel Kohn</i>")) %>%
   add_row(en = paste0("Compare the pedestrian capacity for social distancing metric across a variety of other variables, such ",
-                      "as walkable access to amenities, income level, immigration, visible minorities, population density, etc."),
+                      "as walkable access to amenities, income level, immigration, visible minorities, population density, etc. "),
           fr = paste0("Comparez la mesure de la capacité des piétons à pratiquer la distance sociale en fonction de diverses ",
                       "autres variables, telles que l'accès à pid aux services de base, le revenu, l'immigration, les ",
                       "minorités visibles, la densité de population, etc.")) %>%
@@ -301,12 +301,14 @@ translation_fr <-
   add_row(en = "Immigration", fr = "Immigration") %>% 
   add_row(en = "Transportation", fr = "Déplacement domicile-travail") %>% 
   # geographic boundaries
+  add_row(en = "Borough", fr = "Arrondissement") %>% 
+  add_row(en = "City", fr = "Ville") %>% 
   add_row(en = "borough/city", fr = "de l'arrondissement/de la ville") %>% 
-  add_row(en = "boroughs or cities", fr = "des arrondissements ou des villes") %>% 
+  add_row(en = "boroughs or cities", fr = "arrondissements ou villes") %>% 
   add_row(en = "census tract", fr = "du secteur de recensement") %>%
-  add_row(en = "census tracts", fr = "des secteurs de recensement") %>% 
+  add_row(en = "census tracts", fr = "secteurs de recensement") %>% 
   add_row(en = "dissemination area", fr = "de l'aire de diffusion") %>%
-  add_row(en = "dissemination areas", fr = "des aires de diffusion") %>%
+  add_row(en = "dissemination areas", fr = "aires de diffusion") %>%
   add_row(en = paste0("Census tract {dat$name}"), 
           fr = paste0("Secteur de recensement {dat$name}")) %>% 
   add_row(en = paste0("Dissemination area {dat$name}"), 
@@ -337,6 +339,7 @@ translation_fr <-
   add_row(en = "45-60 minutes to work (%)" , fr = "Trajet de 45-60 minutes (%)") %>% 
   # For my life to be easier
   add_row(en = "----" , fr = "----") %>% 
+  add_row(en = " " , fr = " ") %>% 
   # Quintiles and quantitative terms
   add_row(en = "much larger than" , fr = "beaucoup plus grand que") %>%
   add_row(en = "larger than" , fr = "plus grand que") %>%
@@ -354,6 +357,7 @@ translation_fr <-
   add_row(en = "weak" , fr = "faible") %>%
   add_row(en = "higher" , fr = "plus grandes") %>%
   add_row(en = "lower" , fr = "plus petites") %>%
+  add_row(en = "similar" , fr = "similaires") %>%
   add_row(en = "with only a few exceptions" , fr = "à quelques exceptions près") %>%
   add_row(en = "although with some exceptions" , fr = "bien qu'avec des exceptions") %>%
   add_row(en = "although with many exceptions" , fr = "bien qu'avec beaucoup d'exceptions") %>%
@@ -417,7 +421,7 @@ translation_fr <-
                       "there is no relationship between the two variables."),
           fr = paste0("<p>{var_explanation}", 
                       "<p>L'index AVA-Can n'a en fait aucune corrélation ",
-                      "({correlation}) avec {var_name} à l'échelle ",
+                      "({correlation}) avec la variable '{var_name}' à l'échelle ",
                       "'{scale_singular}'.",
                       "<p>Cela signifie que, à l'échelle '{scale_singular}', ", 
                       "il n'y a pas de relation entre ces deux variables.")) %>% 
@@ -430,11 +434,11 @@ translation_fr <-
                       "values for '{tolower(var_name)}', {high_low_disclaimer}."),
           fr = paste0("<p>{var_explanation}", 
                       "<p>L'index AVA-Can a un indice de corrélation {strong_weak} et {pos_neg} ",
-                      "({correlation}) avec '{tolower(var_name)}' à l'échelle ",
+                      "({correlation}) avec la variable '{tolower(var_name)}' à l'échelle ",
                       "'{scale_singular}'.",
                       "<p>Cela signifie qu'en général, les {scale_plural} avec un haut ",
                       "potentiel de vie active tendent à avoir des {higher_lower} ",
-                      "valeurs pour '{tolower(var_name)}', {high_low_disclaimer}.")) %>% 
+                      "valeurs pour la variable '{tolower(var_name)}', {high_low_disclaimer}.")) %>% 
   # Bivariate comparison
   add_row(en = paste0("<strong>{place_heading}</strong>", 
                       
@@ -453,13 +457,13 @@ translation_fr <-
                       
                       "<p>{place_name} a une population de ",
                       "{prettyNum(dat$population, ',')}, un score d'index AVA-Can ",
-                      "de {round(poly_value_1, 2)}, et une valeur '{tolower(var_name)}' ",
+                      "de {round(poly_value_1, 2)}, et une valeur pour la variable '{tolower(var_name)}' ",
                       "de {round(poly_value_2, 2)}. ",
                       
                       "<p>Ces deux scores sont {relative_position}, en termes ",
                       "relatifs. {place_name} a un score d'index AVA-Can plus grand ",
                       "que {percentile_left}% des {scale_plural} et ",
-                      "un score '{tolower(var_name)}' plus grand que ", 
+                      "un score pour la variable '{tolower(var_name)}' plus grand que ", 
                       "{percentile_right}% des {scale_plural} dans la ",
                       "région de Montréal.")) %>% 
   # Did you know
@@ -583,7 +587,7 @@ translation_fr <-
                       "Deux tiers des trottoirs montréalais ont une largeur ",
                       "entre {quant_low_sidewalk} mètres et {quant_high_sidewalk} mètres.")) %>% 
   # Mode shift module
-  add_row(en = "Shifting car trips to cycling" , fr = "Transférez les trajets de voiture en vélo") %>% 
+  add_row(en = "Shifting car trips to cycling" , fr = "Transférer les trajets de voiture en vélo") %>% 
   add_row(en = "Share of trips taken by car" , fr = "Part des trajets effectués en voiture") %>% 
   add_row(en = "Average commuting distance" , fr = "Distance moyenne pour du trajet domicile-travail") %>% 
   add_row(en = "Access to cycling infrastructure" , fr = "Accès aux infrastructures cyclables") %>% 
