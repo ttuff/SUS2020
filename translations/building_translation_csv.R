@@ -301,6 +301,8 @@ translation_fr <-
   add_row(en = "Immigration", fr = "Immigration") %>% 
   add_row(en = "Transportation", fr = "Déplacement domicile-travail") %>% 
   # geographic boundaries
+  add_row(en = "Borough", fr = "Arrondissement") %>% 
+  add_row(en = "City", fr = "Ville") %>% 
   add_row(en = "borough/city", fr = "de l'arrondissement/de la ville") %>% 
   add_row(en = "boroughs or cities", fr = "arrondissements ou villes") %>% 
   add_row(en = "census tract", fr = "du secteur de recensement") %>%

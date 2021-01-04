@@ -372,6 +372,9 @@ $(document).ready(function(){
                            glue(sus_translate(paste0("Dissemination area {dat$name}")))
                        )
                        
+                       if (dat$name_2 == "Borough" | dat$name_2 == "City"){
+                         dat$name_2 <-  sus_translate(glue("{dat$name_2}"))}
+                       
                        place_heading <- 
                          if_else(scale_singular == sus_translate("borough/city"),
                                  glue(sus_translate(paste0("{dat$name_2} of {place_name}"))),
@@ -429,14 +432,14 @@ $(document).ready(function(){
                    } else {
                      
                      var_name <- 
-                       variable_explanations %>% 
+                       sus_translate(variable_explanations %>% 
                        filter(var_code == input$data_for_plot_right) %>% 
-                       pull(var_name)
+                       pull(var_name))
                      
                      var_explanation <- 
-                       variable_explanations %>% 
+                       sus_translate(variable_explanations %>% 
                        filter(var_code == input$data_for_plot_right) %>% 
-                       pull(explanation)
+                       pull(explanation))
                      
                      correlation <- 
                        cor(data_bivar()$left_variable_full, 
@@ -509,6 +512,9 @@ $(document).ready(function(){
                          scale_singular == sus_translate("dissemination area") ~ 
                            glue(sus_translate(paste0("Dissemination area {dat$name}")))
                        )
+                       
+                       if (dat$name_2 == "Borough" | dat$name_2 == "City"){
+                       dat$name_2 <-  sus_translate(glue("{dat$name_2}"))}
                        
                        place_heading <- 
                          if_else(scale_singular == sus_translate("borough/city"),
@@ -633,9 +639,9 @@ $(document).ready(function(){
                    } else {
                      
                      var_name <- 
-                       variable_explanations %>% 
+                       sus_translate(variable_explanations %>% 
                        filter(var_code == input$data_for_plot_right) %>% 
-                       pull(var_name)
+                       pull(var_name))
                      
                      
                      if (nrow(filter(data_bivar(), ID == rz$poly_selected)) != 1) {
@@ -681,10 +687,10 @@ $(document).ready(function(){
                  
                  output$did_you_know <- renderUI({
                    
-                   did_you_know %>% 
+                   sus_translate(did_you_know %>% 
                      filter(right_variable == input$data_for_plot_right) %>% 
                      slice_sample(n = 2) %>% 
-                     pull(text) %>%
+                     pull(text)) %>%
                      paste("<li> ", ., collapse = "") %>%
                      paste0("<ul>", ., "</ul>") %>%
                      HTML()
