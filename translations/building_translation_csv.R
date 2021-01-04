@@ -349,8 +349,8 @@ translation_fr <-
   add_row(en = "poor" , fr = "faible") %>%
   add_row(en = "moderate" , fr = "modéré") %>%
   # Correlation
-  add_row(en = "positive" , fr = "positive") %>%
-  add_row(en = "negative" , fr = "négative") %>%
+  add_row(en = "positive" , fr = "positif") %>%
+  add_row(en = "negative" , fr = "négatif") %>%
   add_row(en = "weak" , fr = "faible") %>%
   add_row(en = "higher" , fr = "plus grandes") %>%
   add_row(en = "lower" , fr = "plus petites") %>%
