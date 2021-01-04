@@ -110,7 +110,7 @@ translation_fr <-
                       "une diminution des déplacements provenant d'autres quartiers.<br><p><i>Auteur principal du module: ",
                       "Samuel Kohn</i>")) %>%
   add_row(en = paste0("Compare the pedestrian capacity for social distancing metric across a variety of other variables, such ",
-                      "as walkable access to amenities, income level, immigration, visible minorities, population density, etc."),
+                      "as walkable access to amenities, income level, immigration, visible minorities, population density, etc. "),
           fr = paste0("Comparez la mesure de la capacité des piétons à pratiquer la distance sociale en fonction de diverses ",
                       "autres variables, telles que l'accès à pid aux services de base, le revenu, l'immigration, les ",
                       "minorités visibles, la densité de population, etc.")) %>%
