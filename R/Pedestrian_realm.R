@@ -17,35 +17,36 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
       conditionalPanel(
         condition = "output.zoom == 'OUT'", ns = ns ,
         id = ns("plotContainer_ped"),
-        p(title_text %>%
+        p(i18n$t(title_text %>%
             filter(tab == "pedestrian_ct", type == "main") %>%
-            pull(text))),
+            pull(text)))),
       conditionalPanel(
         condition = "output.zoom == 'IN'", ns = ns ,
         id = ns("plotContainer_ped"),
-        p(title_text %>%
+        p(i18n$t(title_text %>%
             filter(tab == "pedestrian_da", type == "main") %>%
-            pull(text))),
+            pull(text)))),
       actionLink(ns("more_info_ped"), i18n$t("Learn more")),
       conditionalPanel(
         condition = "output.more_info_ped_status == 1 && output.zoom == 'OUT'", ns = ns ,
         id = ns("plotContainer_ped"),
-        HTML(title_text %>%
-               filter(tab == "pedestrian_ct", type == "extra") %>%
-               pull(text))),
+        uiOutput(outputId = ns("pedestrian_ct_extra_html"))),
+        # HTML(title_text %>%
+        #        filter(tab == "pedestrian_ct", type == "extra") %>%
+        #        pull(text))),
       conditionalPanel(
         condition = "output.more_info_ped_status == 1 && output.zoom == 'IN'", ns = ns ,
         id = ns("plotContainer_ped"),
-        p(title_text %>%
+        p(i18n$t(title_text %>%
             filter(tab == "pedestrian_da", type == "extra") %>%
-            pull(text)),
+            pull(text))),
         imageOutput(ns("exemplar_ped"))),
       conditionalPanel(
         condition = "output.more_info_ped_status == 1 && output.zoom == 'FINAL'", ns = ns ,
         id = ns("plotContainer_ped"),
-        p(title_text %>%
+        p(i18n$t(title_text %>%
             filter(tab == "pedestrian_sidewalk", type == "extra") %>%
-            pull(text)),
+            pull(text))),
         imageOutput(ns("sidewalk_calculation")))),
     
     absolutePanel(
@@ -202,7 +203,13 @@ Pedestrian_realm_module_server <- function(id) {
   moduleServer(id,
                function(input, output, session) {
                  ns <- NS(id)
-    
+                 
+                 
+    # Pedestrian extra html translation -------------------------------------------
+    output$pedestrian_ct_extra_html <- renderUI(HTML(sus_translate(title_text %>%
+                                                                   filter(tab == "pedestrian_ct", type == "extra") %>%
+                                                                   pull(text))))
+                 
     
     output$bivariate_legend_ped <- renderImage({
       filename <- normalizePath(file.path("www/bivariate_legend_2.png"))
@@ -211,7 +218,7 @@ Pedestrian_realm_module_server <- function(id) {
     }, deleteFile = FALSE)
     
     output$exemplar_ped <- renderImage({
-      filename <- normalizePath(file.path("www/Exemplar.png"))
+      filename <- normalizePath(file.path(sus_translate("www/Exemplar_en.png")))
       return(list(src = filename, contentType = "image/png",  width = 550,
                   height = 600))
     }, deleteFile = FALSE)
@@ -313,7 +320,7 @@ Pedestrian_realm_module_server <- function(id) {
       } else {data_for_plot_uni <- data_for_plot_uni %>% 
         filter(trip_scale >= input$slider_ped[1] & trip_scale <= input$slider_ped[2])}
     })
-    
+
     # legend_uni_chloro <- legend_element(
     #   variables = c("0-1 m", "1-2 m", "2-4 m", "4-6 m", "6-10 m", "10-20 m"),
     #   colours = c('#feebe2', '#fcc5c0', '#fa9fb5', '#f768a1', '#c51b8a', '#7a0177'),
@@ -322,6 +329,15 @@ Pedestrian_realm_module_server <- function(id) {
     #   title = "Sidewalk Width"
     # )
     # legend_uni_chloro <- mapdeck_legend(legend_uni_chloro)
+    
+    legend_uni_chloro <- legend_element(
+      variables = c("0-1 m", "1-2 m", "2-4 m", "4-6 m", "6-10 m", "10-20 m"),
+      colours = c('#feebe2', '#fcc5c0', '#fa9fb5', '#f768a1', '#c51b8a', '#7a0177'),
+      colour_type = "stroke",
+      variable_type = "gradient",
+      title = "Largeur du Trottoir"
+    )
+    legend_uni_chloro <- mapdeck_legend(legend_uni_chloro)
     
     ## Bivariate chloropleth map -------------------------------------------------
     bivariate_chloropleth <- reactive({

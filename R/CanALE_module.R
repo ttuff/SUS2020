@@ -29,10 +29,11 @@ CanALE_module_UI <- function(id) {
     actionLink(ns("more_info"), i18n$t("Learn more")),
     conditionalPanel(
       condition = "output.more_info_status == 1", ns=ns,
-      HTML(title_text %>% 
-             filter(tab == "active", type == "extra") %>% 
-             pull(text)))),
-  
+      uiOutput(outputId = ns("active_extra_html")))),
+      # HTML(title_text %>%
+      #        filter(tab == "active", type == "extra") %>%
+      #        pull(text)))),
+    
   # 3D switch
   absolutePanel(
     id = ns("input_control_overlay"), style = "z-index:500;",
@@ -142,6 +143,13 @@ CanALE_module_server <- function(id) {
                  default_background_color <- "transparent"
                  default_font_color <- "black"
                  default_font_family <- "Helvetica"
+                 
+                 
+                 # Active extra html translation -------------------------------------------
+                 
+                 output$active_extra_html <- renderUI(HTML(sus_translate(title_text %>%
+                                                                      filter(tab == "active", type == "extra") %>%
+                                                                      pull(text))))
                  
                  
                  # Drop down list for variable selection -----------------------------------
