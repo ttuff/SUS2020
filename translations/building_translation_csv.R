@@ -355,6 +355,7 @@ translation_fr <-
   add_row(en = "weak" , fr = "faible") %>%
   add_row(en = "higher" , fr = "plus grandes") %>%
   add_row(en = "lower" , fr = "plus petites") %>%
+  add_row(en = "similar" , fr = "similaire") %>%
   add_row(en = "with only a few exceptions" , fr = "à quelques exceptions près") %>%
   add_row(en = "although with some exceptions" , fr = "bien qu'avec des exceptions") %>%
   add_row(en = "although with many exceptions" , fr = "bien qu'avec beaucoup d'exceptions") %>%
