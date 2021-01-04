@@ -12,6 +12,7 @@ translation_fr <-
   add_row(en = "Compare", fr = "Comparez") %>%
   add_row(en = "SUS Preview", fr = "Aperçu du SUS") %>%
   # title_text.csv
+  add_row(en = "Why a dashboard? The science behind Sus", fr = "Pourquoi un tableau de bord? La science derrière Sus") %>%
   add_row(en = paste0("The CanALE dataset (developed by Prof. Nancy Ross and her team) captures ",
                       "four key elements related to active living environments: population density, ",
                       "points of interest, street grid, and proximity of transit service."), 
@@ -451,8 +452,8 @@ translation_fr <-
                       
                       "<p>{place_name} a une population de ",
                       "{prettyNum(dat$population, ',')}, un score d'index AVA-Can ",
-                      "de {round(poly_value_1, 2)}, et une '{tolower(var_name)}' ",
-                      "valeur de {round(poly_value_2, 2)}. ",
+                      "de {round(poly_value_1, 2)}, et une valeur '{tolower(var_name)}' ",
+                      "de {round(poly_value_2, 2)}. ",
                       
                       "<p>Ces deux scores sont {relative_position}, en termes ",
                       "relatifs. {place_name} a un score d'index AVA-Can plus grand ",
@@ -567,6 +568,7 @@ translation_fr <-
                       "{percentile_right}% des aires de diffusion de la région ",
                       "de Montréal.")) %>% 
   # Pedestrian realm, sidewalk width
+  add_row(en = "Sidewalk width (meters)" , fr = "Largeur des trottoirs (mètres)") %>% 
   add_row(en = paste0("Sidewalk width in Montreal varies from ",
                       "{min_sidewalk} meters to {max_sidewalk} meters, ",
                       "with an average value of {mean_sidewalk} meters ",
