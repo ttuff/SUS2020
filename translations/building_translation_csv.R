@@ -302,11 +302,11 @@ translation_fr <-
   add_row(en = "Transportation", fr = "Déplacement domicile-travail") %>% 
   # geographic boundaries
   add_row(en = "borough/city", fr = "de l'arrondissement/de la ville") %>% 
-  add_row(en = "boroughs or cities", fr = "des arrondissements ou des villes") %>% 
+  add_row(en = "boroughs or cities", fr = "arrondissements ou villes") %>% 
   add_row(en = "census tract", fr = "du secteur de recensement") %>%
-  add_row(en = "census tracts", fr = "des secteurs de recensement") %>% 
+  add_row(en = "census tracts", fr = "secteurs de recensement") %>% 
   add_row(en = "dissemination area", fr = "de l'aire de diffusion") %>%
-  add_row(en = "dissemination areas", fr = "des aires de diffusion") %>%
+  add_row(en = "dissemination areas", fr = "aires de diffusion") %>%
   add_row(en = paste0("Census tract {dat$name}"), 
           fr = paste0("Secteur de recensement {dat$name}")) %>% 
   add_row(en = paste0("Dissemination area {dat$name}"), 

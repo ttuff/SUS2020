@@ -80,11 +80,11 @@ Income,Revenu
 Immigration,Immigration
 Transportation,Déplacement domicile-travail
 borough/city,de l'arrondissement/de la ville
-boroughs or cities,des arrondissements ou des villes
+boroughs or cities,arrondissements ou villes
 census tract,du secteur de recensement
-census tracts,des secteurs de recensement
+census tracts,secteurs de recensement
 dissemination area,de l'aire de diffusion
-dissemination areas,des aires de diffusion
+dissemination areas,aires de diffusion
 Census tract {dat$name},Secteur de recensement {dat$name}
 Dissemination area {dat$name},Aire de diffusion {dat$name}
 {dat$name_2} of {place_name},{dat$name_2} de {place_name}
