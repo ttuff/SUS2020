@@ -535,7 +535,7 @@ $(document).ready(function(){
                          abs(percentile_left - percentile_right) > 50 ~ sus_translate("dramatically different"),
                          abs(percentile_left - percentile_right) > 30 ~ sus_translate("substantially different"),
                          abs(percentile_left - percentile_right) > 10 ~ sus_translate("considerably different"),
-                         TRUE ~ "similar"
+                         TRUE ~ sus_translate("similar")
                        )
                        
                        # Special case for Kahnawake
