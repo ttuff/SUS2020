@@ -8,52 +8,46 @@ translation_fr <-
           fr = "Ajoutez du texte comme titletextSus_UI (textAboveSplit = 'short description'") %>%
   add_row(en = "Add text as titletextSus_UI(textBelowSplit = 'long description')", 
           fr = "Ajouter du texte comme titletextSus_UI (textBelowSplit = 'longue description')") %>%
-  add_row(en = paste0("The CanALE dataset (developed by Prof. Nancy Ross and her team) captures ",
-                      "four key elements related to active living environments: population density, points ",
-                      "of interest, street grid, and proximity of transit service."), 
-          fr = paste0("La base de données AVA-Can (développée par la professeure Nancy Ross et son ",
-                      "équipe) saisit quatre éléments clés liés aux environnements de vie active: ",
-                      "la densité de population, les points d'intérêt, la grille des rues et la proximité ",
-                      "du service de transport en commun.")) %>%
   add_row(en = "Learn more", fr = "En savoir plus") %>%
   add_row(en = "Compare", fr = "Comparez") %>%
   add_row(en = "SUS Preview", fr = "Aperçu du SUS") %>%
   # title_text.csv
-  add_row(en = paste0("The CanALE dataset (developed by Prof. Nancy Ross and her team) captures ", 
+  add_row(en = "Why a dashboard? The science behind Sus", fr = "Pourquoi un tableau de bord? La science derrière Sus") %>%
+  add_row(en = paste0("The CanALE dataset (developed by Prof. Nancy Ross and her team) captures ",
                       "four key elements related to active living environments: population density, ",
                       "points of interest, street grid, and proximity of transit service."), 
-          fr = paste0("La base de données AVA-Can (développée par la professeure Nancy Ross et son équipe) ",
-                      "saisit quatre éléments clés liés aux milieux de vie actifs: la densité de population, ",
-                      "les points d'intérêt, la grille de rues et la proximité du service de transport en commun.")) %>%
-  add_row(en = paste0("<p>A safe and inviting pedestrian realm is not distributed equally across socio-demographic ",
-                      "factors. The risks of pedestrian injuries and fatalities are higher in low-income and ",
-                      "racialized communities where residents often rely on walking as a daily mode of transport but ",
-                      "where the local environment is not necessarily inviting and safe.<p>In addition to evidence ",
-                      "pointing towards large discrepancies in the provision of walkable urban space across income ",
-                      "and racial lines, concern has been raised with regard to the possible gentrification and displacement ",
-                      "impacts of improved pedestrian infrastructure. In other words, who can afford to live in walkable ",
-                      "neighbourhoods?<br><p>Further resources:<ul><li><a href= ''>Thomas Herrmann, William Gleckner, ",
-                      "Rania A. Wasfi, Benoît Thierry, Yan Kestens and Nancy A. Ross. 2019. 'A pan-Canadian measure of ",
-                      "active living environments using open data. Statistics Canada Health Reports, ",
-                      "82-003-X.</a><li><a href = ''>Kevin Manaugh, Linnea Soli, Samuel Kohn, Robin Basalaev-Binder, ",
-                      "Ty Tuff, David Wachsmuth. 2020. 'Montreal’s response to COVID-19: An equity analysis of new active ",
-                      "transport infrastructure.' Transportation Research Board working paper.</a> <b>(MSSI research)</b></ul><br><p><i>",
-                      "Module lead authors: Robin Basalaev-Binder, Ty Tuff, David Wachsmuth</i>"), 
+          fr = paste0("La base de données AVA-Can (développée par la professeure Nancy Ross et son ",
+                      "équipe) saisit quatre éléments clés liés aux environnements de vie active: ",
+                      "la densité de population, les points d'intérêt, la grille des rues et la proximité ",
+                      "du service de transport en commun.")) %>%
+  add_row(en = paste0("<p>A safe and inviting pedestrian realm is not distributed equally across socio-demographic factors. ",
+                      "The risks of pedestrian injuries and fatalities are higher in low-income and racialized communities ",
+                      "where residents often rely on walking as a daily mode of transport but where the local environment ",
+                      "is not necessarily inviting and safe.<p>In addition to evidence pointing towards large discrepancies ",
+                      "in the provision of walkable urban space across income and racial lines, concern has been raised with ",
+                      "regard to the possible gentrification and displacement impacts of improved pedestrian infrastructure. ",
+                      "In other words, who can afford to live in walkable neighbourhoods?<br><p>Further ",
+                      "resources:<ul><li><a href= ''>Thomas Herrmann, William Gleckner, Rania A. Wasfi, Benoît Thierry, Yan ",
+                      "Kestens and Nancy A. Ross. 2019. 'A pan-Canadian measure of active living environments using open data. ",
+                      "Statistics Canada Health Reports, 82-003-X.</a><li><a href = ''>Kevin Manaugh, Linnea Soli, Samuel Kohn, ",
+                      "Robin Basalaev-Binder, Ty Tuff, David Wachsmuth. 2020. 'Montreal’s response to COVID-19: An equity analysis ",
+                      "of new active transport infrastructure.' Transportation Research Board working paper.</a> <b>(MSSI research)</b></ul><br><p><i>Module ",
+                      "lead authors: Robin Basalaev-Binder, Ty Tuff, David Wachsmuth</i>"), 
           fr = paste0("<p>Une voie piétonne sécuritaire et accueillante n'est pas répartie de manière égale entre les ",
                       "facteurs sociodémographiques. Les risques de blessures et de décès de piétons sont plus élevés ",
                       "dans les communautés racialisées et à faible revenu, où les résidents comptent souvent sur la ",
                       "marche comme mode de transport quotidien, mais où l'environnement local n'est pas nécessairement ",
-                      "accueillant et sécuritaire.<p> Outre les éléments indiquant de grandes disparités dans la provision ",
+                      "accueillant et sécuritaire.<p>Outre les éléments indiquant de grandes disparités dans la provision ",
                       "d'un espace piétonnier urbain selon le revenu et le pourcentage de minorités visibles, des préoccupations ont été soulevées ",
                       "concernant les éventuels impacts de l'amélioration des infrastructures piétonnes sur la gentrification ",
-                      "et le déplacement. En d'autres termes, qui peut se permettre de vivre dans des quartiers piétonniers? ",
+                      "et le déplacement. En d'autres termes, qui peut se permettre de vivre dans des quartiers piétonniers?",
                       "<br><p>Ressources supplémentaires:<ul><li><a href= ''>Thomas Herrmann, William Gleckner, Rania A. Wasfi, ",
                       "Benoît Thierry, Yan Kestens et Nancy A. Ross. 2019. Une mesure pancanadienne fondées sur les données ouvertes de ",
                       "l'accessibilité à la vie active dans les milieux de vie. Rapports sur la santé de Statistique Canada, 82-003-X.</a><li><a ",
                       "href = ''>Kevin Manaugh, Linnea Soli, Samuel Kohn, Robin Basalaev-Binder, Ty Tuff, David Wachsmuth. ",
                       "2020. «Réponse de Montréal à COVID-19 : Une analyse de l'équité des nouvelles infrastructures de ",
                       "transport actif». Document de travail pour le Transportation Research Board.</a> <b>(MSSI research)</b></ul><br><<p><<i>Auteur(e)s ",
-                      "principaux du module: Robin Basalaev-Binder, Ty Tuff, David Wachsmuth</i>")) %>%
+                      "principaux(ales) du module: Robin Basalaev-Binder, Ty Tuff, David Wachsmuth</i>")) %>%
   add_row(en = paste0("Based on 2016 commuting data, we quantify possible reductions in VMT and GHG by identifying car ",
                       "trips that could be shifted to cycling based on distance, elevation change and other factors."), 
           fr = paste0("Basé sur les données relatives aux déplacements domicile-travail en 2016, nous quantifions ",
@@ -355,8 +349,8 @@ translation_fr <-
   add_row(en = "poor" , fr = "faible") %>%
   add_row(en = "moderate" , fr = "modéré") %>%
   # Correlation
-  add_row(en = "positive" , fr = "positive") %>%
-  add_row(en = "negative" , fr = "négative") %>%
+  add_row(en = "positive" , fr = "positif") %>%
+  add_row(en = "negative" , fr = "négatif") %>%
   add_row(en = "weak" , fr = "faible") %>%
   add_row(en = "higher" , fr = "plus grandes") %>%
   add_row(en = "lower" , fr = "plus petites") %>%
@@ -391,6 +385,7 @@ translation_fr <-
                       "autochtones que dans les autres juridictions, nous ne ",
                       "pouvons donc pas afficher de résultats ici.")) %>%
   # CanALE active living potential
+  add_row(en = "CanALE Index", fr = "Index AVA-Can") %>% 
   add_row(en = "Active living potential: the CanALE index",
           fr = "Potentiel de vie active: l'index AVA-Can") %>% 
   add_row(en = paste0("<strong>{place_heading}</strong>", 
@@ -458,8 +453,8 @@ translation_fr <-
                       
                       "<p>{place_name} a une population de ",
                       "{prettyNum(dat$population, ',')}, un score d'index AVA-Can ",
-                      "de {round(poly_value_1, 2)}, et une '{tolower(var_name)}' ",
-                      "valeur de {round(poly_value_2, 2)}. ",
+                      "de {round(poly_value_1, 2)}, et une valeur '{tolower(var_name)}' ",
+                      "de {round(poly_value_2, 2)}. ",
                       
                       "<p>Ces deux scores sont {relative_position}, en termes ",
                       "relatifs. {place_name} a un score d'index AVA-Can plus grand ",
@@ -574,6 +569,7 @@ translation_fr <-
                       "{percentile_right}% des aires de diffusion de la région ",
                       "de Montréal.")) %>% 
   # Pedestrian realm, sidewalk width
+  add_row(en = "Sidewalk width (meters)" , fr = "Largeur des trottoirs (mètres)") %>% 
   add_row(en = paste0("Sidewalk width in Montreal varies from ",
                       "{min_sidewalk} meters to {max_sidewalk} meters, ",
                       "with an average value of {mean_sidewalk} meters ",
