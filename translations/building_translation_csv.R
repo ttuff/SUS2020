@@ -355,7 +355,7 @@ translation_fr <-
   add_row(en = "weak" , fr = "faible") %>%
   add_row(en = "higher" , fr = "plus grandes") %>%
   add_row(en = "lower" , fr = "plus petites") %>%
-  add_row(en = "similar" , fr = "similaire") %>%
+  add_row(en = "similar" , fr = "similaires") %>%
   add_row(en = "with only a few exceptions" , fr = "à quelques exceptions près") %>%
   add_row(en = "although with some exceptions" , fr = "bien qu'avec des exceptions") %>%
   add_row(en = "although with many exceptions" , fr = "bien qu'avec beaucoup d'exceptions") %>%
@@ -419,7 +419,7 @@ translation_fr <-
                       "there is no relationship between the two variables."),
           fr = paste0("<p>{var_explanation}", 
                       "<p>L'index AVA-Can n'a en fait aucune corrélation ",
-                      "({correlation}) avec {var_name} à l'échelle ",
+                      "({correlation}) avec la variable '{var_name}' à l'échelle ",
                       "'{scale_singular}'.",
                       "<p>Cela signifie que, à l'échelle '{scale_singular}', ", 
                       "il n'y a pas de relation entre ces deux variables.")) %>% 
@@ -432,11 +432,11 @@ translation_fr <-
                       "values for '{tolower(var_name)}', {high_low_disclaimer}."),
           fr = paste0("<p>{var_explanation}", 
                       "<p>L'index AVA-Can a un indice de corrélation {strong_weak} et {pos_neg} ",
-                      "({correlation}) avec '{tolower(var_name)}' à l'échelle ",
+                      "({correlation}) avec la variable '{tolower(var_name)}' à l'échelle ",
                       "'{scale_singular}'.",
                       "<p>Cela signifie qu'en général, les {scale_plural} avec un haut ",
                       "potentiel de vie active tendent à avoir des {higher_lower} ",
-                      "valeurs pour '{tolower(var_name)}', {high_low_disclaimer}.")) %>% 
+                      "valeurs pour la variable '{tolower(var_name)}', {high_low_disclaimer}.")) %>% 
   # Bivariate comparison
   add_row(en = paste0("<strong>{place_heading}</strong>", 
                       
@@ -455,13 +455,13 @@ translation_fr <-
                       
                       "<p>{place_name} a une population de ",
                       "{prettyNum(dat$population, ',')}, un score d'index AVA-Can ",
-                      "de {round(poly_value_1, 2)}, et une valeur '{tolower(var_name)}' ",
+                      "de {round(poly_value_1, 2)}, et une valeur pour la variable '{tolower(var_name)}' ",
                       "de {round(poly_value_2, 2)}. ",
                       
                       "<p>Ces deux scores sont {relative_position}, en termes ",
                       "relatifs. {place_name} a un score d'index AVA-Can plus grand ",
                       "que {percentile_left}% des {scale_plural} et ",
-                      "un score '{tolower(var_name)}' plus grand que ", 
+                      "un score pour la variable '{tolower(var_name)}' plus grand que ", 
                       "{percentile_right}% des {scale_plural} dans la ",
                       "région de Montréal.")) %>% 
   # Did you know
