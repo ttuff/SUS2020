@@ -1240,20 +1240,20 @@ Pedestrian_realm_module_server <- function(id) {
           HTML()
       }
       else if (rz_pedestrian$zoom == "IN" & input$switch_biv == FALSE) {
-        did_you_know %>%
+        sus_translate(did_you_know %>%
           filter(right_variable == "da_ped") %>%
           slice_sample(n = 2) %>%
-          pull(text) %>%
+          pull(text)) %>%
           paste("<li> ", ., collapse = "") %>%
           paste0("<ul>", ., "</ul>") %>%
           HTML()
       }
       
       else if (rz_pedestrian$zoom == "IN" & input$switch_biv == TRUE) {
-        did_you_know %>% 
+        sus_translate(did_you_know %>% 
           filter(right_variable == paste0(input$data_for_plot_ped, "_quant3")) %>% 
           slice_sample(n = 2) %>%
-          pull(text) %>% 
+          pull(text)) %>% 
           paste("<li> ", ., collapse = "") %>% 
           paste0("<ul>", ., "</ul>") %>%
           HTML()

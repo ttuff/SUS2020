@@ -12,12 +12,11 @@ sus_translation_list <- function(to_translate){
         pull()})
   
   # reiterate in list depth to translate every names
-  if (vec_depth(to_translate) > 1)
+  if (vec_depth(to_translate) > 2)
     to_translate <- map(to_translate, sus_translation_list)
   
   to_translate
 }
-
 
 
 
