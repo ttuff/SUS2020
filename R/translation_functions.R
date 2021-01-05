@@ -41,9 +41,19 @@ sus_translate <- function(to_translate) {
       
     #if it's a character
     } else if ((is.character(to_translate)) == T) {
-      translation_fr %>%
-        filter(en == to_translate) %>%
-        pull()
+      
+      # In some cases, there are multiple different string to translate (ex. did
+      # you know and the list created there). This loop will take care of it.
+      translated <- NULL
+      
+      for(i in 1:length(to_translate)){
+        translated[i] <- 
+          translation_fr %>%
+          filter(en == to_translate[[i]]) %>%
+          pull()
+      }
+      
+      translated
   }
   }
 }
