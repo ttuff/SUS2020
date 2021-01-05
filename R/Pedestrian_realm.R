@@ -94,10 +94,7 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
         selectInput(
           inputId = ns("variable_ped"),
           label = h4(i18n$t("Choose more variables and explore further")), 
-          choices = list("Population density per square km" = 1, 
-                         "Pedestrian social distancing capacity" = 2, 
-                         "Work commutes by car (%)" = 3, 
-                         "Trajet MTL 2016 data on pedestrian flows" = 4),
+          choices = var_list_slider,
           selected = 1),
         h5(tags$em(tags$span(style = "color:#3C3C3B", 
                              i18n$t("Play with the slider to filter the map")))), 
@@ -212,6 +209,11 @@ Pedestrian_realm_module_server <- function(id) {
                          "minority_percent", 
                        "Immigrant Population Proportion" = 
                          "immigrant_percent")
+    
+    var_list_slider <- list("Population density per square km" = 1, 
+                            "Pedestrian social distancing capacity" = 2, 
+                            "Work commutes by car (%)" = 3, 
+                            "Trajet MTL 2016 data on pedestrian flows" = 4)
       
     # List reactive translation
     observe({
@@ -219,6 +221,15 @@ Pedestrian_realm_module_server <- function(id) {
                         inputId = "data_for_plot_ped",
                         choices = sus_translate(var_list_ped))
     })
+    
+    observe({
+      updateSelectInput(session = session,
+                        inputId = "variable_ped",
+                        choices = sus_translate(var_list_slider))
+    })
+    
+    
+    #############
     
     output$bivariate_legend_ped <- renderImage({
       filename <- normalizePath(file.path("www/bivariate_legend_2.png"))
