@@ -138,7 +138,7 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
                           label = i18n$t("Hide")))),
       conditionalPanel(
         condition = "output.pedestrian_hide_dyk_status == 1", ns = ns ,
-        htmlOutput(ns("did_you_know_ped")))
+        uiOutput(ns("did_you_know_ped")))
     ),
     
     absolutePanel(
@@ -1227,19 +1227,18 @@ Pedestrian_realm_module_server <- function(id) {
           filter(right_variable == "ct_ped") %>% 
           pull(text) %>% 
           paste("<li> ", ., collapse = "") %>%
-          paste0("<ul>", ., "</ul>") 
+          paste0("<ul>", ., "</ul>")
         
-        sus_translate(d) %>% 
-          HTML()
+        HTML(sus_translate(d))
       }
       else if (rz_pedestrian$zoom == "IN" & input$switch_biv == FALSE) {
-      #   did_you_know %>%
-      #     filter(right_variable == "da_ped") %>%
-      #     slice_sample(n = 2) %>%
-      #     pull(text) %>%
-      #     paste("<li> ", ., collapse = "") %>%
-      #     paste0("<ul>", ., "</ul>") %>%
-      #     HTML()
+        did_you_know %>%
+          filter(right_variable == "da_ped") %>%
+          slice_sample(n = 2) %>%
+          pull(text) %>%
+          paste("<li> ", ., collapse = "") %>%
+          paste0("<ul>", ., "</ul>") %>%
+          HTML()
       }
       
       else if (rz_pedestrian$zoom == "IN" & input$switch_biv == TRUE) {
@@ -1251,12 +1250,12 @@ Pedestrian_realm_module_server <- function(id) {
           HTML()
       }
       else {
-        # did_you_know %>%
-        #   filter(right_variable == "sidewalk_ped") %>%
-        #   pull(text) %>%
-        #   paste("<li> ", ., collapse = "") %>%
-        #   paste0("<ul>", ., "</ul>") %>%
-        #   HTML()
+        sus_translate(did_you_know %>%
+          filter(right_variable == "sidewalk_ped") %>%
+          pull(text)) %>%
+          paste("<li> ", ., collapse = "") %>%
+          paste0("<ul>", ., "</ul>") %>% 
+          HTML()
       }
       
     })
