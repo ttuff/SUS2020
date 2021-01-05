@@ -56,7 +56,7 @@ Mode_switch_module_UI <- function(id ) {
 
       radioGroupButtons(
         ns("radio1"),
-        label = "Modal shift scenarios",
+        label = i18n$t("Modal shift scenarios"),
         choices = list("Baseline" = 3,
                        "Distance" = 1,
                        "Elevation/time" = 2),
@@ -151,6 +151,13 @@ Mode_switch_module_server <- function(id) {
                                                                   "Access to cycling infrastructure" = 1)))
                  })
                  
+                 observe({
+                   updateRadioGroupButtons(session = session,
+                                     inputId = "radio1",
+                                     choices = sus_translate(list("Baseline" = 3,
+                                                                  "Distance" = 1,
+                                                                  "Elevation/time" = 2)))
+                 })
                  
                  # Commute mode change globals ---------------------------------------------
                  
