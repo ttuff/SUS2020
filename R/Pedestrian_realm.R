@@ -486,7 +486,7 @@ Pedestrian_realm_module_server <- function(id) {
     
     outputOptions(output, "more_info_ped_status", suspendWhenHidden = FALSE)
     
-    observeEvent(input$more_info_ped, {
+    observe({
       
       if (input$more_info_ped %% 2 == 1) {
         txt <- sus_translate("Hide")
