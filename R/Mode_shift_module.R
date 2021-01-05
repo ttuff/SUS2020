@@ -318,10 +318,10 @@ Mode_switch_module_server <- function(id) {
                  output$commute_more_info_status <- reactive(input$commute_more_info %% 2 == 1)
                  outputOptions(output, "commute_more_info_status", suspendWhenHidden = FALSE)
 
-                 observeEvent(input$commute_more_info, {
-                   print("info")
-                   if (input$commute_more_info %% 2 == 1) txt <- "Hide" else txt <- "Learn more"
-                   updateActionButton(session, ns("commute_more_info"), label = txt)
+                 observe({
+
+                   if (input$commute_more_info %% 2 == 1) txt <- sus_translate("Hide") else txt <- sus_translate("Learn more")
+                   updateActionButton(session, "commute_more_info", label = txt)
 
                  })
 

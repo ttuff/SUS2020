@@ -860,7 +860,7 @@ $(document).ready(function(){
                  output$more_info_status <- reactive(input$more_info %% 2 == 1)
                  outputOptions(output, "more_info_status", suspendWhenHidden = FALSE)
                  
-                 observeEvent(input$more_info, {
+                 observe({
                    
                    if (input$more_info %% 2 == 1) txt <- sus_translate("Hide") else txt <- sus_translate("Learn more")
                    updateActionButton(session, "more_info", label = txt)
