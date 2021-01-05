@@ -390,6 +390,7 @@ translation_fr <-
                       "pouvons donc pas afficher de résultats ici.")) %>%
   # CanALE active living potential
   add_row(en = "CanALE Index", fr = "Index AVA-Can") %>% 
+  add_row(en = "View in 3D", fr = "Voir en 3D") %>% 
   add_row(en = "Active living potential: the CanALE index",
           fr = "Potentiel de vie active: l'index AVA-Can") %>% 
   add_row(en = paste0("<strong>{place_heading}</strong>", 
@@ -474,8 +475,8 @@ translation_fr <-
   add_row(en = "Perform a Bivariate Analysis" , fr = "Effectuez une analyse bivariée") %>%
   add_row(en = "Walkable Access to Key Amenities" , fr = "Accès à pied aux services de base") %>%
   add_row(en = "Net Median Income" , fr = "Revenu médian net") %>%
-  add_row(en = "Original Plan (May 15, 2020)" , fr = "Plan initial (15 mai 2020") %>%
-  add_row(en = "Revised Plan (July 25, 2020)" , fr = "Plan révisé (25 juillet 2020") %>%
+  add_row(en = "Original Plan (May 15, 2020)" , fr = "Plan initial (15 mai 2020)") %>%
+  add_row(en = "Revised Plan (July 25, 2020)" , fr = "Plan révisé (25 juillet 2020)") %>%
   add_row(en = "Choose more variables and explore further" , fr = "Choisissez d'autres variables et explorez davantage") %>%
   add_row(en = "Population density per square km" , fr = "Densité de population par kilomètre carré") %>%
   add_row(en = "Pedestrian social distancing capacity" , fr = "Capacité de distanciation sociale des piétons") %>%

@@ -123,6 +123,7 @@ considerably different,modérément différents
 "At the {scale_singular} scale, the CanALE index varies from {min_val} to {max_val}, with an average value of {mean_val} and a median value of {median_val}. Two thirds of {scale_plural} have a score between {quant_low} and {quant_high}.","À l'échelle {scale_singular}, l'index AVA-Can varie de {min_val} à {max_val}, avec une valeur moyenne de {mean_val} et une valeur médianne de {median_val}. Deux tiers {scale_plural} ont un score se situant entre {quant_low} et {quant_high}."
 "<strong>Kahnawake Mohawk Territory</strong><p>Statistics Canada does not gather the same data for indigenous reserves in the Census as it does for other jurisdictions, so we cannot display findings here.","<strong>Kahnawake (Réserve indienne)</strong><p>Dans le cadre du recensement, Statistique Canada ne recueille pas les mêmes données pour les réservesautochtones que dans les autres juridictions, nous ne pouvons donc pas afficher de résultats ici."
 CanALE Index,Index AVA-Can
+View in 3D,Voir en 3D
 Active living potential: the CanALE index,Potentiel de vie active: l'index AVA-Can
 "<strong>{place_heading}</strong><p>{place_name} has a population of {prettyNum(dat$population, ',')} and a CanALE index score of {round(poly_value, 2)}, which is {larger_smaller} the region-wide median of {median_val}.<p>{place_name} has {poor_strong} potential for active living, with a CanALE index score higher than {percentile}% of {scale_plural} in the Montreal region.","<strong>{place_heading}</strong><p>{place_name} a une population de {prettyNum(dat$population, ',')} et un score d'index AVA-Can de {round(poly_value, 2)}, ce qui est {larger_smaller} la médiane régionale de {median_val}.<p>{place_name} a un potentiel {poor_strong} de vie active, avec un score d'index AVA-Can plus grand que {percentile}% des {scale_plural} dans la région de Montréal."
 "<p>{var_explanation}<p>The CanALE index has effectively no correlation ({correlation}) with {var_name} at the {scale_singular} scale.<p>This means that, at the {scale_singular} scale, there is no relationship between the two variables.","<p>{var_explanation}<p>L'index AVA-Can n'a en fait aucune corrélation ({correlation}) avec la variable '{var_name}' à l'échelle '{scale_singular}'.<p>Cela signifie que, à l'échelle '{scale_singular}', il n'y a pas de relation entre ces deux variables."
@@ -132,8 +133,8 @@ Hide,En voir moins
 Show,Afficher
 Perform a Bivariate Analysis,Effectuez une analyse bivariée
 Walkable Access to Key Amenities,Accès à pied aux services de base
-"Original Plan (May 15, 2020)",Plan initial (15 mai 2020
-"Revised Plan (July 25, 2020)",Plan révisé (25 juillet 2020
+"Original Plan (May 15, 2020)",Plan initial (15 mai 2020)
+"Revised Plan (July 25, 2020)",Plan révisé (25 juillet 2020)
 Choose more variables and explore further,Choisissez d'autres variables et explorez davantage
 Population density per square km,Densité de population par kilomètre carré
 Pedestrian social distancing capacity,Capacité de distanciation sociale des piétons
