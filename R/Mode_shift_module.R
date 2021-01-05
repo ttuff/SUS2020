@@ -141,6 +141,16 @@ Mode_switch_module_server <- function(id) {
                                                                            filter(tab == "commute", type == "extra") %>%
                                                                            pull(text))))
                  
+                 # Drop down list for variable selection -----------------------------------
+                 # List reactive translation
+                 observe({
+                   updateSelectInput(session = session,
+                                     inputId = "commute_variable",
+                                     choices = sus_translate(list("Share of trips taken by car" = 2,
+                                                                  "Average commuting distance" = 3,
+                                                                  "Access to cycling infrastructure" = 1)))
+                 })
+                 
                  
                  # Commute mode change globals ---------------------------------------------
                  

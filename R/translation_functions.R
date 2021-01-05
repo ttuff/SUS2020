@@ -19,7 +19,6 @@ sus_translation_list <- function(to_translate){
 }
 
 
-
 # Reactive translation function for texts, lists and png ------------------
 
 

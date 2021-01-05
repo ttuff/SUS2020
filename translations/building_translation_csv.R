@@ -589,7 +589,7 @@ translation_fr <-
   # Mode shift module
   add_row(en = "Shifting car trips to cycling" , fr = "Transférer les trajets de voiture en vélo") %>% 
   add_row(en = "Share of trips taken by car" , fr = "Part des trajets effectués en voiture") %>% 
-  add_row(en = "Average commuting distance" , fr = "Distance moyenne pour du trajet domicile-travail") %>% 
+  add_row(en = "Average commuting distance" , fr = "Distance moyenne du trajet domicile-travail") %>% 
   add_row(en = "Access to cycling infrastructure" , fr = "Accès aux infrastructures cyclables") %>% 
   add_row(en = "% of trips taken by car, by census tract" , fr = "% des trajets effectués en voiture, par secteur de recensement") %>% 
   add_row(en = "Modal shift scenarios" , fr = "Scénarios de transfert modal") %>% 
