@@ -28,7 +28,7 @@ Mode_switch_module_UI <- function(id ) {
 
   # Explore panel
   absolutePanel(
-    id = "commute_right_bar", style = "z-index:500;",
+    id = "commute_right_bar", style = "z-index:500; max-height: 90%; overflow-y: auto; overflow-x:hidden;",
     class = "panel panel-default", top = 70, right = 50, width = 300,
     conditionalPanel(
       condition = "output.zoom_level == 'OUT'",ns = ns ,

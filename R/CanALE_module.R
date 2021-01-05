@@ -36,11 +36,11 @@ CanALE_module_UI <- function(id) {
     
   # 3D switch
   absolutePanel(
-    id = ns("input_control_overlay"), style = "z-index:500;",
+    id = ns("input_control_overlay"), style = "z-index:500; max-height: 90%; overflow-y: auto; overflow-x:hidden;",
     class = "panel panel-default", top = 70, right = 50, width = 300,
     materialSwitch(
       inputId = ns("active_extrude"), 
-      label = "View in 3D", 
+      label = i18n$t("View in 3D"), 
       status = "danger",
       value = FALSE),
     hr(),

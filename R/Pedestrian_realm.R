@@ -50,7 +50,7 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
         imageOutput(ns("sidewalk_calculation")))),
     
     absolutePanel(
-      id = ns("input_control_right"), style="z-index:501;", 
+      id = ns("input_control_right"), style="z-index:500; max-height: 90%; overflow-y: auto; overflow-x:hidden;", 
       class = "panel panel-default", top = 70, right = 50, width = 300,
       conditionalPanel(
         condition = "output.zoom == 'IN'", ns = ns ,
