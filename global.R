@@ -334,6 +334,7 @@ animatedConditionalPanel <-
 
 # Drop down list for variable selection -----------------------------------
 
+#CanALE
 var_list <- 
   list("----" = " ", 
        "Housing" = list("Tenant-occupied (%)" = "tenant_prop",
@@ -354,6 +355,20 @@ var_list <-
                                "15-30 minutes to work (%)" = "time_30_prop",
                                "30-45 minutes to work (%)" = "time_45_prop",
                                "45-60 minutes to work (%)" = "time_60_prop"))
+
+#Pedestrian realm
+var_list_ped <- list("Walkable Access to Key Amenities" = 
+                       "agg_proximity_score",
+                     "Net Median Income" = 
+                       "net_median_income",
+                     "Visible Minority Population Proportion" = 
+                       "minority_percent", 
+                     "Immigrant Population Proportion" = 
+                       "immigrant_percent")
+var_list_slider <- list("Population density per square km" = 1, 
+                        "Pedestrian social distancing capacity" = 2, 
+                        "Work commutes by car (%)" = 3, 
+                        "Trajet MTL 2016 data on pedestrian flows" = 4)
 
 loadingLogo <- 
   function(href, src, loadingsrc, height = NULL, width = NULL, alt = NULL) {

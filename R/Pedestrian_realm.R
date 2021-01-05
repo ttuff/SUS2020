@@ -199,21 +199,6 @@ Pedestrian_realm_module_server <- function(id) {
                                                                    filter(tab == "pedestrian_ct", type == "extra") %>%
                                                                  pull(text))))
     
-    #Var list
-    
-    var_list_ped <- list("Walkable Access to Key Amenities" = 
-                         "agg_proximity_score",
-                       "Net Median Income" = 
-                         "net_median_income",
-                       "Visible Minority Population Proportion" = 
-                         "minority_percent", 
-                       "Immigrant Population Proportion" = 
-                         "immigrant_percent")
-    
-    var_list_slider <- list("Population density per square km" = 1, 
-                            "Pedestrian social distancing capacity" = 2, 
-                            "Work commutes by car (%)" = 3, 
-                            "Trajet MTL 2016 data on pedestrian flows" = 4)
       
     # List reactive translation
     observe({
