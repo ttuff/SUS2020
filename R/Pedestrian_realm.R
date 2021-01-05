@@ -224,7 +224,7 @@ Pedestrian_realm_module_server <- function(id) {
     }, deleteFile = FALSE)
     
     output$sidewalk_calculation <- renderImage({
-      filename <- normalizePath(file.path("www/sidewalk_calc.png"))
+      filename <- normalizePath(file.path(sus_translate("www/sidewalk_calc_en.png")))
       return(list(src = filename, contentType = "image/png",  width = 400,
                   height = 400))
     }, deleteFile = FALSE)
