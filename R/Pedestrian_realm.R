@@ -101,7 +101,7 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
         h5(chooseSliderSkin(skin = "Flat",
                             #c("Shiny", "Flat", "Modern", "Nice", "Simple", "HTML5", "Round", "Square"),
                             color = "#B2D235"),
-           sliderInput(inputId = ns("slider_ped"), label = "", 0, 12, 
+           sliderInput(inputId = ns("slider_ped"), label = NULL, 0, 12, 
                        value = c(0, 12), step = 1))),
       hr(),
       fluidRow(
