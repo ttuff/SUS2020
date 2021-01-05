@@ -67,15 +67,7 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
                         style = "color:#3C3C3B", 
                         i18n$t("Select your second variable"))), 
                       selected = "agg_proximity_score", 
-                      choices = list(
-                        "Walkable Access to Key Amenities" = 
-                          "agg_proximity_score",
-                        "Net Median Income" = 
-                          "net_median_income",
-                        "Visible Minority Population Proportion" = 
-                          "minority_percent", 
-                        "Immigrant Population Proportion" = 
-                          "immigrant_percent")),
+                      choices = var_list_ped),
           fluidRow(
             column(width = 2, offset = 10, align = "right",
                    actionLink(inputId = ns("pedestrian_hide_second_variable"),
@@ -208,8 +200,25 @@ Pedestrian_realm_module_server <- function(id) {
     # Pedestrian extra html translation -------------------------------------------
     output$pedestrian_ct_extra_html <- renderUI(HTML(sus_translate(title_text %>%
                                                                    filter(tab == "pedestrian_ct", type == "extra") %>%
-                                                                   pull(text))))
-                 
+                                                                 pull(text))))
+    
+    #Var list
+    
+    var_list_ped <- list("Walkable Access to Key Amenities" = 
+                         "agg_proximity_score",
+                       "Net Median Income" = 
+                         "net_median_income",
+                       "Visible Minority Population Proportion" = 
+                         "minority_percent", 
+                       "Immigrant Population Proportion" = 
+                         "immigrant_percent")
+      
+    # List reactive translation
+    observe({
+      updateSelectInput(session = session,
+                        inputId = "data_for_plot_ped",
+                        choices = sus_translate(var_list_ped))
+    })
     
     output$bivariate_legend_ped <- renderImage({
       filename <- normalizePath(file.path("www/bivariate_legend_2.png"))
@@ -1223,12 +1232,12 @@ Pedestrian_realm_module_server <- function(id) {
     
     output$did_you_know_ped <- renderUI({
       if (rz_pedestrian$zoom == "OUT") {
-        d <- sus_translate(did_you_know %>% 
+        sus_translate(did_you_know %>% 
           filter(right_variable == "ct_ped") %>% 
           pull(text)) %>% 
           paste("<li> ", ., collapse = "") %>%
           paste0("<ul>", ., "</ul>") %>% 
-          HTML
+          HTML()
       }
       else if (rz_pedestrian$zoom == "IN" & input$switch_biv == FALSE) {
         sus_translate(did_you_know %>%
@@ -1243,6 +1252,7 @@ Pedestrian_realm_module_server <- function(id) {
       else if (rz_pedestrian$zoom == "IN" & input$switch_biv == TRUE) {
         sus_translate(did_you_know %>% 
           filter(right_variable == paste0(input$data_for_plot_ped, "_quant3")) %>% 
+          slice_sample(n = 2) %>%
           pull(text)) %>% 
           paste("<li> ", ., collapse = "") %>% 
           paste0("<ul>", ., "</ul>") %>%
@@ -1251,6 +1261,7 @@ Pedestrian_realm_module_server <- function(id) {
       else {
         sus_translate(did_you_know %>%
           filter(right_variable == "sidewalk_ped") %>%
+            slice_sample(n = 2) %>%
           pull(text)) %>%
           paste("<li> ", ., collapse = "") %>%
           paste0("<ul>", ., "</ul>") %>% 
