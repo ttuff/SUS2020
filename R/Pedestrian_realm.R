@@ -762,7 +762,7 @@ Pedestrian_realm_module_server <- function(id) {
         } 
       })
     
-    observeEvent(input$variable_ped,{
+    observe({
       if(input$variable_ped == 3){
         updateSliderInput(session = session,
                           inputId = "slider_ped",
