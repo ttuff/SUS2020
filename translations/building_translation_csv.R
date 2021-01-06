@@ -837,7 +837,7 @@ translation_fr <-
   add_row(en = paste0("Montreal’s borough with the highest population density per square meter of walkable space is ",
                       "Côte-des-Neiges-Notre-Dame-de-Grâce (0.28 people / square meters of walkable space)."),
           fr = paste0("L'arrondissement de Montréal ayant la plus forte densité de population par mètre carré de surface ",
-                      "marchable est Côte-des-Neiges-Notre-Dame-de-Grâce (0,28 personne / mètre carré de surface marchable).")) %>%
+                      "accessible pour les piétons est Côte-des-Neiges-Notre-Dame-de-Grâce (0,28 personne / mètre carré de surface marchable).")) %>%
   add_row(en = paste0("DAs with a capacity for pedestrian social distancing less than 25% contain, on average, a net median ",
                       "income of $44,773 compared to $54,930 for the city as a whole and $61,651 for DAs with over 100% capacity."),
           fr = paste0("Les AD ayant une capacité de distanciation sociale des piétons inférieure à 25 % ont, en moyenne, ",
@@ -879,14 +879,21 @@ translation_fr <-
                       "Outremont at $1137.1 per month."),
           fr = paste0("Le loyer moyen le plus élevé à Montréal se trouve à Westmount, à 1269,1 $ par mois, suivi ",
                       "d'Outremont, à 1177,1 $ par mois.")) %>%
-  add_row(en = paste0("The lowest average rent in Montreal is in Kirkland, at $124.7 per month."),
-          fr = paste0("Le loyer moyen le plus bas à Montréal se trouve à Kirkland, à 124,7 $ par mois.")) %>%
+  add_row(en = paste0("The lowest average rent in the Montreal CMA is in Beaconsfield, at $237.4 per month, followed ", 
+                      "by Rosemère ($276.2) and Boucherville ($362.2). Within the City of Montreal, the borough with ",
+                      "the lowest average rent is L'Île-Bizard-Sainte-Geneviève, at $432.9 per month, followed by ",
+                      "Pierrefonds-Roxboro ($545.6) and Rivière-des-Prairies-Pointe-aux-Trembles ($610.8)."),
+          fr = paste0("Le loyer moyen le plus bas de la RMR de Montréal se trouve à Beaconsfield, avec 237,4 $ par ",
+                      "mois, suivi de Rosemère (276,2 $) et de Boucherville (362,2 $). Au sein de la Ville de Montréal, ",
+                      "l'arrondissement où le loyer moyen est le plus bas est celui de L'Île-Bizard-Sainte-Geneviève, avec ",
+                      "432,9 $ par mois, suivi de Pierrefonds-Roxboro (545,6 $) et de Rivière-des-Prairies-Pointe-aux-Trembles ",
+                      "(610,8 $).")) %>%
   add_row(en = paste0("Westmount has the highest average property value ($1,242,703.7), followed by Hampstead ",
                       "($1,125,655.9)."),
           fr = paste0("Westmount a la valeur moyenne des propriétés la plus élevée (1 242 703,7 $), suivie de ",
                       "Hampstead (1 125 655,9 $).")) %>%
-  add_row(en = paste0("The lowest average property value in Montreal ($223,573.2) can be found in Pointe-Calumet."),
-          fr = paste0("La valeur moyenne des propriétés la plus basse à Montréal (223 573,2 $) se trouve à Point-Calumet.")) %>%
+  add_row(en = paste0("The lowest average property value in the Montreal CMA ($223,573.2) can be found in Pointe-Calumet."),
+          fr = paste0("La valeur moyenne des propriétés la plus basse dans la RMR de Montréal (223 573,2 $) se trouve à Pointe-Calumet.")) %>%
   add_row(en = paste0("Baie-d'Urfé has the lowest proportion of tenants, at 2.6%, followed by Lorraine with 2.7%."),
           fr = paste0("Baie-d'Urfé a la plus petite proportion de locataires, avec 2,6%, suivie par la Lorraine avec 2,7%.")) %>%
   add_row(en = paste0("Côte-des-Neiges-Notre-Dame-de-Grâce has the highest proportion of tenants (73.7%), closely ",
@@ -930,25 +937,25 @@ translation_fr <-
                       "more than $100,000 at 65.4%, and Montreal-Nord has the lowest (9.7%)."),
           fr = paste0("Sainte-Anne-de-Bellevue a la plus grande proportion de personnes ayant un revenu annuel ",
                       "supérieur à 100 000 $, soit 65,4 %, et Montréal-Nord a la plus petite (9,7 %).")) %>%
-  add_row(en = paste0("Sainte-Anne-des-Plaines has the highest proportion of people (43.7%) with an annual income ",
-                      "of up to $100,000."),
+  add_row(en = paste0("Sainte-Anne-des-Plaines has the highest proportion of people (43.7%) with an annual income of ",
+                      "between $50,000 and $100,000."),
           fr = paste0("Sainte-Anne-des-Plaines compte la plus grande proportion de personnes (43,7 %) ayant un revenu ",
-                      "annuel allant jusqu'à 100 000 $.")) %>%
-  add_row(en = paste0("Half of Montreal has a proportion of 29.0% or less people with an annual income below $50,000, ",
-                      "and 10% of Montreal has a proportion of 49.2% or higher with an annual income below $50,000."),
-          fr = paste0("La moitié de Montréal a une proportion de 29,0 % ou moins de personnes ayant un revenu annuel ",
-                      "inférieur à 50 000 $, et 10 % de Montréal a une proportion de 49,2 % ou plus de personnes ",
-                      "ayant un revenu annuel inférieur à 50 000 $.")) %>%
+                      "annuel compris entre 50 000 et 100 000 dollars.")) %>%
+  add_row(en = paste0("Half of the Montreal CMA's boroughs or cities has a proportion of 29.0% or less people with an ",
+                      "annual income below $50,000. 10% of the Montreal CMA's borough or cities has a proportion of 49.2% ",
+                      "or higher of people with an annual income below $50,000."),
+          fr = paste0("La moitié des arrondissements ou des villes de la RMR de Montréal comptent une proportion de 29,0 % ",
+                      "ou moins de personnes ayant un revenu annuel inférieur à 50 000 $. 10 % des arrondissements ou des ",
+                      "villes de la RMR de Montréal ont une proportion de 49,2 % ou plus de personnes ayant un revenu annuel ",
+                      "inférieur à 50 000 $.")) %>%
   add_row(en = paste0("Montreal-Nord has the lowest median income in Montreal ($43,240.1), followed by Villeray-",
                       "Saint-Michel-Parc-Extension ($43,910.8)."),
           fr = paste0("Montréal-Nord a le revenu médian le plus bas de Montréal (43 240,1 $), suivi de ",
                       "Villeray-Saint-Michel-Parc-Extension (43 910,8 $).")) %>%
-  add_row(en = paste0("Hampstead has the highest median income in Montreal ($134,155.3), followed by Westmount ",
-                      "($1,333,333.9), Sainte-Anne-de-Bellevue ($130,552.9), Mont-Royal ($130,019.4), and Beaconsfield ",
-                      "($129,911.4)."),
-          fr = paste0("Hampstead a le revenu médian le plus élevé à Montréal (134 155,3 $), suivi de Westmount ",
-                      "(1 333 333,9 $), Sainte-Anne-de-Bellevue (130 552,9 $), Mont-Royal (130 019,4 $) et Beaconsfield ",
-                      "(129 911,4 $).")) %>%
+  add_row(en = paste0("Hampstead has the highest median income in Montreal ($134,155.3), followed by Westmount ($133,333.9), ",
+                      "Sainte-Anne-de-Bellevue ($130,552.9), Mont-Royal ($130,019.4), and Beaconsfield ($129,911.4)."),
+          fr = paste0("Hampstead a le revenu médian le plus élevé à Montréal (134 155,3 $), suivi de Westmount (133 333,9 $), ",
+                      "Sainte-Anne-de-Bellevue (130 552,9 $), Mont-Royal (130 019,4 $) et Beaconsfield (129 911,4 $).")) %>%
   add_row(en = paste0("Sainte-Julie, Notre-Dame-de-l'Île-Perrot, Oka, Pointe-Calumet, and Charlemagne have less than ",
                       "0.2% new immigrants."),
           fr = paste0("Sainte-Julie, Notre-Dame-de-l'Île-Perrot, Oka, Pointe-Calumet, et Charlemagne ont moins de 0.2% ",
