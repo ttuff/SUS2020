@@ -8,7 +8,7 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
           #ped_legend_container {background-color: rgba(0,0,255,0.0);
           border-width: 0px;}'))),
     
-    mapdeckOutput(outputId = ns("PedestrianMap"), height = "1000px"),
+    mapdeckOutput(outputId = ns("PedestrianMap"), height = "91vh"),
     
     absolutePanel(
       id = ns("title_bar_ped"), class = "panel panel-default",
@@ -50,7 +50,7 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
         imageOutput(ns("sidewalk_calculation")))),
     
     absolutePanel(
-      id = ns("input_control_right"), style="z-index:500; max-height: 90%; overflow-y: auto; overflow-x:hidden;", 
+      id = ns("input_control_right"), style="z-index:500; max-height: 88vh; overflow-y: auto; overflow-x:hidden;", 
       class = "panel panel-default", top = 70, right = 50, width = 300,
       conditionalPanel(
         condition = "output.zoom == 'IN'", ns = ns ,

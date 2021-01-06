@@ -157,7 +157,7 @@ translation_fr <-
           fr = "Locataire occupant (%) est le pourcentage de logements privés qui sont occupés par des locataires") %>%
   add_row(en = "Average property value", fr = "Valeur foncière moyenne") %>%
   add_row(en = "Average property value is the average value of dwellings.", 
-          fr = "Valeur foncièr moyenne est la valeur moyenne des propriétés.") %>%
+          fr = "Valeur foncière moyenne est la valeur moyenne des propriétés.") %>%
   add_row(en = "Unaffordable housing (%)", fr = "Logement inabordable (%)") %>%
   add_row(en = "Unaffordable housing (%) is the percentage of dwellings for which residents pay more than 30% of income on housing costs.", 
           fr = "Logement inabordable (%) est le pourcentage de logements pour lesquels les résidents paient plus de 30 % de leur revenu sur les frais de logement.") %>%

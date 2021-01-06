@@ -7,7 +7,7 @@ Mode_switch_module_UI <- function(id ) {
           border-color: rgba(255,255,255,1);}'))),
   
   # Main map
-  mapdeckOutput(outputId = ns("qzmyMap"), height = "1000px")
+  mapdeckOutput(outputId = ns("qzmyMap"), height = "91vh")
   ,
   
   # Title bar
@@ -28,7 +28,7 @@ Mode_switch_module_UI <- function(id ) {
 
   # Explore panel
   absolutePanel(
-    id = "commute_right_bar", style = "z-index:500; max-height: 90%; overflow-y: auto; overflow-x:hidden;",
+    id = "commute_right_bar", style = "z-index:500; max-height: 88vh; overflow-y: auto; overflow-x:hidden;",
     class = "panel panel-default", top = 70, right = 50, width = 300,
     conditionalPanel(
       condition = "output.zoom_level == 'OUT'",ns = ns ,

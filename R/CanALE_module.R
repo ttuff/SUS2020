@@ -13,9 +13,9 @@ CanALE_module_UI <- function(id) {
           border-width: 0px;}
           #active_legend_container {background-color: rgba(0,0,255,0.0);
           border-width: 0px;}'))),
-    
+
   # Main map
-  mapdeckOutput(outputId = ns('active_map'), height = "1000px"),
+  mapdeckOutput(outputId = ns('active_map'), height = "91vh"),
   
   
   # Title bar
@@ -36,7 +36,7 @@ CanALE_module_UI <- function(id) {
     
   # 3D switch
   absolutePanel(
-    id = ns("input_control_overlay"), style = "z-index:500; max-height: 90%; overflow-y: auto; overflow-x:hidden;",
+    id = ns("input_control_overlay"), style = "z-index:500; max-height: 88vh; overflow-y: auto; overflow-x:hidden;",
     class = "panel panel-default", top = 70, right = 50, width = 300,
     materialSwitch(
       inputId = ns("active_extrude"), 
