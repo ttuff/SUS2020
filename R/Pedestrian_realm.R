@@ -69,7 +69,7 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
                       selected = "agg_proximity_score", 
                       choices = var_list_ped),
           fluidRow(
-            column(width = 2, offset = 10, align = "right",
+            column(width = 4, offset = 8, align = "right",
                    actionLink(inputId = ns("pedestrian_hide_second_variable"),
                               label = i18n$t("Hide")))),
           conditionalPanel(
@@ -116,7 +116,7 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
         conditionalPanel(
           condition = "output.pedestrian_poly_selected == 1", ns = ns ,
           actionLink(inputId = ns("pedestrian_clear_selection"), 
-                     label = "Clear selection")),
+                     label = i18n$t("Clear selection"))),
         plotOutput(ns("pedestrian_graph"), height = 150)),
       hr(),
       fluidRow(
@@ -505,9 +505,13 @@ Pedestrian_realm_module_server <- function(id) {
     
     outputOptions(output, "pedestrian_hide_explore_status", suspendWhenHidden = FALSE)
     
-    observeEvent(input$pedestrian_hide_explore, {
+    observe({
       
-      if (input$pedestrian_hide_explore %% 2 == 0) txt <- sus_translate("Hide") else txt <- sus_translate("Show")
+      if (input$pedestrian_hide_explore %% 2 == 0) {
+        txt <- sus_translate("Hide")
+        } else {
+          txt <- sus_translate("Show")
+        }
       updateActionButton(session, "pedestrian_hide_explore", label = txt)
       
     })
@@ -519,10 +523,14 @@ Pedestrian_realm_module_server <- function(id) {
     
     outputOptions(output, "pedestrian_hide_dyk_status", suspendWhenHidden = FALSE)
     
-    observeEvent(input$pedestrian_hide_dyk, {
+    observe({
       
-      if (input$pedestrian_hide_dyk %% 2 == 0) txt <- sus_translate("Hide") else txt <- sus_translate("Show")
-      updateActionButton(session, ns("pedestrian_hide_dyk"), label = txt)
+      if (input$pedestrian_hide_dyk %% 2 == 0) {
+        txt <- sus_translate("Hide") 
+        } else {
+          txt <- sus_translate("Show")
+          }
+      updateActionButton(session, "pedestrian_hide_dyk", label = txt)
       
     })
     
@@ -533,10 +541,13 @@ Pedestrian_realm_module_server <- function(id) {
     
     outputOptions(output, "pedestrian_hide_second_variable_status", suspendWhenHidden = FALSE)
     
-    observeEvent(input$pedestrian_hide_second_variable, {
+    observe({
       
-      if (input$pedestrian_hide_second_variable %% 2 == 0) txt <- sus_translate("Hide") else txt <- sus_translate("Show")
-      updateActionButton(session, ns("pedestrian_hide_second_variable"), label = txt)
+      if (input$pedestrian_hide_second_variable %% 2 == 0) {
+        txt <- sus_translate("Hide")
+      } else {
+          txt <- sus_translate("Show")}
+      updateActionButton(session, "pedestrian_hide_second_variable", label = txt)
       
     })
     
@@ -547,10 +558,13 @@ Pedestrian_realm_module_server <- function(id) {
     
     outputOptions(output, "vas_hide_explore_status", suspendWhenHidden = FALSE)
     
-    observeEvent(input$vas_hide_explore, {
+    observe({
       
-      if (input$vas_hide_explore %% 2 == 0) txt <- sus_translate("Hide") else txt <- sus_translate("Show")
-      updateActionButton(session, ns("vas_hide_explore"), label = txt)
+      if (input$vas_hide_explore %% 2 == 0) {txt <- sus_translate("Hide") 
+      } else {
+        txt <- sus_translate("Show")
+      }
+      updateActionButton(session, "vas_hide_explore", label = txt)
       
     })
     
