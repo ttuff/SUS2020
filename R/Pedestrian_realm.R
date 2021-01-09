@@ -194,7 +194,7 @@ Pedestrian_realm_module_server <- function(id) {
                  ns <- NS(id)
                  
                  
-    # Pedestrian extra html translation -------------------------------------------
+    # Pedestrian extra html translation ---------------------------------------------
     output$pedestrian_ct_extra_html <- renderUI(HTML(sus_translate(title_text %>%
                                                                    filter(tab == "pedestrian_ct", type == "extra") %>%
                                                                  pull(text))))
