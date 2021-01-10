@@ -1260,11 +1260,11 @@ Pedestrian_realm_module_server <- function(id) {
       }
       
       else if (rz_pedestrian$zoom == "IN" & input$switch_biv == TRUE) {
-        sus_translate(did_you_know %>% 
+        sus_translate(did_you_know %>%
           filter(right_variable == paste0(input$data_for_plot_ped, "_quant3")) %>% 
-          slice_sample(n = 2) %>%
-          pull(text)) %>% 
-          paste("<li> ", ., collapse = "") %>% 
+            slice_sample(n = 2) %>% 
+          pull(text)) %>%
+          paste("<li> ", ., collapse = "") %>%
           paste0("<ul>", ., "</ul>") %>%
           HTML()
       }
@@ -1277,7 +1277,7 @@ Pedestrian_realm_module_server <- function(id) {
           paste0("<ul>", ., "</ul>") %>% 
           HTML()
       }
-      
+ 
     })
                }
   )

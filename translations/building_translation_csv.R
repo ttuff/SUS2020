@@ -849,6 +849,18 @@ translation_fr <-
           fr = paste0("Les AD ayant une capacité de distanciation sociale des piétons inférieure à 25 % contiennent en ",
                       "moyenne 50,4 % de minorités visibles, contre 32 % pour l'ensemble de la ville et 28 % pour les ",
                       "AD ayant une capacité supérieure à 100 %.")) %>%
+  add_row(en = paste0("The 3 boroughs or independent municipalities with the highest average ‘walkable access to key amenities’ ",
+                      "index score at the DA level are: 1) Le Plateau-Mont-Royal (0.308); 2) Ville-Marie (0.295); and 3) Villeray-Saint-Michel-Parc-Extension (0.237)"),
+          fr = paste0("Test0 ")) %>%
+  add_row(en = paste0("The 3 boroughs or independent municipalities with the lowest average ‘walkable access to key amenities’ ",
+                      "index score at the DA level are: 1) Senneville (0.005); 2) Beaconsfield (0.205); 3) B'aie-d'Urfé (0.022)"),
+          fr = paste0("Test1 ")) %>%
+  add_row(en = paste0("Of the top 25% boroughs and independent municipalities with the highest average ‘walkable access to key amenities’ ",
+                      "score at the DA level, Côte-des-Neiges-Notre-Dame-de-Grâce has the lowest mean capacity for pedestrian social distancing (in the bottom quartile standing at 35.78%)."),
+          fr = paste0("Test3 ")) %>%
+  add_row(en = paste0("There is a moderate to strong positive correlation between dense neighbourhoods and neighbourhoods with strong walkable ",
+                      "access to key amenities. A correlation test between the ‘walkable access to key amenities’ index score and the log of population density yielded a p value of 0.558"),
+          fr = paste0("Test5 ")) %>%
   add_row(en = paste0("DAs with a capacity for pedestrian social distancing less than 25% contain, on average, a 45.25% ",
                       "immigrant population compared to 33% for the city as a whole and 30% for DAs with over 100% capacity."),
           fr = paste0("Les AD ayant une capacité de distanciation sociale des piétons inférieure à 25% contiennent en ",
