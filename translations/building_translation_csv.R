@@ -849,23 +849,73 @@ translation_fr <-
           fr = paste0("Les AD ayant une capacité de distanciation sociale des piétons inférieure à 25 % contiennent en ",
                       "moyenne 50,4 % de minorités visibles, contre 32 % pour l'ensemble de la ville et 28 % pour les ",
                       "AD ayant une capacité supérieure à 100 %.")) %>%
-  add_row(en = paste0("The 3 boroughs or independent municipalities with the highest average ‘walkable access to key amenities’ ",
-                      "index score at the DA level are: 1) Le Plateau-Mont-Royal (0.308); 2) Ville-Marie (0.295); and 3) Villeray-Saint-Michel-Parc-Extension (0.237)"),
-          fr = paste0("Test0 ")) %>%
-  add_row(en = paste0("The 3 boroughs or independent municipalities with the lowest average ‘walkable access to key amenities’ ",
+  add_row(en = paste0("The 3 boroughs or independent municipalities with the highest average 'walkable access to key amenities' ",
+                      "index score at the DA level are Le Plateau-Mont-Royal (0.308), Ville-Marie (0.295) ",
+                      "and Villeray-Saint-Michel-Parc-Extension (0.237)"),
+          fr = paste0("Les 3 arrondissements ou municipalités indépendantes avec les moyennes les plus élevés pour l’accès à pied ",
+                      "aux services de base, à l’échelle des AD, sont Le Plateau-Mont-Royal (0.308), Ville-Marie (0.295) et ",
+                      "Villeray-Saint-Michel-Parc-Extension (0.237)")) %>%
+  add_row(en = paste0("The 3 boroughs or independent municipalities with the lowest average 'walkable access to key amenities' ",
                       "index score at the DA level are: 1) Senneville (0.005); 2) Beaconsfield (0.205); 3) B'aie-d'Urfé (0.022)"),
-          fr = paste0("Test1 ")) %>%
-  add_row(en = paste0("Of the top 25% boroughs and independent municipalities with the highest average ‘walkable access to key amenities’ ",
-                      "score at the DA level, Côte-des-Neiges-Notre-Dame-de-Grâce has the lowest mean capacity for pedestrian social distancing (in the bottom quartile standing at 35.78%)."),
-          fr = paste0("Test3 ")) %>%
-  add_row(en = paste0("There is a moderate to strong positive correlation between dense neighbourhoods and neighbourhoods with strong walkable ",
-                      "access to key amenities. A correlation test between the ‘walkable access to key amenities’ index score and the log of population density yielded a p value of 0.558"),
-          fr = paste0("Test5 ")) %>%
+          fr = paste0("Les 3 arrondissements ou municipalités indépendantes avec les plus basses moyennes pour l’accès à pied aux ",
+                      "services de base, à l’échelle des AD, sont Senneville (0.005), Beaconsfield (0.205), B'aie-d'Urfé (0.022)")) %>%
+  add_row(en = paste0("Of the boroughs and independent municipalities who's average 'walkable access to key amenities' score at the DA ",
+                      "level fall in the top quartile, Côte-des-Neiges-Notre-Dame-de-Grâce has the lowest median capacity for pedestrian ", 
+                      "social distancing (35.78%)"),
+          fr = paste0("Parmi les arrondissements et municipalités indépendantes dont le score moyen de l’indice de l’accès à pied aux ", 
+                      "services de base, à l’échelle des AD, se trouve dans le quartile supérieur, Côte-des-Neiges-Notre-Dame-de-Grâce ", 
+                      "à la capacité de distanciation sociale des piétons la plus faible (35.78%)")) %>%
+  add_row(en = paste0("Denser neighbourhoods generally have better walkable access to key amenities. A correlation test between the 'walkable ", 
+                      "access to key amenities' index score and the log of population density yielded a p value of 0.558, indicating a moderate ", 
+                      "to strong positive correlation"),
+          fr = paste0("Les quartiers les plus denses ont généralement un meilleur accès à pied aux services de base. Un test de corrélation ", 
+                      "entre l’indice d’accès à pied aux services de base et le log de la densité de la population donne une valeur p de 0.558, ", 
+                      "indiquant une corrélation positive modérée voire forte entres les deux variables")) %>%
   add_row(en = paste0("DAs with a capacity for pedestrian social distancing less than 25% contain, on average, a 45.25% ",
                       "immigrant population compared to 33% for the city as a whole and 30% for DAs with over 100% capacity."),
           fr = paste0("Les AD ayant une capacité de distanciation sociale des piétons inférieure à 25% contiennent en ",
                       "moyenne 45,25% de population immigrante contre 33% pour l'ensemble de la ville et 30% pour les ",
                       "AD ayant une capacité supérieure à 100%.")) %>%
+  add_row(en = paste0("Of the DAs with a capacity for pedestrian social distancing less than 25%, the ones located in the Ville-Marie borough have ", 
+                      "the lowest average net median income ($ 13,344)."),
+          fr = paste0("Parmi les ADs avec une capacité de distanciation sociale des piétons inférieure à 25%, ceux qui se situent dans l’arrondissement ", 
+                      "de Ville-Marie ont, en moyenne, les revenus médians nets les plus bas (13 344$).")) %>%
+  add_row(en = paste0("Of the DAs with a capacity for pedestrian social distancing less than 25%, the ones located in the independent municipality ", 
+                      "of Beaconsfield have the highest average net median income ($ 43,349)."),
+          fr = paste0("Parmi les ADs avec une capacité de distanciation sociale des piétons inférieure à 25%, ceux qui se situent dans la municipalité ", 
+                      "indépendante de Beaconsfield ont, en moyenne, les revenus médians nets les plus hauts (43 349$).")) %>%
+  add_row(en = paste0("In absolute terms, Côte-des-Neiges-Notre-Dame-de-Grâce is the borough with the highest number of visible minorities (35,055) ", 
+                      "living in DAs with less than 25% capacity for pedestrian social distancing."),
+          fr = paste0("En termes absolus, Côte-des-Neiges-Notre-Dame-de-Grâce est l’arrondissement avec le plus haut nombre de minorités visibles ", 
+                      "(35,055) vivant dans des AD avec moins de 25% de capacité de distanciation sociale des piétons.")) %>%
+  add_row(en = paste0("In absolute terms, Outremont is the borough with the lowest number of visible minorities (305) living in DAs with less than ", 
+                      "25% capacity for pedestrian social distancing."),
+          fr = paste0("En termes absolus, Outremont est l’arrondissement avec le plus bas nombre de minorités visibles (305) vivant dans des AD avec ", 
+                      "moins de 25% de capacité de distanciation sociale des piétons.")) %>%
+  add_row(en = paste0("In relative terms, Villeray-Saint-Michel-Parc-Extension is the borough with the highest average percentage of visible minorities ", 
+                      "(66%) living in DAs with less than 25% capacity for pedestrian social distancing."),
+          fr = paste0("En termes relatifs, Villeray-Saint-Michel-Parc-Extension est l’arrondissement avec le plus haut pourcentage moyen de minorités ", 
+                      "visibles (66%) vivant dans des AD avec moins de 25% de capacité de distanciation sociale des piétons.")) %>%
+  add_row(en = paste0("In relative terms, Outremont is the borough with the lowest average percentage of visible minorities (6.1%) living in DAs with ", 
+                      "less than 25% capacity for pedestrian social distancing."),
+          fr = paste0("En termes relatifs, Outremont est l’arrondissement avec le plus bas pourcentage moyen de minorités visibles (6.1%) vivant dans ", 
+                      "des AD avec moins de 25% de capacité de distanciation sociale des piétons.")) %>%
+  add_row(en = paste0("In absolute terms, Côte-des-Neiges-Notre-Dame-de-Grâce is the borough with the highest number of immigrants (32,270) living in ", 
+                      "DAs with less than 25% capacity for pedestrian social distancing."),
+          fr = paste0("En termes absolus, Côte-des-Neiges-Notre-Dame-de-Grâce est l’arrondissement avec le plus haut nombre d’immigrants (32,270) vivant ", 
+                      "dans des AD avec moins de 25% de capacité de distanciation sociale des piétons.")) %>%
+  add_row(en = paste0("In absolute terms, L’Île-Bizard-Sainte-Geneviève is the borough with the lowest number of immigrants (480) living in DAs with ", 
+                      "less than 25% capacity for pedestrian social distancing."),
+          fr = paste0("En termes absolus, L'Île-Bizard-Sainte-Geneviève est l’arrondissement avec le plus bas nombre d’immigrants (480) vivant dans des ", 
+                      "AD avec moins de 25% de capacité de distanciation sociale des piétons.")) %>%
+  add_row(en = paste0("In relative terms, Saint-Laurent is the borough with the highest average percentage of immigrants (62%) living in DAs with less ", 
+                      "than 25% capacity for pedestrian social distancing."),
+          fr = paste0("En termes relatifs, Saint-Laurent est l’arrondissement avec le plus haut pourcentage moyen d’immigrants (62%) vivant dans des AD ", 
+                      "avec moins de 25% de capacité de distanciation sociale des piétons.")) %>%
+  add_row(en = paste0("In relative terms, Sainte-Anne-de-Bellevue (independent municipality) has the lowest average percentage of immigrants (12%) living ", 
+                      "in DAs with less than 25% capacity for pedestrian social distancing."),
+          fr = paste0("En termes relatifs, Sainte-Anne-de-Bellevue (municipalité indépendante) a le plus bas pourcentage moyen d’immigrants (12%) vivant ", 
+                      "dans des AD avec moins de 25% de capacité de distanciation sociale des piétons.")) %>%
   add_row(en = paste0("The top 3 boroughs or independent municipalities in the Montreal agglomeration with the lowest ",
                       "average sidewalk widths are 1) L’Île-Bizard-Sainte-Geneviève (0.48 meters), 2) Pierrefonds-Roxboro ",
                       "(0.67 meters) and 3) Dollard-des-Ormeaux (0.68 meters). More than 75% of trips to work in these ",
