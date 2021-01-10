@@ -8,29 +8,31 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
           #ped_legend_container {background-color: rgba(0,0,255,0.0);
           border-width: 0px;}'))),
     
-    mapdeckOutput(outputId = ns("PedestrianMap"), height = "91vh"),
+    mapdeckOutput(outputId = ns("PedestrianMap"), height = "98vh"),
     
     absolutePanel(
-      id = ns("title_bar_ped"), class = "panel panel-default",
+      id = ns("title_bar_ped"), 
+      style="z-index:500; max-height: 60vh; overflow-y: auto; overflow-x:hidden;",
+      class = "panel panel-default",
       draggable = FALSE, top = 70, left = 270, width = "40%",
-      h3(textOutput(ns("title_text_ped"))),
+      h3(textOutput(ns("title_text_ped")), style = "margin-left: 2%"),
       conditionalPanel(
         condition = "output.zoom == 'OUT'", ns = ns ,
         id = ns("plotContainer_ped"),
         p(i18n$t(title_text %>%
             filter(tab == "pedestrian_ct", type == "main") %>%
-            pull(text)))),
+            pull(text))), style = "margin-left: 2%"),
       conditionalPanel(
         condition = "output.zoom == 'IN'", ns = ns ,
         id = ns("plotContainer_ped"),
         p(i18n$t(title_text %>%
             filter(tab == "pedestrian_da", type == "main") %>%
-            pull(text)))),
+            pull(text))), style = "margin-left: 2%"),
       actionLink(ns("more_info_ped"), i18n$t("Learn more")),
       conditionalPanel(
         condition = "output.more_info_ped_status == 1 && output.zoom == 'OUT'", ns = ns ,
         id = ns("plotContainer_ped"),
-        uiOutput(outputId = ns("pedestrian_ct_extra_html"))),
+        uiOutput(outputId = ns("pedestrian_ct_extra_html")), style = "margin-left: 2%"),
         # HTML(title_text %>%
         #        filter(tab == "pedestrian_ct", type == "extra") %>%
         #        pull(text))),
@@ -39,19 +41,19 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
         id = ns("plotContainer_ped"),
         p(i18n$t(title_text %>%
             filter(tab == "pedestrian_da", type == "extra") %>%
-            pull(text))),
-        imageOutput(ns("exemplar_ped"))),
+            pull(text)), style = "margin-left: 2%"),
+        imageOutput(ns("exemplar_ped")), style = "margin-left: 2%"),
       conditionalPanel(
         condition = "output.more_info_ped_status == 1 && output.zoom == 'FINAL'", ns = ns ,
         id = ns("plotContainer_ped"),
         p(i18n$t(title_text %>%
             filter(tab == "pedestrian_sidewalk", type == "extra") %>%
-            pull(text))),
-        imageOutput(ns("sidewalk_calculation")))),
+            pull(text)), style = "margin-left: 2%"),
+        imageOutput(ns("sidewalk_calculation")), style = "margin-left: 2%")),
     
     absolutePanel(
       id = ns("input_control_right"), style="z-index:500; max-height: 88vh; overflow-y: auto; overflow-x:hidden;", 
-      class = "panel panel-default", top = 70, right = 50, width = 300,
+      class = "panel panel-default", top = 70, right = 40, width = 325,
       conditionalPanel(
         condition = "output.zoom == 'IN'", ns = ns ,
         id = ns("plotContainer_ped_control"),
@@ -62,7 +64,8 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
         conditionalPanel(
           condition = "input.switch_biv == true", ns = ns ,
           id = ns("plotContainer_ped_control"),
-          selectInput(ns("data_for_plot_ped"), 
+          selectInput(ns("data_for_plot_ped"),
+                      width = "100%", 
                       label = h4(tags$span(
                         style = "color:#3C3C3B", 
                         i18n$t("Select your second variable"))), 
@@ -135,15 +138,15 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
       style="z-index:500; border-color: #FFFFFF00; background-color: #FFFFFF00;", bottom = -200, left = 270, fixed = TRUE,
       conditionalPanel(
         condition = 
-          "input.switch_biv == true && output.zoom == 'IN' && output.more_info_ped_status == 0", ns = ns ,
+          "input.switch_biv == true && output.zoom == 'IN'", ns = ns ,
         id = ns("ped_legend"),
         imageOutput(ns("bivariate_legend_ped"))),
       conditionalPanel(
         condition = 
-          "output.zoom == 'OUT' || output.zoom == 'IN' && input.switch_biv == false && output.more_info_ped_status == 0", ns = ns ,
+          "output.zoom == 'OUT' || output.zoom == 'IN' && input.switch_biv == false", ns = ns ,
         id = ns("ped_legend"),
         imageOutput(ns("univariate_legend_ped"))),
-      conditionalPanel(condition = "output.zoom == 'FINAL' && output.more_info_ped_status == 0", ns = ns ,
+      conditionalPanel(condition = "output.zoom == 'FINAL'", ns = ns ,
                        id = ns("ped_legend"),
                        imageOutput(ns("sidewalk_legend_ped")))
     )
