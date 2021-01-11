@@ -981,14 +981,14 @@ Pedestrian_realm_module_server <- function(id) {
         strong_weak_ped <- case_when(
           abs(correlation_ped) > 0.6 ~ sus_translate("strong"),
           abs(correlation_ped) > 0.3 ~ sus_translate("moderate"),
-          TRUE ~ "weak")
+          TRUE ~ sus_translate("weak"))
         
         higher_lower_ped <- if_else(pos_neg_ped == sus_translate("positive"), sus_translate("higher"), sus_translate("lower"))
         
         high_low_disclaimer_ped <- case_when(
           strong_weak_ped == sus_translate("strong") ~ sus_translate("with only a few exceptions"),
           strong_weak_ped == sus_translate("moderate") ~ sus_translate("although with some exceptions"),
-          strong_weak_ped == sus_translate("weak") ~ sus_translate("although with many exceptions")
+          strong_weak_ped == sus_translate("weak") ~ sus_translate("although with many exceptions"),
         )
         
         # Case for no poly selected
