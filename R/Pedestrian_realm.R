@@ -120,7 +120,7 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
           condition = "output.pedestrian_poly_selected == 1", ns = ns ,
           actionLink(inputId = ns("pedestrian_clear_selection"), 
                      label = i18n$t("Clear selection"))),
-        plotOutput(ns("pedestrian_graph"), height = 150)),
+        plotOutput(ns("pedestrian_graph"), height = 200)),
       hr(),
       fluidRow(
         column(width = 8,
