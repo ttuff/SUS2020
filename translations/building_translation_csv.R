@@ -475,6 +475,8 @@ translation_fr <-
   add_row(en = "Perform a Bivariate Analysis" , fr = "Effectuez une analyse bivariée") %>%
   add_row(en = "Walkable Access to Key Amenities" , fr = "Accès à pied aux services de base") %>%
   add_row(en = "Net Median Income" , fr = "Revenu médian net") %>%
+  add_row(en = "Visible Minority Population" , fr = "Minorité visible (population)") %>%
+  add_row(en = "Immigrant Population" , fr = "Population d'immigrants") %>%
   add_row(en = "Original Plan (May 15, 2020)" , fr = "Plan initial (15 mai 2020)") %>%
   add_row(en = "Revised Plan (July 25, 2020)" , fr = "Plan révisé (25 juillet 2020)") %>%
   add_row(en = "Choose more variables and explore further" , fr = "Choisissez d'autres variables et explorez davantage") %>%
