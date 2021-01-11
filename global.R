@@ -8,7 +8,7 @@ shinyOptions(cache = diskCache("./app-cache"))
 
 # Packages ----------------------------------------------------------------
 
-library(mapdeck)
+library(mapdeck) 
 library(shiny)
 library(shinydashboard)
 library(jsonify)
