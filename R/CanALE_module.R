@@ -20,7 +20,7 @@ CanALE_module_UI <- function(id) {
   
   # Title bar
   absolutePanel(
-    id = "title_bar", class = "panel panel-default", 
+    id = "title_bar", class = "panel panel-default", style = "padding:5px;",
     draggable = FALSE, top = 70, left = 270, width = "40%",
     h2(i18n$t("Active living potential: the CanALE index")),
     p(i18n$t(title_text %>% 
@@ -36,7 +36,7 @@ CanALE_module_UI <- function(id) {
     
   # 3D switch
   absolutePanel(
-    id = ns("input_control_overlay"), style = "z-index:500; max-height: 88vh; overflow-y: auto; overflow-x:hidden;",
+    id = ns("input_control_overlay"), style = "z-index:500; max-height: 88vh; overflow-y: auto; overflow-x:hidden; padding: 5px;",
     class = "panel panel-default", top = 70, right = 50, width = 300,
     materialSwitch(
       inputId = ns("active_extrude"), 

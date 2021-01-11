@@ -12,7 +12,7 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
     
     absolutePanel(
       id = ns("title_bar_ped"), 
-      style="z-index:500; max-height: 60vh; overflow-y: auto; overflow-x:hidden;",
+      style="z-index:500; max-height: 60vh; overflow-y: auto; overflow-x:hidden; padding:5px;",
       class = "panel panel-default",
       draggable = FALSE, top = 70, left = 270, width = "40%",
       h3(textOutput(ns("title_text_ped")), style = "margin-left: 2%"),
@@ -52,7 +52,7 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
         imageOutput(ns("sidewalk_calculation")), style = "margin-left: 2%")),
     
     absolutePanel(
-      id = ns("input_control_right"), style="z-index:500; max-height: 88vh; overflow-y: auto; overflow-x:hidden;", 
+      id = ns("input_control_right"), style="z-index:500; max-height: 88vh; overflow-y: auto; overflow-x:hidden; padding:5px;", 
       class = "panel panel-default", top = 70, right = 40, width = 325,
       conditionalPanel(
         condition = "output.zoom == 'IN'", ns = ns ,

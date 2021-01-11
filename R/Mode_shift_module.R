@@ -12,7 +12,7 @@ Mode_switch_module_UI <- function(id ) {
   
   # Title bar
   absolutePanel(
-    id = "title_bar_commute", class = "panel panel-default",
+    id = "title_bar_commute", class = "panel panel-default", style = "padding:5px;",
     draggable = FALSE, top = 70, left = 270, width = "40%",
     h2(i18n$t("Shifting car trips to cycling")),
     p(i18n$t(title_text %>%
@@ -28,7 +28,7 @@ Mode_switch_module_UI <- function(id ) {
 
   # Explore panel
   absolutePanel(
-    id = "commute_right_bar", style = "z-index:500; max-height: 88vh; overflow-y: auto; overflow-x:hidden;",
+    id = "commute_right_bar", style = "z-index:500; max-height: 88vh; overflow-y: auto; overflow-x:hidden; padding:5px;",
     class = "panel panel-default", top = 70, right = 50, width = 300,
     conditionalPanel(
       condition = "output.zoom_level == 'OUT'",ns = ns ,
