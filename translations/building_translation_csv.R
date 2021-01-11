@@ -475,6 +475,8 @@ translation_fr <-
   add_row(en = "Perform a Bivariate Analysis" , fr = "Effectuez une analyse bivariée") %>%
   add_row(en = "Walkable Access to Key Amenities" , fr = "Accès à pied aux services de base") %>%
   add_row(en = "Net Median Income" , fr = "Revenu médian net") %>%
+  add_row(en = "Visible Minority Population" , fr = "Minorité visible (population)") %>%
+  add_row(en = "Immigrant Population" , fr = "Population d'immigrants") %>%
   add_row(en = "Original Plan (May 15, 2020)" , fr = "Plan initial (15 mai 2020)") %>%
   add_row(en = "Revised Plan (July 25, 2020)" , fr = "Plan révisé (25 juillet 2020)") %>%
   add_row(en = "Choose more variables and explore further" , fr = "Choisissez d'autres variables et explorez davantage") %>%
@@ -547,10 +549,10 @@ translation_fr <-
                       "capacities to allow for pedestrian social distancing tend to have {higher_lower_ped} ",
                       "'{tolower(var_name_ped)}' values, {high_low_disclaimer_ped}."),
           fr = paste0("La mesure de la capacité de distanciation sociale des pétions a un coefficient de corrélation {strong_weak_ped} {pos_neg_ped} ",
-                      "({correlation_ped}) avec '{tolower(var_name_ped)}', à l'échelle de l'aire de diffusion. ",
+                      "({correlation_ped}) avec la variable '{tolower(var_name_ped)}', à l'échelle de l'aire de diffusion. ",
                       "<p>Cela signifie que, en général, les aires de diffusion avec de plus grandes ",
                       "capacités de distanciation sociale des piétons tendent à avoir de {higher_lower_ped} ",
-                      "valeurs de '{tolower(var_name_ped)}', {high_low_disclaimer_ped}.")) %>% 
+                      "valeurs pour la variable '{tolower(var_name_ped)}', {high_low_disclaimer_ped}.")) %>% 
   add_row(en = paste0("Dissemination area {dat_ped_biv$ID} has a population of ",
                       "{prettyNum(dat_ped_biv$population, ',')}, a capacity for pedestrian social distancing ",
                       "of {round(poly_value_1, 2)}%, and a '{tolower(var_name_ped)}' ",
@@ -564,13 +566,13 @@ translation_fr <-
                       "Montreal region."),
           fr = paste0("L'aire de diffusion {dat_ped_biv$ID} a une population de ",
                       "{prettyNum(dat_ped_biv$population, ',')}, une capacité de distanciation sociale des piétons ",
-                      "de {round(poly_value_1, 2)}%, et une valeur '{tolower(var_name_ped)}' ",
+                      "de {round(poly_value_1, 2)}%, et une valeur pour la variable '{tolower(var_name_ped)}' ",
                       "de{round(poly_value_2, 2)}. ",
                       
                       "<p>Ces deux scores sont {relative_position}, en termes ",
                       "relatifs. L'aire de diffusion {dat_ped_biv$ID} a une capacité de distanciation sociale des piétons plus grande ",
                       "que {percentile_left}% des aires de diffusion et ",
-                      "une valeur '{tolower(var_name_ped)}' plus grand que ", 
+                      "une valeur pour la variable '{tolower(var_name_ped)}' plus grand que ", 
                       "{percentile_right}% des aires de diffusion de la région ",
                       "de Montréal.")) %>% 
   # Pedestrian realm, sidewalk width
