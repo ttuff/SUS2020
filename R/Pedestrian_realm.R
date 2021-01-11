@@ -1,5 +1,5 @@
 Pedestrian_realm_module_UI <- function(id, i18n ) {
-  ns <- NS(id)
+  ns <- NS(id) 
   tabItem(
     tags$head(tags$style(HTML('
           #title_bar_ped {border-width: 10px; border-color: rgb(255, 255, 255);}
