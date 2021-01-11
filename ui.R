@@ -283,8 +283,16 @@ shinyUI(
           tabName = "biodiversity",
           
           Biodiversity_module_UI("biodiversity_module", i18n = i18n)
-        
-          )
+          
+        ),
+
+        ## Meet the team -----------------------------------------------
+        tabItem(
+          tabName = "meet_the_team",
+
+          Meet_the_team_UI("meet_the_team_module", i18n = i18n)
+
+        )
         
         
         )

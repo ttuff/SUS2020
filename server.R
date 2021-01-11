@@ -163,7 +163,15 @@ shinyServer(function(input, output, session) {
   
   ## module
   Biodiversity_module_server("biodiversity_module")
- 
+  
+  
+  ##############################################################################
+  
+  ### Meet the team #########################################################
+  
+  ## module
+  Meet_the_team_server("meet_the_team_module")
+  
   
   
 })
