@@ -79,7 +79,7 @@ knitr::include_graphics("team_photos/david_wachsmuth.jpeg")
 <div class="meet_the_team">
 ```{r robin_basalaev_binder,  fig.cap="<strong><big><a href = '' target='_blank'>Robin Basalaev-Binder</a></big></strong><br>Robin completed her Master of Urban Planning in 2018 at McGill University. Her passion for social and racial justice, equity, as well as affordable and accessible housing has led her to pursue research centered on these issues. Her sustainability research focuses on access and equity in Canada, and the disparities present in Smart Cities approaches. She has also conducted studies exploring gentrification, urban resilience, short-term rentals in the housing system, and the intersection of immigration and housing. Robin is particularly interested in how communities marginalized by the system and individuals with vulnerable immigration status can participate in urban planning processes and advocacy. Her work focuses on the US, Canadian, and Latin American contexts. She plans to continue her research as a doctoral student in Urban Planning in 2021."}
 
-knitr::include_graphics("team_photos/no_photo.jpg")
+knitr::include_graphics("team_photos/no_photo.png")
 
 ```
 </div>
