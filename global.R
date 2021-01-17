@@ -414,6 +414,11 @@ load(file = "data/original_VAS_plan.Rdata")
 load(file = "data/revised_VAS_plan.Rdata")
 load(file = "data/census_analysis_quantile.Rdata")
 load(file = "data/census_analysis_ct.Rdata")
+
+census_analysis_quantile_WSG <- census_analysis_quantile %>% 
+  st_transform(4326)
+
+#mode
 cycling1 <- loadRData("data/car_1_finals.Rdata")
 cycling2 <- loadRData("data/car_3_finals.Rdata")
 cycling_network <- loadRData("data/reseau_cyclable.Rdata")
@@ -422,9 +427,6 @@ cycling_access <- loadRData("data/Cycling_Access.Rdata")
 trip_distance <- loadRData("data/Trip_Distance.Rdata")
 
 load("data/cycling_total_final.Rdata")
-
-census_analysis_quantile_WSG <- census_analysis_quantile %>% 
-  st_transform(4326)
 
 dropshadow1 <- normalizePath(file.path("www/dropshadow1.png"))
 dropshadow2 <- normalizePath(file.path("www/dropshadow2.png"))

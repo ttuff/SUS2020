@@ -7,9 +7,11 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
           border-color: rgba(255,255,255,1);}
           #ped_legend_container {background-color: rgba(0,0,255,0.0);
           border-width: 0px;}'))),
-    
+
+## Main Map 
     mapdeckOutput(outputId = ns("PedestrianMap"), height = "98vh"),
-    
+
+## Title & Text Panel
     absolutePanel(
       id = ns("title_bar_ped"), 
       style="z-index:500; max-height: 60vh; overflow-y: auto; overflow-x:hidden; padding:5px;",
@@ -50,7 +52,8 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
             filter(tab == "pedestrian_sidewalk", type == "extra") %>%
             pull(text)), style = "margin-left: 2%"),
         imageOutput(ns("sidewalk_calculation")), style = "margin-left: 2%")),
-    
+
+## Control Panel  
     absolutePanel(
       id = ns("input_control_right"), style="z-index:500; max-height: 88vh; overflow-y: auto; overflow-x:hidden; padding:5px;", 
       class = "panel panel-default", top = 70, right = 40, width = 325,
@@ -132,7 +135,9 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
         condition = "output.pedestrian_hide_dyk_status == 1", ns = ns ,
         uiOutput(ns("did_you_know_ped")))
     ),
-    
+
+
+## Legend Panel
     absolutePanel(
       id = ns("ped_legend_container"), class = "panel panel-default",
       style="z-index:500; border-color: #FFFFFF00; background-color: #FFFFFF00;", bottom = -200, left = 270, fixed = TRUE,
@@ -191,6 +196,9 @@ js_ped_control <- "$(document).ready(function(){
 });
 "
 
+
+######## Server ########
+
 Pedestrian_realm_module_server <- function(id) {
   moduleServer(id,
                function(input, output, session) {
@@ -204,17 +212,17 @@ Pedestrian_realm_module_server <- function(id) {
     
       
     # List reactive translation
-    observe({
+    observe ({
       updateSelectInput(session = session,
                         inputId = "data_for_plot_ped",
                         choices = sus_translate(var_list_ped))
     })
     
-    observe({
-      updateSelectInput(session = session,
-                        inputId = "variable_ped",
-                        choices = sus_translate(var_list_slider))
-    })
+    # observe({
+    #   updateSelectInput(session = session,
+    #                     inputId = "variable_ped",
+    #                     choices = sus_translate(var_list_slider))
+    # })
     
     
     #############
@@ -256,15 +264,12 @@ Pedestrian_realm_module_server <- function(id) {
     
    # variable_explanations <- 
    #   read_csv("data/variable_explanations.csv")
-    
-    census_analysis_quantile_WSG <- census_analysis_quantile %>% 
-      st_transform(4326)
-    
-    dropshadow1 <- normalizePath(file.path("www/dropshadow1.png"))
-    dropshadow2 <- normalizePath(file.path("www/dropshadow2.png"))
-    
-    uni_legend <- normalizePath(file.path("www/Univariate_left.png"))
-    uni_legend_right <- normalizePath(file.path("www/Univariate_right.png"))
+    # 
+    # dropshadow1 <- normalizePath(file.path("www/dropshadow1.png"))
+    # dropshadow2 <- normalizePath(file.path("www/dropshadow2.png"))
+    # 
+    # uni_legend <- normalizePath(file.path("www/Univariate_left.png"))
+    # uni_legend_right <- normalizePath(file.path("www/Univariate_right.png"))
     
     
     rz_pedestrian <- reactiveValues(zoom = 'OUT',
