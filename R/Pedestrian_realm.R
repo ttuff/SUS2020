@@ -218,11 +218,11 @@ Pedestrian_realm_module_server <- function(id) {
                         choices = sus_translate(var_list_ped))
     })
     
-    # observe({
-    #   updateSelectInput(session = session,
-    #                     inputId = "variable_ped",
-    #                     choices = sus_translate(var_list_slider))
-    # })
+    observe({
+      updateSelectInput(session = session,
+                        inputId = "variable_ped",
+                        choices = sus_translate(var_list_slider))
+    })
     
     
     #############
@@ -300,28 +300,20 @@ Pedestrian_realm_module_server <- function(id) {
       mutate(social_distancing = census_analysis_ct$social_distancing_capacity_pop_perc_2m,
              population = census_analysis_ct$population.x)
     
-    ## Univariate chloropleth map + Legend  --------------------------------------
+    ## Univariate chloropleth map  --------------------------------------
     
     data_for_plot_uni <- reactive({
       
       data_for_plot_uni <- census_analysis_quantile_WSG %>%
         dplyr::select(left_variable_full = social_distancing_capacity_pop_perc_2m,
-                      left_variable = social_distancing_capacity_pop_perc_2m_quant3)
-      
-      data_for_plot_uni <- data_for_plot_uni %>%
-        mutate(
-          group = paste(
-            as.numeric(left_variable)
-          )
-        ) %>%
-        left_join(color_scale_2, by = "group") %>% 
-        mutate(prop_driving = round(census_analysis_quantile_WSG$prop_driving, 0),
+                      left_variable = social_distancing_capacity_pop_perc_2m_quant3,
+                      ID = GeoUID, population, social_distancing = social_distancing_capacity_pop_perc_2m,
+                      trip_scale) %>% 
+        mutate(prop_driving = round(census_analysis_quantile_WSG$prop_driving, 0), 
                pop_density = log(round(census_analysis_quantile_WSG$`pop_density(sqkm)`, 0)),
-               trip_scale = census_analysis_quantile_WSG$trip_scale,
-               social_distancing = census_analysis_quantile_WSG$social_distancing_capacity_pop_perc_2m,
-               ID = census_analysis_quantile_WSG$GeoUID,
-               population = census_analysis_quantile_WSG$population)
-      
+               group = paste(as.numeric(left_variable))) %>% 
+        left_join(color_scale_2, by = "group") %>% 
+        mutate(fill_opacity = paste0(fill, "99"))
       
       if (input$variable_ped == 3) {
         data_for_plot_uni <- data_for_plot_uni %>% 
@@ -351,32 +343,27 @@ Pedestrian_realm_module_server <- function(id) {
     #   title = "Capacité de distanciation sociale dans la voie piétonne (2 mètres)"
     # )
     # legend_uni_chloro <- mapdeck_legend(legend_uni_chloro)
-    
+  
+      
     ## Bivariate chloropleth map -------------------------------------------------
     bivariate_chloropleth <- reactive({
       data_for_plot_bi <- census_analysis_quantile_WSG %>%
         dplyr::select(left_variable_full = social_distancing_capacity_pop_perc_2m, 
-                      right_variable_full = input$data_for_plot_ped,
                       left_variable = social_distancing_capacity_pop_perc_2m_quant3,
-                      right_variable = paste0(input$data_for_plot_ped, "_quant3"))
-      
-      data_for_plot_bivariate <- data_for_plot_bi %>%
-        mutate(
-          group = paste(
-            as.numeric(left_variable), "-",
-            as.numeric(right_variable)
-          )
-        ) %>%
-        mutate(prop_driving = round(census_analysis_quantile_WSG$prop_driving, 0),
+                      right_variable_full = input$data_for_plot_ped,
+                      right_variable = paste0(input$data_for_plot_ped, "_quant3"),
+                      ID = GeoUID, population, social_distancing = social_distancing_capacity_pop_perc_2m,
+                      trip_scale,
+                      group = paste0(input$data_for_plot_ped, "_quant3_group"),
+                      fill = paste0(input$data_for_plot_ped, "_quant3_fill"),
+                      ) %>% 
+        mutate(prop_driving = round(census_analysis_quantile_WSG$prop_driving, 0), 
                pop_density = log(round(census_analysis_quantile_WSG$`pop_density(sqkm)`, 0)),
-               trip_scale = census_analysis_quantile_WSG$trip_scale,
-               social_distancing = census_analysis_quantile_WSG$social_distancing_capacity_pop_perc_2m,
-               ID = census_analysis_quantile_WSG$GeoUID,
-               population = census_analysis_quantile_WSG$population) %>% 
-        left_join(bivariate_color_scale, by = "group") %>% 
+               fill_opacity = paste0(fill, "99")) %>% 
         drop_na(right_variable) 
-      st_crs(data_for_plot_bivariate) <- 4326
-      bivariate_chloropleth  <- st_cast(data_for_plot_bivariate, "MULTIPOLYGON")
+      
+      st_crs(data_for_plot_bi) <- 4326
+      bivariate_chloropleth  <- st_cast(data_for_plot_bi, "MULTIPOLYGON")
       
       if (input$variable_ped == 3) {
         bivariate_chloropleth <- bivariate_chloropleth %>% 
@@ -423,14 +410,11 @@ Pedestrian_realm_module_server <- function(id) {
     
     ## Create VAS plans  -------------------------------------------------
     
-    ## Creating problem on server. See: https://github.com/r-spatial/sf/issues/1419
-    ## also: https://stackoverflow.com/questions/61286108/error-in-cpl-transformx-crs-aoi-pipeline-reverse-ogrcreatecoordinatetrans 
-    
     # # May plan
     st_crs(original_plan_disaggregated) = 32620
     may_vas_plan <- original_plan_disaggregated %>%
       st_transform(4326)
-    # 
+  
     # # July plan
     st_crs(revised_plan) = 32620
     july_vas_plan <- revised_plan %>%
@@ -603,7 +587,7 @@ Pedestrian_realm_module_server <- function(id) {
                 , na_colour = "#FFFFFF" 
                 ,stroke_colour = "#FFFFFF"
                 ,stroke_width = 5
-                , fill_colour = "fill"
+                , fill_colour = "fill_opacity" 
                 , fill_opacity = 1
                 , update_view = FALSE
                 , layer_id = "chloropleth_layer"
@@ -688,7 +672,7 @@ Pedestrian_realm_module_server <- function(id) {
                 , na_colour = "#FFFFFF" 
                 ,stroke_colour = "#FFFFFF"
                 ,stroke_width = 5
-                ,fill_colour = "fill"
+                ,fill_colour = "fill_opacity"
                 , fill_opacity = 1
                 , update_view = FALSE
                 , layer_id = "univariate_layer"
