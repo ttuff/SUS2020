@@ -51,8 +51,8 @@ da_ped,net_median_income_quant3,"DAs with a capacity for pedestrian social dista
 da_ped,net_median_income_quant3,"Of the DAs with a capacity for pedestrian social distancing less than 25%, the ones located in the Ville-Marie borough have the lowest average net median income ($ 13,344)."
 da_ped,net_median_income_quant3,"Of the DAs with a capacity for pedestrian social distancing less than 25%, the ones located in the independent municipality of Beaconsfield have the highest average net median income ($ 43,349)."
 da_ped,minority_percent_quant3,"DAs with a capacity for pedestrian social distancing less than 25% contain, on average, a 50.4% visible minority population compared to 32% for the city as a whole and 28% for DAs with over 100% capacity."
-da_ped,minority_percent_quant3,"In absolute terms, Côte-des-Neiges-Notre-Dame-de-Grâce is the borough with the highest number of visible minorities (35,055) living in DAs with less than 25% capacity for pedestrian social distancing. "
-da_ped,minority_percent_quant3,"In absolute terms, Outremont is the borough with the lowest number of visible minorities (305) living in DAs with less than 25% capacity for pedestrian social distancing. "
+da_ped,minority_percent_quant3,"In absolute terms, Côte-des-Neiges-Notre-Dame-de-Grâce is the borough with the highest number of visible minorities (35,055) living in DAs with less than 25% capacity for pedestrian social distancing."
+da_ped,minority_percent_quant3,"In absolute terms, Outremont is the borough with the lowest number of visible minorities (305) living in DAs with less than 25% capacity for pedestrian social distancing."
 da_ped,minority_percent_quant3,"In relative terms, Villeray-Saint-Michel-Parc-Extension is the borough with the highest average percentage of visible minorities (66%) living in DAs with less than 25% capacity for pedestrian social distancing."
 da_ped,minority_percent_quant3,"In relative terms, Outremont is the borough with the lowest average percentage of visible minorities (6.1%) living in DAs with less than 25% capacity for pedestrian social distancing."
 da_ped,immigrant_percent_quant3,"DAs with a capacity for pedestrian social distancing less than 25% contain, on average, a 45.25% immigrant population compared to 33% for the city as a whole and 30% for DAs with over 100% capacity."
@@ -96,3 +96,19 @@ Transit,,50% of areas in Montreal have proportions of people who take transit to
 Transit,,10% of areas in Montreal have proportions of people taking transit to work higher than 36.0%.
 Transit,,The proportion of people who drive to work ranges from 24.9% (Le Plateau-Mont-Royal) and 95.7% (Saint-Isidore).
 Transit,,90% of areas in Montreal have proportions higher than 48.0% of people who drive to work.
+Housing,,The three areas with the lowest property values all have average Active Living Environment classes of 2 or less (Pointe-Calumet (1.7); Sainte-Anne-des-Plaines (1.8); Bois-des-Filion (2.0)).
+Housing,,The ten areas with the highest proportion of tenants have active living environment class averages ranging from 3.96 to 5.
+Housing,,The ten areas with the lowest proportion of tenant have average active living environments classes ranging from 1 and 2.
+Housing,,"The areas with the lowest active living potential (ALE class 1) have tenant proportions ranging from 0.0% (Saint-Bruno-de-Montarville, Oka) to 24.6% (Saint-Isidore)."
+Housing,,"The areas with the lowest active living potential (ALE class 1) have average property values ranging from $250,046.0 (Saint-Isidore) to $994,294.4 (Saint-Anne-de-Bellevue)."
+Housing,,The areas with the lowest active living potential (ALE class 1) have proportions of unaffordable housing ranging from 10.1% (Sainte-Anne-de-Bellevue) to 18.2% (Sainte-Julie).
+Housing,,"The areas with the lowest active living potential (ALE class 1) have proportions of unsuitable housing ranging from 0.0% (Sainte-Julie, Saint-Bruno-de-Montarville, Sainte-Anne-de-Bellevue) to 5.1% (Oka)."
+Income,,"Sainte-Anne-de-Bellevue has the highest proportion of people with an annual income of more than $100,000 at 65.4%, and Montreal-Nord has the lowest (9.7%)."
+Income,,"Sainte-Anne-des-Plaines has the highest proportion of people (43.7%) with an annual income of up to $100,000."
+Income,,"The areas with the lowest active living potential (ALE class 1) have median household incomes ranging from $63,744.0 (Saint-Isidore) to $130,552.9 (Sainte-Anne-de-Bellevue)."
+Income,,"The areas with the highest active living potential (average ALE class 5 or higher) have median household incomes ranging from $43,910.8 (Villeray-Saint-Michel-Parc-Extension) to $134,155.3 (Hampstead)."
+Transit,,"The areas with the lowest proportion of people with commute times of more than one hour are Westmount (5.5%), Outrement (5.7%), and Mont-Royal (5.9%)."
+Transit,,"The areas with the highest proportion of people with commute times of more than one hour are Léry (19.2%), Saint-Léonard (16.6%), and Anjou (16.2%)."
+Transit,,"The three areas with the highest proportion of people with commute times of more than one hour have varying classes of active living potential, from 1 (Léry) to 3.9 (Saint-Léonard)."
+Transit,,"The three areas with the lowest proportion of people with commute times of more than one hour all have average classes of active living potential above 3 (Westmount: 4.36, Outrement: 4.43, Mont-Royal: 3.33)."
+Transit,,The five areas with the highest active living potential are all boroughs of the City of Montreal (Le Plateau-Mont-Royal; Rosemont-La-Petite-Patrie; Ville-Marie; Villeray-Saint-Michel-Park-Extension; Côte-des-Niges-Notre-Dam-de-Grâce). 
