@@ -178,7 +178,7 @@ Mode_switch_module_server <- function(id) {
                  # Legend
                  df_pal1 <- data.frame(
                    color = c(1,2,3,4,5),
-                   color_value = c('#ECF4CD','#C6DE68','#B2D235','#8AA324','#5C6D18'),
+                   color_value.x = c('#ECF4CD','#C6DE68','#B2D235','#8AA324','#5C6D18'),
                    stringsAsFactors = F
                  )
                  
@@ -195,7 +195,7 @@ Mode_switch_module_server <- function(id) {
                  
                  df_pal2 <- data.frame(
                    color = c(1,2,3,4,5),
-                   color_value = c('#CAF0F8','#90E0EF','#00B4D8','#0077B6','#005D7C'),
+                   color_value.x = c('#CAF0F8','#90E0EF','#00B4D8','#0077B6','#005D7C'),
                    stringsAsFactors = F
                  )
                  
@@ -212,7 +212,7 @@ Mode_switch_module_server <- function(id) {
                  
                  df_pal3 <- data.frame(
                    color = c(1,2,3,4,5),
-                   color_value = c('#004BC9','#0071C9','#0096C9','#BE9735','#C95C34'),
+                   color_value.x = c('#004BC9','#0071C9','#0096C9','#BE9735','#C95C34'),
                    stringsAsFactors = F
                  )
                  
@@ -279,7 +279,7 @@ Mode_switch_module_server <- function(id) {
                   print(x_var_name)
                   ggplot(data ) +
                     geom_histogram(aes( var, fill = color), bins = 25) +
-                    scale_fill_manual(values = deframe(distinct(dplyr::select(data, color, color_value)))) +
+                    scale_fill_manual(values = deframe(distinct(dplyr::select(data, color, color_value.x)))) +
                     labs(x = x_var_name, y = NULL) +
                     theme_minimal() +
                     theme(legend.position = "none",
@@ -438,7 +438,7 @@ Mode_switch_module_server <- function(id) {
                              filter(cycling_ac >= input$commute_explore_slider[1],
                                     cycling_ac <= input$commute_explore_slider[2])},
                            fill_opacity = 150,
-                           fill_colour = "color_value",
+                           fill_colour = "color_value.x",
                            stroke_colour = "#868683",
                            stroke_width = 50,
                            layer_id = "choropleth",
@@ -456,7 +456,7 @@ Mode_switch_module_server <- function(id) {
                            car_share %>%
                              filter(Car_per >= input$commute_explore_slider[1],
                                     Car_per <= input$commute_explore_slider[2])},
-                           fill_colour = "color_value",
+                           fill_colour = "color_value.x",
                            stroke_colour = "#CCD1D1",
                            stroke_width = 50,
                            layer_id = "choropleth",
@@ -474,7 +474,7 @@ Mode_switch_module_server <- function(id) {
                            trip_distance %>%
                              filter(avg_dist >= input$commute_explore_slider[1],
                                     avg_dist <= input$commute_explore_slider[2])},
-                           fill_colour = "color_value",
+                           fill_colour = "color_value.x",
                            stroke_colour = "#CCD1D1",
                            stroke_width = 50,
                            layer_id = "choropleth",

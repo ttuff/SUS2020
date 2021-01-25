@@ -38,7 +38,7 @@ library(ggthemes)
 library(extrafont)
 library(shinydashboard)
 library(shinyWidgets)
-
+library(stringr)
 library(DT)
 library(gghighlight)
 library(qs)
@@ -603,5 +603,5 @@ legend3 <- mapdeck_legend(legend_po3)
 
 spinner <- tagList(
   spin_chasing_dots(),
-  span("Sus is loading, this may take 2 minutes", style="color:white;")
+  span("Sus is currently down for maintenance", style="color:white;")
 )
