@@ -8,7 +8,7 @@
 
  break_data <- as.data.frame( seq(1,20,by=0.1)) %>% rename(c("zoom" = "seq(1, 20, by = 0.1)")) %>%
   mutate(zoom_level = cut(zoom,
-                          breaks = c(0,2.1,4.3,6.5,9.5, 12.5,15.5, 18, 20),
+                          breaks = c(0,4,5.3,6.5,9.5, 12.5,15.5, 18, 20),
                           labels = c("a","b","c","d", "e","f","g","h"),
                           include.lowest = T))
 
@@ -52,13 +52,13 @@ zoomMenuSus_UI <- function(id,i18n, zoom
     conditionalPanel(
       condition = "output.zoom_back == 'f'", ns = ns ,
       id = ns("bttn6"),
-    zoomMenuItemSus_UI(ns("item6"), i18n =  i18n, from_the_top = 410, 
+    zoomMenuItemSus_UI(ns("item6"), i18n =  i18n, from_the_top = 400, 
                        link = "./Rmarkdown_Knits/Biodiversity_module/individual/Individual_biodiversity.html",
                        provided_icon = icon("globe"),provided_label="Population")),
     conditionalPanel(
       condition = "output.zoom_back == 'g'", ns = ns ,
       id = ns("bttn7"),
-    zoomMenuItemSus_UI(ns("item7"), i18n =  i18n, from_the_top = 480, 
+    zoomMenuItemSus_UI(ns("item7"), i18n =  i18n, from_the_top = 450, 
                        link = "./Rmarkdown_Knits/Biodiversity_module/park/park_biodiversity.html",
                        provided_icon = icon("globe"),provided_label="Park")),
     conditionalPanel(

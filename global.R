@@ -7,14 +7,19 @@ shinyOptions(cache = diskCache("./app-cache"))
 
 
 # Packages ----------------------------------------------------------------
+#getDependencies("mapboxapi", installed=TRUE, available=FALSE)
+#library(gtools)
+#library(tidyverse)
 
+library(dplyr)
+library(tidyr)
 library(mapdeck) 
 library(shiny)
 library(shinydashboard)
 library(jsonify)
 library(sf)
 library(geojsonsf)
-library(tidyverse)
+library(readr)
 library(raster)
 library(mapboxapi)
 library(shinybusy)
@@ -596,4 +601,7 @@ legend_po3 <- legend_element(
 legend3 <- mapdeck_legend(legend_po3)
 
 
-
+spinner <- tagList(
+  spin_chasing_dots(),
+  span("Sus is loading, this may take 2 minutes", style="color:white;")
+)

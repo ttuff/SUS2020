@@ -148,7 +148,7 @@ shinyServer(function(input, output, session) {
   
   
   ### Pedestrian realm #########################################################
-  Pedestrian_realm_module_server("Pedestrian_realm_module")
+  #Pedestrian_realm_module_server("Pedestrian_realm_module")
   
   
   ##############################################################################
