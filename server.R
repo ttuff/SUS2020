@@ -116,13 +116,10 @@ shinyServer(function(input, output, session) {
   
   
   # Language button
-  sus_reactive_variables$active_language <- eventReactive(input$language_button, {
-    if((input$language_button[1] %% 2) != 0){
-      c("en")
-    } else {
-      c("fr")
-    }
-  }, ignoreNULL = FALSE)
+  sus_reactive_variables$active_language <- 
+    eventReactive(input$language_button, {
+      if (input$language_button[1] %% 2 != 0) "en" else "fr"
+      }, ignoreNULL = FALSE)
   
   observeEvent(input$language_button,{
     if((input$language_button[1] %% 2) != 0){
@@ -138,22 +135,9 @@ shinyServer(function(input, output, session) {
   })
   
   
-  # observeEvent(input$language_switch, {
-  #   print(input$language_switch)
-  #   if(input$language_switch == TRUE){
-  #     
-  #   i18n$set_translation_language("en")
-  #     update_lang(session = session, language = "en")
-  #   } else {
-  #   i18n$set_translation_language("fr")
-  #     update_lang( session = session, language = "fr")
-  #   }
-  #   return(i18n)
-  #   })
-  
   ### Active living potential ##################################################
   
-  CanALE_module_server("CanALE_module")    
+  canale_server("canale")    
   
   ##############################################################################
   

@@ -256,7 +256,7 @@ shinyUI(
         tabItem(
           tabName = "active",
           
-          CanALE_module_UI("CanALE_module")
+          canale_UI("canale")
         
           ),
         

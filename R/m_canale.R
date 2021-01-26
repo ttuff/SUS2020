@@ -3,9 +3,9 @@
 # Data and helper functions -----------------------------------------------
 
 # Load bivariate census data
-qload("data/new_bivariate.qsm")
+qs::qload("data/new_bivariate.qsm")
 
-#CanALE
+# Dropdown menu
 var_list <- 
   list("----" = " ", 
        "Housing" = list("Tenant-occupied (%)" = "tenant_prop",
@@ -30,7 +30,7 @@ var_list <-
 
 # UI ----------------------------------------------------------------------
 
-CanALE_module_UI <- function(id) {
+canale_UI <- function(id) {
   ns <- NS(id)
 
   tabItem(
@@ -169,14 +169,11 @@ CanALE_module_UI <- function(id) {
 
 # Server ------------------------------------------------------------------
 
-CanALE_module_server <- function(id) {
+canale_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     
     ns <- NS(id)
     
-    
-
-
     # Active extra html translation -------------------------------------------
 
     output$active_extra_html <-

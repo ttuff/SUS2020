@@ -225,7 +225,6 @@ animatedConditionalPanel <-
 
 # Drop down list for variable selection -----------------------------------
 
-
 #Pedestrian realm
 var_list_ped <- list("Walkable Access to Key Amenities" = 
                        "agg_proximity_score",
@@ -235,6 +234,7 @@ var_list_ped <- list("Walkable Access to Key Amenities" =
                        "minority_percent", 
                      "Immigrant Population Proportion" = 
                        "immigrant_percent")
+
 var_list_slider <- list("Population density per square km" = 1, 
                         "Pedestrian social distancing capacity" = 2, 
                         "Work commutes by car (%)" = 3, 
@@ -245,7 +245,7 @@ loadingLogo <-
     tagList(
       tags$head(
         tags$script(
-          "setInterval(function(){
+          "setInterval(function() {
         if ($('html').attr('class')=='shiny-busy') {
         $('div.busy').show();
         $('div.notbusy').hide();
