@@ -145,7 +145,6 @@ CanALE_module_UI <- function(id) {
 }
 
 
-
 # Server ------------------------------------------------------------------
 
 CanALE_module_server <- function(id) {
