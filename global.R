@@ -2,73 +2,61 @@
 
 shinyOptions(cache = diskCache("./app-cache"))
 
-
 # Packages ----------------------------------------------------------------
 
 #getDependencies("mapboxapi", installed=TRUE, available=FALSE)
-#library(gtools)
-#library(tidyverse)
 
-library(dplyr)
-library(purrr)
-library(tidyr)
-library(mapdeck) 
 library(shiny)
 library(shinydashboard)
-library(jsonify)
-library(sf)
-library(geojsonsf)
-library(readr)
-library(raster)
-library(mapboxapi)
 library(shinybusy)
-library(markdown)
 library(shinyjqui)
-#library(plotly)
-library(png)
 library(shinyWidgets)
-library(cowplot)
+library(shinythemes)
+library(extrafont)
+library(shiny.i18n)
+library(waiter)
+
+library(tidyr)
+library(dplyr)
+library(purrr)
+library(readr)
+library(stringr)
+library(gghighlight)
+library(ggthemes)
+
+library(sf)
+library(mapdeck) 
+library(mapboxapi)
+library(geojsonsf)
+library(jsonify)
+library(raster)
 library(RColorBrewer)
+
+library(markdown)
+library(png)
+library(cowplot)
 library(classInt)
 library(scales)
-#library(leaflet)
-library(shinythemes)
-library(ggthemes)
-library(extrafont)
-library(shinydashboard)
-library(shinyWidgets)
-library(stringr)
+
 library(DT)
-library(gghighlight)
 library(qs)
 library(glue)
-#library(shinipsum)
-# library(fakir)
-library(shiny.i18n)
-#library(googleLanguageR)
-#library(shinyanimate)
 library(aniview)
 library(data.table)
+
+#library(shinipsum)
+# library(fakir)
+#library(googleLanguageR)
+#library(shinyanimate)
 # library(shinycssloaders)
-# 
-# # Options for Spinner
-# options(spinner.color="#0275D8", spinner.color.background="#ffffff", spinner.size=2)
-library(waiter)
 
 
 # Translation -------------------------------------------------------------
 
-#i18n <- Translator$new(translation_json_path = "www/translation.json")
 i18n <- Translator$new(translation_csvs_path = "translations/")
-# print(i18n$t("Hello Shiny!"))
-#i18n <- Translator$new(automatic = TRUE)
-#i18n <- init_i18n(translation_json_path = "www/translation.json")
 # change this to the target language
 i18n$set_translation_language("fr")
-# i18n$set_translation_language("en")
 print(i18n$t("Learn more"))
-#HTML(as.character(usei18n(i18n)))
-
 # load translations
 translation_fr <- read_csv("translations/translation_fr.csv")
 
@@ -77,11 +65,7 @@ translation_fr <- read_csv("translations/translation_fr.csv")
 sus_reactive_variables <- reactiveValues() # r to store all our reactive values
 
 
-# create_translation_file(
-#   "/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/www/translation.json", 
-#   type = "json", handle = "i18n", 
-#   output = "/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/www/translation.json")
-
+# When debugging, switch to TRUE and get detailed error log on server
 options(shiny.trace = FALSE)
 
 
