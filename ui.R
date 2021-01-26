@@ -9,17 +9,16 @@ dbHeader <- dashboardHeader(tags$li(class = "dropdown",
 #dbHeader$children[[2]]$children <-  loadingLogo('http:www.drtuff.com', 'logo.png',
 #                                                'spinning_logo.gif', 50, 50, 50)
 
-dbHeader$children[[2]]$children <-  fluidRow(column(width = 4, loadingLogo('http:www.drtuff.com', 'logo.png',
-                                                                            'spinning_logo.gif', 50, 50, 50)),
-                                             column(width = 2),
-                                              column(width = 6 ))
-
+dbHeader$children[[2]]$children <-
+  fluidRow(column(width = 4, loadingLogo('http:www.drtuff.com', 'logo.png', 
+                                         'spinning_logo.gif', 50, 50, 50)), 
+           column(width = 2), column(width = 6 ))
 
 shinyUI(
   
   dashboardPage(
 
-    skin = "black", title="Sus - for sustainable decision making",
+    skin = "black", title = "Sus - for sustainable decision making",
 
     dbHeader,
     ### https://stackoverflow.com/questions/31440564/adding-a-company-logo-to-shinydashboard-header
