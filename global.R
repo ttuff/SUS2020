@@ -1,17 +1,16 @@
-#### Packages and functions ####################################################
-
-
 # Shiny options -----------------------------------------------------------
 
 shinyOptions(cache = diskCache("./app-cache"))
 
 
 # Packages ----------------------------------------------------------------
+
 #getDependencies("mapboxapi", installed=TRUE, available=FALSE)
 #library(gtools)
 #library(tidyverse)
 
 library(dplyr)
+library(purrr)
 library(tidyr)
 library(mapdeck) 
 library(shiny)
@@ -56,6 +55,9 @@ library(data.table)
 # options(spinner.color="#0275D8", spinner.color.background="#ffffff", spinner.size=2)
 library(waiter)
 
+
+# Translation -------------------------------------------------------------
+
 #i18n <- Translator$new(translation_json_path = "www/translation.json")
 i18n <- Translator$new(translation_csvs_path = "translations/")
 # print(i18n$t("Hello Shiny!"))
@@ -67,7 +69,6 @@ i18n$set_translation_language("fr")
 print(i18n$t("Learn more"))
 #HTML(as.character(usei18n(i18n)))
 
-
 # load translations
 translation_fr <- read_csv("translations/translation_fr.csv")
 
@@ -76,9 +77,13 @@ translation_fr <- read_csv("translations/translation_fr.csv")
 sus_reactive_variables <- reactiveValues() # r to store all our reactive values
 
 
-#create_translation_file("/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/www/translation.json", type = "json", handle = "i18n", output = "/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/www/translation.json")
+# create_translation_file(
+#   "/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/www/translation.json", 
+#   type = "json", handle = "i18n", 
+#   output = "/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/www/translation.json")
 
 options(shiny.trace = FALSE)
+
 
 # Functions ---------------------------------------------------------------
 
@@ -87,7 +92,6 @@ loadRData <- function(fileName){
   load(fileName)
   get(ls()[ls() != "fileName"])
 }
-
 
 theme_map <- function(...) {
   default_background_color <- "transparent"
@@ -142,18 +146,14 @@ theme_map <- function(...) {
     )
 }
 
-## save colors
+
+# Colours -----------------------------------------------------------------
+
 bivariate_color_scale <- tibble(
-  "3 - 3" = "#2A5A5B",
-  "2 - 3" = "#567994",
-  "1 - 3" = "#6C83B5",
-  "3 - 2" = "#5A9178",
-  "2 - 2" = "#90B2B3",
-  "1 - 2" = "#B5C0DA",
-  "3 - 1" = "#73AE80",
-  "2 - 1" = "#B8D6BE",
-  "1 - 1" = "#E8E8E8") %>%
-  gather("group", "fill")
+  "3 - 3" = "#2A5A5B", "2 - 3" = "#567994", "1 - 3" = "#6C83B5", 
+  "3 - 2" = "#5A9178", "2 - 2" = "#90B2B3", "1 - 2" = "#B5C0DA",
+  "3 - 1" = "#73AE80", "2 - 1" = "#B8D6BE", "1 - 1" = "#E8E8E8") %>%
+  pivot_longer(everything(), "group", "fill")
 
 color_scale <- tibble(
   "6" = "#73AE80",
@@ -179,108 +179,35 @@ default_background_color <- "transparent"
 default_font_color <- "black"
 default_font_family <- "Helvetica"
 
-#### Animation function
 
-animateCSS <- function(effect, delay = 0, duration = 500, then = NULL){
+# Animation ---------------------------------------------------------------
+
+animateCSS <- function(effect, delay = 0, duration = 500, then = NULL) {
+  
   effect <- match.arg(effect, c(
-    "bounce",
-    "flash",
-    "pulse",
-    "rubberBand",
-    "shakeX",
-    "shakeY",
-    "headShake",
-    "swing",
-    "tada",
-    "wobble",
-    "jello",
-    "heartBeat",
-    "backInDown",
-    "backInLeft",
-    "backInRight",
-    "backInUp",
-    "backOutDown",
-    "backOutLeft",
-    "backOutRight",
-    "backOutUp",
-    "bounceIn",
-    "bounceInDown",
-    "bounceInLeft",
-    "bounceInRight",
-    "bounceInUp",
-    "bounceOut",
-    "bounceOutDown",
-    "bounceOutLeft",
-    "bounceOutRight",
-    "bounceOutUp",
-    "fadeIn",
-    "fadeInDown",
-    "fadeInDownBig",
-    "fadeInLeft",
-    "fadeInLeftBig",
-    "fadeInRight",
-    "fadeInRightBig",
-    "fadeInUp",
-    "fadeInUpBig",
-    "fadeInTopLeft",
-    "fadeInTopRight",
-    "fadeInBottomLeft",
-    "fadeInBottomRight",
-    "fadeOut",
-    "fadeOutDown",
-    "fadeOutDownBig",
-    "fadeOutLeft",
-    "fadeOutLeftBig",
-    "fadeOutRight",
-    "fadeOutRightBig",
-    "fadeOutUp",
-    "fadeOutUpBig",
-    "fadeOutTopLeft",
-    "fadeOutTopRight",
-    "fadeOutBottomRight",
-    "fadeOutBottomLeft",
-    "flip",
-    "flipInX",
-    "flipInY",
-    "flipOutX",
-    "flipOutY",
-    "lightSpeedInRight",
-    "lightSpeedInLeft",
-    "lightSpeedOutRight",
-    "lightSpeedOutLeft",
-    "rotateIn",
-    "rotateInDownLeft",
-    "rotateInDownRight",
-    "rotateInUpLeft",
-    "rotateInUpRight",
-    "rotateOut",
-    "rotateOutDownLeft",
-    "rotateOutDownRight",
-    "rotateOutUpLeft",
-    "rotateOutUpRight",
-    "hinge",
-    "jackInTheBox",
-    "rollIn",
-    "rollOut",
-    "zoomIn",
-    "zoomInDown",
-    "zoomInLeft",
-    "zoomInRight",
-    "zoomInUp",
-    "zoomOut",
-    "zoomOutDown",
-    "zoomOutLeft",
-    "zoomOutRight",
-    "zoomOutUp",
-    "slideInDown",
-    "slideInLeft",
-    "slideInRight",
-    "slideInUp",
-    "slideOutDown",
-    "slideOutLeft",
-    "slideOutRight",
-    "slideOutUp"
-  ))
+    "bounce", "flash", "pulse", "rubberBand", "shakeX", "shakeY", "headShake",
+    "swing", "tada", "wobble", "jello", "heartBeat", "backInDown",
+    "backInLeft", "backInRight", "backInUp", "backOutDown", "backOutLeft",
+    "backOutRight", "backOutUp", "bounceIn", "bounceInDown", "bounceInLeft",
+    "bounceInRight", "bounceInUp", "bounceOut", "bounceOutDown",
+    "bounceOutLeft", "bounceOutRight", "bounceOutUp", "fadeIn", "fadeInDown",
+    "fadeInDownBig", "fadeInLeft", "fadeInLeftBig", "fadeInRight",
+    "fadeInRightBig", "fadeInUp", "fadeInUpBig", "fadeInTopLeft",
+    "fadeInTopRight", "fadeInBottomLeft", "fadeInBottomRight", "fadeOut",
+    "fadeOutDown", "fadeOutDownBig", "fadeOutLeft", "fadeOutLeftBig",
+    "fadeOutRight", "fadeOutRightBig", "fadeOutUp", "fadeOutUpBig",
+    "fadeOutTopLeft", "fadeOutTopRight", "fadeOutBottomRight",
+    "fadeOutBottomLeft", "flip", "flipInX", "flipInY", "flipOutX", "flipOutY",
+    "lightSpeedInRight", "lightSpeedInLeft", "lightSpeedOutRight",
+    "lightSpeedOutLeft", "rotateIn", "rotateInDownLeft", "rotateInDownRight",
+    "rotateInUpLeft", "rotateInUpRight", "rotateOut", "rotateOutDownLeft",
+    "rotateOutDownRight", "rotateOutUpLeft", "rotateOutUpRight", "hinge",
+    "jackInTheBox", "rollIn", "rollOut", "zoomIn", "zoomInDown", "zoomInLeft",
+    "zoomInRight", "zoomInUp", "zoomOut", "zoomOutDown", "zoomOutLeft",
+    "zoomOutRight", "zoomOutUp", "slideInDown", "slideInLeft", "slideInRight",
+    "slideInUp", "slideOutDown", "slideOutLeft", "slideOutRight",
+    "slideOutUp"))
+  
   js <- paste(
     "    $this.animateCSS('%s', {",
     "      delay: %d,",
@@ -291,6 +218,7 @@ animateCSS <- function(effect, delay = 0, duration = 500, then = NULL){
     "    });",
     sep = "\n"
   )
+  
   sprintf(js, effect, delay, duration, ifelse(is.null(then), "", then))
 }
 
@@ -327,7 +255,8 @@ onHideJS <- function(animation, fadeDuration){
 }
 
 animatedConditionalPanel <-
-  function(condition, ..., onShow = NULL, fadeIn = 600, onHide = NULL, fadeOut = 400){
+  function(condition, ..., onShow = NULL, fadeIn = 600, onHide = NULL, 
+           fadeOut = 400) {
     id <- paste0("animateCSS-", stringi::stri_rand_strings(1, 15))
     jsShow <- ifelse(!is.null(onShow), sprintf(onShowJS(onShow, fadeIn), id), "")
     jsHide <- ifelse(!is.null(onHide), sprintf(onHideJS(onHide, fadeOut), id), "")
@@ -401,9 +330,6 @@ loadingLogo <-
 
 
 # Load data ---------------------------------------------------------------
-
-# Load bivariate census data
-qload("data/new_bivariate.qsm")
 
 did_you_know <- 
   read_csv("data/did_you_know.csv") %>% 
