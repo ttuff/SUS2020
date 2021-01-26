@@ -21,6 +21,7 @@ library(ggplot2)
 library(tidyr)
 library(purrr)
 library(readr)
+library(tibble)
 library(stringr)
 library(gghighlight)
 library(ggthemes)
@@ -224,27 +225,6 @@ animatedConditionalPanel <-
 
 # Drop down list for variable selection -----------------------------------
 
-#CanALE
-var_list <- 
-  list("----" = " ", 
-       "Housing" = list("Tenant-occupied (%)" = "tenant_prop",
-                        "Average rent" = "avg_rent",
-                        "Average property value" = "avg_property_value",
-                        "Unaffordable housing (%)" = "unaffordable_prop",
-                        "Unsuitable housing (%)" = "unsuitable_prop"),
-       "Income" = list("Median household income" = "median_income",
-                       "Income under $50k (%)" = "income_50_prop",
-                       "Income between $50k-$100k (%)" = "income_100_prop",
-                       "Income above $100k (%)" = "income_high_prop"),
-       "Immigration" = list("Immigrants (%)" =  "immigrant_prop",
-                            "New immigrants (%)" = "immigrant_new_prop"),
-       "Transportation" = list("Drive to work (%)" = "car_prop",
-                               "Walk or cycle to work (%)" = "walk_or_bike_prop",
-                               "Public transit to work (%)" = "transit_prop",
-                               "15 minutes to work (%)" = "time_15_prop",
-                               "15-30 minutes to work (%)" = "time_30_prop",
-                               "30-45 minutes to work (%)" = "time_45_prop",
-                               "45-60 minutes to work (%)" = "time_60_prop"))
 
 #Pedestrian realm
 var_list_ped <- list("Walkable Access to Key Amenities" = 
