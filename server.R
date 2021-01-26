@@ -5,7 +5,18 @@ shinyServer(function(input, output, session) {
   # show_modal_spinner() # show the modal window
   # remove_modal_spinner()
   
-  waiter_hide()
+  w <- Waiter$new()
+  
+  # give time for wait screen to show
+  #Sys.sleep(3) 
+  hide_waiter()
+  
+  # observeEvent(input$show, {
+  #   w$show(spinner)
+  #   Sys.sleep(3) # give time for wait screen to show
+  #   w$hide()
+  # })
+  
   ### Render images from files #################################################
   
   output$homepic <- renderImage({

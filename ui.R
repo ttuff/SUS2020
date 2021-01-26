@@ -104,9 +104,10 @@ shinyUI(
     
     dashboardBody(
       use_waiter(), 
-      use_steward(colors = c("#0096C9", "#D8F5FF",  "#3DCEFF",  "#007095", "#002532"),speed = 90),
+      #use_steward(colors = c("#0096C9", "#D8F5FF",  "#3DCEFF",  "#007095", "#002532"),speed = 90),
      # waiter_show_on_load(html = spin_fading_circles()),
      waiter_show_on_load(html = spinner),
+    
        
       tags$head(tags$link(rel = "icon", type = "image/png", href = "logo.png")),
       tags$head(tags$script(HTML(js))),
