@@ -12,6 +12,7 @@ shinyOptions(cache = diskCache("./app-cache"))
 #library(tidyverse)
 
 library(dplyr)
+library(purrr)
 library(tidyr)
 library(mapdeck) 
 library(shiny)
