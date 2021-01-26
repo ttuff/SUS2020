@@ -5,11 +5,11 @@ shinyServer(function(input, output, session) {
   # show_modal_spinner() # show the modal window
   # remove_modal_spinner()
   
-  w <- Waiter$new()
+  #w <- Waiter$new()
   
   # give time for wait screen to show
   #Sys.sleep(3) 
-  hide_waiter()
+  #hide_waiter()
   
   # observeEvent(input$show, {
   #   w$show(spinner)
