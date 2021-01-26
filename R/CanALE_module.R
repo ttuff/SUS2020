@@ -1,33 +1,9 @@
+### CANALE MODULE ##############################################################
 
 # Data and helper functions -----------------------------------------------
 
 # Load bivariate census data
 qload("data/new_bivariate.qsm")
-
-bivariate_color_scale <- tibble(
-  "3 - 3" = "#2A5A5B", "2 - 3" = "#567994", "1 - 3" = "#6C83B5", 
-  "3 - 2" = "#5A9178", "2 - 2" = "#90B2B3", "1 - 2" = "#B5C0DA",
-  "3 - 1" = "#73AE80", "2 - 1" = "#B8D6BE", "1 - 1" = "#E8E8E8") %>%
-  pivot_longer(everything(), "group", "fill")
-
-color_scale <- tibble(
-  "6" = "#73AE80", "5" = "#B8D6BE", "4" = "#E8E8E8", "3" = "#6C83B5",
-  "2" = "#B5C0DA", "1" = "#E8E8E8") %>%
-  pivot_longer(everything(), "group", "fill")
-
-color_scale_2 <-
-  tibble(
-    "3" = "#73AE80",
-    "2" = "#B8D6BE",
-    "1" = "#E8E8E8"
-  ) %>%
-  gather("group", "fill")
-
-colors <- as.character(color_scale$fill)
-
-default_background_color <- "transparent"
-default_font_color <- "black"
-default_font_family <- "Helvetica"
 
 
 # UI ----------------------------------------------------------------------

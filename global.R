@@ -140,22 +140,13 @@ bivariate_color_scale <- tibble(
   pivot_longer(everything(), "group", "fill")
 
 color_scale <- tibble(
-  "6" = "#73AE80",
-  "5" = "#B8D6BE", # medium inequality, medium income
-  "4" = "#E8E8E8",
-  "3" = "#6C83B5", # high inequality, low income
-  "2" = "#B5C0DA",
-  "1" = "#E8E8E8" # low inequality, low income
-) %>%
-  gather("group", "fill") 
+  "6" = "#73AE80", "5" = "#B8D6BE", "4" = "#E8E8E8", "3" = "#6C83B5",
+  "2" = "#B5C0DA", "1" = "#E8E8E8") %>%
+  pivot_longer(everything(), "group", "fill")
 
-color_scale_2 <- 
-  tibble(
-    "3" = "#73AE80",
-    "2" = "#B8D6BE",
-    "1" = "#E8E8E8"
-  ) %>%
-  gather("group", "fill")
+color_scale_2 <- tibble(
+  "3" = "#73AE80", "2" = "#B8D6BE", "1" = "#E8E8E8") %>%
+  pivot_longer(everything(), "group", "fill")
 
 colors <- as.character(color_scale$fill)
 
