@@ -122,51 +122,21 @@ shinyServer(function(input, output, session) {
       }, ignoreNULL = FALSE)
   
   observeEvent(input$language_button,{
-    if((input$language_button[1] %% 2) != 0){
-      updateActionButton(session, "language_button",
-                         label = "Français")
+    if (input$language_button[1] %% 2 != 0) {
+      updateActionButton(session, "language_button", label = "Français")
       update_lang(session, "en")
-      
     } else {
-      updateActionButton(session, "language_button",
-                         label = "English")
+      updateActionButton(session, "language_button", label = "English")
       update_lang(session, "fr")
     }
   })
   
-  
-  ### Active living potential ##################################################
-  
+  # Modules -----------------------------------------------------------------
+
   canale_server("canale")    
-  
-  ##############################################################################
-  
-  
-  ### Pedestrian realm #########################################################
   #Pedestrian_realm_module_server("Pedestrian_realm_module")
-  
-  
-  ##############################################################################
-  
-  ### Commuter mode shift ######################################################
   Mode_switch_module_server("Mode_switch_module")
-  
-  
-  ##############################################################################
-  
-  ### Biodiversity #########################################################
-  
-  ## module
   Biodiversity_module_server("biodiversity_module")
-  
-  
-  ##############################################################################
-  
-  ### Meet the team #########################################################
-  
-  ## module
   Meet_the_team_server("meet_the_team_module")
-  
-  
   
 })
