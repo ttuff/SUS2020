@@ -49,7 +49,6 @@ canale_UI <- function(id) {
     # Main map
     mapdeckOutput(outputId = ns("active_map"), height = "91vh"),
 
-
     # Title bar
     absolutePanel(
       id = "title_bar", class = "panel panel-default", style = "padding:5px;",

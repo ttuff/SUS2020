@@ -19,42 +19,28 @@ shinyServer(function(input, output, session) {
   
   ### Render images from files #################################################
   
-  output$homepic <- renderImage({
-    filename <- normalizePath(file.path("www/SUSLOGO.png"))
-    return(list(src = filename, height = "100%",  contentType = "image/png"))
-    }, deleteFile = FALSE)
-  
-  output$mssipic <- renderImage({
-    filename <- normalizePath(file.path("www/mssi_logo.png"))
-    return(list(src = filename, contentType = "image/png",  width = 80,
-                height = 80))
-  }, deleteFile = FALSE)
-  
   output$glamour_shot <- renderImage({
     filename <- normalizePath(file.path("www/glamour_shot.png"))
-    return(list(src = filename, contentType = "image/png",  width = 600,
-                height = 281))
+    return(list(src = filename, contentType = "image/png",  width = 600, height = 281))
   }, deleteFile = FALSE) 
   
   output$bivariate_legend <- renderImage({
     filename <- normalizePath(file.path("www/bivariate_legend_2.png"))
-    return(list(src = filename, contentType = "image/png",  width = 200,
-                height = 177))
+    return(list(src = filename, contentType = "image/png",  width = 200, height = 177))
   }, deleteFile = FALSE)
 
   
   ### Plot output calls for all 'left' plots ###################################
   
   # Active living potential
-  output$active_map_left <- renderCachedPlot({
+  output$canale_map_left <- renderCachedPlot({
     
     # data_for_plot_left <- 
     #   data_bivar()
     # 
     # p <-
     #   ggplot(data_for_plot_left) +
-    #   geom_sf(aes(fill = as.factor(left_variable)), color = "white", 
-    #           size = 0.01) +
+    #   geom_sf(aes(fill = as.factor(left_variable)), color = "white", size = 0.01) +
     #   scale_fill_manual(values = rev(colors[c(1:3)]), na.value = "grey70") +
     #   theme_map() + 
     #   theme(legend.position = "none")
