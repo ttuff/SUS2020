@@ -101,7 +101,7 @@ shinyUI(dashboardPage(
         )), 
       
       # Modules
-      tabItem(tabName = "why_dashboard", why_dash_UI("why_dash")),
+      tabItem(tabName = "why_dash", why_dash_UI("why_dash")),
       tabItem(tabName = "canale", canale_UI("canale")),
       tabItem(tabName = "Pedestrian", #Pedestrian_realm_module_UI("Pedestrian_realm_module", i18n = i18n)
               ),
@@ -110,6 +110,6 @@ shinyUI(dashboardPage(
       tabItem(tabName = "meet_the_team", Meet_the_team_UI("meet_the_team_module", i18n = i18n))
       
       )
+    )
   )
-  )
-  )
+)

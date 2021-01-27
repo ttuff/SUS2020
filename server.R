@@ -2,6 +2,8 @@
 
 shinyServer(function(input, output, session) {
   
+  # Waiter ------------------------------------------------------------------
+
   # show_modal_spinner() # show the modal window
   # remove_modal_spinner()
   
@@ -17,20 +19,8 @@ shinyServer(function(input, output, session) {
   #   w$hide()
   # })
   
-  ### Render images from files #################################################
-  
-  output$glamour_shot <- renderImage({
-    filename <- normalizePath(file.path("www/glamour_shot.png"))
-    return(list(src = filename, contentType = "image/png",  width = 600, height = 281))
-  }, deleteFile = FALSE) 
-  
-  output$bivariate_legend <- renderImage({
-    filename <- normalizePath(file.path("www/bivariate_legend_2.png"))
-    return(list(src = filename, contentType = "image/png",  width = 200, height = 177))
-  }, deleteFile = FALSE)
-
-  
-  ### Plot output calls for all 'left' plots ###################################
+  # Plot output calls for all 'left' plots ----------------------------------
+  # WILL GET MOVED INTO INDIVIDUAL MODULES
   
   # Active living potential
   output$canale_map_left <- renderCachedPlot({
@@ -101,7 +91,8 @@ shinyServer(function(input, output, session) {
     )
   
   
-  # Language button
+  # Language button ---------------------------------------------------------
+  
   sus_reactive_variables$active_language <- 
     eventReactive(input$language_button, {
       if (input$language_button[1] %% 2 != 0) "en" else "fr"
@@ -117,6 +108,7 @@ shinyServer(function(input, output, session) {
     }
   })
   
+  
   # Modules -----------------------------------------------------------------
 
   canale_server("canale")    
@@ -124,5 +116,6 @@ shinyServer(function(input, output, session) {
   Mode_switch_module_server("Mode_switch_module")
   Biodiversity_module_server("biodiversity_module")
   Meet_the_team_server("meet_the_team_module")
+  why_dash_server("why_dash")
   
 })
