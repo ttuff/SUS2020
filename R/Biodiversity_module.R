@@ -1,3 +1,8 @@
+library(sf)
+library(shiny)
+library(shinydashboard)
+library(mapdeck)
+
 Biodiversity_module_UI <- function(id, i18n) {
  # usei18n(i18n)
   ns <- NS(id)
@@ -25,11 +30,14 @@ Biodiversity_module_UI <- function(id, i18n) {
    # rightPanelSus_UI(id = ns("Bio_right_panel"),i18n = i18n)
   
    #dropoutPanelSus_UI("dropPanel_1", i18n = i18n),
-   zoomMenuSus_UI(ns("zoom_menu"), i18n = i18n)
+  # zoomMenuSus_UI(ns("zoom_menu"), i18n = i18n)
   
   
   )
 }
+
+montreal_ES <- st_read("/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/data/Eco2Urb/montreal-agglomeration-muni-100028-div-vf1-20201125.shp")
+
 
 Biodiversity_module_server <- function(id) {
   moduleServer(id,
@@ -38,17 +46,59 @@ Biodiversity_module_server <- function(id) {
                  output$BiodiversityMap <- renderMapdeck({
                     mapdeck(style = "mapbox://styles/ttuff/ckg1hclfr0az819plu73iomnn", 
                            token = 'pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ',
-                           zoom = 20,location = c(-73.5687, 45.5250), pitch = 35) 
+                           zoom = 22,location = c(-73.5686, 45.5250), pitch = 70, bearing = 15) 
                    #return(output$BiodiversityMap)
                     })
-                 titletextSus_Server(id = "title")
-                 dropoutPanelSus_Server("dropPanel_1", i18n = i18n)
+                # titletextSus_Server(id = "title")
+                 #dropoutPanelSus_Server("dropPanel_1", i18n = i18n) #turn imbedded html on and off
                  #observe(print(input$BiodiversityMap_view_change$zoom))
-                 zoomer <- reactive(input$BiodiversityMap_view_change$zoom)
-                 callModule(zoomMenuSus_Server, "zoom_menu", zoom = zoomer)
+                # zoomer <- reactive(input$BiodiversityMap_view_change$zoom)
+                # callModule(zoomMenuSus_Server, "zoom_menu", zoom = zoomer)
+                 
+                 
+                 # mapdeck_update(map_id = "BiodiversityMap")  %>%
+                 #   add_polygon(
+                 #      data = montreal_ES
+                 #     , na_colour = "#FFFFFF"
+                 #     ,stroke_colour = "#FFFFFF"
+                 #     ,stroke_width = 5
+                 #     ,fill_colour = "red"
+                 #     , fill_opacity = 1
+                 #     , update_view = FALSE
+                 #     , layer_id = "first_layter"
+                 #     , id = "ID"
+                 #     , auto_highlight = TRUE
+                 #     , highlight_colour = '#FFFFFF90'
+                 #     , legend = FALSE
+                 #     , light_settings =  list(
+                 #       lightsPosition = c(0,0, 5000)
+                 #       , numberOfLights = 1
+                 #       , ambientRatio = 1
+                 #     )
+                 #   )
+                 
                  
                  
                  
                  
                }
   )}
+
+
+
+
+# source("/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/R/titletextSus.R")
+# source("/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/R/zoomMenuItemSus.R")
+# source("/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/R/zoomMenuSus.R")
+# source("/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/R/scrollingTimelingSus.R")
+# 
+# 
+# ui <- fluidPage(
+#   Biodiversity_module_UI("biodiversity_module", i18n = i18n)
+# )
+# 
+# server <- function(input, output, session) {
+#   Biodiversity_module_server("biodiversity_module")
+# }
+# 
+# shinyApp(ui, server)

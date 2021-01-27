@@ -64,7 +64,6 @@ translation_fr <- read_csv("translations/translation_fr.csv")
 # be called with sus_reactive_variables$active_language()
 sus_reactive_variables <- reactiveValues() # r to store all our reactive values
 
-
 # When debugging, switch to TRUE and get detailed error log on server
 options(shiny.trace = FALSE)
 
