@@ -15,177 +15,101 @@ dbHeader$children[[2]]$children <-
 shinyUI(dashboardPage(
   
   skin = "black", title = "Sus - for sustainable decision making",
-  
   dbHeader,
+  
   
   ## Left sidebar ------------------------------------------------------------
   
   dashboardSidebar(
-     # HTML(as.character(usei18n(i18n))),
-      width = 250,
-      sidebarMenu(id = "tabs", 
-                  shiny.i18n::usei18n(i18n),
-                  menuItem(i18n$t("SUS Preview"), tabName = "home", 
-                           icon = icon("balance-scale")),
-                  
-                  # menuItem("Access to green space", icon = icon("envira"),
-                  #          tabName = "green", badgeLabel = "new",
-                  #          badgeColor = "teal"),
-                  
-                  menuItem(i18n$t("Active living potential"), icon = icon("child"), 
-                           tabName = "canale", badgeLabel = i18n$t("Built environment"), 
-                           badgeColor = "purple"),
-                  conditionalPanel(condition = "input.tabs == 'canale'",
-                                   plotOutput("canale_map_left", 
-                                              height = 200)),
-                  
-                  
-                  menuItem(i18n$t("Commuter mode switching"), icon = icon("biking"), 
-                           tabName = "mode", badgeLabel = i18n$t("Simulation"), badgeColor = "aqua"),
-                  conditionalPanel(condition = "input.tabs == 'mode'", 
-                                   plotOutput("commuter_map_left", 
-                                              height = 200)),
-                  
-                  # menuItem("Covid-19", icon = icon("head-side-mask"),
-                  #          tabName = "Covid", badgeLabel = "health and safety",
-                  #          badgeColor = "red"),
-                  # 
-                  # menuItem("Economic health", icon = icon("dollar-sign"),
-                  #          tabName = "Economic"),
-                  # 
-                  # menuItem("Energy consumption", icon = icon("fire-alt"),
-                  #          tabName = "Energy"),
-                  # 
-                  # menuItem("Food availability", icon = icon("cheese"),
-                  #          tabName = "Food"),
-                  # 
-                  # menuItem("Housing", icon = icon("home"),
-                  #          tabName = "rentals"),
-                  # 
-                  # menuItem("Land use", icon = icon("warehouse"),
-                  #          tabName = "Land"),
-                  
-                  menuItem(i18n$t("Pedestrian realm"), icon = icon("walking"), 
-                           tabName = "Pedestrian", badgeLabel = "Covid-19", 
-                           badgeColor = "red"),
-                  conditionalPanel(condition = "input.tabs == 'Pedestrian'",
-                                   plotOutput("pedestrian_map_left", 
-                                              height = 200))
-                  ,
-                  menuItem(i18n$t("Biodiversity"), icon = icon("bug"),
-                           tabName = "biodiversity", badgeLabel = i18n$t("Nature-based solutions")),
-                  
-                  # menuItem("Public transit", icon = icon("train"),
-                  #          tabName = "transit", badgeLabel = "on the ballot",
-                  #          badgeColor = "teal"),
-                  # 
-                  br(),
-
-                  menuItem(i18n$t("Why a dashboard?"), tabName = "why_dashboard"),
-                  menuItem(i18n$t("Meet the team"), tabName = "meet_the_team")
-                  
-      ), collapsed = FALSE),
+    width = 250,
+    sidebarMenu(
+      id = "tabs", shiny.i18n::usei18n(i18n),
+      
+      menuItem(i18n$t("SUS Preview"), tabName = "home", icon = icon("balance-scale")),
+      
+      menuItem(i18n$t("Active living potential"), icon = icon("child"), 
+               tabName = "canale", badgeLabel = i18n$t("Built environment"), 
+               badgeColor = "purple"),
+      
+      conditionalPanel(condition = "input.tabs == 'canale'", 
+                       plotOutput("canale_map_left", height = 200)), 
+      
+      menuItem(i18n$t("Commuter mode switching"), icon = icon("biking"), 
+               tabName = "mode", badgeLabel = i18n$t("Simulation"),
+               badgeColor = "aqua"),
+      
+      conditionalPanel(condition = "input.tabs == 'mode'", 
+                       plotOutput("commuter_map_left", height = 200)),
+      
+      menuItem(i18n$t("Pedestrian realm"), icon = icon("walking"), 
+               tabName = "Pedestrian", badgeLabel = "Covid-19", 
+               badgeColor = "red"),
+      
+      conditionalPanel(condition = "input.tabs == 'Pedestrian'",
+                       plotOutput("pedestrian_map_left", height = 200)),
+      
+      menuItem(i18n$t("Biodiversity"), icon = icon("bug"), 
+               tabName = "biodiversity", 
+               badgeLabel = i18n$t("Nature-based solutions")),
+      
+      hr(),
+      
+      menuItem(i18n$t("Why a dashboard?"), tabName = "why_dashboard"),
+      
+      menuItem(i18n$t("Meet the team"), tabName = "meet_the_team")), 
     
-    
-    ## Body --------------------------------------------------------------------
-    
-    dashboardBody(
-      use_waiter(), 
-      #use_steward(colors = c("#0096C9", "#D8F5FF",  "#3DCEFF",  "#007095", "#002532"),speed = 90),
-     # waiter_show_on_load(html = spin_fading_circles()),
-  #   waiter_show_on_load(html = spinner),
-    
-       
-      tags$head(tags$link(rel = "icon", type = "image/png", href = "logo.png")),
-      tags$head(tags$script(HTML(js))),
-      tags$head(tags$script(HTML(js2))),
-      tags$head(tags$script(HTML(js3))),
-      tags$head(tags$style(HTML('
-      /* logo */
-      .skin-black .main-header .logo {
-      background-color: #FFFFFF;
-      }
-      
-      /* logo when hovered */
-      .skin-black .main-header .logo:hover {
-      background-color: #FFFFFF;
-      }
-      
-      /* navbar (rest of the header) */
-      .skin-black .main-header .navbar {
-      background-color: #FFFFFF;
-      }
-      
-      /* main sidebar */
-      .skin-black .main-sidebar {
-      background-color: #FFFFFF;
-      
-      }
-      
-      /* active selected tab in the sidebarmenu */
-      .skin-black .main-sidebar .sidebar .sidebar-menu .active a{
-      background-color: #0096C9;
-      color: #FFFFFF;
-      
-      }
-      
-      /* other links in the sidebarmenu */
-      .skin-black .main-sidebar .sidebar .sidebar-menu a{
-      background-color: #FFFFFF50;
-      color: #3C3C3B;
-      height: 60px;
-      }
-      
-      /* other links in the sidebarmenu when hovered */
-      .skin-black .main-sidebar .sidebar .sidebar-menu a:hover{
-      background-color: #0096C910;
-      }
-      
-      /* toggle button when hovered  */
-      .skin-black .main-header .navbar .sidebar-toggle:hover{
-      background-color: #FFFFFF;
-      }
-      
-      /* body */
-      .content-wrapper, .right-side {
-      background-color: #FFFFFF;
-      }
-                                '))),
-      absolutePanel(
-        id = "language_button", style = "z-index:10000; border-color: #FFFFFF00; background-color: #FFFFFF00;", 
-        class = "panel panel-default", top = 10, right = 70, width = 0, height = 0,
-        tagList(usei18n(i18n),
-                actionButton("language_button", label = "English",
-                             style = "color: #3C3C3B; background-color: #0096C950; 
-                       border-color: #FFFFFF;border-radius: 50px; 
-                       border-width: 1px;  padding:7px; font-size:100%")
-                
-        )
-      ),
+    collapsed = FALSE),
   
-  tabItems(
+  
+  ## Body --------------------------------------------------------------------
+  
+  dashboardBody(
+    use_waiter(), 
+    #use_steward(colors = c("#0096C9", "#D8F5FF",  "#3DCEFF",  "#007095", "#002532"),speed = 90),
+    # waiter_show_on_load(html = spin_fading_circles()),
+    # waiter_show_on_load(html = spinner),
     
-    # Home page
-    tabItem(tabName = "home", fluidPage(
-      id = 'home', tags$style('#home {background-color: #FFFFFF;}'),
-      fluidRow(img(src = "SUSLOGO.png", height = 600), align = "center"),
-      fluidRow(hr()),
-      fluidRow(br()),
-      fluidRow(img(src = "mssi_logo.png", height = 80), align = "center"),
-      fluidRow(HTML(paste0(
-        "<h5>An initiative of the <a href = 'https://www.mcgill.ca/mssi/'>McGill ",
-        "Sustainability Systems Initiative</a></h5>")), align = "center")
-      )), 
+    tags$head(tags$link(rel = "icon", type = "image/png", href = "logo.png")),
+    tags$head(tags$script(HTML(js))),
+    tags$head(tags$script(HTML(js2))),
+    tags$head(tags$script(HTML(js3))),
+    tags$head(tags$style(HTML(styler))),
     
-    # Modules
-    tabItem(tabName = "why_dashboard", why_dash_UI("why_dash")),
-    tabItem(tabName = "canale", canale_UI("canale")),
-    tabItem(tabName = "Pedestrian", #Pedestrian_realm_module_UI("Pedestrian_realm_module", i18n = i18n)
-            ),
-    tabItem(tabName = "mode", Mode_switch_module_UI("Mode_switch_module")),
-    tabItem(tabName = "biodiversity", Biodiversity_module_UI("biodiversity_module", i18n = i18n)),
-    tabItem(tabName = "meet_the_team", Meet_the_team_UI("meet_the_team_module", i18n = i18n))
-    )
+    absolutePanel(
+      id = "language_button", 
+      style = "z-index:10000; border-color: #FFFFFF00; background-color: #FFFFFF00;", 
+      class = "panel panel-default", top = 10, right = 70, width = 0, height = 0,
+      tagList(usei18n(i18n), actionButton(
+        "language_button", label = "English", 
+        style = "color: #3C3C3B; background-color: #0096C950; 
+        border-color: #FFFFFF;border-radius: 50px; 
+        border-width: 1px;  padding:7px; font-size:100%"))
+      ),
+    
+    tabItems(
+      
+      # Home page
+      tabItem(tabName = "home", fluidPage(
+        id = 'home', tags$style('#home {background-color: #FFFFFF;}'),
+        fluidRow(img(src = "SUSLOGO.png", height = 600), align = "center"),
+        fluidRow(hr()),
+        fluidRow(br()),
+        fluidRow(img(src = "mssi_logo.png", height = 80), align = "center"),
+        fluidRow(HTML(paste0(
+          "<h5>An initiative of the <a href = 'https://www.mcgill.ca/mssi/'>McGill ",
+          "Sustainability Systems Initiative</a></h5>")), align = "center")
+        )), 
+      
+      # Modules
+      tabItem(tabName = "why_dashboard", why_dash_UI("why_dash")),
+      tabItem(tabName = "canale", canale_UI("canale")),
+      tabItem(tabName = "Pedestrian", #Pedestrian_realm_module_UI("Pedestrian_realm_module", i18n = i18n)
+              ),
+      tabItem(tabName = "mode", Mode_switch_module_UI("Mode_switch_module")),
+      tabItem(tabName = "biodiversity", Biodiversity_module_UI("biodiversity_module", i18n = i18n)),
+      tabItem(tabName = "meet_the_team", Meet_the_team_UI("meet_the_team_module", i18n = i18n))
+      
+      )
   )
   )
   )

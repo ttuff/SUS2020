@@ -217,9 +217,9 @@ animatedConditionalPanel <-
     id <- paste0("animateCSS-", stringi::stri_rand_strings(1, 15))
     jsShow <- ifelse(!is.null(onShow), sprintf(onShowJS(onShow, fadeIn), id), "")
     jsHide <- ifelse(!is.null(onHide), sprintf(onHideJS(onHide, fadeOut), id), "")
-    script <- tags$script(HTML(paste(jsShow,jsHide,sep="\n")))
+    script <- tags$script(HTML(paste(jsShow,jsHide,sep = "\n")))
     condPanel <- conditionalPanel(condition, ...)
-    tags$div(id=id, tagList(condPanel, script))
+    tags$div(id = id, tagList(condPanel, script))
   }
 
 
@@ -379,6 +379,58 @@ $(document).ready(function(){
   });
 });
 "
+
+styler <- '
+      /* logo */
+      .skin-black .main-header .logo {
+      background-color: #FFFFFF;
+      }
+      
+      /* logo when hovered */
+      .skin-black .main-header .logo:hover {
+      background-color: #FFFFFF;
+      }
+      
+      /* navbar (rest of the header) */
+      .skin-black .main-header .navbar {
+      background-color: #FFFFFF;
+      }
+      
+      /* main sidebar */
+      .skin-black .main-sidebar {
+      background-color: #FFFFFF;
+      
+      }
+      
+      /* active selected tab in the sidebarmenu */
+      .skin-black .main-sidebar .sidebar .sidebar-menu .active a{
+      background-color: #0096C9;
+      color: #FFFFFF;
+      
+      }
+      
+      /* other links in the sidebarmenu */
+      .skin-black .main-sidebar .sidebar .sidebar-menu a{
+      background-color: #FFFFFF50;
+      color: #3C3C3B;
+      height: 60px;
+      }
+      
+      /* other links in the sidebarmenu when hovered */
+      .skin-black .main-sidebar .sidebar .sidebar-menu a:hover{
+      background-color: #0096C910;
+      }
+      
+      /* toggle button when hovered  */
+      .skin-black .main-header .navbar .sidebar-toggle:hover{
+      background-color: #FFFFFF;
+      }
+      
+      /* body */
+      .content-wrapper, .right-side {
+      background-color: #FFFFFF;
+      }
+                                '
 
 
 # Establish reactiveValues ------------------------------------------------
