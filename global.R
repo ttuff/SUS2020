@@ -16,10 +16,12 @@ library(extrafont)
 library(shiny.i18n)
 library(waiter)
 
-library(tidyr)
 library(dplyr)
+library(ggplot2)
+library(tidyr)
 library(purrr)
 library(readr)
+library(tibble)
 library(stringr)
 library(gghighlight)
 library(ggthemes)
@@ -83,50 +85,30 @@ theme_map <- function(...) {
   
   theme_minimal() +
     theme(
-      text = element_text(family = default_font_family,
-                          color = default_font_color),
-      # remove all axes
+      text = element_text(family = default_font_family, color = default_font_color),
       axis.line = element_blank(),
       axis.text.x = element_blank(),
       axis.text.y = element_blank(),
       axis.ticks = element_blank(),
-      # add a subtle grid
       panel.grid.major = element_blank(),
       panel.grid.minor = element_blank(),
-      # background colors
-      plot.background = element_rect(fill = default_background_color,
-                                     color = NA),
-      panel.background = element_rect(fill = default_background_color,
-                                      color = NA),
-      legend.background = element_rect(fill = default_background_color,
-                                       color = NA),
+      plot.background = element_rect(fill = default_background_color, color = NA),
+      panel.background = element_rect(fill = default_background_color, color = NA),
+      legend.background = element_rect(fill = default_background_color, color = NA),
       legend.position = "none",
-      # borders and margins
       plot.margin = unit(c(0, .5, .2, .5), "cm"),
       panel.border = element_blank(),
       panel.spacing = unit(c(-.1, 0.2, .2, 0.2), "cm"),
-      # titles
       legend.title = element_text(size = 11),
-      legend.text = element_text(size = 22, hjust = 0,
-                                 color = default_font_color),
-      plot.title = element_text(size = 15, hjust = 0.5,
-                                color = default_font_color),
-      plot.subtitle = element_text(size = 10, hjust = 0.5,
-                                   color = default_font_color,
-                                   margin = margin(b = -0.1,
-                                                   t = -0.1,
-                                                   l = 2,
-                                                   unit = "cm"),
+      legend.text = element_text(size = 22, hjust = 0, color = default_font_color),
+      plot.title = element_text(size = 15, hjust = 0.5, color = default_font_color),
+      plot.subtitle = element_text(size = 10, hjust = 0.5, color = default_font_color,
+                                   margin = margin(b = -0.1, t = -0.1, l = 2, unit = "cm"),
                                    debug = F),
-      # captions
-      plot.caption = element_text(size = 7,
-                                  hjust = .5,
-                                  margin = margin(t = 0.2,
-                                                  b = 0,
-                                                  unit = "cm"),
+      plot.caption = element_text(size = 7, hjust = .5, 
+                                  margin = margin(t = 0.2, b = 0, unit = "cm"),
                                   color = "#939184"),
-      ...
-    )
+      ...)
 }
 
 
@@ -139,22 +121,13 @@ bivariate_color_scale <- tibble(
   pivot_longer(everything(), "group", "fill")
 
 color_scale <- tibble(
-  "6" = "#73AE80",
-  "5" = "#B8D6BE", # medium inequality, medium income
-  "4" = "#E8E8E8",
-  "3" = "#6C83B5", # high inequality, low income
-  "2" = "#B5C0DA",
-  "1" = "#E8E8E8" # low inequality, low income
-) %>%
-  gather("group", "fill") 
+  "6" = "#73AE80", "5" = "#B8D6BE", "4" = "#E8E8E8", "3" = "#6C83B5",
+  "2" = "#B5C0DA", "1" = "#E8E8E8") %>%
+  pivot_longer(everything(), "group", "fill")
 
-color_scale_2 <- 
-  tibble(
-    "3" = "#73AE80",
-    "2" = "#B8D6BE",
-    "1" = "#E8E8E8"
-  ) %>%
-  gather("group", "fill")
+color_scale_2 <- tibble(
+  "3" = "#73AE80", "2" = "#B8D6BE", "1" = "#E8E8E8") %>%
+  pivot_longer(everything(), "group", "fill")
 
 colors <- as.character(color_scale$fill)
 
@@ -243,35 +216,13 @@ animatedConditionalPanel <-
     id <- paste0("animateCSS-", stringi::stri_rand_strings(1, 15))
     jsShow <- ifelse(!is.null(onShow), sprintf(onShowJS(onShow, fadeIn), id), "")
     jsHide <- ifelse(!is.null(onHide), sprintf(onHideJS(onHide, fadeOut), id), "")
-    script <- tags$script(HTML(paste(jsShow,jsHide,sep="\n")))
+    script <- tags$script(HTML(paste(jsShow,jsHide,sep = "\n")))
     condPanel <- conditionalPanel(condition, ...)
-    tags$div(id=id, tagList(condPanel, script))
+    tags$div(id = id, tagList(condPanel, script))
   }
 
 
 # Drop down list for variable selection -----------------------------------
-
-#CanALE
-var_list <- 
-  list("----" = " ", 
-       "Housing" = list("Tenant-occupied (%)" = "tenant_prop",
-                        "Average rent" = "avg_rent",
-                        "Average property value" = "avg_property_value",
-                        "Unaffordable housing (%)" = "unaffordable_prop",
-                        "Unsuitable housing (%)" = "unsuitable_prop"),
-       "Income" = list("Median household income" = "median_income",
-                       "Income under $50k (%)" = "income_50_prop",
-                       "Income between $50k-$100k (%)" = "income_100_prop",
-                       "Income above $100k (%)" = "income_high_prop"),
-       "Immigration" = list("Immigrants (%)" =  "immigrant_prop",
-                            "New immigrants (%)" = "immigrant_new_prop"),
-       "Transportation" = list("Drive to work (%)" = "car_prop",
-                               "Walk or cycle to work (%)" = "walk_or_bike_prop",
-                               "Public transit to work (%)" = "transit_prop",
-                               "15 minutes to work (%)" = "time_15_prop",
-                               "15-30 minutes to work (%)" = "time_30_prop",
-                               "30-45 minutes to work (%)" = "time_45_prop",
-                               "45-60 minutes to work (%)" = "time_60_prop"))
 
 #Pedestrian realm
 var_list_ped <- list("Walkable Access to Key Amenities" = 
@@ -282,6 +233,7 @@ var_list_ped <- list("Walkable Access to Key Amenities" =
                        "minority_percent", 
                      "Immigrant Population Proportion" = 
                        "immigrant_percent")
+
 var_list_slider <- list("Population density per square km" = 1, 
                         "Pedestrian social distancing capacity" = 2, 
                         "Work commutes by car (%)" = 3, 
@@ -292,7 +244,7 @@ loadingLogo <-
     tagList(
       tags$head(
         tags$script(
-          "setInterval(function(){
+          "setInterval(function() {
         if ($('html').attr('class')=='shiny-busy') {
         $('div.busy').show();
         $('div.notbusy').hide();
@@ -313,6 +265,9 @@ loadingLogo <-
 
 
 # Load data ---------------------------------------------------------------
+## THESE ALL NEED TO BE TURNED INTO QS BINARIES
+
+title_text <- qread("data/title_text.qs")
 
 did_you_know <- 
   read_csv("data/did_you_know.csv") %>% 
@@ -426,6 +381,58 @@ $(document).ready(function(){
   });
 });
 "
+
+styler <- '
+      /* logo */
+      .skin-black .main-header .logo {
+      background-color: #FFFFFF;
+      }
+      
+      /* logo when hovered */
+      .skin-black .main-header .logo:hover {
+      background-color: #FFFFFF;
+      }
+      
+      /* navbar (rest of the header) */
+      .skin-black .main-header .navbar {
+      background-color: #FFFFFF;
+      }
+      
+      /* main sidebar */
+      .skin-black .main-sidebar {
+      background-color: #FFFFFF;
+      
+      }
+      
+      /* active selected tab in the sidebarmenu */
+      .skin-black .main-sidebar .sidebar .sidebar-menu .active a{
+      background-color: #0096C9;
+      color: #FFFFFF;
+      
+      }
+      
+      /* other links in the sidebarmenu */
+      .skin-black .main-sidebar .sidebar .sidebar-menu a{
+      background-color: #FFFFFF50;
+      color: #3C3C3B;
+      height: 60px;
+      }
+      
+      /* other links in the sidebarmenu when hovered */
+      .skin-black .main-sidebar .sidebar .sidebar-menu a:hover{
+      background-color: #0096C910;
+      }
+      
+      /* toggle button when hovered  */
+      .skin-black .main-header .navbar .sidebar-toggle:hover{
+      background-color: #FFFFFF;
+      }
+      
+      /* body */
+      .content-wrapper, .right-side {
+      background-color: #FFFFFF;
+      }
+                                '
 
 
 # Establish reactiveValues ------------------------------------------------
