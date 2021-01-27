@@ -266,6 +266,9 @@ loadingLogo <-
 
 
 # Load data ---------------------------------------------------------------
+## THESE ALL NEED TO BE TURNED INTO QS BINARIES
+
+title_text <- qread("data/title_text.qs")
 
 did_you_know <- 
   read_csv("data/did_you_know.csv") %>% 

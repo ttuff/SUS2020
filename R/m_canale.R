@@ -3,7 +3,7 @@
 # Data and helper functions -----------------------------------------------
 
 # Load bivariate census data
-qs::qload("data/new_bivariate.qsm")
+qs::qload("data/canale.qsm")
 
 # Dropdown menu
 var_list <- 
