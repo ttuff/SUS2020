@@ -36,7 +36,7 @@ Biodiversity_module_UI <- function(id, i18n) {
   )
 }
 
-montreal_ES <- st_read("/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/data/Eco2Urb/montreal-agglomeration-muni-100028-div-vf1-20201125.shp")
+#montreal_ES <- st_read("/Users/Ty/Dropbox/Dendritic connectivity/SUS2020/data/Eco2Urb/montreal-agglomeration-muni-100028-div-vf1-20201125.shp")
 
 
 Biodiversity_module_server <- function(id) {
