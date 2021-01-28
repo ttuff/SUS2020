@@ -43,11 +43,11 @@ canale_UI <- function(id) {
           border-width: 0px;}
           #input_control_left2 {background-color: rgba(0,0,255,0.0);
           border-width: 0px;}
-          #active_legend_container {background-color: rgba(0,0,255,0.0);
+          #canale_legend_container {background-color: rgba(0,0,255,0.0);
           border-width: 0px;}"))),
 
     # Main map
-    mapdeckOutput(outputId = ns("active_map"), height = "91vh"),
+    mapdeckOutput(outputId = ns("canale_map"), height = "91vh"),
 
     # Title bar
     absolutePanel(
@@ -55,16 +55,16 @@ canale_UI <- function(id) {
       draggable = FALSE, top = 70, left = 270, width = "40%",
       h2(i18n$t("Active living potential: the CanALE index")),
       p(i18n$t(title_text %>%
-        filter(tab == "active", type == "main") %>%
+        filter(tab == "canale", type == "main") %>%
         pull(text))),
       actionLink(ns("more_info"), i18n$t("Learn more")),
       conditionalPanel(
         condition = "output.more_info_status == 1", ns = ns,
-        uiOutput(outputId = ns("active_extra_html"))
+        uiOutput(outputId = ns("canale_extra_html"))
       )
     ),
     # HTML(title_text %>%
-    #        filter(tab == "active", type == "extra") %>%
+    #        filter(tab == "canale", type == "extra") %>%
     #        pull(text)))),
 
     # 3D switch
@@ -73,7 +73,7 @@ canale_UI <- function(id) {
         "z-index:500; max-height: 88vh; overflow-y: auto; overflow-x:hidden; padding: 5px;",
       class = "panel panel-default", top = 70, right = 50, width = 300,
       materialSwitch(
-        inputId = ns("active_extrude"),
+        inputId = ns("canale_extrude"),
         label = i18n$t("View in 3D"),
         status = "danger",
         value = FALSE
@@ -86,21 +86,21 @@ canale_UI <- function(id) {
         column(
           width = 4, align = "right",
           actionLink(
-            inputId = ns("active_hide_compare"),
+            inputId = ns("canale_hide_compare"),
             label = i18n$t("Hide")
           )
         )
       ),
       conditionalPanel(
-        condition = "output.active_hide_compare_status == 1", ns = ns,
+        condition = "output.canale_hide_compare_status == 1", ns = ns,
         selectInput(ns("data_for_plot_right"),
           label = NULL,
           choices = var_list
         ),
-        plotOutput(ns("active_map_right")), height = 250
+        plotOutput(ns("canale_map_right")), height = 250
       ),
       conditionalPanel(
-        condition = "input.active_extrude == 0", ns = ns,
+        condition = "input.canale_extrude == 0", ns = ns,
         hr(),
 
         # Explore panel
@@ -112,18 +112,18 @@ canale_UI <- function(id) {
           column(
             width = 4, align = "right",
             actionLink(
-              inputId = ns("active_hide_explore"),
+              inputId = ns("canale_hide_explore"),
               label = i18n$t("Hide")
             )
           )
         ),
         conditionalPanel(
-          condition = "output.active_hide_explore_status == 1", ns = ns,
-          htmlOutput(ns("active_info")),
+          condition = "output.canale_hide_explore_status == 1", ns = ns,
+          htmlOutput(ns("canale_info")),
           conditionalPanel(
-            condition = "output.active_poly_selected == 1", ns = ns,
+            condition = "output.canale_poly_selected == 1", ns = ns,
             actionLink(
-              inputId = ns("active_clear_selection"),
+              inputId = ns("canale_clear_selection"),
               label = "Clear selection"
             )
           ),
@@ -140,13 +140,13 @@ canale_UI <- function(id) {
           column(
             width = 4, align = "right",
             actionLink(
-              inputId = ns("active_hide_dyk"),
+              inputId = ns("canale_hide_dyk"),
               label = i18n$t("Hide")
             )
           )
         ),
         conditionalPanel(
-          condition = "output.active_hide_dyk_status == 1",
+          condition = "output.canale_hide_dyk_status == 1",
           htmlOutput(ns("did_you_know"))
         )
       )
@@ -154,11 +154,11 @@ canale_UI <- function(id) {
 
     # Floating legend
     absolutePanel(
-      id = ns("active_legend_container"), class = "panel panel-default",
+      id = ns("canale_legend_container"), class = "panel panel-default",
       style = "z-index:500;", bottom = -200, left = 270, fixed = TRUE,
       conditionalPanel(
         condition = 'input.data_for_plot_right != " "', ns = ns,
-        id = ns("active_legend"),
+        id = ns("canale_legend"),
         img(src = "bivariate_legend_2.png", width = 200, height = 177)
       )
     )
@@ -173,12 +173,12 @@ canale_server <- function(id) {
     
     ns <- NS(id)
     
-    # Active extra html translation -------------------------------------------
+    # CanALE extra html translation -------------------------------------------
 
-    output$active_extra_html <-
+    output$canale_extra_html <-
       renderUI(HTML(sus_translate(
         title_text %>%
-          filter(tab == "active", type == "extra") %>%
+          filter(tab == "canale", type == "extra") %>%
           pull(text)
       )))
 
@@ -260,7 +260,7 @@ $(document).ready(function(){
 
 
     data_bivar <- reactive({
-      if (input$active_extrude) {
+      if (input$canale_extrude) {
         data <- data_DA_1_large
       } else if (rz$zoom == "OUT") {
         data <- data_borough_large
@@ -306,13 +306,13 @@ $(document).ready(function(){
 
     ## Observe zoom and coalesce to four values ----------------------------------
 
-    observeEvent(input$active_map_view_change$zoom, {
+    observeEvent(input$canale_map_view_change$zoom, {
       rz$zoom <- case_when(
-        input$active_map_view_change$zoom >= 10.5 &&
-          input$active_map_view_change$zoom <= 12 ~ "IN",
-        input$active_map_view_change$zoom > 12 &&
-          input$active_map_view_change$zoom < 14 ~ "ISO",
-        input$active_map_view_change$zoom >= 14 ~ "ISO_2",
+        input$canale_map_view_change$zoom >= 10.5 &&
+          input$canale_map_view_change$zoom <= 12 ~ "IN",
+        input$canale_map_view_change$zoom > 12 &&
+          input$canale_map_view_change$zoom < 14 ~ "ISO",
+        input$canale_map_view_change$zoom >= 14 ~ "ISO_2",
         TRUE ~ "OUT"
       )
     })
@@ -321,21 +321,21 @@ $(document).ready(function(){
     ## Observe and change click status -------------------------------------------
 
     # Update poly_selected on click
-    observeEvent(input$active_map_polygon_click, {
-      lst <- jsonlite::fromJSON(input$active_map_polygon_click)
+    observeEvent(input$canale_map_polygon_click, {
+      lst <- jsonlite::fromJSON(input$canale_map_polygon_click)
       rz$poly_selected <- lst$object$properties$id
     })
 
     # Clear click status if prompted
-    observeEvent(input$active_clear_selection, {
+    observeEvent(input$canale_clear_selection, {
       rz$poly_selected <- NA
     })
 
     # Output polygon select status
-    output$active_poly_selected <- reactive({
+    output$canale_poly_selected <- reactive({
       if (is.na(rz$poly_selected)) FALSE else TRUE
     })
-    outputOptions(output, "active_poly_selected", suspendWhenHidden = FALSE)
+    outputOptions(output, "canale_poly_selected", suspendWhenHidden = FALSE)
 
     # Clear polygon select on zoom change
     observeEvent(rz$zoom,
@@ -356,14 +356,14 @@ $(document).ready(function(){
 
     ## Observe and react to change in extrude status -----------------------------
 
-    observeEvent(input$active_extrude, {
+    observeEvent(input$canale_extrude, {
       rz$poly_selected <- NA
     })
 
 
     ## Render the map ------------------------------------------------------------
 
-    output$active_map <- renderMapdeck({
+    output$canale_map <- renderMapdeck({
       mapdeck(
         style = "mapbox://styles/dwachsmuth/ckh6cg4wg05nw19p5yrs9tib7",
         token = paste0(
@@ -377,7 +377,7 @@ $(document).ready(function(){
 
     ## Render the info table -----------------------------------------------------
 
-    output$active_info <- renderUI({
+    output$canale_info <- renderUI({
       scale_singular <- case_when(
         rz$zoom == "OUT" ~ sus_translate("borough/city"),
         rz$zoom == "IN" ~ sus_translate("census tract"),
@@ -791,11 +791,11 @@ $(document).ready(function(){
       {
         data_bivar()
         input$tabs
-        input$active_extrude
+        input$canale_extrude
       },
       {
-        if (!input$active_extrude) {
-          mapdeck_update(map_id = ns("active_map")) %>%
+        if (!input$canale_extrude) {
+          mapdeck_update(map_id = ns("canale_map")) %>%
             clear_polygon(layer_id = "extrude") %>%
             add_polygon(
               data = data_bivar(),
@@ -815,7 +815,7 @@ $(document).ready(function(){
               )
             )
         } else {
-          mapdeck_update(map_id = ns("active_map")) %>%
+          mapdeck_update(map_id = ns("canale_map")) %>%
             clear_polygon(layer_id = "polylayer") %>%
             add_polygon(
               data = data_bivar(),
@@ -843,12 +843,12 @@ $(document).ready(function(){
     observeEvent(rz$poly_selected, {
 
       # Mode if not in 3D
-      if (!input$active_extrude) {
+      if (!input$canale_extrude) {
         if (!is.na(rz$poly_selected)) {
 
           # print(paste0("Selecting polygon ", rz$poly_selected))
 
-          mapdeck_update(map_id = ns("active_map")) %>%
+          mapdeck_update(map_id = ns("canale_map")) %>%
             add_polygon(
               data = {
                 data_bivar() %>%
@@ -874,17 +874,17 @@ $(document).ready(function(){
 
           # print("Removing selection")
 
-          mapdeck_update(map_id = ns("active_map")) %>%
+          mapdeck_update(map_id = ns("canale_map")) %>%
             clear_polygon(layer_id = "poly_highlight")
         }
 
         # Mode if in 3D
-      } else if (input$active_extrude) {
+      } else if (input$canale_extrude) {
         if (!is.na(rz$poly_selected)) {
 
           # print(paste0("Selecting 3D polygon ", rz$poly_selected))
 
-          mapdeck_update(map_id = ns("active_map")) %>%
+          mapdeck_update(map_id = ns("canale_map")) %>%
             clear_polygon(layer_id = "polylayer") %>%
             clear_polygon(layer_id = "extrude") %>%
             add_polygon(
@@ -914,7 +914,7 @@ $(document).ready(function(){
 
           # print("Removing 3D selection")
 
-          mapdeck_update(map_id = ns("active_map")) %>%
+          mapdeck_update(map_id = ns("canale_map")) %>%
             clear_polygon(layer_id = "poly_highlight") %>%
             clear_polygon(layer_id = "extrude") %>%
             add_polygon(
@@ -956,44 +956,44 @@ $(document).ready(function(){
     })
 
     # Hide compare status
-    output$active_hide_compare_status <-
-      reactive(input$active_hide_compare %% 2 == 0)
-    outputOptions(output, "active_hide_compare_status", suspendWhenHidden = FALSE)
+    output$canale_hide_compare_status <-
+      reactive(input$canale_hide_compare %% 2 == 0)
+    outputOptions(output, "canale_hide_compare_status", suspendWhenHidden = FALSE)
 
-    observeEvent(input$active_hide_compare, {
-      if (input$active_hide_compare %% 2 == 0) {
+    observeEvent(input$canale_hide_compare, {
+      if (input$canale_hide_compare %% 2 == 0) {
         txt <- sus_translate("Hide")
       } else {
         txt <- sus_translate("Show")
       }
-      updateActionButton(session, "active_hide_compare", label = txt)
+      updateActionButton(session, "canale_hide_compare", label = txt)
     })
 
     # Hide explore status
-    output$active_hide_explore_status <-
-      reactive(input$active_hide_explore %% 2 == 0)
-    outputOptions(output, "active_hide_explore_status", suspendWhenHidden = FALSE)
+    output$canale_hide_explore_status <-
+      reactive(input$canale_hide_explore %% 2 == 0)
+    outputOptions(output, "canale_hide_explore_status", suspendWhenHidden = FALSE)
 
-    observeEvent(input$active_hide_explore, {
-      if (input$active_hide_explore %% 2 == 0) {
+    observeEvent(input$canale_hide_explore, {
+      if (input$canale_hide_explore %% 2 == 0) {
         txt <- sus_translate("Hide")
       } else {
         txt <- sus_translate("Show")
       }
-      updateActionButton(session, "active_hide_explore", label = txt)
+      updateActionButton(session, "canale_hide_explore", label = txt)
     })
 
     # Hide DYK status
-    output$active_hide_dyk_status <- reactive(input$active_hide_dyk %% 2 == 0)
-    outputOptions(output, "active_hide_dyk_status", suspendWhenHidden = FALSE)
+    output$canale_hide_dyk_status <- reactive(input$canale_hide_dyk %% 2 == 0)
+    outputOptions(output, "canale_hide_dyk_status", suspendWhenHidden = FALSE)
 
-    observeEvent(input$active_hide_dyk, {
-      if (input$active_hide_dyk %% 2 == 0) {
+    observeEvent(input$canale_hide_dyk, {
+      if (input$canale_hide_dyk %% 2 == 0) {
         txt <- sus_translate("Hide")
       } else {
         txt <- sus_translate("Show")
       }
-      updateActionButton(session, "active_hide_dyk", label = txt)
+      updateActionButton(session, "canale_hide_dyk", label = txt)
     })
 
 
@@ -1024,7 +1024,7 @@ $(document).ready(function(){
     ### Plot output calls for all 'right' plots ##################################
 
     # Active living potential
-    output$active_map_right <- renderCachedPlot(
+    output$canale_map_right <- renderCachedPlot(
       {
         if (input$data_for_plot_right == " ") {
           p <-
