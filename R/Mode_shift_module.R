@@ -365,19 +365,19 @@ Mode_switch_module_server <- function(id) {
                    }
                  })
 
-                 cycling_network <- reactive(cycling_network)
+                 #cycling_network <- reactive(cycling_network)
 
                  observeEvent(input$switch2, {
                    if (input$switch2 == TRUE) {
                      mapdeck_update(map_id = ns("qzmyMap")) %>%
-                       add_path(data = cycling_network(),
+                       add_path(data = cycling_network,
                                 stroke_colour = "#EA3546",
                                 stroke_width = 50,
                                 layer_id = "network",
                                 update_view = FALSE)
                    } else {
                      mapdeck_update(map_id = ns("qzmyMap")) %>%
-                       clear_path(layer_id = ns("network"))
+                       clear_path(layer_id = "network")
                    }
                  })
 
