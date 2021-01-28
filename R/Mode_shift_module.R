@@ -384,7 +384,7 @@ Mode_switch_module_server <- function(id) {
 
                  ## Change Explore sliders when menu selection changes ------------------------
 
-                 observeEvent(input$commute_variable, {
+                 observe({
 
                    if (input$commute_variable == 1) {
 
