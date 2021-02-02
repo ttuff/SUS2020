@@ -93,6 +93,14 @@ knitr::include_graphics("team_photos/samuel_kohn.jpg")
 </div>
 
 <div class="meet_the_team">
+```{r qiao_zhao,  fig.cap="<strong><big><a href = 'https://www.linkedin.com/in/kohnsamuel/' target='_blank'>Qiao Zhao</a></big></strong><br>Qiao Zhao est un doctorant dans le département de géographie de l’université McGill. Il a obtenu sa maîtrise en urbanisme à l’université A&M du Texas. Les recherches de Qiao Zhao portent sur la relation entre le cadre bâti et le comportement des voyageurs, avec un accent particulier sur l’équité en matière de cyclisme. Son travail reconnaît que les installations cyclables - ainsi que l’accessibilité et les avantages sociaux qu’elles peuvent apporter - sont réparties de manière inéquitable entre des communautés de composition sociodémographique différente. Afin d’explorer les implications de cette distribution pour l’équité en matière de cyclisme, la thèse de Qiao examine les performances actuelles du réseau cyclable en matière d’équité, les impacts potentiels des investissements dans le cyclisme sur les comportements de déplacement des populations défavorisées, et les implications en matière d’équité des données “crowdsourced” pour orienter les décisions de planification du réseau cyclable."}
+
+knitr::include_graphics("team_photos/qiao_zhao.jpeg")
+
+```
+</div>
+
+<div class="meet_the_team">
 ```{r maxime_belanger_de_blois, fig.cap="<strong><big><a href = 'https://www.linkedin.com/in/maximebdeblois' target='_blank'>Maxime Bélanger De Blois</a></big></strong><br>Actuellement étudiant à la maîtrise en urbanisme de l'Université McGill, Maxime a précédemment obtenu un baccalauréat intégré en économie et politique à l'Université Laval avec mention d'honneur et inscrit sur le tableau d'honneur de sa faculté. En parallèle, il a obtenu un microprogramme en langue espagnole. En tant qu'étudiant au premier cycle, il s'est penché sur l'application des idées de développement durable aux théories économiques. Ses intérêts académiques actuels portent sur l'application des concepts politiques et économiques aux enjeux territoriaux et environnementaux. Dans la poursuite de ces objectifs, il estime que les techniques d'analyse et de visualisation des données sont essentielles. Il est actuellement assistant de recherche au sein du groupe de recherche sur la gouvernance et les politiques urbaines UPGo, où il se concentre sur l'analyse et les impacts du marché de la location à court-terme dans les villes nord-américaines dans le contexte de la COVID-19."}
 
 knitr::include_graphics("team_photos/maxime_belanger_de_blois.jpg")

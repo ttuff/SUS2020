@@ -46,7 +46,7 @@ translation_fr <-
                       "l'accessibilité à la vie active dans les milieux de vie. Rapports sur la santé de Statistique Canada, 82-003-X.</a><li><a ",
                       "href = ''>Kevin Manaugh, Linnea Soli, Samuel Kohn, Robin Basalaev-Binder, Ty Tuff, David Wachsmuth. ",
                       "2020. «Réponse de Montréal à COVID-19 : Une analyse de l'équité des nouvelles infrastructures de ",
-                      "transport actif». Document de travail pour le Transportation Research Board.</a> <b>(MSSI research)</b></ul><br><<p><<i>Auteur(e)s ",
+                      "transport actif». Document de travail pour le Transportation Research Board.</a> <b>(MSSI research)</b></ul><br><p><i>Auteur(e)s ",
                       "principaux(ales) du module: Robin Basalaev-Binder, Ty Tuff, David Wachsmuth</i>")) %>%
   add_row(en = paste0("Based on 2016 commuting data, we quantify possible reductions in VMT and GHG by identifying car ",
                       "trips that could be shifted to cycling based on distance, elevation change and other factors."), 
@@ -389,7 +389,7 @@ translation_fr <-
                       "autochtones que dans les autres juridictions, nous ne ",
                       "pouvons donc pas afficher de résultats ici.")) %>%
   # CanALE active living potential
-  add_row(en = "CanALE Index", fr = "Index AVA-Can") %>% 
+  add_row(en = "CanALE index", fr = "Index AVA-Can") %>% 
   add_row(en = "View in 3D", fr = "Voir en 3D") %>% 
   add_row(en = "Active living potential: the CanALE index",
           fr = "Potentiel de vie active: l'index AVA-Can") %>% 
@@ -1071,6 +1071,81 @@ translation_fr <-
   add_row(en = paste0("90% of areas in Montreal have proportions higher than 48.0% of people who drive to work."),
           fr = paste0("90 % des quartiers de Montréal ont des proportions supérieures à 48,0 % de personnes ",
                       "qui se rendent au travail en voiture.")) %>%
+  add_row(en = paste0("The three areas with the lowest property values all have average Active Living Environment ",
+                      "classes of 2 or less (Pointe-Calumet (1.7); Sainte-Anne-des-Plaines (1.8); Bois-des-Filion (2.0))."),
+          fr = paste0("Les trois régions dont la valeur des propriétés est la plus faible ont toutes des moyennes de classe de","
+                      potentiel de vie active de 2 ou moins (Pointe-Calumet (1,7) ; Sainte-Anne-des-Plaines ",
+                      "(1,8) ; Bois-des-Filion (2,0)).")) %>%
+  add_row(en = paste0("The ten areas with the highest proportion of tenants have active living environment class ",
+                      "averages ranging from 3.96 to 5."),
+          fr = paste0("Les dix zones ayant la plus forte proportion de locataires ont des moyennes de classe de potentiel de ",
+                      "vie active allant de 3,96 à 5.")) %>%
+  add_row(en = paste0("The ten areas with the lowest proportion of tenant have average active living environments ",
+                      "classes ranging from 1 and 2."),
+          fr = paste0("Les dix zones ayant la plus faible proportion de locataires ont des moyennes de classe de ",
+                      "potentiel de vie active allant de 1 à 2.")) %>%
+  add_row(en = paste0("The areas with the lowest active living potential (ALE class 1) have tenant proportions ",
+                      "ranging from 0.0% (Saint-Bruno-de-Montarville, Oka) to 24.6% (Saint-Isidore)."),
+          fr = paste0("Les zones ayant le plus faible potentiel de vie active (classe 1 de l'AVA) ont des proportions ",
+                      "de locataires allant de 0,0% (Saint-Bruno-de-Montarville, Oka) à 24,6% (Saint-Isidore).")) %>%
+  add_row(en = paste0("The areas with the lowest active living potential (ALE class 1) have average property values ",
+                      "ranging from $250,046.0 (Saint-Isidore) to $994,294.4 (Saint-Anne-de-Bellevue)."),
+          fr = paste0("Les zones ayant le plus faible potentiel de vie active (classe 1 de l'AVA) ont une valeur ",
+                      "moyenne des propriétés allant de 250 046,0 $ (Saint-Isidore) à 994 294,4 $ (Saint-Anne-de-Bellevue).")) %>%
+  add_row(en = paste0("The areas with the lowest active living potential (ALE class 1) have proportions of unaffordable ",
+                      "housing ranging from 10.1% (Sainte-Anne-de-Bellevue) to 18.2% (Sainte-Julie)."),
+          fr = paste0("Les zones ayant le plus faible potentiel de vie active (classe 1 de l'AVA) présentent des proportions ",
+                      "de logements inabordables allant de 10,1% (Sainte-Anne-de-Bellevue) à 18,2% (Sainte-Julie).")) %>%
+  add_row(en = paste0("The areas with the lowest active living potential (ALE class 1) have proportions of unsuitable ",
+                      "housing ranging from 0.0% (Sainte-Julie, Saint-Bruno-de-Montarville, Sainte-Anne-de-Bellevue) ",
+                      "to 5.1% (Oka)."),
+          fr = paste0("Les zones ayant le plus faible potentiel de vie active (classe 1 de l'AVA) présentent des proportions ",
+                      "de logements de taille non convenable allant de 0,0% (Sainte-Julie, Saint-Bruno-de-Montarville, ",
+                      "Sainte-Anne-de-Bellevue) à 5,1% (Oka).")) %>%
+  add_row(en = paste0("Sainte-Anne-de-Bellevue has the highest proportion of people with an annual income of more than ",
+                      "$100,000 at 65.4%, and Montreal-Nord has the lowest (9.7%)."),
+          fr = paste0("Sainte-Anne-de-Bellevue a la plus forte proportion de personnes ayant un revenu annuel supérieur ",
+                      "à 100 000 $, soit 65,4 %, et Montréal-Nord a la plus faible (9,7 %).")) %>%
+  add_row(en = paste0("Sainte-Anne-des-Plaines has the highest proportion of people (43.7%) with an annual income ",
+                      "of up to $100,000."),
+          fr = paste0("Sainte-Anne-des-Plaines compte la plus forte proportion de personnes (43,7 %) ayant un ",
+                      "revenu annuel allant jusqu'à 100 000 $.")) %>%
+  add_row(en = paste0("The areas with the lowest active living potential (ALE class 1) have median household incomes ",
+                      "ranging from $63,744.0 (Saint-Isidore) to $130,552.9 (Sainte-Anne-de-Bellevue)."),
+          fr = paste0("Les régions où le potentiel de vie active est le plus faible (classe 1 de l'AVA) ont des ",
+                      "revenus des ménages médians allant de 63 744,0 $ (Saint-Isidore) à 130 552,9 $ ",
+                      "(Sainte-Anne-de-Bellevue).")) %>%
+  add_row(en = paste0("The areas with the highest active living potential (average ALE class 5 or higher) have ",
+                      "median household incomes ranging from $43,910.8 (Villeray-Saint-Michel-Parc-Extension) to ",
+                      "$134,155.3 (Hampstead)."),
+          fr = paste0("Les régions où le potentiel de vie active est le plus élevé (moyenne de l'AVA classe 5 ",
+                      "ou plus) ont des revenus médians par ménage allant de 43 910,8 $ (Villeray-Saint-Michel-Parc-Extension) ",
+                      "à 134 155,3 $ (Hampstead).")) %>%
+  add_row(en = paste0("The areas with the lowest proportion of people with commute times of more than one hour ",
+                      "are Westmount (5.5%), Outremont (5.7%), and Mont-Royal (5.9%)."),
+          fr = paste0("Les régions où la proportion de personnes ayant un temps de déplacement domicile-travail de plus d'une ",
+                      "heure est la plus faible sont Westmount (5,5 %), Outremont (5,7 %) et Mont-Royal (5,9 %).")) %>%
+  add_row(en = paste0("The areas with the highest proportion of people with commute times of more than one hour ",
+                      "are Léry (19.2%), Saint-Léonard (16.6%), and Anjou (16.2%)."),
+          fr = paste0("Les régions où la proportion de personnes ayant un temps de déplacement domicile-travail supérieur à une heure est ",
+                      "la plus élevée sont Léry (19,2%), Saint-Léonard (16,6%) et Anjou (16,2%).")) %>%
+  add_row(en = paste0("The three areas with the highest proportion of people with commute times of more than one hour ",
+                      "have varying classes of active living potential, from 1 (Léry) to 3.9 (Saint-Léonard)."),
+          fr = paste0("Les trois zones qui comptent la plus forte proportion de personnes ayant un temps de trajet ",
+                      "de plus d'une heure ont des classes de potentiel de vie active variables, de 1 (Léry) à ",
+                      "3,9 (Saint-Léonard).")) %>%
+  add_row(en = paste0("The three areas with the lowest proportion of people with commute times of more than one ",
+                      "hour all have average classes of active living potential above 3 (Westmount: 4.36, ",
+                      "Outremont: 4.43, Mont-Royal: 3.33)."),
+          fr = paste0("Les trois régions qui comptent la plus faible proportion de personnes dont le temps ",
+                      "de déplacement est supérieur à une heure ont toutes des classes moyennes de potentiel ",
+                      "de vie active supérieures à 3 (Westmount: 4,36, Outremont: 4,43, Mont-Royal: 3,33).")) %>%
+  add_row(en = paste0("The five areas with the highest active living potential are all boroughs of the ",
+                      "City of Montreal (Le Plateau-Mont-Royal; Rosemont-La-Petite-Patrie; Ville-Marie; ",
+                      "Villeray-Saint-Michel-Parc-Extension; Côte-des-Niges-Notre-Dame-de-Grâce)."),
+          fr = paste0("Les cinq secteurs ayant le plus fort potentiel de vie active sont tous des arrondissements ",
+                      "de la Ville de Montréal (Le Plateau-Mont-Royal; Rosemont-La-Petite-Patrie; Ville-Marie; ",
+                      "Villeray-Saint-Michel-Parc-Extension; Côte-des-Niges-Notre-Dame-de-Grâce).")) %>%
   distinct(en, .keep_all = T)
 
 write_csv(translation_fr, "translations/translation_fr.csv")
