@@ -7,6 +7,11 @@ qs::qload("data/canale.qsm")
 
 # Initialize reactive values
 rz <- reactiveValues(zoom = "OUT", poly_selected = NA)
+data_canale <- reactive(
+  data_borough_large %>%
+    dplyr::select(ID, name, name_2, population, left_variable_full = ale_index,
+                  left_variable = ale_index_quant3, ale_class, width, group, 
+                  fill, elevation, fill_opacity))
 
 # Dropdown menu
 var_list <- 
@@ -43,7 +48,7 @@ canale_UI <- function(id) {
     
     # Style tags
     module_style,
-    
+
     # Main map
     mapdeckOutput(ns("canale_map"), height = "91vh"),
     
@@ -174,8 +179,8 @@ canale_server <- function(id) {
         dplyr::select(ID, name, name_2, population,
                       left_variable_full = ale_index,
                       left_variable = ale_index_quant3, ale_class, width,
-                      group, fill, elevation, fill_opacity
-        )
+                      group, fill, elevation, fill_opacity)
+      
       # } else {
       #   data <-
       # data %>%
@@ -226,8 +231,6 @@ canale_server <- function(id) {
     # })
     # 
     # 
-    # 
-    # 
     # # did_you_know <-
     # #   read_csv("data/did_you_know.csv") %>%
     # #   mutate(right_variable = if_else(is.na(right_variable), " ", right_variable))
@@ -235,12 +238,6 @@ canale_server <- function(id) {
     # # variable_explanations <-
     # #   read_csv("data/variable_explanations.csv")
     # #
-    # 
-    # 
-    # 
-    # 
-    # 
-    # 
     # 
     # 
     # ## Observe and change click status -------------------------------------------
@@ -921,32 +918,11 @@ canale_server <- function(id) {
     #   updateActionButton(session, "canale_hide_dyk", label = txt)
     # })
     # 
-    # ### Plot output calls for left plot ##################################
-    # 
-    # left_map_server("canale", data_borough_large)
-    # # output$canale_map_left <- renderCachedPlot({
-    # # 
-    # #   data_for_plot_left <-
-    # #     data_bivar()
-    # # 
-    # #   p <-
-    # #     ggplot(data_for_plot_left) +
-    # #     geom_sf(aes(fill = as.factor(left_variable)), color = "white", size = 0.01) +
-    # #     scale_fill_manual(values = rev(colors[c(1:3)]), na.value = "grey70") +
-    # #     theme_map() +
-    # #     theme(legend.position = "none")
-    # # 
-    # #   ggdraw() +
-    # #     draw_image(dropshadow2, scale = 1.59, vjust = 0.003, hjust = 0.003) +
-    # #     draw_plot(p) +
-    # #     draw_image(uni_legend, scale = .45, vjust = 0.25, hjust = 0.25)
-    # # 
-    # # },
-    # # cacheKeyExpr = paste(rz$zoom, "left", sep = "_"),
-    # # cache = diskCache("./app-cache"),
-    # # bg = "white")
-    # 
-    # 
+    
+    # Left map
+    # left_map_server("canale_left_map", data_canale)
+
+
     # ### Plot output calls for all 'right' plots ##################################
     # 
     # # Active living potential

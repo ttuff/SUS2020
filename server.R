@@ -95,4 +95,9 @@ shinyServer(function(input, output, session) {
   Meet_the_team_server("meet_the_team_module")
   why_dash_server("why_dash")
   
+  
+  # Left maps ---------------------------------------------------------------
+  left_map_server("canale_left_map", data_canale)
+  
+  
 })

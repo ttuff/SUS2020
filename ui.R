@@ -29,8 +29,8 @@ ui <- dashboardPage(
                tabName = "canale", badgeLabel = i18n$t("Built environment"), 
                badgeColor = "purple"),
       
-      conditionalPanel(condition = "input.tabs == 'canale'", 
-                       left_map_output("canale")), 
+      conditionalPanel(condition = "input.tabs == 'canale'",
+                       left_map_UI("canale_left_map")),
       
       menuItem(i18n$t("Commuter mode switching"), icon = icon("biking"), 
                tabName = "mode", badgeLabel = i18n$t("Simulation"),
