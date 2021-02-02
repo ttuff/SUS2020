@@ -46,7 +46,7 @@ translation_fr <-
                       "l'accessibilité à la vie active dans les milieux de vie. Rapports sur la santé de Statistique Canada, 82-003-X.</a><li><a ",
                       "href = ''>Kevin Manaugh, Linnea Soli, Samuel Kohn, Robin Basalaev-Binder, Ty Tuff, David Wachsmuth. ",
                       "2020. «Réponse de Montréal à COVID-19 : Une analyse de l'équité des nouvelles infrastructures de ",
-                      "transport actif». Document de travail pour le Transportation Research Board.</a> <b>(MSSI research)</b></ul><br><<p><<i>Auteur(e)s ",
+                      "transport actif». Document de travail pour le Transportation Research Board.</a> <b>(MSSI research)</b></ul><br><p><i>Auteur(e)s ",
                       "principaux(ales) du module: Robin Basalaev-Binder, Ty Tuff, David Wachsmuth</i>")) %>%
   add_row(en = paste0("Based on 2016 commuting data, we quantify possible reductions in VMT and GHG by identifying car ",
                       "trips that could be shifted to cycling based on distance, elevation change and other factors."), 
