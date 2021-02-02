@@ -125,7 +125,7 @@ zoomMenuItemSus_Server <- function(input, output, session, zoom) {
   #observe(print(input$bttn1))
   output$bttn <- reactive({
     
-    even <- input$Id114[1] %% 2 == 0
+    even <- input$Id114[1] %% 2 == 1
     #print(even)
     return(even)
     
