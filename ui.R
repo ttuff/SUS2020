@@ -12,11 +12,9 @@ dbHeader$children[[2]]$children <-
     'http:www.drtuff.com', 'logo.png', 'spinning_logo.gif', 50, 50, 50)), 
     column(width = 2), column(width = 6 ))
 
-shinyUI(dashboardPage(
+ui <- dashboardPage(
   
-  skin = "black", title = "Sus - for sustainable decision making",
   dbHeader,
-  
   
   ## Left sidebar ------------------------------------------------------------
   
@@ -32,7 +30,7 @@ shinyUI(dashboardPage(
                badgeColor = "purple"),
       
       conditionalPanel(condition = "input.tabs == 'canale'", 
-                       plotOutput("canale_map_left", height = 200)), 
+                       left_map_output("canale")), 
       
       menuItem(i18n$t("Commuter mode switching"), icon = icon("biking"), 
                tabName = "mode", badgeLabel = i18n$t("Simulation"),
@@ -64,7 +62,7 @@ shinyUI(dashboardPage(
   ## Body --------------------------------------------------------------------
   
   dashboardBody(
-    use_waiter(), 
+    # use_waiter(), 
     #use_steward(colors = c("#0096C9", "#D8F5FF",  "#3DCEFF",  "#007095", "#002532"),speed = 90),
     # waiter_show_on_load(html = spin_fading_circles()),
     # waiter_show_on_load(html = spinner),
@@ -110,6 +108,9 @@ shinyUI(dashboardPage(
       tabItem(tabName = "meet_the_team", Meet_the_team_UI("meet_the_team_module", i18n = i18n))
       
       )
-    )
+    ),
+  
+
+  skin = "black", title = "Sus - for sustainable decision making"
   )
-)
+
