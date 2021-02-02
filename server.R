@@ -1,23 +1,9 @@
 ##### SUS SERVER SCRIPT ########################################################
 
 shinyServer(function(input, output, session) {
-  
   # Waiter ------------------------------------------------------------------
-
-  # show_modal_spinner() # show the modal window
-  # remove_modal_spinner()
-  
-  #w <- Waiter$new()
-  
-  # give time for wait screen to show
-  #Sys.sleep(3) 
-  #hide_waiter()
-  
-  # observeEvent(input$show, {
-  #   w$show(spinner)
-  #   Sys.sleep(3) # give time for wait screen to show
-  #   w$hide()
-  # })
+  Sys.sleep(3)
+  waiter_hide()
   
   # Plot output calls for all 'left' plots ----------------------------------
   # WILL GET MOVED INTO INDIVIDUAL MODULES
@@ -98,6 +84,5 @@ shinyServer(function(input, output, session) {
   
   # Left maps ---------------------------------------------------------------
   left_map_server("canale_left_map", data_canale)
-  
   
 })

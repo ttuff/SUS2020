@@ -62,10 +62,20 @@ ui <- dashboardPage(
   ## Body --------------------------------------------------------------------
   
   dashboardBody(
-    # use_waiter(), 
-    #use_steward(colors = c("#0096C9", "#D8F5FF",  "#3DCEFF",  "#007095", "#002532"),speed = 90),
-    # waiter_show_on_load(html = spin_fading_circles()),
-    # waiter_show_on_load(html = spinner),
+    waiter::use_waiter(),
+    waiter::use_hostess(),
+    waiter::waiter_show_on_load(
+      html = shiny::tagList(img(src = "Sus logo transparent.png", height = "400px"), shiny::br(),
+        shiny::strong(shiny::h4(
+          "Please wait, this may take a few minutes", style =
+            "color:#002532; ")), shiny::br(), spin_folding_cube(),
+        # shiny::span(waiter::hostess_loader("dup_1", preset = "circle",
+        #                                    text_color = "#002532",
+        #                                    class = "label-center",
+        #                                    stroke_color = "#002532",
+        #                                    center_page = TRUE))
+        ), 
+      color = "#D8F5FF"),
     
     tags$head(tags$link(rel = "icon", type = "image/png", href = "logo.png")),
     tags$head(tags$script(HTML(js))),
@@ -82,7 +92,7 @@ ui <- dashboardPage(
         style = "color: #3C3C3B; background-color: #0096C950; 
         border-color: #FFFFFF;border-radius: 50px; 
         border-width: 1px;  padding:7px; font-size:100%"))
-      ),
+    ),
     
     tabItems(
       
@@ -96,21 +106,20 @@ ui <- dashboardPage(
         fluidRow(HTML(paste0(
           "<h5>An initiative of the <a href = 'https://www.mcgill.ca/mssi/'>McGill ",
           "Sustainability Systems Initiative</a></h5>")), align = "center")
-        )), 
+      )), 
       
       # Modules
       tabItem(tabName = "why_dash", why_dash_UI("why_dash")),
       tabItem(tabName = "canale", canale_UI("canale")),
       tabItem(tabName = "Pedestrian", #Pedestrian_realm_module_UI("Pedestrian_realm_module", i18n = i18n)
-              ),
+      ),
       tabItem(tabName = "mode", Mode_switch_module_UI("Mode_switch_module")),
       tabItem(tabName = "biodiversity", Biodiversity_module_UI("biodiversity_module", i18n = i18n)),
       tabItem(tabName = "meet_the_team", Meet_the_team_UI("meet_the_team_module", i18n = i18n))
       
-      )
-    ),
+    )
+  ),
   
-
+  
   skin = "black", title = "Sus - for sustainable decision making"
-  )
-
+)
