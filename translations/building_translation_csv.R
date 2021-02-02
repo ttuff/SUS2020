@@ -389,7 +389,7 @@ translation_fr <-
                       "autochtones que dans les autres juridictions, nous ne ",
                       "pouvons donc pas afficher de résultats ici.")) %>%
   # CanALE active living potential
-  add_row(en = "CanALE Index", fr = "Index AVA-Can") %>% 
+  add_row(en = "CanALE index", fr = "Index AVA-Can") %>% 
   add_row(en = "View in 3D", fr = "Voir en 3D") %>% 
   add_row(en = "Active living potential: the CanALE index",
           fr = "Potentiel de vie active: l'index AVA-Can") %>% 

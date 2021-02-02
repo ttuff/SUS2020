@@ -666,7 +666,7 @@ $(document).ready(function(){
               values = colors[c(1:3)],
               na.translate = FALSE
             ) +
-            labs(x = "CanALE index", y = NULL) +
+            labs(x = sus_translate("CanALE index"), y = NULL) +
             theme_minimal() +
             theme(
               legend.position = "none",
