@@ -13,7 +13,7 @@ why_dash_UI <- function(id) {
     absolutePanel(
       id = "why_title_bar", class = "panel panel-default", draggable = FALSE, 
       top = 70, left = 270, width = "40%", 
-      h2("Why a dashboard? The science behind Sus"),
+      h2(i18n$t("Why a dashboard? The science behind Sus")),
       img(src = "glamour_shot.png", height = 300),
       p(i18n$t(paste0("Dashboards offer a tool for communicating ", 
                       "sustainability data in a visually based digital ", 
