@@ -92,26 +92,26 @@ Biodiversity_module_server <- function(id) {
                  # {
                    #if( rz_pedestrian$zoom == "IN"){
                    #  if (input$switch_biv == TRUE) {
-                 mapdeck_update(map_id = "BiodiversityMap")  %>%
-                   add_polygon(
-                      data = montreal_ES
-                     , na_colour = "#FFFFFF"
-                     ,stroke_colour = "#FFFFFF"
-                     ,stroke_width = 5
-                     ,fill_colour = "nom_arr"
-                     , fill_opacity = 1
-                     , update_view = FALSE
-                     , layer_id = "tree_agg_layer"
-                     , id = "ID"
-                     , auto_highlight = TRUE
-                     , highlight_colour = '#FFFFFF90'
-                     , legend = FALSE
-                     , light_settings =  list(
-                       lightsPosition = c(0,0, 5000)
-                       , numberOfLights = 1
-                       , ambientRatio = 1
-                     )
-                   )
+                 # mapdeck_update(map_id = "BiodiversityMap")  %>%
+                 #   add_polygon(
+                 #      data = montreal_ES
+                 #     , na_colour = "#FFFFFF"
+                 #     ,stroke_colour = "#FFFFFF"
+                 #     ,stroke_width = 5
+                 #     ,fill_colour = "nom_arr"
+                 #     , fill_opacity = 1
+                 #     , update_view = FALSE
+                 #     , layer_id = "tree_agg_layer"
+                 #     , id = "ID"
+                 #     , auto_highlight = TRUE
+                 #     , highlight_colour = '#FFFFFF90'
+                 #     , legend = FALSE
+                 #     , light_settings =  list(
+                 #       lightsPosition = c(0,0, 5000)
+                 #       , numberOfLights = 1
+                 #       , ambientRatio = 1
+                 #     )
+                 #   )
                   #   }}
                  # })
                  
