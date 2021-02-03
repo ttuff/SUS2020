@@ -40,8 +40,6 @@ var_list <-
 
 canale_UI <- function(id) {
   
-  ns <- NS(id)
-  
   tabItem(
     tabName = "canale",
     
@@ -49,20 +47,20 @@ canale_UI <- function(id) {
     module_style,
 
     # Main map
-    mapdeckOutput(ns("map"), height = "91vh"),
+    mapdeckOutput(NS(id, "map"), height = "91vh"),
     
     # Title bar
-    title_UI(ns("title")),
+    title_UI(NS(id, "title")),
     
     # Right panel
     absolutePanel(
-      id = ns("right_panel"), style =
+      id = NS(id, "right_panel"), style =
         "z-index:500; max-height: 88vh; overflow-y: auto; overflow-x:hidden; padding: 5px;",
       class = "panel panel-default", top = 70, right = 50, width = 300,
       
       # 3D switch
       materialSwitch(
-        inputId = ns("extrude"),
+        inputId = NS(id, "extrude"),
         label = i18n$t("View in 3D"),
         status = "danger",
         value = FALSE),
@@ -286,11 +284,15 @@ canale_server <- function(id) {
         style = "mapbox://styles/dwachsmuth/ckh6cg4wg05nw19p5yrs9tib7",
         token = paste0(
           "pk.eyJ1IjoiZHdhY2hzbXV0aCIsImEiOiJja2g2Y2JpbDc",
-          "wMDc5MnltbWpja2xpYTZhIn0.BXdU7bsQYWcSwmmBx8DNqQ"
-        ),
-        zoom = 10.1, location = c(-73.58, 45.53), pitch = 0
-      )
-    })
+          "wMDc5MnltbWpja2xpYTZhIn0.BXdU7bsQYWcSwmmBx8DNqQ"),
+        zoom = 10.1, location = c(-73.58, 45.53), pitch = 0) %>% 
+        add_polygon(
+          data = data_canale(),
+          stroke_width = "width", stroke_colour = "#FFFFFF",
+          fill_colour = "fill_opacity", update_view = FALSE,
+          layer_id = "polylayer", id = "ID", auto_highlight = TRUE,
+          highlight_colour = "#FFFFFF90", legend = FALSE)
+      })
     
     
     # ## Render the info table -----------------------------------------------------
@@ -705,55 +707,32 @@ canale_server <- function(id) {
     # 
     ## Update map in response to variable changes, zooming, or options -----------
 
-    observeEvent(
-      {
-        rv_canale$zoom
-        input$tabs
-        input$extrude
-      },
-      {
+    observeEvent({
+      rv_canale$zoom
+      input$extrude}, {
         if (!input$extrude) {
           mapdeck_update(map_id = NS(id, "map")) %>%
             clear_polygon(layer_id = "extrude") %>%
             add_polygon(
               data = data_canale(),
-              stroke_width = "width",
-              stroke_colour = "#FFFFFF",
-              fill_colour = "fill_opacity",
-              update_view = FALSE,
-              layer_id = "polylayer",
-              id = "ID",
-              auto_highlight = TRUE,
-              highlight_colour = "#FFFFFF90",
-              legend = FALSE,
-              light_settings = list(
-                lightsPosition = c(0, 0, 5000),
-                numberOfLights = 1,
-                ambientRatio = 1
-              )
-            )
+              stroke_width = "width", stroke_colour = "#FFFFFF",
+              fill_colour = "fill_opacity", update_view = FALSE,
+              layer_id = "polylayer", id = "ID", auto_highlight = TRUE,
+              highlight_colour = "#FFFFFF90", legend = FALSE)
         } else {
           mapdeck_update(map_id = NS(id, "map")) %>%
             clear_polygon(layer_id = "polylayer") %>%
             add_polygon(
               data = data_canale(),
-              fill_colour = "fill",
-              elevation = "elevation",
-            update_view = FALSE,
-            layer_id = "extrude",
-            id = "ID",
-            auto_highlight = TRUE,
-            highlight_colour = "#FFFFFF90",
-            legend = FALSE,
-            light_settings = list(
-              lightsPosition = c(0, 0, 5000),
-              numberOfLights = 1,
-              ambientRatio = 1
-            )
-          )
+              fill_colour = "fill", elevation = "elevation",
+              update_view = FALSE, layer_id = "extrude", id = "ID",
+              auto_highlight = TRUE, highlight_colour = "#FFFFFF90",
+              legend = FALSE,
+              light_settings = list(lightsPosition = c(0, 0, 5000),
+                                    numberOfLights = 1, ambientRatio = 1))
+          }
         }
-      }
-    )
+      )
 
 
     # ## Update map on click -------------------------------------------------------
