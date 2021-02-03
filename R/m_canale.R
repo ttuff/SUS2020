@@ -163,15 +163,9 @@ canale_server <- function(id) {
       #if (input$canale_extrude) {
       #  data <- data_DA_1_large
       #} else 
-      if (rv_canale$zoom == "OUT") {
-        data <- data_borough_large
-      } else if (rv_canale$zoom == "IN") {
-        data <- data_CT_large
-      } else if (rv_canale$zoom == "ISO") {
-        data <- data_DA_1_large
-      } else if (rv_canale$zoom == "ISO_2") {
-        data <- data_DA_2_large
-      }
+      data <- switch(rv_canale$zoom, "OUT" = data_borough_large, 
+                     "IN" = data_CT_large, "ISO" = data_DA_1_large, 
+                     "ISO_2" = data_DA_2_large)
       
       # if (input$data_for_plot_right == " ") {
       data <-

@@ -1,6 +1,6 @@
 # Shiny options -----------------------------------------------------------
 
-shinyOptions(cache = diskCache("./app-cache"))
+shinyOptions(cache = diskCache("./app-cache")) # Remove once modules are updated
 shinyOptions(cache = cachem::cache_disk("./app-cache"))
 
 
