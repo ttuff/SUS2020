@@ -75,7 +75,7 @@ ui <- dashboardPage(
     waiter::use_hostess(),
     waiter::use_steward(),
     waiter::waiter_show_on_load(
-      html = shiny::tagList(img(src = "Sus logo transparent.png", style = "height:50vh;"), 
+      html = shiny::tagList(img(src = "Sus logo transparent.png", style = "height:50vh; max-height:600px;"), 
                             shiny::br(), shiny::br(),
                             shiny::strong(shiny::h4(
                               i18n$t("Please wait, this may take a few minutes"), 
@@ -106,9 +106,9 @@ ui <- dashboardPage(
       # Home page
       tabItem(tabName = "home", fluidPage(
         id = 'home', tags$style('#home {background-color: #FFFFFF;}'),
-        fluidRow(img(src = "SUSLOGO.png", style = "height:65vh;"), align = "center"),
+        fluidRow(img(src = "SUSLOGO.png", style = "height:65vh; max-height:600px;"), align = "center"),
         fluidRow(hr()),
-        fluidRow(img(src = "mssi_logo.png", style = "height:10vh;"), align = "center"),
+        fluidRow(img(src = "mssi_logo.png", style = "height:10vh; max-height:70px"), align = "center"),
         fluidRow(HTML(paste0(
           "<h5>An initiative of the <a href = 'https://www.mcgill.ca/mssi/'>McGill ",
           "Sustainability Systems Initiative</a></h5>")), align = "center")
