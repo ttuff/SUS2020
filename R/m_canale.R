@@ -66,27 +66,19 @@ canale_UI <- function(id) {
         value = FALSE),
       
       hr(),
+
+      # Compare panel
+      fluidRow(
+        column(width = 8, h4(i18n$t("Compare"))),
+        column(width = 4, align = "right", 
+               actionLink(inputId = NS(id, "hide_compare"),
+                          label = i18n$t("Hide")))),
       
-    # 
-    #   # Compare panel
-    #   fluidRow(
-    #     column(width = 8, h4(i18n$t("Compare"))),
-    #     column(
-    #       width = 4, align = "right",
-    #       actionLink(
-    #         inputId = NS(id, "canale_hide_compare"),
-    #         label = i18n$t("Hide")
-    #       )
-    #     )
-    #   ),
-    #   conditionalPanel(
-    #     condition = "output.canale_hide_compare_status == 1", 
-    #     selectInput(NS(id, "data_for_plot_right"),
-    #       label = NULL,
-    #       choices = var_list
-    #     ),
-    #     plotOutput(NS(id, "canale_map_right")), height = 250
-    #   ),
+      conditionalPanel(
+        condition = "output.hide_compare_status == 1", ns = NS(id),
+        selectInput(NS(id, "data_for_plot_right"),
+                    label = NULL, choices = var_list),
+        plotOutput(NS(id, "map_right"), height = 200)),
     #   conditionalPanel(
     #     condition = "input.extrude == 0", hr(),
     # 
@@ -167,32 +159,28 @@ canale_server <- function(id) {
                             "IN" = data_canale_CT, "ISO" = data_canale_DA_1, 
                             "ISO_2" = data_canale_DA_2)
       
-      # if (input$data_for_plot_right == " ") {
-      data <-
-        data %>%
-        dplyr::select(ID, name, name_2, population,
-                      left_variable_full = ale_index,
-                      left_variable = ale_index_quant3, ale_class, width,
-                      group, fill, elevation, fill_opacity)
-      
-      # } else {
-      #   data <-
-      # data %>%
-      # dplyr::select(
-      #   ID, name, name_2, population,
-      #   left_variable_full = ale_index,
-      #   left_variable = ale_index_quant3, ale_class,
-      #   right_variable_full = input$data_for_plot_right,
-      #   right_variable = paste0(input$data_for_plot_right, "_quant3"),
-      #   width, group = paste0(input$data_for_plot_right, "_quant3_group"),
-      #   fill = paste0(input$data_for_plot_right, "_quant3_fill"),
-      #   elevation = paste0(input$data_for_plot_right, "_quant3_elevation"),
-      #   fill_opacity = paste0(
-      #     input$data_for_plot_right,
-      #     "_quant3_fill_opacity"
-      #   )
-      # )
-      # }
+      if (input$data_for_plot_right == " ") {
+        data <-
+          data %>%
+          dplyr::select(ID, name, name_2, population,
+                        left_variable_full = ale_index,
+                        left_variable = ale_index_quant3, ale_class, width,
+                        group, fill, elevation, fill_opacity)
+        
+        } else {
+          data <-
+            data %>%
+            dplyr::select(
+              ID, name, name_2, population,
+              left_variable_full = ale_index, left_variable = ale_index_quant3, 
+              ale_class, right_variable_full = input$data_for_plot_right, 
+              right_variable = paste0(input$data_for_plot_right, "_quant3"), 
+              width, group = paste0(input$data_for_plot_right, "_quant3_group"),
+              fill = paste0(input$data_for_plot_right, "_quant3_fill"),
+              elevation = paste0(input$data_for_plot_right, "_quant3_elevation"),
+              fill_opacity = paste0(input$data_for_plot_right, 
+                                    "_quant3_fill_opacity"))
+          }
       
       return(data)
     })
@@ -211,19 +199,15 @@ canale_server <- function(id) {
       
       })
     
-    
-    # # Drop down list for variable selection -----------------------------------
-    # 
-    # 
-    # # List reactive translation
-    # observe({
-    #   updateSelectInput(
-    #     session = session,
-    #     inputId = "data_for_plot_right",
-    #     choices = sus_translate(var_list)
-    #   )
-    # })
-    # 
+    # Translate drop-down list
+    observe({
+      updateSelectInput(
+        session = session,
+        inputId = "data_for_plot_right",
+        choices = sus_translate(var_list)
+      )
+    })
+
     # 
     # # did_you_know <-
     # #   read_csv("data/did_you_know.csv") %>%
@@ -708,6 +692,7 @@ canale_server <- function(id) {
     ## Update map in response to variable changes, zooming, or options -----------
 
     observeEvent({
+      input$data_for_plot_right
       rv_canale$zoom
       input$extrude}, {
         if (!input$extrude) {
@@ -851,19 +836,18 @@ canale_server <- function(id) {
     #   }
     #   updateActionButton(session, "more_info", label = txt)
     # })
-    # 
-    # # Hide compare status
-    # output$canale_hide_compare_status <-
-    #   reactive(input$canale_hide_compare %% 2 == 0)
-    # outputOptions(output, "canale_hide_compare_status", suspendWhenHidden = FALSE)
-    # 
-    # observeEvent(input$canale_hide_compare, {
-    #   if (input$canale_hide_compare %% 2 == 0) {
+
+    # Hide compare status
+    output$hide_compare_status <- reactive(input$hide_compare %% 2 == 0)
+    outputOptions(output, "hide_compare_status", suspendWhenHidden = FALSE)
+
+    # observeEvent(input$hide_compare, {
+    #   if (input$hide_compare %% 2 == 0) {
     #     txt <- sus_translate("Hide")
     #   } else {
     #     txt <- sus_translate("Show")
     #   }
-    #   updateActionButton(session, "canale_hide_compare", label = txt)
+    #   updateActionButton(session, "hide_compare", label = txt)
     # })
     # 
     # # Hide explore status
@@ -897,42 +881,32 @@ canale_server <- function(id) {
     # Left map
     left_map_server("canale", data_canale, reactive(rv_canale$zoom))
 
+    # Right map
+    output$map_right <- renderPlot({
+      
+        if (input$data_for_plot_right == " ") {
+          p <- 
+            ggplot(data_canale()) +
+            geom_sf(fill = "#CABED0", color = "white", size = 0.01) +
+            theme_map()
 
-    # ### Plot output calls for all 'right' plots ##################################
-    # 
-    # # Active living potential
-    # output$canale_map_right <- renderCachedPlot(
-    #   {
-    #     if (input$data_for_plot_right == " ") {
-    #       p <-
-    #         data_bivar() %>%
-    #         ggplot() +
-    #         geom_sf(fill = "#CABED0", color = "white", size = 0.01) +
-    #         theme_map()
-    # 
-    #       ggdraw() +
-    #         draw_image(dropshadow1, scale = 1.49, vjust = -0.003, hjust = -0.003) +
-    #         draw_plot(p)
-    #     } else {
-    #       p <-
-    #         data_bivar() %>%
-    #         ggplot() +
-    #         geom_sf(aes(fill = as.factor(right_variable)),
-    #           color = "white",
-    #           size = 0.01
-    #         ) +
-    #         scale_fill_manual(values = rev(colors[c(4:6)])) +
-    #         theme_map()
-    # 
-    #       ggdraw() +
-    #         draw_image(dropshadow1, scale = 1.49, vjust = -0.003, hjust = -0.003) +
-    #         draw_plot(p) +
-    #         draw_image(uni_legend_right, scale = .5, vjust = 0.25, hjust = -0.25)
-    #     }
-    #   },
-    #   cacheKeyExpr = paste(rz$zoom, input$data_for_plot_right, sep = "_"),
-    #   cache = diskCache("./app-cache"),
-    #   bg = "transparent"
-    # )
+          ggdraw() +
+            draw_image(dropshadow_right, scale = 1.17) +
+            draw_plot(p)
+        } else {
+          p <-
+            ggplot(data_canale()) +
+            geom_sf(aes(fill = as.factor(right_variable)),
+                    color = "white", size = 0.01) +
+            scale_fill_manual(values = rev(colors[c(4:6)])) +
+            theme_map()
+
+          ggdraw() +
+            draw_image(dropshadow_right, scale = 1.17) +
+            draw_plot(p) +
+            draw_image(uni_legend_right, scale = .45, vjust = 0.25, hjust = -0.25)
+        }
+      }, bg = "transparent") %>% bindCache(input$data_for_plot_right, 
+                                           rv_canale$zoom)
   })
 }
