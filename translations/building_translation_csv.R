@@ -1146,6 +1146,9 @@ translation_fr <-
           fr = paste0("Les cinq secteurs ayant le plus fort potentiel de vie active sont tous des arrondissements ",
                       "de la Ville de Montréal (Le Plateau-Mont-Royal; Rosemont-La-Petite-Patrie; Ville-Marie; ",
                       "Villeray-Saint-Michel-Parc-Extension; Côte-des-Niges-Notre-Dame-de-Grâce).")) %>%
+  # For the waiter
+  add_row(en = "Please wait, this may take a few minutes",
+          fr = "Veuillez patienter, ceci peut prendre quelques minutes") %>% 
   distinct(en, .keep_all = T)
 
 write_csv(translation_fr, "translations/translation_fr.csv")

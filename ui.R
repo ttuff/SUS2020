@@ -13,7 +13,7 @@ dbHeader$children[[2]]$children <-
     column(width = 2), column(width = 6 ))
 
 ui <- dashboardPage(
-  
+
   dbHeader,
   
   ## Left sidebar ------------------------------------------------------------
@@ -64,20 +64,6 @@ ui <- dashboardPage(
   ## Body --------------------------------------------------------------------
   
   dashboardBody(
-    waiter::use_waiter(),
-    waiter::use_hostess(),
-    waiter::waiter_show_on_load(
-      html = shiny::tagList(img(src = "Sus logo transparent.png", height = "400px"), shiny::br(),
-        shiny::strong(shiny::h4(
-          "Please wait, this may take a few minutes", style =
-            "color:#002532; ")), shiny::br(), spin_folding_cube(),
-        # shiny::span(waiter::hostess_loader("dup_1", preset = "circle",
-        #                                    text_color = "#002532",
-        #                                    class = "label-center",
-        #                                    stroke_color = "#002532",
-        #                                    center_page = TRUE))
-        ), 
-      color = "#D8F5FF"),
     
     tags$head(tags$link(rel = "icon", type = "image/png", href = "logo.png")),
     tags$head(tags$script(HTML(js))),
@@ -85,10 +71,29 @@ ui <- dashboardPage(
     tags$head(tags$script(HTML(js3))),
     tags$head(tags$style(HTML(styler))),
     
+    waiter::use_waiter(),
+    waiter::use_hostess(),
+    waiter::use_steward(),
+    waiter::waiter_show_on_load(
+      html = shiny::tagList(img(src = "Sus logo transparent.png", style = "height:50vh;"), 
+                            shiny::br(), shiny::br(),
+                            shiny::strong(shiny::h4(
+                              i18n$t("Please wait, this may take a few minutes"), 
+                              style ="color:#002532;")), 
+                            spin_folding_cube(), 
+        # shiny::span(waiter::hostess_loader("hostess_id", preset = "circle",
+        #                                    text_color = "#002532",
+        #                                    class = "label-center",
+        #                                    stroke_color = "#002532",
+        #                                    center_page = TRUE))
+        ), 
+      color = "#D8F5FF"),
+    
+    
     absolutePanel(
       id = "language_button", 
-      style = "z-index:10000; border-color: #FFFFFF00; background-color: #FFFFFF00;", 
-      class = "panel panel-default", top = 10, right = 70, width = 0, height = 0,
+      style = "z-index = 9998; border-color: #FFFFFF00; background-color: #FFFFFF00;", 
+      class = "panel panel-default", top = 10, right = 70, width = 0,
       tagList(usei18n(i18n), actionButton(
         "language_button", label = "English", 
         style = "color: #3C3C3B; background-color: #0096C950; 
@@ -101,10 +106,9 @@ ui <- dashboardPage(
       # Home page
       tabItem(tabName = "home", fluidPage(
         id = 'home', tags$style('#home {background-color: #FFFFFF;}'),
-        fluidRow(img(src = "SUSLOGO.png", height = 600), align = "center"),
+        fluidRow(img(src = "SUSLOGO.png", style = "height:65vh;"), align = "center"),
         fluidRow(hr()),
-        fluidRow(br()),
-        fluidRow(img(src = "mssi_logo.png", height = 80), align = "center"),
+        fluidRow(img(src = "mssi_logo.png", style = "height:10vh;"), align = "center"),
         fluidRow(HTML(paste0(
           "<h5>An initiative of the <a href = 'https://www.mcgill.ca/mssi/'>McGill ",
           "Sustainability Systems Initiative</a></h5>")), align = "center")

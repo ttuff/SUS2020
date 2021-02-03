@@ -3,6 +3,7 @@
 shinyServer(function(input, output, session) {
   
   # Waiter ------------------------------------------------------------------
+
   waiter_hide()
   
   # Plot output calls for all 'left' plots ----------------------------------
