@@ -36,7 +36,6 @@ var_list <-
                                "45-60 minutes to work (%)" = "time_60_prop"))
 
 
-
 # UI ----------------------------------------------------------------------
 
 canale_UI <- function(id) {
@@ -50,23 +49,26 @@ canale_UI <- function(id) {
     module_style,
 
     # Main map
-    mapdeckOutput(ns("canale_map"), height = "91vh"),
+    mapdeckOutput(ns("map"), height = "91vh"),
     
     # Title bar
-    title_UI(ns("canale_title")),
+    title_UI(ns("title")),
     
-    # # 3D switch
-    # absolutePanel(
-    #   id = NS(id, "input_control_overlay"), style =
-    #     "z-index:500; max-height: 88vh; overflow-y: auto; overflow-x:hidden; padding: 5px;",
-    #   class = "panel panel-default", top = 70, right = 50, width = 300,
-    #   materialSwitch(
-    #     inputId = NS(id, "canale_extrude"),
-    #     label = i18n$t("View in 3D"),
-    #     status = "danger",
-    #     value = FALSE
-    #   ),
-    #   hr(),
+    # Right panel
+    absolutePanel(
+      id = ns("right_panel"), style =
+        "z-index:500; max-height: 88vh; overflow-y: auto; overflow-x:hidden; padding: 5px;",
+      class = "panel panel-default", top = 70, right = 50, width = 300,
+      
+      # 3D switch
+      materialSwitch(
+        inputId = ns("extrude"),
+        label = i18n$t("View in 3D"),
+        status = "danger",
+        value = FALSE),
+      
+      hr(),
+      
     # 
     #   # Compare panel
     #   fluidRow(
@@ -88,7 +90,7 @@ canale_UI <- function(id) {
     #     plotOutput(NS(id, "canale_map_right")), height = 250
     #   ),
     #   conditionalPanel(
-    #     condition = "input.canale_extrude == 0", hr(),
+    #     condition = "input.extrude == 0", hr(),
     # 
     #     # Explore panel
     #     fluidRow(
@@ -137,7 +139,7 @@ canale_UI <- function(id) {
     #       htmlOutput(NS(id, "did_you_know"))
     #     )
     #   )
-    # ),
+    ),
     # 
     # # Floating legend
     # absolutePanel(
@@ -160,12 +162,12 @@ canale_server <- function(id) {
     
     # Data
     data_canale <- reactive({
-      #if (input$canale_extrude) {
-      #  data <- data_canale_DA_1
-      #} else 
-      data <- switch(rv_canale$zoom, "OUT" = data_canale_borough, 
-                     "IN" = data_canale_CT, "ISO" = data_canale_DA_1, 
-                     "ISO_2" = data_canale_DA_2)
+      
+      if (input$extrude) {
+       data <- data_canale_DA_1
+      } else data <- switch(rv_canale$zoom, "OUT" = data_canale_borough, 
+                            "IN" = data_canale_CT, "ISO" = data_canale_DA_1, 
+                            "ISO_2" = data_canale_DA_2)
       
       # if (input$data_for_plot_right == " ") {
       data <-
@@ -198,17 +200,15 @@ canale_server <- function(id) {
     })
     
     # Title bar
-    title_server("canale_title", "canale")
+    title_server("title", "canale")
     
     # Zoom level
-    observeEvent(input$canale_map_view_change$zoom, {
+    observeEvent(input$map_view_change$zoom, {
       
       rv_canale$zoom <- case_when(
-        input$canale_map_view_change$zoom >= 10.5 &&
-          input$canale_map_view_change$zoom <= 12 ~ "IN",
-        input$canale_map_view_change$zoom > 12 &&
-          input$canale_map_view_change$zoom < 14 ~ "ISO",
-        input$canale_map_view_change$zoom >= 14 ~ "ISO_2",
+        input$map_view_change$zoom >= 10.5 && input$map_view_change$zoom <= 12 ~ "IN",
+        input$map_view_change$zoom > 12 && input$map_view_change$zoom < 14 ~ "ISO",
+        input$map_view_change$zoom >= 14 ~ "ISO_2",
         TRUE ~ "OUT")
       
       })
@@ -239,8 +239,8 @@ canale_server <- function(id) {
     # ## Observe and change click status -------------------------------------------
     # 
     # # Update poly_selected on click
-    # observeEvent(input$canale_map_polygon_click, {
-    #   lst <- jsonlite::fromJSON(input$canale_map_polygon_click)
+    # observeEvent(input$map_polygon_click, {
+    #   lst <- jsonlite::fromJSON(input$map_polygon_click)
     #   rv_canale$poly_selected <- lst$object$properties$id
     # })
     # 
@@ -274,14 +274,14 @@ canale_server <- function(id) {
     # 
     # ## Observe and react to change in extrude status -----------------------------
     # 
-    # observeEvent(input$canale_extrude, {
+    # observeEvent(input$extrude, {
     #   rz$poly_selected <- NA
     # })
     # 
     # 
     ## Render the map ------------------------------------------------------------
     
-    output$canale_map <- renderMapdeck({
+    output$map <- renderMapdeck({
       mapdeck(
         style = "mapbox://styles/dwachsmuth/ckh6cg4wg05nw19p5yrs9tib7",
         token = paste0(
@@ -707,40 +707,21 @@ canale_server <- function(id) {
 
     observeEvent(
       {
-        data_canale()
+        rv_canale$zoom
         input$tabs
-        # input$canale_extrude
+        input$extrude
       },
       {
-        # if (!input$canale_extrude) {
-        #   mapdeck_update(map_id = NS(id, "canale_map")) %>%
-        #     clear_polygon(layer_id = "extrude") %>%
-        #     add_polygon(
-        #       data = data_bivar(),
-        #       stroke_width = "width",
-        #       stroke_colour = "#FFFFFF",
-        #       fill_colour = "fill_opacity",
-        #       update_view = FALSE,
-        #       layer_id = "polylayer",
-        #       id = "ID",
-        #       auto_highlight = TRUE,
-        #       highlight_colour = "#FFFFFF90",
-        #       legend = FALSE,
-        #       light_settings = list(
-        #         lightsPosition = c(0, 0, 5000),
-        #         numberOfLights = 1,
-        #         ambientRatio = 1
-        #       )
-        #     )
-        # } else {
-          mapdeck_update(map_id = ns("canale_map")) %>%
-            clear_polygon(layer_id = "polylayer") %>%
+        if (!input$extrude) {
+          mapdeck_update(map_id = NS(id, "map")) %>%
+            clear_polygon(layer_id = "extrude") %>%
             add_polygon(
               data = data_canale(),
-              fill_colour = "fill",
-              elevation = "elevation",
+              stroke_width = "width",
+              stroke_colour = "#FFFFFF",
+              fill_colour = "fill_opacity",
               update_view = FALSE,
-              layer_id = "extrude",
+              layer_id = "polylayer",
               id = "ID",
               auto_highlight = TRUE,
               highlight_colour = "#FFFFFF90",
@@ -751,7 +732,26 @@ canale_server <- function(id) {
                 ambientRatio = 1
               )
             )
-        # }
+        } else {
+          mapdeck_update(map_id = NS(id, "map")) %>%
+            clear_polygon(layer_id = "polylayer") %>%
+            add_polygon(
+              data = data_canale(),
+              fill_colour = "fill",
+              elevation = "elevation",
+            update_view = FALSE,
+            layer_id = "extrude",
+            id = "ID",
+            auto_highlight = TRUE,
+            highlight_colour = "#FFFFFF90",
+            legend = FALSE,
+            light_settings = list(
+              lightsPosition = c(0, 0, 5000),
+              numberOfLights = 1,
+              ambientRatio = 1
+            )
+          )
+        }
       }
     )
 
@@ -761,16 +761,16 @@ canale_server <- function(id) {
     # observeEvent(rz$poly_selected, {
     # 
     #   # Mode if not in 3D
-    #   if (!input$canale_extrude) {
-    #     if (!is.na(rz$poly_selected)) {
+    #   if (!input$extrude) {
+    #     if (!is.na(rv_canale$poly_selected)) {
     # 
-    #       # print(paste0("Selecting polygon ", rz$poly_selected))
+    #       # print(paste0("Selecting polygon ", rv_canale$poly_selected))
     # 
-    #       mapdeck_update(map_id = NS(id, "canale_map")) %>%
+    #       mapdeck_update(map_id = NS(id, "map")) %>%
     #         add_polygon(
     #           data = {
-    #             data_bivar() %>%
-    #               filter(ID == rz$poly_selected)
+    #             data_canale() %>%
+    #               filter(ID == rv_canale$poly_selected)
     #           },
     #           stroke_width = "width",
     #           stroke_colour = "#000000",
@@ -792,17 +792,17 @@ canale_server <- function(id) {
     # 
     #       # print("Removing selection")
     # 
-    #       mapdeck_update(map_id = NS(id, "canale_map")) %>%
+    #       mapdeck_update(map_id = NS(id, "map")) %>%
     #         clear_polygon(layer_id = "poly_highlight")
     #     }
     # 
     #     # Mode if in 3D
-    #   } else if (input$canale_extrude) {
+    #   } else if (input$extrude) {
     #     if (!is.na(rz$poly_selected)) {
     # 
     #       # print(paste0("Selecting 3D polygon ", rz$poly_selected))
     # 
-    #       mapdeck_update(map_id = NS(id, "canale_map")) %>%
+    #       mapdeck_update(map_id = NS(id, "map")) %>%
     #         clear_polygon(layer_id = "polylayer") %>%
     #         clear_polygon(layer_id = "extrude") %>%
     #         add_polygon(
@@ -832,7 +832,7 @@ canale_server <- function(id) {
     # 
     #       # print("Removing 3D selection")
     # 
-    #       mapdeck_update(map_id = NS(id, "canale_map")) %>%
+    #       mapdeck_update(map_id = NS(id, "map")) %>%
     #         clear_polygon(layer_id = "poly_highlight") %>%
     #         clear_polygon(layer_id = "extrude") %>%
     #         add_polygon(
