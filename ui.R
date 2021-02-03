@@ -92,7 +92,7 @@ ui <- dashboardPage(
     
     absolutePanel(
       id = "language_button", 
-      style = "z-index = 9998; border-color: #FFFFFF00; background-color: #FFFFFF00;", 
+      style = "z-index: 9998; border-color: #FFFFFF00; background-color: #FFFFFF00;", 
       class = "panel panel-default", top = 10, right = 70, width = 0,
       tagList(usei18n(i18n), actionButton(
         "language_button", label = "English", 
