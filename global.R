@@ -1,6 +1,8 @@
 # Shiny options -----------------------------------------------------------
 
 shinyOptions(cache = diskCache("./app-cache"))
+shinyOptions(cache = cachem::cache_disk("./app-cache"))
+
 
 # Packages ----------------------------------------------------------------
 
@@ -123,7 +125,7 @@ bivariate_color_scale <- tibble(
 color_scale <- tibble(
   "6" = "#73AE80", "5" = "#B8D6BE", "4" = "#E8E8E8", "3" = "#6C83B5",
   "2" = "#B5C0DA", "1" = "#E8E8E8") %>%
-  pivot_longer(everything(), "group", "fill")
+  pivot_longer(everything(), "group", values_to = "fill")
 
 color_scale_2 <- tibble(
   "3" = "#73AE80", "2" = "#B8D6BE", "1" = "#E8E8E8") %>%
@@ -297,8 +299,10 @@ trip_distance <- loadRData("data/Trip_Distance.Rdata")
 
 load("data/cycling_total_final.Rdata")
 
-dropshadow1 <- normalizePath(file.path("www/dropshadow1.png"))
-dropshadow2 <- normalizePath(file.path("www/dropshadow2.png"))
+dropshadow1 <- normalizePath(file.path("www/dropshadow_right.png"))
+dropshadow_right <- normalizePath(file.path("www/dropshadow_right.png"))
+dropshadow2 <- normalizePath(file.path("www/dropshadow_left.png"))
+dropshadow_left <- normalizePath(file.path("www/dropshadow_left.png"))
 
 uni_legend <- normalizePath(file.path("www/Univariate_left.png"))
 uni_legend_right <- normalizePath(file.path("www/Univariate_right.png"))

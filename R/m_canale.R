@@ -6,7 +6,7 @@
 qs::qload("data/canale.qsm")
 
 # Initialize reactive values
-rz <- reactiveValues(zoom = "OUT", poly_selected = NA)
+rv_canale <- reactiveValues(zoom = "OUT", poly_selected = NA)
 data_canale <- reactive(
   data_borough_large %>%
     dplyr::select(ID, name, name_2, population, left_variable_full = ale_index,
@@ -163,13 +163,13 @@ canale_server <- function(id) {
       #if (input$canale_extrude) {
       #  data <- data_DA_1_large
       #} else 
-      if (rz$zoom == "OUT") {
+      if (rv_canale$zoom == "OUT") {
         data <- data_borough_large
-      } else if (rz$zoom == "IN") {
+      } else if (rv_canale$zoom == "IN") {
         data <- data_CT_large
-      } else if (rz$zoom == "ISO") {
+      } else if (rv_canale$zoom == "ISO") {
         data <- data_DA_1_large
-      } else if (rz$zoom == "ISO_2") {
+      } else if (rv_canale$zoom == "ISO_2") {
         data <- data_DA_2_large
       }
       
@@ -208,14 +208,16 @@ canale_server <- function(id) {
     
     # Zoom level
     observeEvent(input$canale_map_view_change$zoom, {
-      rz$zoom <- case_when(
+      
+      rv_canale$zoom <- case_when(
         input$canale_map_view_change$zoom >= 10.5 &&
           input$canale_map_view_change$zoom <= 12 ~ "IN",
         input$canale_map_view_change$zoom > 12 &&
           input$canale_map_view_change$zoom < 14 ~ "ISO",
         input$canale_map_view_change$zoom >= 14 ~ "ISO_2",
         TRUE ~ "OUT")
-    })
+      
+      })
     
     
     # # Drop down list for variable selection -----------------------------------
@@ -245,7 +247,7 @@ canale_server <- function(id) {
     # # Update poly_selected on click
     # observeEvent(input$canale_map_polygon_click, {
     #   lst <- jsonlite::fromJSON(input$canale_map_polygon_click)
-    #   rz$poly_selected <- lst$object$properties$id
+    #   rv_canale$poly_selected <- lst$object$properties$id
     # })
     # 
     # # Clear click status if prompted
@@ -920,7 +922,7 @@ canale_server <- function(id) {
     # 
     
     # Left map
-    # left_map_server("canale_left_map", data_canale)
+    left_map_server("canale", data_canale, reactive(rv_canale$zoom))
 
 
     # ### Plot output calls for all 'right' plots ##################################
