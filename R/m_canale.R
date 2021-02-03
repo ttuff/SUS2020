@@ -3,12 +3,12 @@
 # Data and helper functions -----------------------------------------------
 
 # Load bivariate census data
-qs::qload("data/canale.qsm")
+qs::qload("data/data_canale.qsm")
 
 # Initialize reactive values
 rv_canale <- reactiveValues(zoom = "OUT", poly_selected = NA)
 data_canale <- reactive(
-  data_borough_large %>%
+  data_canale_borough %>%
     dplyr::select(ID, name, name_2, population, left_variable_full = ale_index,
                   left_variable = ale_index_quant3, ale_class, width, group, 
                   fill, elevation, fill_opacity))
@@ -161,11 +161,11 @@ canale_server <- function(id) {
     # Data
     data_canale <- reactive({
       #if (input$canale_extrude) {
-      #  data <- data_DA_1_large
+      #  data <- data_canale_DA_1
       #} else 
-      data <- switch(rv_canale$zoom, "OUT" = data_borough_large, 
-                     "IN" = data_CT_large, "ISO" = data_DA_1_large, 
-                     "ISO_2" = data_DA_2_large)
+      data <- switch(rv_canale$zoom, "OUT" = data_canale_borough, 
+                     "IN" = data_canale_CT, "ISO" = data_canale_DA_1, 
+                     "ISO_2" = data_canale_DA_2)
       
       # if (input$data_for_plot_right == " ") {
       data <-
@@ -703,59 +703,59 @@ canale_server <- function(id) {
     # })
     # 
     # 
-    # ## Update map in response to variable changes, zooming, or options -----------
-    # 
-    # observeEvent(
-    #   {
-    #     data_bivar()
-    #     input$tabs
-    #     input$canale_extrude
-    #   },
-    #   {
-    #     if (!input$canale_extrude) {
-    #       mapdeck_update(map_id = NS(id, "canale_map")) %>%
-    #         clear_polygon(layer_id = "extrude") %>%
-    #         add_polygon(
-    #           data = data_bivar(),
-    #           stroke_width = "width",
-    #           stroke_colour = "#FFFFFF",
-    #           fill_colour = "fill_opacity",
-    #           update_view = FALSE,
-    #           layer_id = "polylayer",
-    #           id = "ID",
-    #           auto_highlight = TRUE,
-    #           highlight_colour = "#FFFFFF90",
-    #           legend = FALSE,
-    #           light_settings = list(
-    #             lightsPosition = c(0, 0, 5000),
-    #             numberOfLights = 1,
-    #             ambientRatio = 1
-    #           )
-    #         )
-    #     } else {
-    #       mapdeck_update(map_id = NS(id, "canale_map")) %>%
-    #         clear_polygon(layer_id = "polylayer") %>%
-    #         add_polygon(
-    #           data = data_bivar(),
-    #           fill_colour = "fill",
-    #           elevation = "elevation",
-    #           update_view = FALSE,
-    #           layer_id = "extrude",
-    #           id = "ID",
-    #           auto_highlight = TRUE,
-    #           highlight_colour = "#FFFFFF90",
-    #           legend = FALSE,
-    #           light_settings = list(
-    #             lightsPosition = c(0, 0, 5000),
-    #             numberOfLights = 1,
-    #             ambientRatio = 1
-    #           )
-    #         )
-    #     }
-    #   }
-    # )
-    # 
-    # 
+    ## Update map in response to variable changes, zooming, or options -----------
+
+    observeEvent(
+      {
+        data_canale()
+        input$tabs
+        # input$canale_extrude
+      },
+      {
+        # if (!input$canale_extrude) {
+        #   mapdeck_update(map_id = NS(id, "canale_map")) %>%
+        #     clear_polygon(layer_id = "extrude") %>%
+        #     add_polygon(
+        #       data = data_bivar(),
+        #       stroke_width = "width",
+        #       stroke_colour = "#FFFFFF",
+        #       fill_colour = "fill_opacity",
+        #       update_view = FALSE,
+        #       layer_id = "polylayer",
+        #       id = "ID",
+        #       auto_highlight = TRUE,
+        #       highlight_colour = "#FFFFFF90",
+        #       legend = FALSE,
+        #       light_settings = list(
+        #         lightsPosition = c(0, 0, 5000),
+        #         numberOfLights = 1,
+        #         ambientRatio = 1
+        #       )
+        #     )
+        # } else {
+          mapdeck_update(map_id = ns("canale_map")) %>%
+            clear_polygon(layer_id = "polylayer") %>%
+            add_polygon(
+              data = data_canale(),
+              fill_colour = "fill",
+              elevation = "elevation",
+              update_view = FALSE,
+              layer_id = "extrude",
+              id = "ID",
+              auto_highlight = TRUE,
+              highlight_colour = "#FFFFFF90",
+              legend = FALSE,
+              light_settings = list(
+                lightsPosition = c(0, 0, 5000),
+                numberOfLights = 1,
+                ambientRatio = 1
+              )
+            )
+        # }
+      }
+    )
+
+
     # ## Update map on click -------------------------------------------------------
     # 
     # observeEvent(rz$poly_selected, {

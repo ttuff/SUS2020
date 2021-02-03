@@ -1,6 +1,7 @@
 ##### SUS SERVER SCRIPT ########################################################
 
 shinyServer(function(input, output, session) {
+  
   # Waiter ------------------------------------------------------------------
   waiter_hide()
   
