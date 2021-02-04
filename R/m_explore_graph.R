@@ -7,7 +7,7 @@ explore_graph_UI <- function(id) {
 explore_graph_server <- function(id, x, select = NULL, title = NULL) {
   stopifnot(is.reactive(x))
   # stopifnot(is.reactive(select))
-  stopifnot(!is.reactive(title))
+  # stopifnot(!is.reactive(title))
   
   moduleServer(id, function(input, output, session) {
     

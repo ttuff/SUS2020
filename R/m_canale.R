@@ -74,7 +74,7 @@ canale_UI <- function(id) {
     # Floating legend
     absolutePanel(
       id = NS(id, "legend_container"), class = "panel panel-default",
-      style = "z-index:500; background-color:rgba(0, 0, 0, 0); color: rgba(0, 0, 0, 0);", 
+      style = "z-index:500; background-color: rgba(0,0,255,0); border-width: 0px;", 
       bottom = 20, left = 260, fixed = TRUE,
       conditionalPanel(
         condition = 'input.var_right != " "', ns = NS(id),

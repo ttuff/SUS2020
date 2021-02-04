@@ -1,22 +1,23 @@
 #### TITLE BAR MODULE ##########################################################
 
 title_UI <- function(id) {
-  ns <- NS(id)
-  
+
   absolutePanel(
     id = "title_bar", class = "panel panel-default", style = "padding:5px;",
     draggable = FALSE, top = 70, left = 270, width = "40%",
-    uiOutput(ns("title")),
-    uiOutput(ns("title_main")),
-    actionLink(ns("more_info"), i18n$t("Learn more")),
+    uiOutput(NS(id, "title")),
+    uiOutput(NS(id, "title_main")),
+    actionLink(NS(id, "more_info"), i18n$t("Learn more")),
     conditionalPanel(
-      condition = "output.more_info_status == 1", ns = ns,
-      uiOutput(ns("title_extra"))
+      condition = "output.more_info_status == 1", ns = NS(id),
+      uiOutput(NS(id, "title_extra"))
     )
   )
 }
 
 title_server <- function(id, x) {
+  stopifnot(!is.reactive(x))
+  
   moduleServer(id, function(input, output, session) {
     
     title <- filter(title_text, tab == x)
