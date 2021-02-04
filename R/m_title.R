@@ -3,8 +3,8 @@
 title_UI <- function(id) {
 
   absolutePanel(
-    id = "title_bar", class = "panel panel-default", style = "padding:5px;",
-    draggable = FALSE, top = 70, left = 270, width = "40%",
+    id = "title_bar", class = "panel panel-default", style = "padding:5px;margin:20px",
+    draggable = FALSE, top = 60, width = "40%", 
     uiOutput(NS(id, "title")),
     uiOutput(NS(id, "title_main")),
     actionLink(NS(id, "more_info"), i18n$t("Learn more")),
