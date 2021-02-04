@@ -13,8 +13,9 @@ explore_graph_server <- function(id, x, select = NULL, title = NULL) {
     
     output$explore_graph <- renderPlot({
       
-      ggplot(x()) +
-        geom_sf()
+      plot(1:4, 1:4)
+    # ggplot(x()) +
+    #   geom_sf()
       
     }, bg = "white")
   })

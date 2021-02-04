@@ -310,6 +310,7 @@ uni_legend_right <- normalizePath(file.path("www/Univariate_right.png"))
 
 # Other prep --------------------------------------------------------------
 
+# This doesn't work with module namespacing TKTK
 module_style <- 
   tags$head(tags$style(HTML("
           #title_bar {border-width: 10px; border-color: rgb(255, 255, 255);}
@@ -319,7 +320,7 @@ module_style <-
           border-width: 0px;}
           #input_control_left2 {background-color: rgba(0,0,255,0.0);
           border-width: 0px;}
-          #canale_legend_container {background-color: rgba(0,0,255,0.0);
+          #legend_container {background-color: rgba(0,0,255,0.0);
           border-width: 0px;}")))
 
 js_ped_1 <- "$(document).ready(function(){
