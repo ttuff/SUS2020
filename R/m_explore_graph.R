@@ -4,19 +4,17 @@ explore_graph_UI <- function(id) {
   plotOutput(NS(id, "explore_graph"), height = 150)
 }
 
-explore_graph_server <- function(id, x, select) {
+explore_graph_server <- function(id, x, select = NULL, title = NULL) {
   stopifnot(is.reactive(x))
-  stopifnot(is.reactive(select))
+  # stopifnot(is.reactive(select))
+  stopifnot(!is.reactive(title))
   
   moduleServer(id, function(input, output, session) {
     
     output$explore_graph <- renderPlot({
       
       ggplot(x()) +
-        geom_sf(aes(fill = as.factor(left_variable)), color = "white", size = 0.01) +
-        scale_fill_manual(values = rev(colors[c(1:3)]), na.value = "grey70") +
-        theme_map() +
-        theme(legend.position = "none")
+        geom_sf()
       
     }, bg = "white")
   })

@@ -28,11 +28,9 @@ title_server <- function(id, x) {
     observe({
       if (input$more_info %% 2 == 1) {
         txt <- sus_translate("Hide")
-      } else {
-        txt <- sus_translate("Learn more")
-      }
+      } else txt <- sus_translate("Learn more")
       updateActionButton(session, "more_info", label = txt)
-    })
+      })
     
     output$title <- 
       renderUI(h2(sus_translate(filter(title, type == "title") %>% pull(text))))
@@ -41,10 +39,6 @@ title_server <- function(id, x) {
       renderUI(p(sus_translate(filter(title, type == "main") %>% pull(text))))
     
     output$title_extra <-
-      renderUI(HTML(
-        sus_translate(
-        filter(title, type == "extra") %>% pull(text)
-        )
-      ))
+      renderUI(HTML(sus_translate(filter(title, type == "extra") %>% pull(text))))
   })
 }
