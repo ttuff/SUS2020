@@ -1,8 +1,7 @@
 #### LEFT MAP MODULE ###########################################################
 
 left_map_UI <- function(id) {
-  ns <- NS(id)
-  plotOutput(ns("left_map"), height = 200)
+  plotOutput(NS(id, "left_map"), height = 200)
 }
 
 left_map_server <- function(id, x, cache_id = x) {
@@ -28,6 +27,3 @@ left_map_server <- function(id, x, cache_id = x) {
     }, bg = "white") %>% bindCache(cache_id())
   })
 }
-
-
-# cacheKeyExpr = paste(rz$zoom, "left", sep = "_"),

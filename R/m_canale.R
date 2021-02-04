@@ -92,15 +92,15 @@ canale_UI <- function(id) {
         
         conditionalPanel(
           condition = "output.hide_explore_status == 1", ns = NS(id),
-          htmlOutput(NS(id, "canale_info")),
+          htmlOutput(NS(id, "info")),
           conditionalPanel(
             condition = "output.poly_selected == 1", ns = NS(id),
             actionLink(inputId = NS(id, "clear_selection"),
                        label = "Clear selection")),
-    #       plotOutput(NS(id, "bivariate_graph"), height = 150)
-        ),
-    #     hr(),
-    # 
+          explore_graph_UI("canale")),
+        
+        hr(),
+
     #     # DYK panel
     #     fluidRow(
     #       column(
@@ -110,13 +110,13 @@ canale_UI <- function(id) {
     #       column(
     #         width = 4, align = "right",
     #         actionLink(
-    #           inputId = NS(id, "canale_hide_dyk"),
+    #           inputId = NS(id, "hide_dyk"),
     #           label = i18n$t("Hide")
     #         )
     #       )
     #     ),
     #     conditionalPanel(
-    #       condition = "output.canale_hide_dyk_status == 1",
+    #       condition = "output.hide_dyk_status == 1",
     #       htmlOutput(NS(id, "did_you_know"))
     #     )
       )
@@ -257,7 +257,7 @@ canale_server <- function(id) {
     
     # ## Render the info table -----------------------------------------------------
     # 
-    # output$canale_info <- renderUI({
+    # output$info <- renderUI({
     #   scale_singular <- case_when(
     #     rv_canale$zoom == "OUT" ~ sus_translate("borough/city"),
     #     rv_canale$zoom == "IN" ~ sus_translate("census tract"),
@@ -528,128 +528,12 @@ canale_server <- function(id) {
     #     }
     #   }
     # })
+
+    # Render the histogram/scatterplot
+    explore_graph_server("canale", data_canale, reactive(rv_canale$poly_selected))
+    
+    
     # 
-    # ## Render the histogram/scatterplot ------------------------------------------
-    # 
-    # output$bivariate_graph <- renderPlot({
-    # 
-    #   # Histogram for a single variable
-    #   if (input$var_right == " ") {
-    # 
-    #     # If no poly is selected
-    #     if (is.na(rv_canale$poly_selected)) {
-    #       data_canale() %>%
-    #         filter(!is.na(left_variable)) %>%
-    #         ggplot(aes(left_variable_full)) +
-    #         geom_histogram(aes(fill = fill), bins = 25) +
-    #         scale_fill_manual(
-    #           values = colors[c(1:3)],
-    #           na.translate = FALSE
-    #         ) +
-    #         labs(x = sus_translate("CanALE index"), y = NULL) +
-    #         theme_minimal() +
-    #         theme(
-    #           legend.position = "none",
-    #           panel.grid.minor.x = element_blank(),
-    #           panel.grid.major.x = element_blank(),
-    #           panel.grid.minor.y = element_blank()
-    #         )
-    # 
-    #       # If there is an active selection
-    #     } else {
-    # 
-    #       # If the selection is NA
-    #       if ({
-    #         data_canale() %>%
-    #           filter(ID == rv_canale$poly_selected) %>%
-    #           filter(!is.na(left_variable)) %>%
-    #           nrow()
-    #       } == 0) {
-    #         data_canale() %>%
-    #           filter(!is.na(left_variable)) %>%
-    #           ggplot(aes(left_variable_full)) +
-    #           geom_histogram(bins = 25, fill = colors[3]) +
-    #           labs(x = "CanALE index", y = NULL) +
-    #           theme_minimal() +
-    #           theme(
-    #             legend.position = "none",
-    #             panel.grid.minor.x = element_blank(),
-    #             panel.grid.major.x = element_blank(),
-    #             panel.grid.minor.y = element_blank()
-    #           )
-    # 
-    #         # If the selection should be plotted
-    #       } else {
-    #         data_canale() %>%
-    #           filter(!is.na(left_variable)) %>%
-    #           ggplot(aes(left_variable_full)) +
-    #           geom_histogram(aes(
-    #             fill = round(left_variable_full) ==
-    #               round(left_variable_full[ID == rv_canale$poly_selected])
-    #           ),
-    #           bins = 25
-    #           ) +
-    #           scale_fill_manual(values = colors[c(3, 1)], na.translate = FALSE) +
-    #           labs(x = "CanALE index", y = NULL) +
-    #           theme_minimal() +
-    #           theme(
-    #             legend.position = "none",
-    #             panel.grid.minor.x = element_blank(),
-    #             panel.grid.major.x = element_blank(),
-    #             panel.grid.minor.y = element_blank()
-    #           )
-    #       }
-    #     }
-    # 
-    #     # Scatterplot for two variables
-    #   } else {
-    #     var_name <-
-    #       sus_translate(variable_explanations %>%
-    #         filter(var_code == input$var_right) %>%
-    #         pull(var_name))
-    # 
-    # 
-    #     if (nrow(filter(data_canale(), ID == rv_canale$poly_selected)) != 1) {
-    #       data_canale() %>%
-    #         drop_na() %>%
-    #         ggplot(aes(left_variable_full, right_variable_full)) +
-    #         geom_point(aes(colour = group)) +
-    #         # geom_smooth(method = "lm", se = FALSE, colour = "grey50") +
-    #         scale_colour_manual(values = deframe(bivariate_color_scale)) +
-    #         labs(x = "CanALE index", y = var_name) +
-    #         theme_minimal() +
-    #         theme(
-    #           legend.position = "none",
-    #           panel.grid.minor.x = element_blank(),
-    #           panel.grid.major.x = element_blank(),
-    #           panel.grid.minor.y = element_blank()
-    #         )
-    #     } else {
-    #       data_canale() %>%
-    #         drop_na() %>%
-    #         ggplot(aes(left_variable_full, right_variable_full)) +
-    #         geom_point(colour = bivariate_color_scale$fill[9]) +
-    #         # geom_smooth(method = "lm", se = FALSE, colour = "grey50") +
-    #         geom_point(
-    #           data = filter(
-    #             data_canale(), ID == rv_canale$poly_selected,
-    #             !is.na(left_variable_full),
-    #             !is.na(right_variable_full)
-    #           ),
-    #           colour = bivariate_color_scale$fill[1],
-    #           size = 3
-    #         ) +
-    #         labs(x = "CanALE index", y = var_name) +
-    #         theme_minimal() +
-    #         theme(
-    #           legend.position = "none",
-    #           panel.grid.minor.x = element_blank(),
-    #           panel.grid.major.x = element_blank(),
-    #           panel.grid.minor.y = element_blank()
-    #         )
-    #     }
-    #   }
-    # })
     # 
     # 
     # ## Render the did-you-knows --------------------------------------------------
@@ -783,40 +667,35 @@ canale_server <- function(id) {
     output$hide_compare_status <- reactive(input$hide_compare %% 2 == 0)
     outputOptions(output, "hide_compare_status", suspendWhenHidden = FALSE)
 
-    # observeEvent(input$hide_compare, {
-    #   if (input$hide_compare %% 2 == 0) {
-    #     txt <- sus_translate("Hide")
-    #   } else {
-    #     txt <- sus_translate("Show")
-    #   }
-    #   updateActionButton(session, "hide_compare", label = txt)
-    # })
-    # 
-    # # Hide explore status
-    # output$hide_explore_status <-
-    #   reactive(input$hide_explore %% 2 == 0)
-    # outputOptions(output, "hide_explore_status", suspendWhenHidden = FALSE)
-    # 
-    # observeEvent(input$hide_explore, {
-    #   if (input$hide_explore %% 2 == 0) {
-    #     txt <- sus_translate("Hide")
-    #   } else {
-    #     txt <- sus_translate("Show")
-    #   }
-    #   updateActionButton(session, "hide_explore", label = txt)
-    # })
-    # 
+    observeEvent(input$hide_compare, {
+      if (input$hide_compare %% 2 == 0) {
+        txt <- sus_translate("Hide")
+      } else txt <- sus_translate("Show")
+      updateActionButton(session, "hide_compare", label = txt)
+      })
+
+    # Hide explore status
+    output$hide_explore_status <- reactive(input$hide_explore %% 2 == 0)
+    outputOptions(output, "hide_explore_status", suspendWhenHidden = FALSE)
+
+    observeEvent(input$hide_explore, {
+      if (input$hide_explore %% 2 == 0) {
+        txt <- sus_translate("Hide")
+      } else txt <- sus_translate("Show")
+      updateActionButton(session, "hide_explore", label = txt)
+      })
+
     # # Hide DYK status
-    # output$canale_hide_dyk_status <- reactive(input$canale_hide_dyk %% 2 == 0)
-    # outputOptions(output, "canale_hide_dyk_status", suspendWhenHidden = FALSE)
+    # output$hide_dyk_status <- reactive(input$hide_dyk %% 2 == 0)
+    # outputOptions(output, "hide_dyk_status", suspendWhenHidden = FALSE)
     # 
-    # observeEvent(input$canale_hide_dyk, {
-    #   if (input$canale_hide_dyk %% 2 == 0) {
+    # observeEvent(input$hide_dyk, {
+    #   if (input$hide_dyk %% 2 == 0) {
     #     txt <- sus_translate("Hide")
     #   } else {
     #     txt <- sus_translate("Show")
     #   }
-    #   updateActionButton(session, "canale_hide_dyk", label = txt)
+    #   updateActionButton(session, "hide_dyk", label = txt)
     # })
     # 
     
