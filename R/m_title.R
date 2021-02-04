@@ -3,7 +3,7 @@
 title_UI <- function(id) {
 
   absolutePanel(
-    id = "title_bar", class = "panel panel-default", style = "margin:20px",
+    id = "title_bar", class = "panel panel-default", style = "margin:10px",
     draggable = FALSE, top = 60, width = "40%", 
     uiOutput(NS(id, "title")),
     uiOutput(NS(id, "title_main")),

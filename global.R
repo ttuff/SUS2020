@@ -120,7 +120,7 @@ bivariate_color_scale <- tibble(
   "3 - 3" = "#2A5A5B", "2 - 3" = "#567994", "1 - 3" = "#6C83B5", 
   "3 - 2" = "#5A9178", "2 - 2" = "#90B2B3", "1 - 2" = "#B5C0DA",
   "3 - 1" = "#73AE80", "2 - 1" = "#B8D6BE", "1 - 1" = "#E8E8E8") %>%
-  pivot_longer(everything(), "group", "fill")
+  pivot_longer(everything(), "group",values_to = "fill")
 
 color_scale <- tibble(
   "6" = "#73AE80", "5" = "#B8D6BE", "4" = "#E8E8E8", "3" = "#6C83B5",
