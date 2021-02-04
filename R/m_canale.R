@@ -52,12 +52,12 @@ canale_UI <- function(id) {
         
         conditionalPanel(
           condition = "output.hide_explore_status == 1", ns = NS(id),
-          info_table_UI("canale"),
+          info_table_UI(NS(id, "canale")),
+          explore_graph_UI(NS(id, "canale")),
           conditionalPanel(
             condition = "output.poly_selected == 1", ns = NS(id),
             actionLink(inputId = NS(id, "clear_selection"),
-                       label = "Clear selection")),
-          explore_graph_UI("canale")),
+                       label = "Clear selection"))),
         
         hr(),
 
@@ -74,8 +74,8 @@ canale_UI <- function(id) {
     # Floating legend
     absolutePanel(
       id = NS(id, "legend_container"), class = "panel panel-default",
-      style = "z-index:500; background-color: rgba(0,0,255,0); border-width: 0px;", 
-      bottom = 20, left = 260, fixed = TRUE,
+      style = "z-index:500; background-color: rgba(0,0,255,0); border-width: 0px; margin:10px", 
+      bottom = 20, fixed = TRUE,
       conditionalPanel(
         condition = 'input.var_right != " "', ns = NS(id),
         id = NS(id, "legend"),
@@ -151,7 +151,9 @@ canale_server <- function(id) {
     # Update poly_selected on click
     observeEvent(input$map_polygon_click, {
       lst <- jsonlite::fromJSON(input$map_polygon_click)
-      rv_canale$poly_selected <- lst$object$properties$id
+      if (is.null(lst$object$properties$id)) {
+        rv_canale$poly_selected <- NA
+        } else rv_canale$poly_selected <- lst$object$properties$id
       })
 
     # Clear click status if prompted
@@ -192,16 +194,16 @@ canale_server <- function(id) {
       })
     
     # Render info table
-    info_table_server("canale")
+    info_table_server("canale", data_canale, reactive(input$var_right),
+                      reactive(rv_canale$poly_selected), 
+                      reactive(rv_canale$zoom), "CanALE index")
     
     # Render the histogram/scatterplot
-    explore_graph_server("canale", data_canale#, reactive(rv_canale$poly_selected)
-                         )
+    explore_graph_server("canale", data_canale, reactive(input$var_right), 
+                         reactive(rv_canale$poly_selected), "CanALE index")
     
     
-    # 
-    # 
-    # 
+
     # ## Render the did-you-knows --------------------------------------------------
     # 
     # output$did_you_know <- renderUI({
