@@ -61,27 +61,16 @@ canale_UI <- function(id) {
         
         hr(),
 
-    #     # DYK panel
-    #     fluidRow(
-    #       column(
-    #         width = 8,
-    #         h4(i18n$t("Did you know?"))
-    #       ),
-    #       column(
-    #         width = 4, align = "right",
-    #         actionLink(
-    #           inputId = NS(id, "hide_dyk"),
-    #           label = i18n$t("Hide")
-    #         )
-    #       )
-    #     ),
-    #     conditionalPanel(
-    #       condition = "output.hide_dyk_status == 1",
-    #       htmlOutput(NS(id, "did_you_know"))
-    #     )
-      )
-    ),
-    # 
+        # DYK panel
+        fluidRow(
+          column(width = 7, h4(i18n$t("Did you know?"))),
+          column(width = 5, align = "right",
+                 actionLink(inputId = NS(id, "hide_dyk"), label = i18n$t("Hide")))),
+        conditionalPanel(
+          condition = "output.hide_dyk_status == 1",
+          htmlOutput(NS(id, "did_you_know"))))
+      ),
+
     # Floating legend
     absolutePanel(
       id = NS(id, "legend_container"), class = "panel panel-default",
@@ -159,15 +148,6 @@ canale_server <- function(id) {
       )
     })
 
-    # 
-    # # did_you_know <-
-    # #   read_csv("data/did_you_know.csv") %>%
-    # #   mutate(right_variable = if_else(is.na(right_variable), " ", right_variable))
-    # #
-    # # variable_explanations <-
-    # #   read_csv("data/variable_explanations.csv")
-    # #
-    # 
     
     ## Observe and change click status -------------------------------------------
 
@@ -608,22 +588,6 @@ canale_server <- function(id) {
       }
     })
 
-
-    # ## Update link text ----------------------------------------------------------
-    # 
-    # # More info
-    # output$more_info_status <- reactive(input$more_info %% 2 == 1)
-    # outputOptions(output, "more_info_status", suspendWhenHidden = FALSE)
-    # 
-    # observe({
-    #   if (input$more_info %% 2 == 1) {
-    #     txt <- sus_translate("Hide")
-    #   } else {
-    #     txt <- sus_translate("Learn more")
-    #   }
-    #   updateActionButton(session, "more_info", label = txt)
-    # })
-
     # Hide compare status
     output$hide_compare_status <- reactive(input$hide_compare %% 2 == 0)
     outputOptions(output, "hide_compare_status", suspendWhenHidden = FALSE)
@@ -646,20 +610,17 @@ canale_server <- function(id) {
       updateActionButton(session, "hide_explore", label = txt)
       })
 
-    # # Hide DYK status
-    # output$hide_dyk_status <- reactive(input$hide_dyk %% 2 == 0)
-    # outputOptions(output, "hide_dyk_status", suspendWhenHidden = FALSE)
-    # 
-    # observeEvent(input$hide_dyk, {
-    #   if (input$hide_dyk %% 2 == 0) {
-    #     txt <- sus_translate("Hide")
-    #   } else {
-    #     txt <- sus_translate("Show")
-    #   }
-    #   updateActionButton(session, "hide_dyk", label = txt)
-    # })
-    # 
-    
+    # Hide DYK status
+    output$hide_dyk_status <- reactive(input$hide_dyk %% 2 == 0)
+    outputOptions(output, "hide_dyk_status", suspendWhenHidden = FALSE)
+
+    observeEvent(input$hide_dyk, {
+      if (input$hide_dyk %% 2 == 0) {
+        txt <- sus_translate("Hide")
+      } else txt <- sus_translate("Show")
+      updateActionButton(session, "hide_dyk", label = txt)
+      })
+
     # Left map
     left_map_server("canale", data_canale, reactive(rv_canale$zoom))
 
