@@ -389,10 +389,10 @@ translation_fr <-
                       "autochtones que dans les autres juridictions, nous ne ",
                       "pouvons donc pas afficher de résultats ici.")) %>%
   # CanALE active living potential
-  add_row(en = "CanALE index", fr = "Index AVA-Can") %>% 
+  add_row(en = "CanALE index", fr = "Indice AVA-Can") %>% 
   add_row(en = "View in 3D", fr = "Voir en 3D") %>% 
   add_row(en = "Active living potential: the CanALE index",
-          fr = "Potentiel de vie active: l'index AVA-Can") %>% 
+          fr = "Potentiel de vie active: l'indice AVA-Can") %>% 
   add_row(en = paste0("<strong>{place_heading}</strong>", 
                       
                       "<p>{place_name} has a population of ",
@@ -406,12 +406,12 @@ translation_fr <-
           fr = paste0("<strong>{place_heading}</strong>", 
                       
                       "<p>{place_name} a une population de ",
-                      "{prettyNum(dat$population, ',')} et un score d'index ",
+                      "{prettyNum(dat$population, ',')} et un score d'indice ",
                       "AVA-Can de {round(poly_value, 2)}, ce qui est {larger_smaller} ",
                       "la médiane régionale de {median_val}.", 
                       
                       "<p>{place_name} a un potentiel {poor_strong} de vie ", 
-                      "active, avec un score d'index AVA-Can plus grand que {percentile}% ",
+                      "active, avec un score d'indice AVA-Can plus grand que {percentile}% ",
                       "des {scale_plural} dans la région de Montréal.")) %>% 
   # Correlation explanation
   add_row(en = paste0("<p>{var_explanation}", 
@@ -644,7 +644,7 @@ translation_fr <-
   add_row(en = paste0("While, overall, there is a trend towards lower income DAs being in high ALE class, roughly ",
                       "340,000 people are in CanALE class 3 or lower AND have median household income less than $50,000."),
           fr = paste0("Alors que, généralement, on observe une tendance à ce que les AD à faible revenu fassent partie ",
-                      "de la classe AVA élevée, environ 340 000 personnes font partie de la classe CanALE 3 ou moins et ",
+                      "de la classe AVA élevée, environ 340 000 personnes font partie de la classe AVA-Can 3 ou moins et ",
                       "ont un revenu par ménage médian inférieur à 50 000 $.")) %>% 
   add_row(en = paste0("Areas in class 4 of active living potential have the highest average dwelling values, but nearly ",
                       "10% fewer renters than areas with active living class 5."),
