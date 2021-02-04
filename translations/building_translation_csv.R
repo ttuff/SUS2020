@@ -444,12 +444,12 @@ translation_fr <-
   add_row(en = paste0("<strong>{place_heading}</strong>", 
                       
                       "<p>{place_name} has a population of ",
-                      "{prettyNum(dat$population, ',')}, a CanALE index score ",
+                      "{prettyNum(dat$population, ',')}, a {title} score ",
                       "of {round(poly_value_1, 2)}, and a '{tolower(var_name)}' ",
                       "value of {round(poly_value_2, 2)}. ",
                       
                       "<p>These two scores are {relative_position}, in relative ",
-                      "terms. {place_name} has a CanALE index score higher ",
+                      "terms. {place_name} has a {title} score higher ",
                       "than {percentile_left}% of {scale_plural} and ",
                       "a '{tolower(var_name)}' score higher than ", 
                       "{percentile_right}% of {scale_plural} in the ",
@@ -457,12 +457,12 @@ translation_fr <-
           fr = paste0("<strong>{place_heading}</strong>", 
                       
                       "<p>{place_name} a une population de ",
-                      "{prettyNum(dat$population, ',')}, un score d'index AVA-Can ",
+                      "{prettyNum(dat$population, ',')}, un score {title} ",
                       "de {round(poly_value_1, 2)}, et une valeur pour la variable '{tolower(var_name)}' ",
                       "de {round(poly_value_2, 2)}. ",
                       
                       "<p>Ces deux scores sont {relative_position}, en termes ",
-                      "relatifs. {place_name} a un score d'index AVA-Can plus grand ",
+                      "relatifs. {place_name} a un score {title} plus grand ",
                       "que {percentile_left}% des {scale_plural} et ",
                       "un score pour la variable '{tolower(var_name)}' plus grand que ", 
                       "{percentile_right}% des {scale_plural} dans la ",
