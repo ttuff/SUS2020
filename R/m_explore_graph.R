@@ -81,7 +81,6 @@ explore_graph_server <- function(id, x, var_right, select, title) {
             drop_na() %>%
             ggplot(aes(left_variable_full, right_variable_full)) +
             geom_point(aes(colour = group)) +
-            # geom_smooth(method = "lm", se = FALSE, colour = "grey50") +
             scale_colour_manual(values = deframe(bivariate_color_scale)) +
             labs(x = title, y = var_name) +
             theme_minimal() +
@@ -95,7 +94,6 @@ explore_graph_server <- function(id, x, var_right, select, title) {
             drop_na() %>%
             ggplot(aes(left_variable_full, right_variable_full)) +
             geom_point(colour = bivariate_color_scale$fill[9]) +
-            geom_smooth(method = "lm", se = FALSE, colour = "grey50") +
             geom_point(data = filter(x(), ID == select(), 
                                      !is.na(left_variable_full),
                                      !is.na(right_variable_full)),

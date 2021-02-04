@@ -53,11 +53,11 @@ canale_UI <- function(id) {
         conditionalPanel(
           condition = "output.hide_explore_status == 1", ns = NS(id),
           info_table_UI(NS(id, "canale")),
+          explore_graph_UI(NS(id, "canale")),
           conditionalPanel(
             condition = "output.poly_selected == 1", ns = NS(id),
             actionLink(inputId = NS(id, "clear_selection"),
-                       label = "Clear selection")),
-          explore_graph_UI(NS(id, "canale"))),
+                       label = "Clear selection"))),
         
         hr(),
 
@@ -194,8 +194,9 @@ canale_server <- function(id) {
       })
     
     # Render info table
-    info_table_server("canale"#, reactive(rv_canale$poly_selected), "CanALE index"
-                      )
+    info_table_server("canale", data_canale, reactive(input$var_right),
+                      reactive(rv_canale$poly_selected), 
+                      reactive(rv_canale$zoom), "CanALE index")
     
     # Render the histogram/scatterplot
     explore_graph_server("canale", data_canale, reactive(input$var_right), 
