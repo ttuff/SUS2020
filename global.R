@@ -458,9 +458,6 @@ styler <- '
 rz_pedestrian <- reactiveValues(zoom = 'OUT',
                                 poly_selected = NA)
 
-rz <- reactiveValues(zoom = 'OUT',
-                     poly_selected = NA)
-
 
 
 # Commute mode change globals ---------------------------------------------

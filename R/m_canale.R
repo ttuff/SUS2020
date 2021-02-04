@@ -14,7 +14,7 @@ data_canale <- reactive(
                   fill, elevation, fill_opacity))
 
 # Dropdown menu
-var_list <- 
+var_right_list <- 
   list("----" = " ", 
        "Housing" = list("Tenant-occupied (%)" = "tenant_prop",
                         "Average rent" = "avg_rent",
@@ -56,7 +56,7 @@ canale_UI <- function(id) {
     absolutePanel(
       id = NS(id, "right_panel"), style =
         "z-index:500; max-height: 88vh; overflow-y: auto; overflow-x:hidden; padding: 5px;",
-      class = "panel panel-default", top = 70, right = 50, width = 300,
+      class = "panel panel-default", top = 70, right = 20, width = 300,
       
       # 3D switch
       materialSwitch(
@@ -69,45 +69,36 @@ canale_UI <- function(id) {
 
       # Compare panel
       fluidRow(
-        column(width = 8, h4(i18n$t("Compare"))),
-        column(width = 4, align = "right", 
+        column(width = 7, h4(i18n$t("Compare"))),
+        column(width = 5, align = "right", 
                actionLink(inputId = NS(id, "hide_compare"),
                           label = i18n$t("Hide")))),
       
       conditionalPanel(
         condition = "output.hide_compare_status == 1", ns = NS(id),
-        selectInput(NS(id, "data_for_plot_right"),
-                    label = NULL, choices = var_list),
+        selectInput(NS(id, "var_right"),
+                    label = NULL, choices = var_right_list),
         plotOutput(NS(id, "map_right"), height = 200)),
-    #   conditionalPanel(
-    #     condition = "input.extrude == 0", hr(),
-    # 
-    #     # Explore panel
-    #     fluidRow(
-    #       column(
-    #         width = 8,
-    #         h4(i18n$t("Explore"))
-    #       ),
-    #       column(
-    #         width = 4, align = "right",
-    #         actionLink(
-    #           inputId = NS(id, "canale_hide_explore"),
-    #           label = i18n$t("Hide")
-    #         )
-    #       )
-    #     ),
-    #     conditionalPanel(
-    #       condition = "output.canale_hide_explore_status == 1",
-    #       htmlOutput(NS(id, "canale_info")),
-    #       conditionalPanel(
-    #         condition = "output.canale_poly_selected == 1",
-    #         actionLink(
-    #           inputId = NS(id, "canale_clear_selection"),
-    #           label = "Clear selection"
-    #         )
-    #       ),
+      
+      conditionalPanel(
+        condition = "input.extrude == 0", ns = NS(id), hr(),
+
+        # Explore panel
+        fluidRow(
+          column(width = 7, h4(i18n$t("Explore"))),
+          column(width = 5, align = "right",
+                 actionLink(inputId = NS(id, "hide_explore"), 
+                            label = i18n$t("Hide")))),
+        
+        conditionalPanel(
+          condition = "output.hide_explore_status == 1", ns = NS(id),
+          htmlOutput(NS(id, "canale_info")),
+          conditionalPanel(
+            condition = "output.poly_selected == 1", ns = NS(id),
+            actionLink(inputId = NS(id, "clear_selection"),
+                       label = "Clear selection")),
     #       plotOutput(NS(id, "bivariate_graph"), height = 150)
-    #     ),
+        ),
     #     hr(),
     # 
     #     # DYK panel
@@ -128,19 +119,19 @@ canale_UI <- function(id) {
     #       condition = "output.canale_hide_dyk_status == 1",
     #       htmlOutput(NS(id, "did_you_know"))
     #     )
-    #   )
+      )
     ),
     # 
-    # # Floating legend
-    # absolutePanel(
-    #   id = NS(id, "canale_legend_container"), class = "panel panel-default",
-    #   style = "z-index:500;", bottom = -200, left = 270, fixed = TRUE,
-    #   conditionalPanel(
-    #     condition = 'input.data_for_plot_right != " "', 
-    #     id = NS(id, "canale_legend"),
-    #     img(src = "bivariate_legend_2.png", width = 200, height = 177)
-    #   )
-    # )
+    # Floating legend
+    absolutePanel(
+      id = NS(id, "legend_container"), class = "panel panel-default",
+      style = "z-index:500; background-color:rgba(0, 0, 0, 0); color: rgba(0, 0, 0, 0);", 
+      bottom = 20, left = 260, fixed = TRUE,
+      conditionalPanel(
+        condition = 'input.var_right != " "', ns = NS(id),
+        id = NS(id, "legend"),
+        img(src = "bivariate_legend_2.png", width = 200, height = 177))
+      )
   )
 }
 
@@ -159,7 +150,7 @@ canale_server <- function(id) {
                             "IN" = data_canale_CT, "ISO" = data_canale_DA_1, 
                             "ISO_2" = data_canale_DA_2)
       
-      if (input$data_for_plot_right == " ") {
+      if (input$var_right == " ") {
         data <-
           data %>%
           dplyr::select(ID, name, name_2, population,
@@ -173,12 +164,12 @@ canale_server <- function(id) {
             dplyr::select(
               ID, name, name_2, population,
               left_variable_full = ale_index, left_variable = ale_index_quant3, 
-              ale_class, right_variable_full = input$data_for_plot_right, 
-              right_variable = paste0(input$data_for_plot_right, "_quant3"), 
-              width, group = paste0(input$data_for_plot_right, "_quant3_group"),
-              fill = paste0(input$data_for_plot_right, "_quant3_fill"),
-              elevation = paste0(input$data_for_plot_right, "_quant3_elevation"),
-              fill_opacity = paste0(input$data_for_plot_right, 
+              ale_class, right_variable_full = input$var_right, 
+              right_variable = paste0(input$var_right, "_quant3"), 
+              width, group = paste0(input$var_right, "_quant3_group"),
+              fill = paste0(input$var_right, "_quant3_fill"),
+              elevation = paste0(input$var_right, "_quant3_elevation"),
+              fill_opacity = paste0(input$var_right, 
                                     "_quant3_fill_opacity"))
           }
       
@@ -203,8 +194,8 @@ canale_server <- function(id) {
     observe({
       updateSelectInput(
         session = session,
-        inputId = "data_for_plot_right",
-        choices = sus_translate(var_list)
+        inputId = "var_right",
+        choices = sus_translate(var_right_list)
       )
     })
 
@@ -217,50 +208,35 @@ canale_server <- function(id) {
     # #   read_csv("data/variable_explanations.csv")
     # #
     # 
-    # 
-    # ## Observe and change click status -------------------------------------------
-    # 
-    # # Update poly_selected on click
-    # observeEvent(input$map_polygon_click, {
-    #   lst <- jsonlite::fromJSON(input$map_polygon_click)
-    #   rv_canale$poly_selected <- lst$object$properties$id
-    # })
-    # 
-    # # Clear click status if prompted
-    # observeEvent(input$canale_clear_selection, {
-    #   rz$poly_selected <- NA
-    # })
-    # 
-    # # Output polygon select status
-    # output$canale_poly_selected <- reactive({
-    #   if (is.na(rz$poly_selected)) FALSE else TRUE
-    # })
-    # outputOptions(output, "canale_poly_selected", suspendWhenHidden = FALSE)
-    # 
-    # # Clear polygon select on zoom change
-    # observeEvent(rz$zoom,
-    #   {
-    #     rz$poly_selected <- NA
-    #   },
-    #   ignoreInit = TRUE
-    # )
-    # 
-    # # Clear polygon select on tab change
-    # observeEvent(input$tabs,
-    #   {
-    #     rz$poly_selected <- NA
-    #   },
-    #   ignoreInit = TRUE
-    # )
-    # 
-    # 
-    # ## Observe and react to change in extrude status -----------------------------
-    # 
-    # observeEvent(input$extrude, {
-    #   rz$poly_selected <- NA
-    # })
-    # 
-    # 
+    
+    ## Observe and change click status -------------------------------------------
+
+    # Update poly_selected on click
+    observeEvent(input$map_polygon_click, {
+      lst <- jsonlite::fromJSON(input$map_polygon_click)
+      rv_canale$poly_selected <- lst$object$properties$id
+      })
+
+    # Clear click status if prompted
+    observeEvent(input$clear_selection, {rv_canale$poly_selected <- NA})
+
+    # Output polygon select status
+    output$poly_selected <- reactive({
+      if (is.na(rv_canale$poly_selected)) FALSE else TRUE
+      })
+    outputOptions(output, "poly_selected", suspendWhenHidden = FALSE)
+
+    # Clear polygon select on zoom change
+    observeEvent(rv_canale$zoom, {rv_canale$poly_selected <- NA},
+                 ignoreInit = TRUE)
+
+    # Clear polygon select on tab change
+    observeEvent(input$tabs, {rv_canale$poly_selected <- NA}, ignoreInit = TRUE)
+
+    # Observe and react to change in extrude status
+    observeEvent(input$extrude, {rv_canale$poly_selected <- NA})
+
+
     ## Render the map ------------------------------------------------------------
     
     output$map <- renderMapdeck({
@@ -283,8 +259,8 @@ canale_server <- function(id) {
     # 
     # output$canale_info <- renderUI({
     #   scale_singular <- case_when(
-    #     rz$zoom == "OUT" ~ sus_translate("borough/city"),
-    #     rz$zoom == "IN" ~ sus_translate("census tract"),
+    #     rv_canale$zoom == "OUT" ~ sus_translate("borough/city"),
+    #     rv_canale$zoom == "IN" ~ sus_translate("census tract"),
     #     TRUE ~ sus_translate("dissemination area")
     #   )
     # 
@@ -295,12 +271,12 @@ canale_server <- function(id) {
     #   )
     # 
     #   vec <-
-    #     data_bivar() %>%
+    #     data_canale() %>%
     #     filter(!is.na(left_variable), !is.na(left_variable_full)) %>%
     #     pull(left_variable_full)
     # 
     #   # Univariate case
-    #   if (input$data_for_plot_right == " ") {
+    #   if (input$var_right == " ") {
     #     # print("stats")
     #     min_val <- round(min(vec), 2)
     #     max_val <- round(max(vec), 2)
@@ -311,7 +287,7 @@ canale_server <- function(id) {
     #     quant_high <- round(quantile(vec, c(1 / 3, 2 / 3))[2], 2)
     # 
     #     # Case for no poly selected
-    #     if (is.na(rz$poly_selected)) {
+    #     if (is.na(rv_canale$poly_selected)) {
     #       HTML(
     #         glue(sus_translate(paste0(
     #           "At the {scale_singular} scale, the CanALE index varies from ",
@@ -324,7 +300,7 @@ canale_server <- function(id) {
     # 
     #       # Case for selected poly
     #     } else {
-    #       dat <- data_bivar() %>% filter(ID == rz$poly_selected)
+    #       dat <- data_canale() %>% filter(ID == rv_canale$poly_selected)
     # 
     #       place_name <- case_when(
     #         scale_singular == sus_translate("borough/city") ~
@@ -402,18 +378,18 @@ canale_server <- function(id) {
     #   } else {
     #     var_name <-
     #       sus_translate(variable_explanations %>%
-    #         filter(var_code == input$data_for_plot_right) %>%
+    #         filter(var_code == input$var_right) %>%
     #         pull(var_name))
     # 
     #     var_explanation <-
     #       sus_translate(variable_explanations %>%
-    #         filter(var_code == input$data_for_plot_right) %>%
+    #         filter(var_code == input$var_right) %>%
     #         pull(explanation))
     # 
     #     correlation <-
     #       cor(
-    #         data_bivar()$left_variable_full,
-    #         data_bivar()$right_variable_full
+    #         data_canale()$left_variable_full,
+    #         data_canale()$right_variable_full
     #       ) %>%
     #       round(2)
     # 
@@ -438,7 +414,7 @@ canale_server <- function(id) {
     #     )
     # 
     #     # Case for no poly selected
-    #     if (is.na(rz$poly_selected)) {
+    #     if (is.na(rv_canale$poly_selected)) {
     #       # print("2nd order")
     #       # If correlation is close to zero
     #       if (correlation < 0.05 && correlation > -0.05) {
@@ -468,10 +444,10 @@ canale_server <- function(id) {
     # 
     #       # Case for poly selected
     #     } else {
-    #       dat <- data_bivar() %>% filter(ID == rz$poly_selected)
+    #       dat <- data_canale() %>% filter(ID == rv_canale$poly_selected)
     # 
     #       vec_2 <-
-    #         data_bivar() %>%
+    #         data_canale() %>%
     #         filter(!is.na(right_variable), !is.na(right_variable_full)) %>%
     #         pull(right_variable_full)
     # 
@@ -558,11 +534,11 @@ canale_server <- function(id) {
     # output$bivariate_graph <- renderPlot({
     # 
     #   # Histogram for a single variable
-    #   if (input$data_for_plot_right == " ") {
+    #   if (input$var_right == " ") {
     # 
     #     # If no poly is selected
-    #     if (is.na(rz$poly_selected)) {
-    #       data_bivar() %>%
+    #     if (is.na(rv_canale$poly_selected)) {
+    #       data_canale() %>%
     #         filter(!is.na(left_variable)) %>%
     #         ggplot(aes(left_variable_full)) +
     #         geom_histogram(aes(fill = fill), bins = 25) +
@@ -584,12 +560,12 @@ canale_server <- function(id) {
     # 
     #       # If the selection is NA
     #       if ({
-    #         data_bivar() %>%
-    #           filter(ID == rz$poly_selected) %>%
+    #         data_canale() %>%
+    #           filter(ID == rv_canale$poly_selected) %>%
     #           filter(!is.na(left_variable)) %>%
     #           nrow()
     #       } == 0) {
-    #         data_bivar() %>%
+    #         data_canale() %>%
     #           filter(!is.na(left_variable)) %>%
     #           ggplot(aes(left_variable_full)) +
     #           geom_histogram(bins = 25, fill = colors[3]) +
@@ -604,12 +580,12 @@ canale_server <- function(id) {
     # 
     #         # If the selection should be plotted
     #       } else {
-    #         data_bivar() %>%
+    #         data_canale() %>%
     #           filter(!is.na(left_variable)) %>%
     #           ggplot(aes(left_variable_full)) +
     #           geom_histogram(aes(
     #             fill = round(left_variable_full) ==
-    #               round(left_variable_full[ID == rz$poly_selected])
+    #               round(left_variable_full[ID == rv_canale$poly_selected])
     #           ),
     #           bins = 25
     #           ) +
@@ -629,12 +605,12 @@ canale_server <- function(id) {
     #   } else {
     #     var_name <-
     #       sus_translate(variable_explanations %>%
-    #         filter(var_code == input$data_for_plot_right) %>%
+    #         filter(var_code == input$var_right) %>%
     #         pull(var_name))
     # 
     # 
-    #     if (nrow(filter(data_bivar(), ID == rz$poly_selected)) != 1) {
-    #       data_bivar() %>%
+    #     if (nrow(filter(data_canale(), ID == rv_canale$poly_selected)) != 1) {
+    #       data_canale() %>%
     #         drop_na() %>%
     #         ggplot(aes(left_variable_full, right_variable_full)) +
     #         geom_point(aes(colour = group)) +
@@ -649,14 +625,14 @@ canale_server <- function(id) {
     #           panel.grid.minor.y = element_blank()
     #         )
     #     } else {
-    #       data_bivar() %>%
+    #       data_canale() %>%
     #         drop_na() %>%
     #         ggplot(aes(left_variable_full, right_variable_full)) +
     #         geom_point(colour = bivariate_color_scale$fill[9]) +
     #         # geom_smooth(method = "lm", se = FALSE, colour = "grey50") +
     #         geom_point(
     #           data = filter(
-    #             data_bivar(), ID == rz$poly_selected,
+    #             data_canale(), ID == rv_canale$poly_selected,
     #             !is.na(left_variable_full),
     #             !is.na(right_variable_full)
     #           ),
@@ -680,7 +656,7 @@ canale_server <- function(id) {
     # 
     # output$did_you_know <- renderUI({
     #   sus_translate(did_you_know %>%
-    #     filter(right_variable == input$data_for_plot_right) %>%
+    #     filter(right_variable == input$var_right) %>%
     #     slice_sample(n = 2) %>%
     #     pull(text)) %>%
     #     paste("<li> ", ., collapse = "") %>%
@@ -692,7 +668,7 @@ canale_server <- function(id) {
     ## Update map in response to variable changes, zooming, or options -----------
 
     observeEvent({
-      input$data_for_plot_right
+      input$var_right
       rv_canale$zoom
       input$extrude}, {
         if (!input$extrude) {
@@ -720,108 +696,74 @@ canale_server <- function(id) {
       )
 
 
-    # ## Update map on click -------------------------------------------------------
-    # 
-    # observeEvent(rz$poly_selected, {
-    # 
-    #   # Mode if not in 3D
-    #   if (!input$extrude) {
-    #     if (!is.na(rv_canale$poly_selected)) {
-    # 
-    #       # print(paste0("Selecting polygon ", rv_canale$poly_selected))
-    # 
-    #       mapdeck_update(map_id = NS(id, "map")) %>%
-    #         add_polygon(
-    #           data = {
-    #             data_canale() %>%
-    #               filter(ID == rv_canale$poly_selected)
-    #           },
-    #           stroke_width = "width",
-    #           stroke_colour = "#000000",
-    #           fill_colour = "fill",
-    #           update_view = FALSE,
-    #           layer_id = "poly_highlight",
-    #           auto_highlight = TRUE,
-    #           highlight_colour = "#FFFFFF90",
-    #           legend = FALSE,
-    #           light_settings = list(
-    #             lightsPosition = c(0, 0, 5000),
-    #             numberOfLights = 1,
-    #             ambientRatio = 1
-    #           )
-    #         )
-    #     }
-    # 
-    #     if (is.na(rz$poly_selected)) {
-    # 
-    #       # print("Removing selection")
-    # 
-    #       mapdeck_update(map_id = NS(id, "map")) %>%
-    #         clear_polygon(layer_id = "poly_highlight")
-    #     }
-    # 
-    #     # Mode if in 3D
-    #   } else if (input$extrude) {
-    #     if (!is.na(rz$poly_selected)) {
-    # 
-    #       # print(paste0("Selecting 3D polygon ", rz$poly_selected))
-    # 
-    #       mapdeck_update(map_id = NS(id, "map")) %>%
-    #         clear_polygon(layer_id = "polylayer") %>%
-    #         clear_polygon(layer_id = "extrude") %>%
-    #         add_polygon(
-    #           data = {
-    #             data_bivar() %>%
-    #               mutate(elevation = if_else(
-    #                 group == group[ID == rz$poly_selected], 4000, 0
-    #               ))
-    #           },
-    #           fill_colour = "fill",
-    #           elevation = "elevation",
-    #           update_view = FALSE,
-    #           layer_id = "extrude",
-    #           id = "ID",
-    #           auto_highlight = TRUE,
-    #           highlight_colour = "#FFFFFF90",
-    #           legend = FALSE,
-    #           light_settings = list(
-    #             lightsPosition = c(0, 0, 5000),
-    #             numberOfLights = 1,
-    #             ambientRatio = 1
-    #           )
-    #         )
-    #     }
-    # 
-    #     if (is.na(rz$poly_selected)) {
-    # 
-    #       # print("Removing 3D selection")
-    # 
-    #       mapdeck_update(map_id = NS(id, "map")) %>%
-    #         clear_polygon(layer_id = "poly_highlight") %>%
-    #         clear_polygon(layer_id = "extrude") %>%
-    #         add_polygon(
-    #           data = data_bivar(),
-    #           fill_colour = "fill",
-    #           elevation = "elevation",
-    #           update_view = FALSE,
-    #           layer_id = "extrude",
-    #           id = "ID",
-    #           auto_highlight = TRUE,
-    #           highlight_colour = "#FFFFFF90",
-    #           legend = FALSE,
-    #           light_settings = list(
-    #             lightsPosition = c(0, 0, 5000),
-    #             numberOfLights = 1,
-    #             ambientRatio = 1
-    #           )
-    #         )
-    #     }
-    # 
-    #     # Mode if in 3D
-    #   }
-    # })
-    # 
-    # 
+    ## Update map on click -------------------------------------------------------
+
+    observeEvent(rv_canale$poly_selected, {
+
+      # Mode if not in 3D
+      if (!input$extrude) {
+        if (!is.na(rv_canale$poly_selected)) {
+
+          # print(paste0("Selecting polygon ", rv_canale$poly_selected))
+
+          mapdeck_update(map_id = NS(id, "map")) %>%
+            add_polygon(
+              data = filter(data_canale(), ID == rv_canale$poly_selected),
+              stroke_width = "width", stroke_colour = "#000000",
+              fill_colour = "fill", update_view = FALSE, 
+              layer_id = "poly_highlight", auto_highlight = TRUE,
+              highlight_colour = "#FFFFFF90", legend = FALSE)
+          }
+
+        if (is.na(rv_canale$poly_selected)) {
+
+          # print("Removing selection")
+
+          mapdeck_update(map_id = NS(id, "map")) %>%
+            clear_polygon(layer_id = "poly_highlight")
+        }
+
+        # Mode if in 3D
+      } else if (input$extrude) {
+        if (!is.na(rv_canale$poly_selected)) {
+
+          # print(paste0("Selecting 3D polygon ", rv_canale$poly_selected))
+
+          mapdeck_update(map_id = NS(id, "map")) %>%
+            clear_polygon(layer_id = "polylayer") %>%
+            clear_polygon(layer_id = "extrude") %>%
+            add_polygon(
+              data = {
+                data_canale() %>%
+                  mutate(elevation = if_else(
+                    group == group[ID == rv_canale$poly_selected], 4000, 0))},
+              fill_colour = "fill", elevation = "elevation",
+              update_view = FALSE, layer_id = "extrude", id = "ID",
+              auto_highlight = TRUE, highlight_colour = "#FFFFFF90",
+              legend = FALSE,
+              light_settings = list(
+                lightsPosition = c(0, 0, 5000),
+                numberOfLights = 1,
+                ambientRatio = 1))
+        }
+
+        if (is.na(rv_canale$poly_selected)) {
+
+          # print("Removing 3D selection")
+
+          mapdeck_update(map_id = NS(id, "map")) %>%
+            clear_polygon(layer_id = "poly_highlight") %>%
+            clear_polygon(layer_id = "extrude") %>%
+            add_polygon(
+              data = data_canale(), fill_colour = "fill", 
+              elevation = "elevation", update_view = FALSE, layer_id = "extrude",
+              id = "ID", auto_highlight = TRUE, highlight_colour = "#FFFFFF90",
+              legend = FALSE)
+        }
+      }
+    })
+
+
     # ## Update link text ----------------------------------------------------------
     # 
     # # More info
@@ -851,17 +793,17 @@ canale_server <- function(id) {
     # })
     # 
     # # Hide explore status
-    # output$canale_hide_explore_status <-
-    #   reactive(input$canale_hide_explore %% 2 == 0)
-    # outputOptions(output, "canale_hide_explore_status", suspendWhenHidden = FALSE)
+    # output$hide_explore_status <-
+    #   reactive(input$hide_explore %% 2 == 0)
+    # outputOptions(output, "hide_explore_status", suspendWhenHidden = FALSE)
     # 
-    # observeEvent(input$canale_hide_explore, {
-    #   if (input$canale_hide_explore %% 2 == 0) {
+    # observeEvent(input$hide_explore, {
+    #   if (input$hide_explore %% 2 == 0) {
     #     txt <- sus_translate("Hide")
     #   } else {
     #     txt <- sus_translate("Show")
     #   }
-    #   updateActionButton(session, "canale_hide_explore", label = txt)
+    #   updateActionButton(session, "hide_explore", label = txt)
     # })
     # 
     # # Hide DYK status
@@ -884,7 +826,7 @@ canale_server <- function(id) {
     # Right map
     output$map_right <- renderPlot({
       
-        if (input$data_for_plot_right == " ") {
+        if (input$var_right == " ") {
           p <- 
             ggplot(data_canale()) +
             geom_sf(fill = "#CABED0", color = "white", size = 0.01) +
@@ -906,7 +848,7 @@ canale_server <- function(id) {
             draw_plot(p) +
             draw_image(uni_legend_right, scale = .45, vjust = 0.25, hjust = -0.25)
         }
-      }, bg = "transparent") %>% bindCache(input$data_for_plot_right, 
+      }, bg = "transparent") %>% bindCache(input$var_right, 
                                            rv_canale$zoom)
   })
 }
