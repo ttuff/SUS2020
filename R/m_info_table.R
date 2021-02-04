@@ -134,52 +134,44 @@ info_table_server <- function(id, x, var_right, select, zoom, title) {
         
         # Bivariate case
       } else {
-        var_name <-
-          sus_translate(variable_explanations %>%
-                          filter(var_code == input$var_right) %>%
-                          pull(var_name))
+        var_name <- sus_translate(variable_explanations %>% 
+                                    filter(var_code == var_right()) %>%
+                                    pull(var_name))
         
-        var_explanation <-
-          sus_translate(variable_explanations %>%
-                          filter(var_code == input$var_right) %>%
-                          pull(explanation))
+        var_explanation <- sus_translate(variable_explanations %>%
+                                           filter(var_code == var_right()) %>%
+                                           pull(explanation))
         
-        correlation <-
-          cor(
-            data_canale()$left_variable_full,
-            data_canale()$right_variable_full
-          ) %>%
+        correlation <- cor(x()$left_variable_full, x()$right_variable_full) %>%
           round(2)
         
-        pos_neg <- if_else(correlation > 0, sus_translate("positive"), sus_translate("negative"))
+        pos_neg <- if_else(correlation > 0, sus_translate("positive"), 
+                           sus_translate("negative"))
         
-        strong_weak <- case_when(
-          abs(correlation) > 0.6 ~ sus_translate("strong"),
-          abs(correlation) > 0.3 ~ sus_translate("moderate"),
-          TRUE ~ "weak"
-        )
+        strong_weak <- case_when(abs(correlation) > 0.6 ~ sus_translate("strong"),
+                                 abs(correlation) > 0.3 ~ sus_translate("moderate"),
+                                 TRUE ~ "weak")
         
-        higher_lower <-
-          if_else(pos_neg == sus_translate("positive"),
-                  sus_translate("higher"),
-                  sus_translate("lower")
-          )
+        higher_lower <- if_else(pos_neg == sus_translate("positive"),
+                                sus_translate("higher"),
+                                sus_translate("lower"))
         
         high_low_disclaimer <- case_when(
-          strong_weak == sus_translate("strong") ~ sus_translate("with only a few exceptions"),
-          strong_weak == sus_translate("moderate") ~ sus_translate("although with some exceptions"),
-          strong_weak == sus_translate("weak") ~ sus_translate("although with many exceptions"),
-        )
+          strong_weak == sus_translate("strong") ~ 
+            sus_translate("with only a few exceptions"),
+          strong_weak == sus_translate("moderate") ~ 
+            sus_translate("although with some exceptions"),
+          strong_weak == sus_translate("weak") ~ 
+            sus_translate("although with many exceptions"))
         
         # Case for no poly selected
-        if (is.na(rv_canale$poly_selected)) {
-          # print("2nd order")
+        if (is.na(select())) {
           # If correlation is close to zero
           if (correlation < 0.05 && correlation > -0.05) {
             HTML(
               glue(sus_translate(paste0(
                 "<p>{var_explanation}",
-                "<p>The CanALE index has effectively no correlation ",
+                "<p>The {title} has effectively no correlation ",
                 "({correlation}) with {var_name} at the ",
                 "{scale_singular} scale.",
                 "<p>This means that, at the {scale_singular} scale, ",
@@ -187,25 +179,23 @@ info_table_server <- function(id, x, var_right, select, zoom, title) {
               )))
             )
           } else {
-            HTML(
-              glue(sus_translate(paste0(
-                "<p>{var_explanation}",
-                "<p>The CanALE index has a {strong_weak} {pos_neg} ",
-                "correlation ({correlation}) with '{tolower(var_name)}' at the ",
-                "{scale_singular} scale.",
-                "<p>This means that, in general, {scale_plural} with higher ",
-                "potential for active living tend to have {higher_lower} ",
-                "values for '{tolower(var_name)}', {high_low_disclaimer}."
-              )))
-            )
-          }
+            HTML(glue(sus_translate(paste0(
+              "<p>{var_explanation}",
+              "<p>The {title} has a {strong_weak} {pos_neg} ",
+              "correlation ({correlation}) with '{tolower(var_name)}' at the ",
+              "{scale_singular} scale.",
+              "<p>This means that, in general, {scale_plural} with higher ",
+              "potential for active living tend to have {higher_lower} ",
+              "values for '{tolower(var_name)}', {high_low_disclaimer}.")))
+              )
+            }
           
           # Case for poly selected
         } else {
-          dat <- data_canale() %>% filter(ID == rv_canale$poly_selected)
+          dat <- x() %>% filter(ID == select())
           
           vec_2 <-
-            data_canale() %>%
+            x() %>%
             filter(!is.na(right_variable), !is.na(right_variable_full)) %>%
             pull(right_variable_full)
           
@@ -214,7 +204,7 @@ info_table_server <- function(id, x, var_right, select, zoom, title) {
           
           # print("polyselect")
           place_name <- case_when(
-            scale_singular == sus_translate("borough/city") ~
+            scale_singular == sus_translate("borough/city") ~ 
               glue("{dat$name}"),
             scale_singular == sus_translate("census tract") ~
               glue(sus_translate(paste0("Census tract {dat$name}"))),
@@ -229,27 +219,21 @@ info_table_server <- function(id, x, var_right, select, zoom, title) {
           place_heading <-
             if_else(scale_singular == sus_translate("borough/city"),
                     glue(sus_translate(paste0("{dat$name_2} of {place_name}"))),
-                    glue("{place_name} ({dat$name_2})")
-            )
+                    glue("{place_name} ({dat$name_2})"))
           
+          percentile_left <- 
+            round(length(vec[vec <= dat$left_variable_full]) / length(vec) * 100)
           
-          percentile_left <-
-            {
-              length(vec[vec <= dat$left_variable_full]) / length(vec) * 100
-            } %>%
-            round()
-          
-          percentile_right <-
-            {
-              length(vec_2[vec_2 <= dat$right_variable_full]) /
-                length(vec_2) * 100
-            } %>%
-            round()
+          percentile_right <- 
+            round(length(vec_2[vec_2 <= dat$right_variable_full]) / length(vec_2) * 100)
           
           relative_position <- case_when(
-            abs(percentile_left - percentile_right) > 50 ~ sus_translate("dramatically different"),
-            abs(percentile_left - percentile_right) > 30 ~ sus_translate("substantially different"),
-            abs(percentile_left - percentile_right) > 10 ~ sus_translate("considerably different"),
+            abs(percentile_left - percentile_right) > 50 ~ 
+              sus_translate("dramatically different"),
+            abs(percentile_left - percentile_right) > 30 ~ 
+              sus_translate("substantially different"),
+            abs(percentile_left - percentile_right) > 10 ~ 
+              sus_translate("considerably different"),
             TRUE ~ sus_translate("similar")
           )
           
@@ -270,17 +254,16 @@ info_table_server <- function(id, x, var_right, select, zoom, title) {
                 "<strong>{place_heading}</strong>",
                 
                 "<p>{place_name} has a population of ",
-                "{prettyNum(dat$population, ',')}, a CanALE index score ",
+                "{prettyNum(dat$population, ',')}, a {title} score ",
                 "of {round(poly_value_1, 2)}, and a '{tolower(var_name)}' ",
                 "value of {round(poly_value_2, 2)}. ",
                 
                 "<p>These two scores are {relative_position}, in relative ",
-                "terms. {place_name} has a CanALE index score higher ",
+                "terms. {place_name} has a {title} score higher ",
                 "than {percentile_left}% of {scale_plural} and ",
                 "a '{tolower(var_name)}' score higher than ",
                 "{percentile_right}% of {scale_plural} in the ",
-                "Montreal region."
-              )))
+                "Montreal region.")))
             )
           }
         }

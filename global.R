@@ -271,10 +271,6 @@ loadingLogo <-
 
 title_text <- qread("data/title_text.qs")
 
-did_you_know <- 
-  read_csv("data/did_you_know.csv") %>% 
-  mutate(right_variable = if_else(is.na(right_variable), " ", right_variable))
-
 variable_explanations <- 
   fread("data/variable_explanations.csv")
 

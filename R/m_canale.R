@@ -44,31 +44,13 @@ canale_UI <- function(id) {
         condition = "input.extrude == 0", ns = NS(id), hr(),
 
         # Explore panel
-        fluidRow(
-          column(width = 7, h4(i18n$t("Explore"))),
-          column(width = 5, align = "right", 
-                 actionLink(inputId = NS(id, "hide_explore"), 
-                            label = i18n$t("Hide")))),
-        
-        conditionalPanel(
-          condition = "output.hide_explore_status == 1", ns = NS(id),
-          info_table_UI(NS(id, "canale")),
-          explore_graph_UI(NS(id, "canale")),
-          conditionalPanel(
-            condition = "output.poly_selected == 1", ns = NS(id),
-            actionLink(inputId = NS(id, "clear_selection"),
-                       label = "Clear selection"))),
+        explore_UI(NS(id, "canale")),
         
         hr(),
 
         # DYK panel
-        fluidRow(
-          column(width = 7, h4(i18n$t("Did you know?"))),
-          column(width = 5, align = "right",
-                 actionLink(inputId = NS(id, "hide_dyk"), label = i18n$t("Hide")))),
-        conditionalPanel(
-          condition = "output.hide_dyk_status == 1",
-          htmlOutput(NS(id, "did_you_know"))))
+        dyk_UI(NS(id, "canale"))
+        )
       ),
 
     # Floating legend
@@ -193,30 +175,15 @@ canale_server <- function(id) {
           highlight_colour = "#FFFFFF90", legend = FALSE)
       })
     
-    # Render info table
-    info_table_server("canale", data_canale, reactive(input$var_right),
-                      reactive(rv_canale$poly_selected), 
-                      reactive(rv_canale$zoom), "CanALE index")
+    # Render explore panel
+    explore_server("canale", data_canale, reactive(input$var_right),
+                   reactive(rv_canale$poly_selected), 
+                   reactive(rv_canale$zoom), "CanALE index")
     
-    # Render the histogram/scatterplot
-    explore_graph_server("canale", data_canale, reactive(input$var_right), 
-                         reactive(rv_canale$poly_selected), "CanALE index")
-    
-    
+    # Render did-you-know panel
+    dyk_server("canale", reactive("ale_index"), reactive(input$var_right))
 
-    # ## Render the did-you-knows --------------------------------------------------
-    # 
-    # output$did_you_know <- renderUI({
-    #   sus_translate(did_you_know %>%
-    #     filter(right_variable == input$var_right) %>%
-    #     slice_sample(n = 2) %>%
-    #     pull(text)) %>%
-    #     paste("<li> ", ., collapse = "") %>%
-    #     paste0("<ul>", ., "</ul>") %>%
-    #     HTML()
-    # })
-    # 
-    # 
+
     ## Update map in response to variable changes, zooming, or options -----------
 
     observeEvent({
@@ -324,28 +291,6 @@ canale_server <- function(id) {
         txt <- sus_translate("Hide")
       } else txt <- sus_translate("Show")
       updateActionButton(session, "hide_compare", label = txt)
-      })
-
-    # Hide explore status
-    output$hide_explore_status <- reactive(input$hide_explore %% 2 == 0)
-    outputOptions(output, "hide_explore_status", suspendWhenHidden = FALSE)
-
-    observeEvent(input$hide_explore, {
-      if (input$hide_explore %% 2 == 0) {
-        txt <- sus_translate("Hide")
-      } else txt <- sus_translate("Show")
-      updateActionButton(session, "hide_explore", label = txt)
-      })
-
-    # Hide DYK status
-    output$hide_dyk_status <- reactive(input$hide_dyk %% 2 == 0)
-    outputOptions(output, "hide_dyk_status", suspendWhenHidden = FALSE)
-
-    observeEvent(input$hide_dyk, {
-      if (input$hide_dyk %% 2 == 0) {
-        txt <- sus_translate("Hide")
-      } else txt <- sus_translate("Show")
-      updateActionButton(session, "hide_dyk", label = txt)
       })
 
     # Left map

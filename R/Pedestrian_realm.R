@@ -257,11 +257,6 @@ Pedestrian_realm_module_server <- function(id) {
                   height = 140))
     }, deleteFile = FALSE)
     
-    
-   # did_you_know <- 
-    #  read_csv("data/did_you_know.csv") 
-     # mutate(right_variable = if_else(is.na(right_variable), " ", right_variable))
-    
    # variable_explanations <- 
    #   read_csv("data/variable_explanations.csv")
     # 
@@ -1234,7 +1229,7 @@ Pedestrian_realm_module_server <- function(id) {
     
     output$did_you_know_ped <- renderUI({
       if (rz_pedestrian$zoom == "OUT") {
-        sus_translate(did_you_know %>% 
+        sus_translate(dyk %>% 
           filter(right_variable == "ct_ped") %>% 
           pull(text)) %>% 
           paste("<li> ", ., collapse = "") %>%
@@ -1242,7 +1237,7 @@ Pedestrian_realm_module_server <- function(id) {
           HTML()
       }
       else if (rz_pedestrian$zoom == "IN" & input$switch_biv == FALSE) {
-        sus_translate(did_you_know %>%
+        sus_translate(dyk %>%
           filter(right_variable == "da_ped") %>%
           slice_sample(n = 2) %>%
           pull(text)) %>%
@@ -1252,7 +1247,7 @@ Pedestrian_realm_module_server <- function(id) {
       }
       
       else if (rz_pedestrian$zoom == "IN" & input$switch_biv == TRUE) {
-        sus_translate(did_you_know %>%
+        sus_translate(dyk %>%
           filter(right_variable == paste0(input$data_for_plot_ped, "_quant3")) %>% 
             slice_sample(n = 2) %>% 
           pull(text)) %>%
@@ -1261,7 +1256,7 @@ Pedestrian_realm_module_server <- function(id) {
           HTML()
       }
       else {
-        sus_translate(did_you_know %>%
+        sus_translate(dyk %>%
           filter(right_variable == "sidewalk_ped") %>%
             slice_sample(n = 2) %>%
           pull(text)) %>%
