@@ -78,6 +78,7 @@ shinyServer(function(input, output, session) {
   canale_server("canale")    
   #Pedestrian_realm_module_server("Pedestrian_realm_module")
   Mode_switch_module_server("Mode_switch_module")
+  Accessibility_module_server("accessibility_module")
   Biodiversity_module_server("biodiversity_module")
   Meet_the_team_server("meet_the_team_module")
   why_dash_server("why_dash")
