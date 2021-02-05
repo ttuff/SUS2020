@@ -20,18 +20,11 @@ dyk_server <- function(id, var_left, var_right) {
   moduleServer(id, function(input, output, session) {
     
     output$dyk <- renderUI({
-      
-      print({dyk %>%
-              filter(left_variable == var_left(),
-                     right_variable == var_right()) %>%
-              slice_sample(n = 2) %>%
-              pull(text)})
-      
-      sus_translate(dyk %>%
-                      filter(left_variable == var_left(),
-                             right_variable == var_right()) %>%
-                      slice_sample(n = 2) %>%
-                      pull(text)) %>%
+      sus_translate(
+        dyk %>% 
+          filter(left_variable == var_left(), right_variable == var_right()) %>%
+          slice_sample(n = 2) %>%
+          pull(text)) %>%
         paste("<li> ", ., collapse = "") %>%
         paste0("<ul>", ., "</ul>") %>%
         HTML()

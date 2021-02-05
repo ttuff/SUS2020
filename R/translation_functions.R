@@ -2,19 +2,21 @@
 
 # Basic list french translation -------------------------------------------
 
-sus_translation_list <- function(x) {
+sus_translate_list <- function(x) {
   
   # translate name of lists
   names(x) <-
-    map_chr(names(x), ~{translation_fr %>%
+    map_chr(names(x), ~{
+      translation_fr %>%
         filter(en == .x) %>%
         pull()
       })
   
   # Re-iterate in list depth to translate every name
-  if (vec_depth(x) > 2) x <- map(x, sus_translation_list)
+  if (vec_depth(x) > 2) x <- map(x, sus_translate_list)
   
   x
+  
 }
 
 
@@ -30,7 +32,7 @@ sus_translate <- function(x) {
     
     # List
     if (is.list(x)) {
-      sus_translation_list(x)
+      sus_translate_list(x)
     
     # png
     } else if (any(str_detect(x, "_en.png"))) {
@@ -39,8 +41,8 @@ sus_translate <- function(x) {
     # Character
     } else if (is.character(x)) {
       
-      # In some cases, there are multiple different strings to translate (ex. did
-      # you know and the list created there). This loop will take care of it.
+      # In some cases, there are multiple different strings to translate (e.g. 
+      # m_dyk and the list created there). This loop will take care of it.
       translated <- vector("character", length(x))
       
       for (i in 1:length(x)) {
