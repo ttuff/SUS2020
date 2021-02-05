@@ -9,7 +9,7 @@ dbHeader <- dashboardHeader(tags$li(
 
 dbHeader$children[[2]]$children <-
   fluidRow(column(width = 4, loadingLogo(
-    'http:www.drtuff.com', 'logo.png', 'spinning_logo.gif', 50, 50, 50)), 
+    'https://tuff.shinyapps.io/SUS2020/', 'logo.png', 'spinning_logo.gif', 50, 50, 50)), 
     column(width = 2), column(width = 6 ))
 
 ui <- dashboardPage(
