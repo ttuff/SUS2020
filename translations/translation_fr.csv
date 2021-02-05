@@ -298,3 +298,32 @@ The areas with the lowest active living potential (ALE class 1) have proportions
 "The three areas with the lowest proportion of people with commute times of more than one hour all have average classes of active living potential above 3 (Westmount: 4.36, Outremont: 4.43, Mont-Royal: 3.33).","Les trois régions qui comptent la plus faible proportion de personnes dont le temps de déplacement est supérieur à une heure ont toutes des classes moyennes de potentiel de vie active supérieures à 3 (Westmount: 4,36, Outremont: 4,43, Mont-Royal: 3,33)."
 The five areas with the highest active living potential are all boroughs of the City of Montreal (Le Plateau-Mont-Royal; Rosemont-La-Petite-Patrie; Ville-Marie; Villeray-Saint-Michel-Parc-Extension; Côte-des-Niges-Notre-Dame-de-Grâce).,Les cinq secteurs ayant le plus fort potentiel de vie active sont tous des arrondissements de la Ville de Montréal (Le Plateau-Mont-Royal; Rosemont-La-Petite-Patrie; Ville-Marie; Villeray-Saint-Michel-Parc-Extension; Côte-des-Niges-Notre-Dame-de-Grâce).
 "Please wait, this may take a few minutes","Veuillez patienter, ceci peut prendre quelques minutes"
+Access to Urban Opportunities,Accès aux opportunités urbaines
+Dissemination Area,Aire de diffusion
+Route Planner,Planificateur d'itinéraire
+Cycling Network,Réseau cycliste
+Select your destination,Sélectionnez votre destination
+COVID-19 Testing Centre,Centre de dépistage COVID-19
+Health Care,Soins de santé
+Grocery Store,Épicerie
+Pharmacy,Pharmacie
+Eating Place,Lieu de restauration
+Shortest Route,Itinéraire le plus court
+Route Information,Informations sur l'itinéraire
+Elevation Profile,Profil d'élévation
+Select a variable:,Choisissez une variable:
+Travel Time to Closest Health Care,Temps de trajet pour se rendre aux soins de santé les plus proches
+Travel Time to Closest Grocery,Temps de trajet jusqu'à l'épicerie la plus proche
+Travel Time to Closest Pharmacy,Temps de trajet jusqu'à la pharmacie la plus proche
+Number of Accessible Eating Places,Nombre de lieux de restauration accessibles
+Journey Time,Durée du trajet
+Route Distance,Distance du trajet
+Cycling Facility,Installations pour cyclistes
+CO2 Avoided,CO2 évité
+Safest Route/Fastest Route,L'itinéraire le plus sécuritaire/le plus rapide
+Travel Time to Closest Health Care Facility (minutes),Temps de trajet jusqu'à l'établissement de soins de santé le plus proche (en minutes)
+Travel Time to Closest Grocery Store (minutes),Temps de trajet jusqu'à l'épicerie la plus proche (en minutes)
+Travel Time to Closest Pharmacy (minutes),Temps de trajet jusqu'à la pharmacie la plus proche (en minutes)
+Number of Eating Places within 15-minutes Cycling,Nombre de lieux de restauration accessibles en 15 minutes de vélo
+"Residents of the Island live an average of 1.8 kms from the nearest health care facility,<br/>that works out to a 7-minutes cycling. Overall, 19% of people live more than<br/>10 minutes away from their nearest health care facility, while 22% live between 5 and<br/>10 minutes away and 59% live less than 5 minutes away. Low-income<br/>households are more likely to live closer to the nearest health care facility.","Les résidents de l'Île de Montréal vivent, en moyenne, à 1.8 km de l'établissement de soins de santé le plus proche,<br/>ce qui revient à 7 minutes de vélo. Dans l'ensemble, 19% des gens habitent à plus de<br/>10 minutes de l'établissement de soins de santé le plus proche, tandis que 22% vivent entre 5 et<br/>10 minutes et 59% à moins de 5 minutes. Les ménages à faibles revenus<br/>sont plus susceptibles de vivre à proximité de l'établissement de soins de santé le plus proche."
+"Residents of the Island live an average of 0.4 kms from the nearest grocery store,<br/>that works out to a 2-minutes cycling. Overall, 97% of people live less than<br/>5 minutes away from their nearest grocery store.","Les résidents de l'Île de Montréal vivent, en moyenne, à 0.4 km de l'épicerie la plus proche,<br/>ce qui revient à 2 minutes de vélo. Dans l'ensemble, 97% des personnes vivent à moins de 5<br/>minutes de vélo de l'épicerie la plus proche."
