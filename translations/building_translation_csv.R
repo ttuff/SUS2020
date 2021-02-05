@@ -367,12 +367,12 @@ translation_fr <-
   add_row(en = "considerably different" , fr = "modérément différents") %>%
   # CanAle module
   # Chosen value and comparison
-  add_row(en = paste0("At the {scale_singular} scale, the CanALE index varies from ",
+  add_row(en = paste0("At the {scale_singular} scale, the {title} varies from ",
                       "{min_val} to {max_val}, with an average value of {mean_val} ",
                       "and a median value of {median_val}. ",
                       "Two thirds of {scale_plural} have a score between {quant_low} ",
                       "and {quant_high}."),
-          fr = paste0("À l'échelle {scale_singular}, l'index AVA-Can varie de ",
+          fr = paste0("À l'échelle {scale_singular}, {title} varie de ",
                       "{min_val} à {max_val}, avec une valeur moyenne de {mean_val} ",
                       "et une valeur médianne de {median_val}. ",
                       "Deux tiers {scale_plural} ont un score se situant entre {quant_low} ",
@@ -389,14 +389,14 @@ translation_fr <-
                       "autochtones que dans les autres juridictions, nous ne ",
                       "pouvons donc pas afficher de résultats ici.")) %>%
   # CanALE active living potential
-  add_row(en = "CanALE index", fr = "Index AVA-Can") %>% 
+  add_row(en = "CanALE index", fr = "Indice AVA-Can") %>% 
   add_row(en = "View in 3D", fr = "Voir en 3D") %>% 
   add_row(en = "Active living potential: the CanALE index",
-          fr = "Potentiel de vie active: l'index AVA-Can") %>% 
+          fr = "Potentiel de vie active: l'indice AVA-Can") %>% 
   add_row(en = paste0("<strong>{place_heading}</strong>", 
                       
                       "<p>{place_name} has a population of ",
-                      "{prettyNum(dat$population, ',')} and a CanALE index ",
+                      "{prettyNum(dat$population, ',')} and a {title} ",
                       "score of {round(poly_value, 2)}, which is {larger_smaller} ",
                       "the region-wide median of {median_val}.", 
                       
@@ -406,35 +406,35 @@ translation_fr <-
           fr = paste0("<strong>{place_heading}</strong>", 
                       
                       "<p>{place_name} a une population de ",
-                      "{prettyNum(dat$population, ',')} et un score d'index ",
-                      "AVA-Can de {round(poly_value, 2)}, ce qui est {larger_smaller} ",
+                      "{prettyNum(dat$population, ',')} et un score {title} ",
+                      "de {round(poly_value, 2)}, ce qui est {larger_smaller} ",
                       "la médiane régionale de {median_val}.", 
                       
                       "<p>{place_name} a un potentiel {poor_strong} de vie ", 
-                      "active, avec un score d'index AVA-Can plus grand que {percentile}% ",
+                      "active, avec un score d'indice AVA-Can plus grand que {percentile}% ",
                       "des {scale_plural} dans la région de Montréal.")) %>% 
   # Correlation explanation
   add_row(en = paste0("<p>{var_explanation}", 
-                      "<p>The CanALE index has effectively no correlation ",
+                      "<p>The {title} has effectively no correlation ",
                       "({correlation}) with {var_name} at the ",
                       "{scale_singular} scale.",
                       "<p>This means that, at the {scale_singular} scale, ", 
                       "there is no relationship between the two variables."),
           fr = paste0("<p>{var_explanation}", 
-                      "<p>L'index AVA-Can n'a en fait aucune corrélation ",
+                      "<p>{title} n'a en fait aucune corrélation ",
                       "({correlation}) avec la variable '{var_name}' à l'échelle ",
                       "'{scale_singular}'.",
                       "<p>Cela signifie que, à l'échelle '{scale_singular}', ", 
                       "il n'y a pas de relation entre ces deux variables.")) %>% 
   add_row(en = paste0("<p>{var_explanation}", 
-                      "<p>The CanALE index has a {strong_weak} {pos_neg} ",
+                      "<p>The {title} has a {strong_weak} {pos_neg} ",
                       "correlation ({correlation}) with '{tolower(var_name)}' at the ",
                       "{scale_singular} scale.",
                       "<p>This means that, in general, {scale_plural} with higher ",
                       "potential for active living tend to have {higher_lower} ",
                       "values for '{tolower(var_name)}', {high_low_disclaimer}."),
           fr = paste0("<p>{var_explanation}", 
-                      "<p>L'index AVA-Can a un indice de corrélation {strong_weak} et {pos_neg} ",
+                      "<p>{title} a un indice de corrélation {strong_weak} et {pos_neg} ",
                       "({correlation}) avec la variable '{tolower(var_name)}' à l'échelle ",
                       "'{scale_singular}'.",
                       "<p>Cela signifie qu'en général, les {scale_plural} avec un haut ",
@@ -444,12 +444,12 @@ translation_fr <-
   add_row(en = paste0("<strong>{place_heading}</strong>", 
                       
                       "<p>{place_name} has a population of ",
-                      "{prettyNum(dat$population, ',')}, a CanALE index score ",
+                      "{prettyNum(dat$population, ',')}, a {title} score ",
                       "of {round(poly_value_1, 2)}, and a '{tolower(var_name)}' ",
                       "value of {round(poly_value_2, 2)}. ",
                       
                       "<p>These two scores are {relative_position}, in relative ",
-                      "terms. {place_name} has a CanALE index score higher ",
+                      "terms. {place_name} has a {title} score higher ",
                       "than {percentile_left}% of {scale_plural} and ",
                       "a '{tolower(var_name)}' score higher than ", 
                       "{percentile_right}% of {scale_plural} in the ",
@@ -457,12 +457,12 @@ translation_fr <-
           fr = paste0("<strong>{place_heading}</strong>", 
                       
                       "<p>{place_name} a une population de ",
-                      "{prettyNum(dat$population, ',')}, un score d'index AVA-Can ",
+                      "{prettyNum(dat$population, ',')}, un score {title} ",
                       "de {round(poly_value_1, 2)}, et une valeur pour la variable '{tolower(var_name)}' ",
                       "de {round(poly_value_2, 2)}. ",
                       
                       "<p>Ces deux scores sont {relative_position}, en termes ",
-                      "relatifs. {place_name} a un score d'index AVA-Can plus grand ",
+                      "relatifs. {place_name} a un score {title} plus grand ",
                       "que {percentile_left}% des {scale_plural} et ",
                       "un score pour la variable '{tolower(var_name)}' plus grand que ", 
                       "{percentile_right}% des {scale_plural} dans la ",
@@ -644,7 +644,7 @@ translation_fr <-
   add_row(en = paste0("While, overall, there is a trend towards lower income DAs being in high ALE class, roughly ",
                       "340,000 people are in CanALE class 3 or lower AND have median household income less than $50,000."),
           fr = paste0("Alors que, généralement, on observe une tendance à ce que les AD à faible revenu fassent partie ",
-                      "de la classe AVA élevée, environ 340 000 personnes font partie de la classe CanALE 3 ou moins et ",
+                      "de la classe AVA élevée, environ 340 000 personnes font partie de la classe AVA-Can 3 ou moins et ",
                       "ont un revenu par ménage médian inférieur à 50 000 $.")) %>% 
   add_row(en = paste0("Areas in class 4 of active living potential have the highest average dwelling values, but nearly ",
                       "10% fewer renters than areas with active living class 5."),
@@ -1146,6 +1146,9 @@ translation_fr <-
           fr = paste0("Les cinq secteurs ayant le plus fort potentiel de vie active sont tous des arrondissements ",
                       "de la Ville de Montréal (Le Plateau-Mont-Royal; Rosemont-La-Petite-Patrie; Ville-Marie; ",
                       "Villeray-Saint-Michel-Parc-Extension; Côte-des-Niges-Notre-Dame-de-Grâce).")) %>%
+  # For the waiter
+  add_row(en = "Please wait, this may take a few minutes",
+          fr = "Veuillez patienter, ceci peut prendre quelques minutes") %>% 
   distinct(en, .keep_all = T)
 
 write_csv(translation_fr, "translations/translation_fr.csv")

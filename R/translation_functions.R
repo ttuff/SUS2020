@@ -1,54 +1,57 @@
+#### Translation functions #####################################################
 
+# Basic list French translation -------------------------------------------
 
-# Basic list french translation -------------------------------------------
-
-
-sus_translation_list <- function(to_translate){
+sus_translate_list <- function(x) {
   
   # translate name of lists
-  names(to_translate) <-
-    map_chr(names(to_translate), ~{translation_fr %>%
+  names(x) <-
+    purrr::map_chr(names(x), ~{
+      if (is.null(.x)) NULL else {
+        translation_fr %>%
         filter(en == .x) %>%
-        pull()})
+        pull()
+      }})
   
-  # reiterate in list depth to translate every names
-  if (vec_depth(to_translate) > 2)
-    to_translate <- map(to_translate, sus_translation_list)
+  # Re-iterate in list depth to translate every name
+  if (purrr::vec_depth(x) > 2) x <- purrr::map(x, ~{
+    if (purrr::vec_depth(.x) > 1) sus_translate_list(.x) else (.x)
+    })
   
-  to_translate
+  x
+  
 }
 
 
-# Reactive translation function for texts, lists and png ------------------
+# Reactive translation function for text, lists and png -------------------
 
-
-sus_translate <- function(to_translate) {
-  # if it's in english
+sus_translate <- function(x) {
+  # English
   if (sus_reactive_variables$active_language() == "en") {
-    to_translate
+    x
     
-  # if it's in french
+  # French
   } else if (sus_reactive_variables$active_language() == "fr") {
     
-    # if it's a list
-    if (is.list(to_translate)) {
-      sus_translation_list(to_translate)
+    # List
+    if (is.list(x)) {
+      sus_translate_list(x)
     
-    # if it's a png
-    } else if (str_detect(to_translate, "_en.png") == T) {
-      str_replace(to_translate, "_en.png", "_fr.png")
+    # png
+    } else if (any(stringr::str_detect(x, "_en.png"))) {
+      stringr::str_replace(x, "_en.png", "_fr.png")
       
-    #if it's a character
-    } else if ((is.character(to_translate)) == T) {
+    # Character
+    } else if (is.character(x)) {
       
-      # In some cases, there are multiple different strings to translate (ex. did
-      # you know and the list created there). This loop will take care of it.
-      translated <- vector("character", length(to_translate))
+      # In some cases, there are multiple different strings to translate (e.g. 
+      # m_dyk and the list created there). This loop will take care of it.
+      translated <- vector("character", length(x))
       
-      for (i in 1:length(to_translate)) {
+      for (i in 1:length(x)) {
         translated[i] <- 
           translation_fr %>%
-          filter(en == to_translate[[i]]) %>%
+          filter(en == x[[i]]) %>%
           pull()
       }
       

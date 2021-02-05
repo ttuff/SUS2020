@@ -1,6 +1,8 @@
 # Shiny options -----------------------------------------------------------
 
-shinyOptions(cache = diskCache("./app-cache"))
+shinyOptions(cache = diskCache("./app-cache")) # Remove once modules are updated
+shinyOptions(cache = cachem::cache_disk("./app-cache"))
+
 
 # Packages ----------------------------------------------------------------
 
@@ -8,43 +10,42 @@ shinyOptions(cache = diskCache("./app-cache"))
 
 library(shiny)
 library(shinydashboard)
-library(shinybusy)
-library(shinyjqui)
+# library(shinybusy) # :: or remove
+# library(shinyjqui) # :: or remove
 library(shinyWidgets)
-library(shinythemes)
-library(extrafont)
+# library(shinythemes) # ::
+# library(extrafont) # :: or remove
 library(shiny.i18n)
 library(waiter)
 
 library(dplyr)
 library(ggplot2)
-library(tidyr)
-library(purrr)
-library(readr)
-library(tibble)
-library(stringr)
-library(gghighlight)
-library(ggthemes)
+# library(tidyr) # :: or remove
+# library(purrr) # ::
+library(readr) # Eventually get rid of in favour of qs
+# library(tibble) # ::
+# library(stringr) # ::
+# library(ggthemes) # :: or remove
 
 library(sf)
 library(mapdeck) 
 library(mapboxapi)
-library(geojsonsf)
-library(jsonify)
-library(raster)
-library(RColorBrewer)
+# library(geojsonsf) # ::
+# library(jsonify) # ::
+# library(raster) # :: or remove
+# library(RColorBrewer) # ::
 
-library(markdown)
-library(png)
-library(cowplot)
-library(classInt)
-library(scales)
+# library(markdown) # :: or remove
+# library(png) # ::
+# library(cowplot) # ::, long-term replace with patchwork
+# library(classInt) # :: or remove
+# library(scales) # ::
 
 library(DT)
 library(qs)
 library(glue)
-library(aniview)
-library(data.table)
+# library(aniview) # ::
+# library(data.table) # remove
 
 #library(shinipsum)
 # library(fakir)
@@ -118,16 +119,16 @@ bivariate_color_scale <- tibble(
   "3 - 3" = "#2A5A5B", "2 - 3" = "#567994", "1 - 3" = "#6C83B5", 
   "3 - 2" = "#5A9178", "2 - 2" = "#90B2B3", "1 - 2" = "#B5C0DA",
   "3 - 1" = "#73AE80", "2 - 1" = "#B8D6BE", "1 - 1" = "#E8E8E8") %>%
-  pivot_longer(everything(), "group", "fill")
+  tidyr::pivot_longer(everything(), "group",values_to = "fill")
 
 color_scale <- tibble(
   "6" = "#73AE80", "5" = "#B8D6BE", "4" = "#E8E8E8", "3" = "#6C83B5",
   "2" = "#B5C0DA", "1" = "#E8E8E8") %>%
-  pivot_longer(everything(), "group", "fill")
+  tidyr::pivot_longer(everything(), "group", values_to = "fill")
 
 color_scale_2 <- tibble(
   "3" = "#73AE80", "2" = "#B8D6BE", "1" = "#E8E8E8") %>%
-  pivot_longer(everything(), "group", "fill")
+  tidyr::pivot_longer(everything(), "group", "fill")
 
 colors <- as.character(color_scale$fill)
 
@@ -269,12 +270,7 @@ loadingLogo <-
 
 title_text <- qread("data/title_text.qs")
 
-did_you_know <- 
-  read_csv("data/did_you_know.csv") %>% 
-  mutate(right_variable = if_else(is.na(right_variable), " ", right_variable))
-
-variable_explanations <- 
-  fread("data/variable_explanations.csv")
+variable_explanations <- read_csv("data/variable_explanations.csv")
 
 # Load data for pedestrian realm 
 load(file = "data/sidewalks_WSG.Rdata")
@@ -297,8 +293,10 @@ trip_distance <- loadRData("data/Trip_Distance.Rdata")
 
 load("data/cycling_total_final.Rdata")
 
-dropshadow1 <- normalizePath(file.path("www/dropshadow1.png"))
-dropshadow2 <- normalizePath(file.path("www/dropshadow2.png"))
+dropshadow1 <- normalizePath(file.path("www/dropshadow_right.png"))
+dropshadow_right <- normalizePath(file.path("www/dropshadow_right.png"))
+dropshadow2 <- normalizePath(file.path("www/dropshadow_left.png"))
+dropshadow_left <- normalizePath(file.path("www/dropshadow_left.png"))
 
 uni_legend <- normalizePath(file.path("www/Univariate_left.png"))
 uni_legend_right <- normalizePath(file.path("www/Univariate_right.png"))
@@ -306,6 +304,7 @@ uni_legend_right <- normalizePath(file.path("www/Univariate_right.png"))
 
 # Other prep --------------------------------------------------------------
 
+# This doesn't work with module namespacing TKTK
 module_style <- 
   tags$head(tags$style(HTML("
           #title_bar {border-width: 10px; border-color: rgb(255, 255, 255);}
@@ -315,7 +314,7 @@ module_style <-
           border-width: 0px;}
           #input_control_left2 {background-color: rgba(0,0,255,0.0);
           border-width: 0px;}
-          #canale_legend_container {background-color: rgba(0,0,255,0.0);
+          #legend_container {background-color: rgba(0,0,255,0.0);
           border-width: 0px;}")))
 
 js_ped_1 <- "$(document).ready(function(){
@@ -453,9 +452,6 @@ styler <- '
 
 rz_pedestrian <- reactiveValues(zoom = 'OUT',
                                 poly_selected = NA)
-
-rz <- reactiveValues(zoom = 'OUT',
-                     poly_selected = NA)
 
 
 

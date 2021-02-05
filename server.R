@@ -1,7 +1,9 @@
 ##### SUS SERVER SCRIPT ########################################################
 
 shinyServer(function(input, output, session) {
+  
   # Waiter ------------------------------------------------------------------
+
   waiter_hide()
   
   # Plot output calls for all 'left' plots ----------------------------------
@@ -18,9 +20,9 @@ shinyServer(function(input, output, session) {
       scale_fill_manual(values = rev(colors[c(4:6)])) +
       theme_map()
     
-    ggdraw() + 
-      draw_image(dropshadow2, scale = 1.59, vjust = 0.003, hjust = 0.003) +
-      draw_plot(p, scale = .85) 
+    cowplot::ggdraw() + 
+      cowplot::draw_image(dropshadow2, scale = 1.59, vjust = 0.003, hjust = 0.003) +
+      cowplot::draw_plot(p, scale = .85) 
     
   },
   cacheKeyExpr = paste("commute_mode_left"),
@@ -42,10 +44,10 @@ shinyServer(function(input, output, session) {
       theme_void() +
       theme(legend.position = "none")
     
-    ggdraw() + 
-      draw_image(dropshadow2, scale = 1.85, vjust = 0.01) +
-      draw_plot(p) +
-      draw_image(uni_legend, scale = .45, vjust = 0.3, hjust = 0.3)
+    cowplot::ggdraw() + 
+      cowplot::draw_image(dropshadow2, scale = 1.85, vjust = 0.01) +
+      cowplot::draw_plot(p) +
+      cowplot::draw_image(uni_legend, scale = .45, vjust = 0.3, hjust = 0.3)
     
     },
     cacheKeyExpr = "pedestrian_left",
@@ -79,9 +81,5 @@ shinyServer(function(input, output, session) {
   Biodiversity_module_server("biodiversity_module")
   Meet_the_team_server("meet_the_team_module")
   why_dash_server("why_dash")
-  
-  
-  # Left maps ---------------------------------------------------------------
-  left_map_server("canale_left_map", data_canale)
   
 })
