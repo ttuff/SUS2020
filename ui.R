@@ -40,8 +40,7 @@ ui <- dashboardPage(
       
       conditionalPanel(condition = "input.tabs == 'mode'", 
                        plotOutput("commuter_map_left", height = 200)),
-      menuItem(i18n$t("Accessibility to urban opportunities"), icon = icon("biking"), 
-               tabName = "accessibility"),
+     
       menuItem(i18n$t("Pedestrian realm"), icon = icon("walking"), 
                tabName = "Pedestrian", badgeLabel = "Covid-19", 
                badgeColor = "red"),
@@ -52,6 +51,9 @@ ui <- dashboardPage(
       menuItem(i18n$t("Biodiversity"), icon = icon("bug"), 
                tabName = "biodiversity", 
                badgeLabel = i18n$t("Nature-based solutions")),
+      
+      menuItem(i18n$t("Accessibility to urban opportunities"), icon = icon("biking"), 
+               tabName = "accessibility"),
       
       hr(),
       
