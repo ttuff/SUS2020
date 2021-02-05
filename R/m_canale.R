@@ -19,7 +19,7 @@ canale_UI <- function(id) {
     # Right panel
     absolutePanel(
       id = NS(id, "right_panel"), style =
-        "z-index:500; max-height: 88vh; overflow-y: auto; overflow-x:hidden; padding: 5px;",
+        "z-index:500; max-height: 90vh; overflow-y: auto; overflow-x:hidden; padding: 5px;",
       class = "panel panel-default", top = 70, right = 20, width = 300,
       
       # 3D switch
