@@ -78,10 +78,10 @@ explore_graph_server <- function(id, x, var_right, select, title) {
         
         if (nrow(filter(x(), ID == select())) != 1) {
           x() %>%
-            drop_na() %>%
+            tidyr::drop_na() %>%
             ggplot(aes(left_variable_full, right_variable_full)) +
             geom_point(aes(colour = group)) +
-            scale_colour_manual(values = deframe(bivariate_color_scale)) +
+            scale_colour_manual(values = tibble::deframe(bivariate_color_scale)) +
             labs(x = title, y = var_name) +
             theme_minimal() +
             theme(legend.position = "none",
@@ -91,7 +91,7 @@ explore_graph_server <- function(id, x, var_right, select, title) {
           
         } else {
           x() %>%
-            drop_na() %>%
+            tidyr::drop_na() %>%
             ggplot(aes(left_variable_full, right_variable_full)) +
             geom_point(colour = bivariate_color_scale$fill[9]) +
             geom_point(data = filter(x(), ID == select(), 

@@ -10,43 +10,42 @@ shinyOptions(cache = cachem::cache_disk("./app-cache"))
 
 library(shiny)
 library(shinydashboard)
-library(shinybusy)
-library(shinyjqui)
-library(shinyWidgets)
-library(shinythemes)
-library(extrafont)
+# library(shinybusy) # :: or remove
+# library(shinyjqui) # :: or remove
+# library(shinyWidgets) # ::
+# library(shinythemes) # ::
+# library(extrafont) # :: or remove
 library(shiny.i18n)
 library(waiter)
 
 library(dplyr)
 library(ggplot2)
-library(tidyr)
-library(purrr)
-library(readr)
-library(tibble)
-library(stringr)
-library(gghighlight)
-library(ggthemes)
+# library(tidyr) # :: or remove
+# library(purrr) # ::
+library(readr) # Eventually get rid of in favour of qs
+# library(tibble) # ::
+# library(stringr) # ::
+# library(ggthemes) # :: or remove
 
 library(sf)
 library(mapdeck) 
 library(mapboxapi)
-library(geojsonsf)
-library(jsonify)
-library(raster)
-library(RColorBrewer)
+# library(geojsonsf) # ::
+# library(jsonify) # ::
+# library(raster) # :: or remove
+# library(RColorBrewer) # ::
 
-library(markdown)
-library(png)
-library(cowplot)
-library(classInt)
-library(scales)
+# library(markdown) # :: or remove
+# library(png) # ::
+# library(cowplot) # ::, long-term replace with patchwork
+# library(classInt) # :: or remove
+# library(scales) # ::
 
 library(DT)
 library(qs)
 library(glue)
-library(aniview)
-library(data.table)
+# library(aniview) # ::
+# library(data.table) # remove
 
 #library(shinipsum)
 # library(fakir)
@@ -120,16 +119,16 @@ bivariate_color_scale <- tibble(
   "3 - 3" = "#2A5A5B", "2 - 3" = "#567994", "1 - 3" = "#6C83B5", 
   "3 - 2" = "#5A9178", "2 - 2" = "#90B2B3", "1 - 2" = "#B5C0DA",
   "3 - 1" = "#73AE80", "2 - 1" = "#B8D6BE", "1 - 1" = "#E8E8E8") %>%
-  pivot_longer(everything(), "group",values_to = "fill")
+  tidyr::pivot_longer(everything(), "group",values_to = "fill")
 
 color_scale <- tibble(
   "6" = "#73AE80", "5" = "#B8D6BE", "4" = "#E8E8E8", "3" = "#6C83B5",
   "2" = "#B5C0DA", "1" = "#E8E8E8") %>%
-  pivot_longer(everything(), "group", values_to = "fill")
+  tidyr::pivot_longer(everything(), "group", values_to = "fill")
 
 color_scale_2 <- tibble(
   "3" = "#73AE80", "2" = "#B8D6BE", "1" = "#E8E8E8") %>%
-  pivot_longer(everything(), "group", "fill")
+  tidyr::pivot_longer(everything(), "group", "fill")
 
 colors <- as.character(color_scale$fill)
 
@@ -271,8 +270,7 @@ loadingLogo <-
 
 title_text <- qread("data/title_text.qs")
 
-variable_explanations <- 
-  fread("data/variable_explanations.csv")
+variable_explanations <- read_csv("data/variable_explanations.csv")
 
 # Load data for pedestrian realm 
 load(file = "data/sidewalks_WSG.Rdata")

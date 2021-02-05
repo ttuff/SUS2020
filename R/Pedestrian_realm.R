@@ -60,7 +60,7 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
       conditionalPanel(
         condition = "output.zoom == 'IN'", ns = ns ,
         id = ns("plotContainer_ped_control"),
-        materialSwitch(inputId = ns("switch_biv"), 
+        shinyWidgets::materialSwitch(inputId = ns("switch_biv"), 
                        label = h3(strong(i18n$t("Perform a Bivariate Analysis"), 
                                          style = "color:#B2D235")), 
                        status = "primary", value = FALSE),
@@ -104,7 +104,7 @@ Pedestrian_realm_module_UI <- function(id, i18n ) {
           selected = 1),
         h5(tags$em(tags$span(style = "color:#3C3C3B", 
                              i18n$t("Play with the slider to filter the map")))), 
-        h5(chooseSliderSkin(skin = "Flat",
+        h5(shinyWidgets::chooseSliderSkin(skin = "Flat",
                             #c("Shiny", "Flat", "Modern", "Nice", "Simple", "HTML5", "Round", "Square"),
                             color = "#B2D235"),
            sliderInput(inputId = ns("slider_ped"), label = NULL, 0, 12, 
@@ -355,7 +355,7 @@ Pedestrian_realm_module_server <- function(id) {
         mutate(prop_driving = round(census_analysis_quantile_WSG$prop_driving, 0), 
                pop_density = log(round(census_analysis_quantile_WSG$`pop_density(sqkm)`, 0)),
                fill_opacity = paste0(fill, "99")) %>% 
-        drop_na(right_variable) 
+        tidyr::drop_na(right_variable) 
       
       st_crs(data_for_plot_bi) <- 4326
       bivariate_chloropleth  <- st_cast(data_for_plot_bi, "MULTIPOLYGON")
@@ -395,10 +395,10 @@ Pedestrian_realm_module_server <- function(id) {
         theme_void() +
         theme(legend.position = "none")
       
-      ggdraw() + 
-        draw_image(dropshadow1, scale = 1.8, vjust = 0.01) +
-        draw_plot(p) +
-        draw_image(uni_legend_right, scale = .5, vjust = 0.25, hjust = -0.25)
+      cowplot::ggdraw() + 
+        cowplot::draw_image(dropshadow1, scale = 1.8, vjust = 0.01) +
+        cowplot::draw_plot(p) +
+        cowplot::draw_image(uni_legend_right, scale = .5, vjust = 0.25, hjust = -0.25)
       
     }, bg = "transparent")
     
@@ -923,8 +923,10 @@ Pedestrian_realm_module_server <- function(id) {
           )
           
           poor_strong_ped_uni <- case_when(
-            str_detect(larger_smaller_ped_uni, sus_translate("larger")) ~ sus_translate("strong"),
-            str_detect(larger_smaller_ped_uni, sus_translate("smaller")) ~ sus_translate("poor"),
+            stringr::str_detect(larger_smaller_ped_uni, 
+                                sus_translate("larger")) ~ sus_translate("strong"),
+            stringr::str_detect(larger_smaller_ped_uni, 
+                                sus_translate("smaller")) ~ sus_translate("poor"),
             TRUE ~ sus_translate("moderate")
           )
           
@@ -1165,11 +1167,11 @@ Pedestrian_realm_module_server <- function(id) {
         if (nrow(filter(bivariate_chloropleth(), ID == rz_pedestrian$poly_selected)) != 1) {
           
           bivariate_chloropleth() %>%
-            drop_na() %>%
+            tidyr::drop_na() %>%
             ggplot(aes(left_variable_full, right_variable_full)) +
             geom_point(aes(colour = group)) +
             #geom_smooth(method = "lm", se = FALSE, colour = "grey50") +
-            scale_colour_manual(values = deframe(bivariate_color_scale)) +
+            scale_colour_manual(values = tibble::deframe(bivariate_color_scale)) +
             scale_x_continuous(name = sus_translate("Capacity for pedestrian social distancing"),
                                limits = c(0, 500),
                                expand = c(0,0),
@@ -1186,7 +1188,7 @@ Pedestrian_realm_module_server <- function(id) {
         } else {
           
           bivariate_chloropleth() %>%
-            drop_na() %>%
+            tidyr::drop_na() %>%
             ggplot(aes(left_variable_full, right_variable_full)) +
             geom_point(colour = bivariate_color_scale$fill[9]) +
             geom_smooth(method = "lm", se = FALSE, colour = "grey50") +

@@ -93,9 +93,9 @@ info_table_server <- function(id, x, var_right, select, zoom, title) {
           )
           
           poor_strong <- case_when(
-            str_detect(larger_smaller, sus_translate("larger")) ~ 
+            stringr::str_detect(larger_smaller, sus_translate("larger")) ~ 
               sus_translate("strong"),
-            str_detect(larger_smaller, sus_translate("smaller")) ~ 
+            stringr::str_detect(larger_smaller, sus_translate("smaller")) ~ 
               sus_translate("poor"),
             TRUE ~ sus_translate("moderate")
           )
