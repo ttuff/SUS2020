@@ -86,14 +86,14 @@ Accessibility_module_UI <- function(id, i18n){
     )
 }
 
-load(file="D:/SUS2020/SUS2020/data/Road_wo_weight.Rdata")
-load(file="D:/SUS2020/SUS2020/data/Road_weighted.Rdata")
-load(file="D:/SUS2020/SUS2020/data/hospital.Rdata")
-load(file="D:/SUS2020/SUS2020/data/grocery.Rdata")
-load(file="D:/SUS2020/SUS2020/data/pharmacy.Rdata")
-load(file="D:/SUS2020/SUS2020/data/covid.Rdata")
-load(file="D:/SUS2020/SUS2020/data/DA.Rdata")
-load(file="D:/SUS2020/SUS2020/data/reseau_cyclable.Rdata")
+load(file="data/Road_wo_weight.Rdata")
+load(file="data/Road_weighted.Rdata")
+load(file="data/hospital.Rdata")
+load(file="data/grocery.Rdata")
+load(file="data/pharmacy.Rdata")
+load(file="data/covid.Rdata")
+load(file="data/DA.Rdata")
+load(file="data/reseau_cyclable.Rdata")
 
 Accessibility_module_server <- function(id) {
     moduleServer(
