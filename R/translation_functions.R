@@ -1,19 +1,22 @@
 #### Translation functions #####################################################
 
-# Basic list french translation -------------------------------------------
+# Basic list French translation -------------------------------------------
 
 sus_translate_list <- function(x) {
   
   # translate name of lists
   names(x) <-
     map_chr(names(x), ~{
-      translation_fr %>%
+      if (is.null(.x)) NULL else {
+        translation_fr %>%
         filter(en == .x) %>%
         pull()
-      })
+      }})
   
   # Re-iterate in list depth to translate every name
-  if (vec_depth(x) > 2) x <- map(x, sus_translate_list)
+  if (vec_depth(x) > 2) x <- map(x, ~{
+    if (vec_depth(.x) > 1) sus_translate_list(.x) else (.x)
+    })
   
   x
   
