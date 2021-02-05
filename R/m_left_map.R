@@ -19,10 +19,10 @@ left_map_server <- function(id, x, cache_id = x) {
         theme_map() +
         theme(legend.position = "none")
       
-      ggdraw() +
-        draw_image(dropshadow_left, scale = 1.41) +
-        draw_plot(p) +
-        draw_image(uni_legend, scale = .45, vjust = 0.25, hjust = 0.25)
+      cowplot::ggdraw() +
+        cowplot::draw_image(dropshadow_left, scale = 1.41) +
+        cowplot::draw_plot(p) +
+        cowplot::draw_image(uni_legend, scale = .45, vjust = 0.25, hjust = 0.25)
       
     }, bg = "white") %>% bindCache(cache_id())
   })

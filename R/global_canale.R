@@ -3,7 +3,7 @@
 # Data and helper functions -----------------------------------------------
 
 # Load bivariate census data
-qs::qload("data/data_canale.qsm")
+qload("data/data_canale.qsm")
 
 # Initialize reactive values
 rv_canale <- reactiveValues(zoom = "OUT", poly_selected = NA)

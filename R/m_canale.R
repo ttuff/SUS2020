@@ -19,11 +19,12 @@ canale_UI <- function(id) {
     # Right panel
     absolutePanel(
       id = NS(id, "right_panel"), style =
-        "z-index:500; max-height: 88vh; overflow-y: auto; overflow-x:hidden; padding: 5px;",
+        "z-index:500; max-height: 90vh; overflow-y: auto; overflow-x:hidden; padding: 5px; border-width: 0px;",
       class = "panel panel-default", top = 70, right = 20, width = 300,
       
       # 3D switch
-      materialSwitch(inputId = NS(id, "extrude"), label = i18n$t("View in 3D"),
+      shinyWidgets::materialSwitch(inputId = NS(id, "extrude"), 
+                                   label = i18n$t("View in 3D"),
                      status = "danger", value = FALSE),
       
       hr(),
@@ -56,7 +57,7 @@ canale_UI <- function(id) {
     # Floating legend
     absolutePanel(
       id = NS(id, "legend_container"), class = "panel panel-default",
-      style = "z-index:500; background-color: rgba(0,0,255,0); border-width: 0px; margin:10px", 
+      style = "z-index:500; background-color: rgba(0,0,255,0); border-width: 0px; margin:0px", 
       bottom = 20, fixed = TRUE,
       conditionalPanel(
         condition = 'input.var_right != " "', ns = NS(id),
@@ -305,9 +306,9 @@ canale_server <- function(id) {
             geom_sf(fill = "#CABED0", color = "white", size = 0.01) +
             theme_map()
 
-          ggdraw() +
-            draw_image(dropshadow_right, scale = 1.17) +
-            draw_plot(p)
+          cowplot::ggdraw() +
+            cowplot::draw_image(dropshadow_right, scale = 1.17) +
+            cowplot::draw_plot(p)
         } else {
           p <-
             ggplot(data_canale()) +
@@ -316,10 +317,11 @@ canale_server <- function(id) {
             scale_fill_manual(values = rev(colors[c(4:6)])) +
             theme_map()
 
-          ggdraw() +
-            draw_image(dropshadow_right, scale = 1.17) +
-            draw_plot(p) +
-            draw_image(uni_legend_right, scale = .45, vjust = 0.25, hjust = -0.25)
+          cowplot::ggdraw() +
+            cowplot::draw_image(dropshadow_right, scale = 1.17) +
+            cowplot::draw_plot(p) +
+            cowplot::draw_image(uni_legend_right, scale = .45, vjust = 0.25, 
+                                hjust = -0.25)
         }
       }, bg = "transparent") %>% bindCache(input$var_right, 
                                            rv_canale$zoom)
