@@ -45,7 +45,7 @@ Biodiversity_module_UI <- function(id, i18n) {
 # class(montreal_ES)
 # st_crs(montreal_ES) <- 2950
 # mapview(montreal_ES)
-# key <- 'pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ'
+ key <- 'pk.eyJ1IjoidHR1ZmYiLCJhIjoiY2pvbTV2OTk3MGkxcTN2bzkwZm1hOXEzdiJ9.KurIg4udRE3PiJqY1p2pdQ'
 # montreal_ES <- montreal_ES %>%
 #   st_transform(4326)
 
