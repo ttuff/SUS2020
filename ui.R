@@ -121,7 +121,7 @@ ui <- dashboardPage(
       tabItem(tabName = "Pedestrian", #Pedestrian_realm_module_UI("Pedestrian_realm_module", i18n = i18n)
       ),
       tabItem(tabName = "mode", Mode_switch_module_UI("Mode_switch_module")),
-      tabItem(tabName = "accessibility", Accessibility_module_UI("accessibility_module", i18n = i18n),
+      tabItem(tabName = "accessibility", Accessibility_module_UI("accessibility_module", i18n = i18n)),
       tabItem(tabName = "biodiversity", Biodiversity_module_UI("biodiversity_module", i18n = i18n)),
       tabItem(tabName = "meet_the_team", Meet_the_team_UI("meet_the_team_module", i18n = i18n))
       
