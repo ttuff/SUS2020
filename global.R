@@ -12,7 +12,7 @@ library(shiny)
 library(shinydashboard)
 # library(shinybusy) # :: or remove
 # library(shinyjqui) # :: or remove
-# library(shinyWidgets) # ::
+library(shinyWidgets)
 # library(shinythemes) # ::
 # library(extrafont) # :: or remove
 library(shiny.i18n)
