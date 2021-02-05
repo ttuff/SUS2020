@@ -396,7 +396,7 @@ translation_fr <-
   add_row(en = paste0("<strong>{place_heading}</strong>", 
                       
                       "<p>{place_name} has a population of ",
-                      "{prettyNum(dat$population, ',')} and a CanALE index ",
+                      "{prettyNum(dat$population, ',')} and a {title} ",
                       "score of {round(poly_value, 2)}, which is {larger_smaller} ",
                       "the region-wide median of {median_val}.", 
                       
@@ -406,8 +406,8 @@ translation_fr <-
           fr = paste0("<strong>{place_heading}</strong>", 
                       
                       "<p>{place_name} a une population de ",
-                      "{prettyNum(dat$population, ',')} et un score d'indice ",
-                      "AVA-Can de {round(poly_value, 2)}, ce qui est {larger_smaller} ",
+                      "{prettyNum(dat$population, ',')} et un score {title} ",
+                      "de {round(poly_value, 2)}, ce qui est {larger_smaller} ",
                       "la médiane régionale de {median_val}.", 
                       
                       "<p>{place_name} a un potentiel {poor_strong} de vie ", 
