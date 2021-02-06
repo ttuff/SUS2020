@@ -272,7 +272,7 @@ Accessibility_module_server <- function(id) {
                                         update_view = FALSE)
 
                         output$text <- renderUI({
-                            HTML("Residents of the Island live an average of 1.8 kms from the nearest health care facility,
+                            HTML("Residents of the Island live an average of 1.8 km from the nearest health care facility,
                      <br/>that works out to a 7-minutes cycling. Overall, 19% of people live more than
                      <br/>10 minutes away from their nearest health care facility, while 22% live between 5 and
                      <br/>10 minutes away and 59% live less than 5 minutes away. Low-income
@@ -293,7 +293,7 @@ Accessibility_module_server <- function(id) {
                                         update_view = FALSE)
 
                         output$text <- renderUI({
-                            HTML("Residents of the Island live an average of 0.4 kms from the nearest grocery store,
+                            HTML("Residents of the Island live an average of 0.4 km from the nearest grocery store,
                      <br/>that works out to a 2-minutes cycling. Overall, 97% of people live less than
                      <br/>5 minutes away from their nearest grocery store.")
                         })
@@ -311,7 +311,7 @@ Accessibility_module_server <- function(id) {
                                         auto_highlight = TRUE,
                                         update_view = FALSE)
                         output$text <- renderUI({
-                            HTML("Residents of the Island live an average of 0.7 kms from the nearest pharmacy,
+                            HTML("Residents of the Island live an average of 0.7 km from the nearest pharmacy,
                          <br/>that works out to a 3-minutes cycling. Overall, 92% of people live less than
                          <br/>5 minutes away from their nearest pharmacy.")
                         })
