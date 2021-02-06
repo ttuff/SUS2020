@@ -1197,6 +1197,28 @@ translation_fr <-
           fr = "Installations pour cyclistes") %>%
   add_row(en = "CO2 Avoided",
           fr = "CO2 évité") %>%
+  add_row(en = "Distance (m)",
+          fr = "Distance (m)") %>%
+  add_row(en = "Elevation (m)",
+          fr = "Élevation (m)") %>%
+  add_row(en = "km/sq(km)",
+          fr = "km/km2") %>%
+  add_row(en = "Low Income Rate (2016)",
+          fr = "Taux de faible revenu (2016)") %>%
+  add_row(en = "Cycling Rate",
+          fr = "Taux de cyclisme") %>%
+  add_row(en = "Density of Cycling Facility",
+          fr = "Densité de l'infrastructure cyclable") %>%
+  add_row(en = "Density of Cycling Facility",
+          fr = "Densité de l'infrastructure cyclable") %>%
+  add_row(en = "Travel Time to Closest Health Care",
+          fr = "Temps de trajet jusqu'à l'établissement de soins de santé le plus proche") %>%
+  add_row(en = "Travel Time to Closest Grocery",
+          fr = "Temps de trajet jusqu'à l'épicerie la plus proche") %>%
+  add_row(en = "Travel Time to Closest Pharmacy",
+          fr = "Temps de trajet jusqu'à la pharmacie la plus proche") %>%
+  add_row(en = "Number of Accessible Eating Places",
+          fr = "Nombre de lieux de restauration accessibles") %>%
   add_row(en = "Safest Route/Fastest Route",
           fr = "L'itinéraire le plus sécuritaire/le plus rapide") %>%
   add_row(en = "Travel Time to Closest Health Care Facility (minutes)",
@@ -1207,7 +1229,7 @@ translation_fr <-
           fr = "Temps de trajet jusqu'à la pharmacie la plus proche (en minutes)") %>%
   add_row(en = "Number of Eating Places within 15-minutes Cycling",
           fr = "Nombre de lieux de restauration accessibles en 15 minutes de vélo") %>%
-  add_row(en = paste0("Residents of the Island live an average of 1.8 kms from the nearest health care facility,",
+  add_row(en = paste0("Residents of the Island live an average of 1.8 km from the nearest health care facility,",
                      "<br/>that works out to a 7-minutes cycling. Overall, 19% of people live more than",
                      "<br/>10 minutes away from their nearest health care facility, while 22% live between 5 and",
                      "<br/>10 minutes away and 59% live less than 5 minutes away. Low-income",
@@ -1217,12 +1239,18 @@ translation_fr <-
                       "<br/>10 minutes de l'établissement de soins de santé le plus proche, tandis que 22% vivent entre 5 et",
                       "<br/>10 minutes et 59% à moins de 5 minutes. Les ménages à faibles revenus",
                       "<br/>sont plus susceptibles de vivre à proximité de l'établissement de soins de santé le plus proche.")) %>%
-  add_row(en = paste0("Residents of the Island live an average of 0.4 kms from the nearest grocery store,",
+  add_row(en = paste0("Residents of the Island live an average of 0.4 km from the nearest grocery store,",
                      "<br/>that works out to a 2-minutes cycling. Overall, 97% of people live less than",
                      "<br/>5 minutes away from their nearest grocery store."),
           fr = paste0("Les résidents de l'Île de Montréal vivent, en moyenne, à 0.4 km de l'épicerie la plus proche,",
                       "<br/>ce qui revient à 2 minutes de vélo. Dans l'ensemble, 97% des personnes vivent à moins de 5",
                       "<br/>minutes de vélo de l'épicerie la plus proche.")) %>%
+  add_row(en = paste0("Residents of the Island live an average of 0.7 km from the nearest pharmacy,",
+                      "<br/>that works out to a 3-minutes cycling. Overall, 92% of people live less than",
+                      "<br/>5 minutes away from their nearest pharmacy."),
+          fr = paste0("Les résidents de l'Île de Montréal vivent, en moyenne, à 0.7 km de la pharmacie la plus proche,",
+                      "<br/>ce qui revient à 3 minutes de vélo. Dans l'ensemble, 92% des personnes vivent à moins de 5",
+                      "<br/>minutes de vélo de la pharmacie la plus proche.")) %>%
   distinct(en, .keep_all = T)
 
 write_csv(translation_fr, "translations/translation_fr.csv")
