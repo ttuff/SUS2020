@@ -5,3 +5,4 @@
 *DS_Store
 app-cache/*
 R/app-cache/*
+*.Rproj
