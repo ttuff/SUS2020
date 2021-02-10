@@ -46,7 +46,7 @@ translation_fr <-
                       "l'accessibilité à la vie active dans les milieux de vie. Rapports sur la santé de Statistique Canada, 82-003-X.</a><li><a ",
                       "href = ''>Kevin Manaugh, Linnea Soli, Samuel Kohn, Robin Basalaev-Binder, Ty Tuff, David Wachsmuth. ",
                       "2020. «Réponse de Montréal à COVID-19 : Une analyse de l'équité des nouvelles infrastructures de ",
-                      "transport actif». Document de travail pour le Transportation Research Board.</a> <b>(MSSI research)</b></ul><br><<p><<i>Auteur(e)s ",
+                      "transport actif». Document de travail pour le Transportation Research Board.</a> <b>(MSSI research)</b></ul><br><p><i>Auteur(e)s ",
                       "principaux(ales) du module: Robin Basalaev-Binder, Ty Tuff, David Wachsmuth</i>")) %>%
   add_row(en = paste0("Based on 2016 commuting data, we quantify possible reductions in VMT and GHG by identifying car ",
                       "trips that could be shifted to cycling based on distance, elevation change and other factors."), 
@@ -153,8 +153,8 @@ translation_fr <-
   add_row(en = "Tenant-occupied (%) is the percentage of private dwellings which are occupied by tenants.", 
           fr = "Locataire occupant (%) est le pourcentage de logements privés qui sont occupés par des locataires") %>%
   add_row(en = "Average rent", fr = "Frais de logement mensuels moyens") %>%
-  add_row(en = "Tenant-occupied (%) is the percentage of private dwellings which are occupied by tenants.", 
-          fr = "Locataire occupant (%) est le pourcentage de logements privés qui sont occupés par des locataires") %>%
+  add_row(en = "Average rent is the average rent paid by tenants per month.", 
+          fr = "Frais de logement mensuels moyens est le loyer moyen payé par les locataires par mois.") %>%
   add_row(en = "Average property value", fr = "Valeur foncière moyenne") %>%
   add_row(en = "Average property value is the average value of dwellings.", 
           fr = "Valeur foncière moyenne est la valeur moyenne des propriétés.") %>%
@@ -367,12 +367,12 @@ translation_fr <-
   add_row(en = "considerably different" , fr = "modérément différents") %>%
   # CanAle module
   # Chosen value and comparison
-  add_row(en = paste0("At the {scale_singular} scale, the CanALE index varies from ",
+  add_row(en = paste0("At the {scale_singular} scale, the {title} varies from ",
                       "{min_val} to {max_val}, with an average value of {mean_val} ",
                       "and a median value of {median_val}. ",
                       "Two thirds of {scale_plural} have a score between {quant_low} ",
                       "and {quant_high}."),
-          fr = paste0("À l'échelle {scale_singular}, l'index AVA-Can varie de ",
+          fr = paste0("À l'échelle {scale_singular}, {title} varie de ",
                       "{min_val} à {max_val}, avec une valeur moyenne de {mean_val} ",
                       "et une valeur médianne de {median_val}. ",
                       "Deux tiers {scale_plural} ont un score se situant entre {quant_low} ",
@@ -389,14 +389,14 @@ translation_fr <-
                       "autochtones que dans les autres juridictions, nous ne ",
                       "pouvons donc pas afficher de résultats ici.")) %>%
   # CanALE active living potential
-  add_row(en = "CanALE Index", fr = "Index AVA-Can") %>% 
+  add_row(en = "CanALE index", fr = "Indice AVA-Can") %>% 
   add_row(en = "View in 3D", fr = "Voir en 3D") %>% 
   add_row(en = "Active living potential: the CanALE index",
-          fr = "Potentiel de vie active: l'index AVA-Can") %>% 
+          fr = "Potentiel de vie active: l'indice AVA-Can") %>% 
   add_row(en = paste0("<strong>{place_heading}</strong>", 
                       
                       "<p>{place_name} has a population of ",
-                      "{prettyNum(dat$population, ',')} and a CanALE index ",
+                      "{prettyNum(dat$population, ',')} and a {title} ",
                       "score of {round(poly_value, 2)}, which is {larger_smaller} ",
                       "the region-wide median of {median_val}.", 
                       
@@ -406,35 +406,35 @@ translation_fr <-
           fr = paste0("<strong>{place_heading}</strong>", 
                       
                       "<p>{place_name} a une population de ",
-                      "{prettyNum(dat$population, ',')} et un score d'index ",
-                      "AVA-Can de {round(poly_value, 2)}, ce qui est {larger_smaller} ",
+                      "{prettyNum(dat$population, ',')} et un score {title} ",
+                      "de {round(poly_value, 2)}, ce qui est {larger_smaller} ",
                       "la médiane régionale de {median_val}.", 
                       
                       "<p>{place_name} a un potentiel {poor_strong} de vie ", 
-                      "active, avec un score d'index AVA-Can plus grand que {percentile}% ",
+                      "active, avec un score d'indice AVA-Can plus grand que {percentile}% ",
                       "des {scale_plural} dans la région de Montréal.")) %>% 
   # Correlation explanation
   add_row(en = paste0("<p>{var_explanation}", 
-                      "<p>The CanALE index has effectively no correlation ",
+                      "<p>The {title} has effectively no correlation ",
                       "({correlation}) with {var_name} at the ",
                       "{scale_singular} scale.",
                       "<p>This means that, at the {scale_singular} scale, ", 
                       "there is no relationship between the two variables."),
           fr = paste0("<p>{var_explanation}", 
-                      "<p>L'index AVA-Can n'a en fait aucune corrélation ",
+                      "<p>{title} n'a en fait aucune corrélation ",
                       "({correlation}) avec la variable '{var_name}' à l'échelle ",
                       "'{scale_singular}'.",
                       "<p>Cela signifie que, à l'échelle '{scale_singular}', ", 
                       "il n'y a pas de relation entre ces deux variables.")) %>% 
   add_row(en = paste0("<p>{var_explanation}", 
-                      "<p>The CanALE index has a {strong_weak} {pos_neg} ",
+                      "<p>The {title} has a {strong_weak} {pos_neg} ",
                       "correlation ({correlation}) with '{tolower(var_name)}' at the ",
                       "{scale_singular} scale.",
                       "<p>This means that, in general, {scale_plural} with higher ",
                       "potential for active living tend to have {higher_lower} ",
                       "values for '{tolower(var_name)}', {high_low_disclaimer}."),
           fr = paste0("<p>{var_explanation}", 
-                      "<p>L'index AVA-Can a un indice de corrélation {strong_weak} et {pos_neg} ",
+                      "<p>{title} a un indice de corrélation {strong_weak} et {pos_neg} ",
                       "({correlation}) avec la variable '{tolower(var_name)}' à l'échelle ",
                       "'{scale_singular}'.",
                       "<p>Cela signifie qu'en général, les {scale_plural} avec un haut ",
@@ -444,12 +444,12 @@ translation_fr <-
   add_row(en = paste0("<strong>{place_heading}</strong>", 
                       
                       "<p>{place_name} has a population of ",
-                      "{prettyNum(dat$population, ',')}, a CanALE index score ",
+                      "{prettyNum(dat$population, ',')}, a {title} score ",
                       "of {round(poly_value_1, 2)}, and a '{tolower(var_name)}' ",
                       "value of {round(poly_value_2, 2)}. ",
                       
                       "<p>These two scores are {relative_position}, in relative ",
-                      "terms. {place_name} has a CanALE index score higher ",
+                      "terms. {place_name} has a {title} score higher ",
                       "than {percentile_left}% of {scale_plural} and ",
                       "a '{tolower(var_name)}' score higher than ", 
                       "{percentile_right}% of {scale_plural} in the ",
@@ -457,12 +457,12 @@ translation_fr <-
           fr = paste0("<strong>{place_heading}</strong>", 
                       
                       "<p>{place_name} a une population de ",
-                      "{prettyNum(dat$population, ',')}, un score d'index AVA-Can ",
+                      "{prettyNum(dat$population, ',')}, un score {title} ",
                       "de {round(poly_value_1, 2)}, et une valeur pour la variable '{tolower(var_name)}' ",
                       "de {round(poly_value_2, 2)}. ",
                       
                       "<p>Ces deux scores sont {relative_position}, en termes ",
-                      "relatifs. {place_name} a un score d'index AVA-Can plus grand ",
+                      "relatifs. {place_name} a un score {title} plus grand ",
                       "que {percentile_left}% des {scale_plural} et ",
                       "un score pour la variable '{tolower(var_name)}' plus grand que ", 
                       "{percentile_right}% des {scale_plural} dans la ",
@@ -644,7 +644,7 @@ translation_fr <-
   add_row(en = paste0("While, overall, there is a trend towards lower income DAs being in high ALE class, roughly ",
                       "340,000 people are in CanALE class 3 or lower AND have median household income less than $50,000."),
           fr = paste0("Alors que, généralement, on observe une tendance à ce que les AD à faible revenu fassent partie ",
-                      "de la classe AVA élevée, environ 340 000 personnes font partie de la classe CanALE 3 ou moins et ",
+                      "de la classe AVA élevée, environ 340 000 personnes font partie de la classe AVA-Can 3 ou moins et ",
                       "ont un revenu par ménage médian inférieur à 50 000 $.")) %>% 
   add_row(en = paste0("Areas in class 4 of active living potential have the highest average dwelling values, but nearly ",
                       "10% fewer renters than areas with active living class 5."),
@@ -1146,6 +1146,111 @@ translation_fr <-
           fr = paste0("Les cinq secteurs ayant le plus fort potentiel de vie active sont tous des arrondissements ",
                       "de la Ville de Montréal (Le Plateau-Mont-Royal; Rosemont-La-Petite-Patrie; Ville-Marie; ",
                       "Villeray-Saint-Michel-Parc-Extension; Côte-des-Niges-Notre-Dame-de-Grâce).")) %>%
+  # For the waiter
+  add_row(en = "Please wait, this may take a few minutes",
+          fr = "Veuillez patienter, ceci peut prendre quelques minutes") %>% 
+  # Accessibility module
+  add_row(en = "Access to Urban Opportunities",
+          fr = "Accès aux opportunités urbaines") %>% 
+  add_row(en = "Dissemination Area",
+          fr = "Aire de diffusion") %>% 
+  add_row(en = "Route Planner",
+          fr = "Planificateur d'itinéraire") %>% 
+  add_row(en = "Cycling Network",
+          fr = "Réseau cycliste") %>% 
+  # Accessibility destionations
+  add_row(en = "Select your destination",
+          fr = "Sélectionnez votre destination") %>%
+  add_row(en = "COVID-19 Testing Centre",
+          fr = "Centre de dépistage COVID-19") %>%
+  add_row(en = "Health Care",
+          fr = "Soins de santé") %>%
+  add_row(en = "Grocery Store",
+          fr = "Épicerie") %>%
+  add_row(en = "Pharmacy",
+          fr = "Pharmacie") %>%
+  add_row(en = "Eating Place",
+          fr = "Lieu de restauration") %>%
+  add_row(en = "Shortest Route",
+          fr = "Itinéraire le plus court") %>%
+  add_row(en = "Shortest Route",
+          fr = "Safest Route") %>%
+  add_row(en = "Route Information",
+          fr = "Informations sur l'itinéraire") %>%
+  add_row(en = "Elevation Profile",
+          fr = "Profil d'élévation") %>%
+  add_row(en = "Select a variable:",
+          fr = "Choisissez une variable:") %>%
+  add_row(en = "Travel Time to Closest Health Care",
+          fr = "Temps de trajet pour se rendre aux soins de santé les plus proches") %>%
+  add_row(en = "Travel Time to Closest Grocery",
+          fr = "Temps de trajet jusqu'à l'épicerie la plus proche") %>%
+  add_row(en = "Travel Time to Closest Pharmacy",
+          fr = "Temps de trajet jusqu'à la pharmacie la plus proche") %>%
+  add_row(en = "Number of Accessible Eating Places",
+          fr = "Nombre de lieux de restauration accessibles") %>%
+  add_row(en = "Journey Time",
+          fr = "Durée du trajet") %>%
+  add_row(en = "Route Distance",
+          fr = "Distance du trajet") %>%
+  add_row(en = "Cycling Facility",
+          fr = "Installations pour cyclistes") %>%
+  add_row(en = "CO2 Avoided",
+          fr = "CO2 évité") %>%
+  add_row(en = "Distance (m)",
+          fr = "Distance (m)") %>%
+  add_row(en = "Elevation (m)",
+          fr = "Élevation (m)") %>%
+  add_row(en = "km/sq(km)",
+          fr = "km/km2") %>%
+  add_row(en = "Low Income Rate (2016)",
+          fr = "Taux de faible revenu (2016)") %>%
+  add_row(en = "Cycling Rate",
+          fr = "Taux de cyclisme") %>%
+  add_row(en = "Density of Cycling Facility",
+          fr = "Densité de l'infrastructure cyclable") %>%
+  add_row(en = "Density of Cycling Facility",
+          fr = "Densité de l'infrastructure cyclable") %>%
+  add_row(en = "Travel Time to Closest Health Care",
+          fr = "Temps de trajet jusqu'à l'établissement de soins de santé le plus proche") %>%
+  add_row(en = "Travel Time to Closest Grocery",
+          fr = "Temps de trajet jusqu'à l'épicerie la plus proche") %>%
+  add_row(en = "Travel Time to Closest Pharmacy",
+          fr = "Temps de trajet jusqu'à la pharmacie la plus proche") %>%
+  add_row(en = "Number of Accessible Eating Places",
+          fr = "Nombre de lieux de restauration accessibles") %>%
+  add_row(en = "Safest Route/Fastest Route",
+          fr = "L'itinéraire le plus sécuritaire/le plus rapide") %>%
+  add_row(en = "Travel Time to Closest Health Care Facility (minutes)",
+          fr = "Temps de trajet jusqu'à l'établissement de soins de santé le plus proche (en minutes)") %>%
+  add_row(en = "Travel Time to Closest Grocery Store (minutes)",
+          fr = "Temps de trajet jusqu'à l'épicerie la plus proche (en minutes)") %>%
+  add_row(en = "Travel Time to Closest Pharmacy (minutes)",
+          fr = "Temps de trajet jusqu'à la pharmacie la plus proche (en minutes)") %>%
+  add_row(en = "Number of Eating Places within 15-minutes Cycling",
+          fr = "Nombre de lieux de restauration accessibles en 15 minutes de vélo") %>%
+  add_row(en = paste0("Residents of the Island live an average of 1.8 km from the nearest health care facility,",
+                     "<br/>that works out to a 7-minutes cycling. Overall, 19% of people live more than",
+                     "<br/>10 minutes away from their nearest health care facility, while 22% live between 5 and",
+                     "<br/>10 minutes away and 59% live less than 5 minutes away. Low-income",
+                     "<br/>households are more likely to live closer to the nearest health care facility."),
+          fr = paste0("Les résidents de l'Île de Montréal vivent, en moyenne, à 1.8 km de l'établissement de soins de santé le plus proche,",
+                      "<br/>ce qui revient à 7 minutes de vélo. Dans l'ensemble, 19% des gens habitent à plus de",
+                      "<br/>10 minutes de l'établissement de soins de santé le plus proche, tandis que 22% vivent entre 5 et",
+                      "<br/>10 minutes et 59% à moins de 5 minutes. Les ménages à faibles revenus",
+                      "<br/>sont plus susceptibles de vivre à proximité de l'établissement de soins de santé le plus proche.")) %>%
+  add_row(en = paste0("Residents of the Island live an average of 0.4 km from the nearest grocery store,",
+                     "<br/>that works out to a 2-minutes cycling. Overall, 97% of people live less than",
+                     "<br/>5 minutes away from their nearest grocery store."),
+          fr = paste0("Les résidents de l'Île de Montréal vivent, en moyenne, à 0.4 km de l'épicerie la plus proche,",
+                      "<br/>ce qui revient à 2 minutes de vélo. Dans l'ensemble, 97% des personnes vivent à moins de 5",
+                      "<br/>minutes de vélo de l'épicerie la plus proche.")) %>%
+  add_row(en = paste0("Residents of the Island live an average of 0.7 km from the nearest pharmacy,",
+                      "<br/>that works out to a 3-minutes cycling. Overall, 92% of people live less than",
+                      "<br/>5 minutes away from their nearest pharmacy."),
+          fr = paste0("Les résidents de l'Île de Montréal vivent, en moyenne, à 0.7 km de la pharmacie la plus proche,",
+                      "<br/>ce qui revient à 3 minutes de vélo. Dans l'ensemble, 92% des personnes vivent à moins de 5",
+                      "<br/>minutes de vélo de la pharmacie la plus proche.")) %>%
   distinct(en, .keep_all = T)
 
 write_csv(translation_fr, "translations/translation_fr.csv")

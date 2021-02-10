@@ -4,46 +4,10 @@ shinyServer(function(input, output, session) {
   
   # Waiter ------------------------------------------------------------------
 
-  # show_modal_spinner() # show the modal window
-  # remove_modal_spinner()
-  
-  #w <- Waiter$new()
-  
-  # give time for wait screen to show
-  #Sys.sleep(3) 
-  #hide_waiter()
-  
-  # observeEvent(input$show, {
-  #   w$show(spinner)
-  #   Sys.sleep(3) # give time for wait screen to show
-  #   w$hide()
-  # })
+  waiter_hide()
   
   # Plot output calls for all 'left' plots ----------------------------------
   # WILL GET MOVED INTO INDIVIDUAL MODULES
-  
-  # Active living potential
-  output$canale_map_left <- renderCachedPlot({
-    
-    # data_for_plot_left <- 
-    #   data_bivar()
-    # 
-    # p <-
-    #   ggplot(data_for_plot_left) +
-    #   geom_sf(aes(fill = as.factor(left_variable)), color = "white", size = 0.01) +
-    #   scale_fill_manual(values = rev(colors[c(1:3)]), na.value = "grey70") +
-    #   theme_map() + 
-    #   theme(legend.position = "none")
-    # 
-    # ggdraw() + 
-    #   draw_image(dropshadow2, scale = 1.59, vjust = 0.003, hjust = 0.003) +
-    #   draw_plot(p) +
-    #   draw_image(uni_legend, scale = .45, vjust = 0.25, hjust = 0.25) 
-    
-    }, 
-    cacheKeyExpr = paste(rz$zoom, "left", sep = "_"),
-    cache = diskCache("./app-cache"),
-    bg = "white")
   
   # Commuter mode shift
   output$commuter_map_left <- renderCachedPlot({
@@ -56,9 +20,9 @@ shinyServer(function(input, output, session) {
       scale_fill_manual(values = rev(colors[c(4:6)])) +
       theme_map()
     
-    ggdraw() + 
-      draw_image(dropshadow2, scale = 1.59, vjust = 0.003, hjust = 0.003) +
-      draw_plot(p, scale = .85) 
+    cowplot::ggdraw() + 
+      cowplot::draw_image(dropshadow2, scale = 1.59, vjust = 0.003, hjust = 0.003) +
+      cowplot::draw_plot(p, scale = .85) 
     
   },
   cacheKeyExpr = paste("commute_mode_left"),
@@ -80,10 +44,10 @@ shinyServer(function(input, output, session) {
       theme_void() +
       theme(legend.position = "none")
     
-    ggdraw() + 
-      draw_image(dropshadow2, scale = 1.85, vjust = 0.01) +
-      draw_plot(p) +
-      draw_image(uni_legend, scale = .45, vjust = 0.3, hjust = 0.3)
+    cowplot::ggdraw() + 
+      cowplot::draw_image(dropshadow2, scale = 1.85, vjust = 0.01) +
+      cowplot::draw_plot(p) +
+      cowplot::draw_image(uni_legend, scale = .45, vjust = 0.3, hjust = 0.3)
     
     },
     cacheKeyExpr = "pedestrian_left",
@@ -114,6 +78,7 @@ shinyServer(function(input, output, session) {
   canale_server("canale")    
   #Pedestrian_realm_module_server("Pedestrian_realm_module")
   Mode_switch_module_server("Mode_switch_module")
+  Accessibility_module_server("accessibility_module")
   Biodiversity_module_server("biodiversity_module")
   Meet_the_team_server("meet_the_team_module")
   why_dash_server("why_dash")
