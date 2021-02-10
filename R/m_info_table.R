@@ -150,7 +150,7 @@ info_table_server <- function(id, x, var_right, select, zoom, title) {
         
         strong_weak <- case_when(abs(correlation) > 0.6 ~ sus_translate("strong"),
                                  abs(correlation) > 0.3 ~ sus_translate("moderate"),
-                                 TRUE ~ "weak")
+                                 TRUE ~ sus_translate("weak"))
         
         higher_lower <- if_else(pos_neg == sus_translate("positive"),
                                 sus_translate("higher"),

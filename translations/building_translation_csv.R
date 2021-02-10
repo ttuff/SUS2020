@@ -153,8 +153,8 @@ translation_fr <-
   add_row(en = "Tenant-occupied (%) is the percentage of private dwellings which are occupied by tenants.", 
           fr = "Locataire occupant (%) est le pourcentage de logements privés qui sont occupés par des locataires") %>%
   add_row(en = "Average rent", fr = "Frais de logement mensuels moyens") %>%
-  add_row(en = "Tenant-occupied (%) is the percentage of private dwellings which are occupied by tenants.", 
-          fr = "Locataire occupant (%) est le pourcentage de logements privés qui sont occupés par des locataires") %>%
+  add_row(en = "Average rent is the average rent paid by tenants per month.", 
+          fr = "Frais de logement mensuels moyens est le loyer moyen payé par les locataires par mois.") %>%
   add_row(en = "Average property value", fr = "Valeur foncière moyenne") %>%
   add_row(en = "Average property value is the average value of dwellings.", 
           fr = "Valeur foncière moyenne est la valeur moyenne des propriétés.") %>%
