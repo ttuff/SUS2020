@@ -66,7 +66,8 @@ Accessibility_module_UI <- function(id, i18n){
             ),
             conditionalPanel(
                 condition = "output.da != null & input.radio3 == 1",ns = ns,
-                DT::DTOutput(ns("table2"))
+                DT::DTOutput(ns("table2")),
+                plotOutput(ns("histogram"), height = 200)
             )
             
         ),
@@ -95,6 +96,15 @@ load(file="data/covid.Rdata")
 load(file="data/DA.Rdata")
 load(file="data/reseau_cyclable.Rdata")
 
+# load(file="D:/GitHub/SUS2020/data/Road_wo_weight.Rdata")
+# load(file="D:/GitHub/SUS2020/data/Road_weighted.Rdata")
+# load(file="D:/GitHub/SUS2020/data/hospital.Rdata")
+# load(file="D:/GitHub/SUS2020/data/grocery.Rdata")
+# load(file="D:/GitHub/SUS2020/data/pharmacy.Rdata")
+# load(file="D:/GitHub/SUS2020/data/covid.Rdata")
+# load(file="D:/GitHub/SUS2020/data/DA.Rdata")
+# load(file="D:/GitHub/SUS2020/data/reseau_cyclable.Rdata")
+
 Accessibility_module_server <- function(id) {
     moduleServer(
         id,
@@ -115,6 +125,23 @@ Accessibility_module_server <- function(id) {
                 mapdeck(token = "pk.eyJ1Ijoiemhhb3FpYW8wMTIwIiwiYSI6ImNrYXBnbHB3dTFtbDIycWxvZ285cjNmcG0ifQ.fieGPt1pLEgHs1AI8NvjYg",
                         style = "mapbox://styles/zhaoqiao0120/ckjj0fbc205z319p36spdtnv9",zoom=10.5,location=c(-73.611,45.526))
             })
+            ##Histogram plot------
+            p_hos<-ggplot(DA, aes(x=time_hos))+
+                geom_histogram(color="darkblue", fill="lightblue")+
+                labs(x="Cycling Time to Closest Health Care Facility (Minutes)", y = "Count")+theme(legend.position = "none")
+            
+            p_groc<-ggplot(DA, aes(x=time_groc))+
+                geom_histogram(color="darkgreen", fill="lightgreen")+
+                labs(x="Cycling Time to Closest Grocery Store (Minutes)", y = "Count")+theme(legend.position = "none")
+           
+            p_phar<-ggplot(DA, aes(x=time_phar))+
+                geom_histogram(color="Chocolate", fill="orange")+
+                labs(x="Cycling Time to Closest Pharmacy (Minutes)", y = "Count")+theme(legend.position = "none")
+            
+            p_eat<-ggplot(DA, aes(x=eat_15min))+
+                geom_histogram(color="darkgoldenrod4", fill="lightgoldenrod")+
+                labs(x="Accessible Eating Places within 15-mins Cycling", y = "Count")+theme(legend.position = "none")
+           
             ##Legend--------
             df_pal1 <- data.frame(
                 col_hosp = c(1,2,3,4,5),
@@ -278,6 +305,7 @@ Accessibility_module_server <- function(id) {
                      <br/>10 minutes away and 59% live less than 5 minutes away. Low-income
                      <br/>households are more likely to live closer to the nearest health care facility.")
                         })
+                        
                     } else if (input$variable == 2){
                         mapdeck_update(map_id = ns("mymap"))  %>%
                             add_polygon(data = DA,
@@ -336,14 +364,16 @@ Accessibility_module_server <- function(id) {
                         Cyc_Rate <- paste0(round(selected$Cyc_Rate,1),"%")
                         Cyc_dent <- paste0(round(selected$cyc_dent,1)," km/sq(km)")
 
-                        info <- c(Pop,LI_Rate,Cyc_Rate, Cyc_dent,
+                        info <- c(Pop,LI_Rate,Cyc_Rate, Cyc_dent)
+                                  #
                                   # paste0(selected$to_hosp, " m"), paste0(selected$to_grocery, " m"), paste0(selected$to_phar, "m"),
-                                  paste0(selected$time_hos, " minutes"), paste0(selected$time_groc, " minutes"), paste0(selected$time_phar, " minutes"),
-                                  selected$eat_15min)
-                        DA_info <- data.frame(c("Population (2016)", "Low Income Rate (2016)", "Cycling Rate", "Density of Cycling Facility",
+                                  # paste0(selected$time_hos, " minutes"), paste0(selected$time_groc, " minutes"), paste0(selected$time_phar, " minutes"),
+                                  # selected$eat_15min)
+                        DA_info <- data.frame(c("Population (2016)", "Low Income Rate (2016)", "Cycling Rate", "Density of Cycling Facility"),
+                                                #,
                                                 # "Distance to Closest Health Care", "Distance to Closest Grocery","Distance to Closest Pharmacy",
-                                                "Travel Time to Closest Health Care", "Travel Time to Closest Grocery",
-                                                "Travel Time to Closest Pharmacy",  "Number of Accessible Eating Places"),
+                                                # "Travel Time to Closest Health Care", "Travel Time to Closest Grocery",
+                                                # "Travel Time to Closest Pharmacy",  "Number of Accessible Eating Places"),
                                               info)
                         output$table2 <- renderDT({
                             DT::datatable(DA_info,
@@ -354,6 +384,35 @@ Accessibility_module_server <- function(id) {
                                           )
                             )
                         })
+                        if (input$variable == 1){
+                            output$histogram = renderPlot({
+                                p_hos+
+                                    geom_vline(data=DA, aes(xintercept=selected$time_hos, color="red"),
+                                               linetype="dashed",size = 1)+
+                                    geom_text(x=selected$time_hos+5, y=750, label=paste0(selected$time_hos, " mins"),size = 4)
+                            })
+                        }else if (input$variable == 2){
+                            output$histogram = renderPlot({
+                                p_groc+geom_vline(data=DA, aes(xintercept=selected$time_groc, color="red"),
+                                                  linetype="dashed",size = 1)+
+                                    geom_text(x=selected$time_groc+1.5, y=1250, label=paste0(selected$time_groc, " mins"),size = 4)
+                            })
+                        }else if (input$variable == 3){
+                            output$histogram = renderPlot({
+                                p_phar+
+                                    geom_vline(data=DA, aes(xintercept=selected$time_phar, color="red"),
+                                               linetype="dashed",size = 1)+
+                                    geom_text(x=selected$time_phar+2, y=875, label=paste0(selected$time_phar, " mins"),size = 4)
+                            })
+                        }else if (input$variable == 4){
+                            output$histogram = renderPlot({
+                                p_eat+
+                                    geom_vline(data=DA, aes(xintercept=selected$eat_15min, color="red"),
+                                               linetype="dashed",size = 1)+
+                                    geom_text(x=selected$eat_15min+80, y=450, label=selected$eat_15min, size = 4)
+                            })
+                        }
+                        
                     }
                     
                 } 
