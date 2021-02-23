@@ -76,42 +76,45 @@ zoomMenuItemSus_UI <- function(id,
       #               overflow-y:scroll
       #             }
       #             ")),
-    conditionalPanel(
-      condition = "output.bttn", 
-      ns = ns ,
-      id = ns("bttn_panel"),
-      absolutePanel(
-        id = "dropPanel", class = "panel panel-default",
-        draggable = TRUE, top = 260, left = 270, 
-        width = "40%", height = "50%",
-        style="z-index:600;
-       # overflow-y:scroll;
-        color: #FFFFFF; 
-        background-color: #3C3C3B00; 
-        border-color: #0096C900; 
-        border-radius: 30px; 
-        border-width: 1px;  
-        padding:5px; 
-        font-size:100%",
-        tags$iframe(src = link, # put myMarkdown.html to /www
-                    width = '100%', height = '100%',
-                    frameborder = 0, scrolling = 'auto',
-                    style="z-index:600;
-       # overflow-y:scroll;
-        color: #FFFFFF; 
-        background-color: #3C3C3B95; 
-        border-color: #0096C995; 
-        border-radius: 30px; 
-        border-width: 1px;  
-        padding:5px; 
-        font-size:100%"
-        )
-        
-        )
-          
-        
-        
-      )
+    # conditionalPanel(
+    #   condition = "output.bttn", 
+    #   ns = ns ,
+    #   id = ns("bttn_panel"),
+    #   absolutePanel(
+    #     id = "dropPanel", class = "panel panel-default",
+    #     draggable = TRUE, top = 260, left = 270, 
+    #     width = "40%", height = "50%",
+    #     style="z-index:600;
+    #    # overflow-y:scroll;
+    #     color: #FFFFFF; 
+    #     background-color: #3C3C3B00; 
+    #     border-color: #0096C900; 
+    #     border-radius: 30px; 
+    #     border-width: 1px;  
+    #     padding:5px; 
+    #     font-size:100%",
+    #     
+    #     
+    #     tags$iframe(src = link, # put myMarkdown.html to /www
+    #                 width = '100%', height = '100%',
+    #                 frameborder = 0, scrolling = 'auto',
+    #                 style="z-index:600;
+    #                 
+    #    # overflow-y:scroll;
+    #     color: #FFFFFF; 
+    #     background-color: #3C3C3B95; 
+    #     border-color: #0096C995; 
+    #     border-radius: 30px; 
+    #     border-width: 1px;  
+    #     padding:5px; 
+    #     font-size:100%"
+    #     )
+    #     
+    #     )
+    #       
+    #     
+    #     
+    #   )
       
     
   )

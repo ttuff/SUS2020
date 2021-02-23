@@ -75,7 +75,7 @@ zoomMenuSus_UI <- function(id,i18n, zoom
 
 
 zoomMenuSus_Server <- function(input, output, session, zoom) {
-  observe(print(zoom()))
+  #observe(print(zoom()))
   zoom_menu_zoom <- reactiveValues(zoom = 'h')
   
   output$zoomBreak <- reactive({

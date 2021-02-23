@@ -7,7 +7,7 @@
 # within an expanding and contracting window.
 
 
-rightPanelSus_UI <- function(id,i18n){ 
+rightPanelSus_UI <- function(id,i18n, var_list_bio_raster){ 
   
   ns <- NS(id)
   
@@ -15,12 +15,12 @@ rightPanelSus_UI <- function(id,i18n){
     absolutePanel(
       id = ns("input_control_overlay"), style = "z-index:500;",
       class = "panel panel-default", top = 70, right = 50, width = 300,
-      materialSwitch(
-        inputId = ns("active_extrude"), 
-        label = "View in 3D", 
-        status = "danger",
-        value = FALSE),
-      hr(),
+      # materialSwitch(
+      #   inputId = ns("active_extrude"), 
+      #   label = "View in 3D", 
+      #   status = "danger",
+      #   value = FALSE),
+      # hr(),
       
       # Compare panel
       fluidRow(
@@ -29,9 +29,8 @@ rightPanelSus_UI <- function(id,i18n){
                actionLink(inputId = ns("active_hide_compare"), 
                           label = "Hide"))),
       conditionalPanel(
-        condition = "output.active_hide_compare_status == 1", ns=ns,
-        selectInput(ns("data_for_plot_right"), label = NULL, 
-                    choices = var_list),
+        condition = 1 == 1, ns=ns,
+        select_var_UI(NS(id, "left"), var_list_bio_raster),
         #plotOutput(ns("active_map_right")), height = 250),
       conditionalPanel(
         condition = "input.active_extrude == 0",ns=ns,
@@ -46,15 +45,14 @@ rightPanelSus_UI <- function(id,i18n){
 
 
 
-rightPanelSus_Server <- function(id) {
+rightPanelSus_Server <- function(id, var_list_bio_raster) {
   moduleServer(id,
                function(input, output, session) {
                  ns <- NS(id)
                  
-                 ## Show/hide more info panel in title bar ------------------------------------
-                 
-                 # More info button
-                 
+                 bio_raster <- select_var_server("left", var_list_bio_raster)
+                 reactive(bio_raster)
+                 return(bio_raster)
                })
 }
 

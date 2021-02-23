@@ -240,6 +240,19 @@ var_list_slider <- list("Population density per square km" = 1,
                         "Work commutes by car (%)" = 3, 
                         "Trajet MTL 2016 data on pedestrian flows" = 4)
 
+var_list_bio_raster <- list("Top priority for ecosystem conservation" = "Priority_for_conservation_fill" , 
+                        "Contribution to reducting local high temperatures" = "Priority_for_heat_island_mitigation_fill" , 
+                        "Contribution to conserving biodiversity" = "Priority_for_biodiversity_conservation_fill", 
+                        "Contribution to reducting flood risk" = "Priority_for_flood_mitigation_fill",
+                        "Areas with healthy climate zones for local biodiversity" = "Climate_conditions_for_species_fill",
+                        "Areas with good habitat connectivity for local biodiversity" = "Habitat_Connectivity_fill",
+                        "Areas with high habitat quality for local biodiversity" = "Habitat_Quality_fill")
+
+
+
+
+
+
 loadingLogo <- 
   function(href, src, loadingsrc, height = NULL, width = NULL, alt = NULL) {
     tagList(
