@@ -30,7 +30,7 @@ rightPanelSus_UI <- function(id,i18n, var_list_bio_raster){
                           label = "Hide"))),
       conditionalPanel(
         condition = 1 == 1, ns=ns,
-        select_var_UI(NS(id, "left"), var_list_bio_raster),
+        select_var_BIO_UI(NS(id, "left"), var_list_bio_raster),
         #plotOutput(ns("active_map_right")), height = 250),
       conditionalPanel(
         condition = "input.active_extrude == 0",ns=ns,
@@ -50,7 +50,7 @@ rightPanelSus_Server <- function(id, var_list_bio_raster) {
                function(input, output, session) {
                  ns <- NS(id)
                  
-                 bio_raster <- select_var_server("left", var_list_bio_raster)
+                 bio_raster <- select_var_BIO_server("left", var_list_bio_raster)
                  reactive(bio_raster)
                  return(bio_raster)
                })
